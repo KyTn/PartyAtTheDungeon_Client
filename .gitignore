@@ -1,6 +1,5 @@
 # Visual Studio 2015 user specific files
 .vs/
-
 # Compiled Object files
 *.slo
 *.lo
@@ -38,6 +37,7 @@
 *.opensdf
 *.sdf
 *.VC.opendb
+*.VC.db
 
 # Precompiled Assets
 SourceArt/**/*.png
