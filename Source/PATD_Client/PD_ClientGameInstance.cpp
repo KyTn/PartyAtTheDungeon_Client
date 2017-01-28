@@ -24,7 +24,16 @@ void UPD_ClientGameInstance::initializeNetworking()
 
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
 	socketManager->Init(ServerActorSpawned, "127.0.0.1", 8891);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
-//	socketManager->
+	
+
+	//PRUEBA
+	FString serialized = TEXT("loadPlayer|1");
+	TCHAR *serializedChar = serialized.GetCharArray().GetData();
+	int32 size = FCString::Strlen(serializedChar);
+	int32 sent = 0;
+	
+
+	//bool successful = socketManager->SendInfoTo(0, (uint8*)TCHAR_TO_UTF8(serializedChar));
 }
 
 PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
