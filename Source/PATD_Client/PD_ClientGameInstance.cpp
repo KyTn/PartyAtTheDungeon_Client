@@ -11,7 +11,7 @@ void UPD_ClientGameInstance::Init()
 {
 	Super::Init();
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
-	initializeNetworking();
+	InitializeNetworking();
 }
 
 
