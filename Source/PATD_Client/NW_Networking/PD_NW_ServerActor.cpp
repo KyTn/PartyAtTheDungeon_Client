@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PATD_Client.h"
-#include "PD_ServerGameInstance.h"
 #include "PD_NW_ServerActor.h"
 
 //Includes of forward declaration

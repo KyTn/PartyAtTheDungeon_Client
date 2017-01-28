@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Engine/GameInstance.h"
-#include "PD_ServerGameInstance.generated.h"
+#include "PD_ClientGameInstance.generated.h"
 
 /**
  * 
@@ -11,7 +11,7 @@
  //forward declarations
 class PD_NW_SocketManager;
 UCLASS()
-class PATD_CLIENT_API UPD_ServerGameInstance : public UGameInstance
+class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
