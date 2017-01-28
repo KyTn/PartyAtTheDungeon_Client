@@ -15,7 +15,7 @@ void UPD_ClientGameInstance::Init()
 }
 
 
-void UPD_ClientGameInstance::initializeNetworking()
+void UPD_ClientGameInstance::InitializeNetworking()
 {
 	socketManager = new PD_NW_SocketManager();
 	socketManager->SetIsServer(false);
@@ -23,7 +23,7 @@ void UPD_ClientGameInstance::initializeNetworking()
 	APD_NW_ServerActor* ServerActorSpawned = (APD_NW_ServerActor*)GetWorld()->SpawnActor(APD_NW_ServerActor::StaticClass());
 
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
-	socketManager->Init(ServerActorSpawned, "127.0.0.1", 8891);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
+	socketManager->Init(ServerActorSpawned, "127.0.0.1", defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
 	
 
 	//PRUEBA

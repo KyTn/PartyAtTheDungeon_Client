@@ -22,13 +22,16 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 
 	//Functions ====
 	//Funcion para inicializar entre otros el socketManager. 
-	void initializeNetworking();
+	void InitializeNetworking();
 
 	//Funcion para volver a poner todo adecuadamente despues de un travel.
-	void initializeAfterTravel();
+	void InitializeAfterTravel();
 
 public:
 	//Overwrites
+
+	///CONSTANTES
+	const int32 defaultServerPort = 8890;
 
 	//Funcion que llama al inicializar 
 	//Existe ya UWorld aqui, y GetTimerManager()??
