@@ -3,9 +3,13 @@
 #include "PATD_Client.h"
 #include "PD_ClientGameInstance.h"
 #include "NW_NetWorking/PD_NW_ServerActor.h"
+
+
+//Includes of forward declaration
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
 
-
+//Includes de prueba
+#include "NW_NetWorking/Serializer/PruebaUStruct.h"
 
 void UPD_ClientGameInstance::Init()
 {
@@ -26,14 +30,7 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	socketManager->Init(ServerActorSpawned, "127.0.0.1", defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
 	
 
-	//PRUEBA
-	FString serialized = TEXT("loadPlayer|1");
-	TCHAR *serializedChar = serialized.GetCharArray().GetData();
-	int32 size = FCString::Strlen(serializedChar);
-	int32 sent = 0;
-	
 
-	//bool successful = socketManager->SendInfoTo(0, (uint8*)TCHAR_TO_UTF8(serializedChar));
 }
 
 PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
