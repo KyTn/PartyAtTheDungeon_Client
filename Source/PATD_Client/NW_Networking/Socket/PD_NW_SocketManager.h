@@ -6,6 +6,7 @@
 class PD_NW_Socket;
 class APD_NW_ServerActor;
 
+class PD_NW_NetworkManager;
 /**
 *
 
@@ -24,6 +25,10 @@ private:
 	APD_NW_ServerActor* myServerActor;
 
 	bool isServer;
+
+
+	//Referencia al NerworkManager (Solo para los handlers, a falta de hacer un sistema de observadores)
+	PD_NW_NetworkManager* networkManager;
 
 	//Functions ======
 
@@ -58,6 +63,8 @@ private:
 
 	//Lo de la gestion de reconexiones va aqui (aunque puede llamar a otra clase)
 
+
+
 public:
 	///Inicializacion
 	PD_NW_SocketManager();
@@ -71,6 +78,10 @@ public:
 	bool GetIsServer();
 	void SetServerActor(APD_NW_ServerActor* InmyServerActor);
 	APD_NW_ServerActor* GetServerActor();
+	PD_NW_NetworkManager* GetNetworkManager();
+	void SetNetworkManager(PD_NW_NetworkManager* networkManagerIn);
+
+
 
 	///FUNCIONES 
 	//Inicializa el socketManager e inicia el timer. IP se usa solo en modo cliente.
@@ -90,8 +101,9 @@ public:
 	void InitSocketManager_ClientMode(FString ip, int port);
 
 
-	//Funcion publica para poder añadir sockets manualmente. Devuelve la posicion donde se crea el socket.
-	int CreateDataSocket(FString ip, int port);
+	//Funcion publica para poder añadir sockets (conectados) manualmente. Devuelve la posicion donde se crea el socket.
+	//Solo guarda el socket en el array si se llega a conectar.
+	int ConnectDataSocket(FString ip, int port);
 
 
 

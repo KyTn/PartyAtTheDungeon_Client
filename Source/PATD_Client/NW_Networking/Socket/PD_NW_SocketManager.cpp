@@ -7,17 +7,17 @@
 #include "PD_NW_Socket.h" 
 #include "Networking.h"
 #include "NW_NetWorking/PD_NW_ServerActor.h"
-
+#include "NW_NetWorking/PD_NW_NetworkManager.h"
 //Includes de prueba
-#include <string>
-#include "NW_Networking/Serializer/PruebaUStruct.h"
+
 
 /******************************
 *** CONSTRUCTOR Y DESTRUCTOR DE LA CLASE **
 /******************************/
 PD_NW_SocketManager::PD_NW_SocketManager()
 {
-	socketArray = TArray<PD_NW_Socket*>();
+	socketArray = TArray<PD_NW_Socket*>();//Creo que no hace falta esta inicializacion.
+
 	listenerSocket = nullptr;
 }
 
@@ -77,12 +77,14 @@ void PD_NW_SocketManager::InitSocketManager_ClientMode(FString ip, int port)
 	//1.Crear el Socket que va a comunicar con el Servidor
 	//2.Comprobar que hay comunicacion
 	//3.Cuando hay comunicacion, Guadar dicho socket en el Array de Socket del SocketManager
+	//Esto ya no se hace aqui.
 
+	/*
 	if (CreateDataSocket(ip, port) == -1) {
 		//ERROR!!
 		UE_LOG(LogTemp, Error, TEXT("No se ha podido crear el Socket Cliente! "));
 		return;
-	}
+	}*/
 	//Y si no conecta aqui porque es demasiado pronto y no esta el server up? 
 	///R : Si no esta el Server UP, esta funcion se volveria a llamar con un boton de "refresh"
 
@@ -119,7 +121,7 @@ void PD_NW_SocketManager::InitServerActor(APD_NW_ServerActor* InmyServerActor)
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 }
 
-int PD_NW_SocketManager::CreateDataSocket(FString ip, int port) {
+int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 	PD_NW_Socket* pdSocket = new PD_NW_Socket();
 	pdSocket->InitAsDataSocket();
 	bool connected = pdSocket->ConnectTo(ip, port);
@@ -150,31 +152,7 @@ void PD_NW_SocketManager::HandleNewSocketData(TArray<uint8>* data, int socketInd
 
 	UE_LOG(LogTemp, Error, TEXT("HandleNewSocketData (socketIndex: %d)"), socketIndex);
 
-
-	//Esto no va aqui, esto ya seria llamar al serializer o a los objetos suscritos
-
-	//Para probar strings
-	/*std::string cstr(reinterpret_cast<const char*>(data->GetData()), data->Num());
-
-	FString string = FString(cstr.c_str());
-
-	UE_LOG(LogTemp, Error, TEXT("HandleNewSocketData Read: %s"), *string);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT(">>> DESDE CLIENTE ! %s"), *string));
-	*/
-
-	//Prueba con UStructs
-	FpruebaUStruct pruebaStruct;
-
-	UStruct* MyStruct = FpruebaUStruct::StaticStruct();
-
-	FMemoryReader ArReader(*data);
-
-	MyStruct->SerializeBin(ArReader, &pruebaStruct);
-
-	UE_LOG(LogTemp, Error, TEXT("%s"), *(pruebaStruct.stringPrueba));
-
-	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%s"), *(pruebaStruct.stringPrueba)));
+	networkManager->HandleNewSocketData(data, socketIndex);
 
 };
 
@@ -185,6 +163,10 @@ void PD_NW_SocketManager::HandleNewListenerConnection(PD_NW_Socket* newSocket) {
 	int socketIndex = socketArray.Add(newSocket);
 
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
+
+	//Se podria incluso preguntar antes si meterlo o no meterlo.
+
+	networkManager->HandleNewConnectionSocketListener(socketIndex);
 
 }
 
@@ -244,6 +226,13 @@ APD_NW_ServerActor* PD_NW_SocketManager::GetServerActor()
 	return myServerActor;
 }
 
+
+PD_NW_NetworkManager* PD_NW_SocketManager::GetNetworkManager() {
+	return networkManager;
+}
+void PD_NW_SocketManager::SetNetworkManager(PD_NW_NetworkManager* networkManagerIn) {
+	networkManager = networkManagerIn;
+}
 
 FString PD_NW_SocketManager::StateString() {
 	FString out = "SocketManager state:";

@@ -8,7 +8,7 @@
 
 
 //Includes de prueba
-#include "NW_NetWorking/Serializer/PruebaUStruct.h"
+
 #include "PD_ClientGameInstance.h"
 
 // Sets default values
@@ -66,30 +66,8 @@ bool APD_NW_ServerActor::isTimerActive() {
 
 void APD_NW_ServerActor::SendPruebaSockets()
 {
+
 	//PRUEBA
-	UStruct* MyStruct = FpruebaUStruct::StaticStruct();
-
-	FpruebaUStruct pruebaStruct;
-	pruebaStruct = FpruebaUStruct();
-	//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Blue, FString::Printf(TEXT("Cliente enviando al servidor")));
-
-
-	UE_LOG(LogTemp, Warning, TEXT("Cliente enviando al servidor"));
-
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *SocketManager->StateString());
-
-
-
-	pruebaStruct.stringPrueba = "Texto de pruebe escrito en cliente";
-
-
-
-	TArray<uint8>* Storage = new TArray<uint8>();
-	FMemoryWriter ArWriter(*Storage);
-	MyStruct->SerializeBin(ArWriter, &pruebaStruct);
-
-
-	bool successful = SocketManager->SendInfoTo(0, Storage);
 
 
 }

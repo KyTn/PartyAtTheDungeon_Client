@@ -17,9 +17,12 @@ PD_NW_Socket::PD_NW_Socket()
 
 PD_NW_Socket::~PD_NW_Socket()
 {
+	UE_LOG(LogTemp, Error, TEXT("DELETE DE LOS SOCKET "));
+
 	//Esto puede dar error al llamarse alguna vez sin que tenga nada?
 	//if (socket) {
-	delete this->socket; // con esto se supone que se borra la instancia de la clase (?)
+	socket->Close();
+	delete socket; // con esto se supone que se borra la instancia de la clase (?)
 	socket = NULL;
 	//}
 
@@ -74,10 +77,11 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 
 	uint32 Size;
 	//El while nos come todos los pendings pero solo se queda con el ultimo. No tiene mucho sentido
-	while (socket->HasPendingData(Size))
+	//Lo dejamos en un unico if, y la informacion que pueda seguir habiendo se quedara para el siguiente tick
+	if (socket->HasPendingData(Size))
 	{
 		//Estamos creando los datos nuevos en el HEAP
-		receivedData = new TArray<uint8>();
+		receivedData = new TArray<uint8>(); //Aqui creamos reserva de memoria en heap para el array.
 		receivedData->Init(0, FMath::Min(Size, 65507u));
 
 		int32 Read = 0;
@@ -89,11 +93,11 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 	// ERROR!
 	if (receivedData == nullptr || receivedData->Num() <= 0)
 	{
-		UE_LOG(LogTemp, Error, TEXT(">>>> No se han enviado datos ! "));
+		//	UE_LOG(LogTemp, Error, TEXT(">>>> No se han enviado datos ! "));
 		return nullptr; //No Data Received
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT(">>>> Se van a enviar DATOS :) ! "));
+		//	UE_LOG(LogTemp, Warning, TEXT(">>>> Se van a enviar DATOS :) ! "));
 	}
 	return receivedData;
 
@@ -105,7 +109,7 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 PD_NW_Socket* PD_NW_Socket::ReceiveNewConnection() {
 
 
-	UE_LOG(LogTemp, Error, TEXT("Ha entrado a ReceiveNewConnection ! "));
+	//	UE_LOG(LogTemp, Warning, TEXT("Ha entrado a ReceiveNewConnection ! "));
 	//~~~~~~~~~~~~~
 	//Ahora mismo, al no tener datos para recibir y el que haya un error se devuelve lo mismo, null.
 	// ERROR!
@@ -120,9 +124,17 @@ PD_NW_Socket* PD_NW_Socket::ReceiveNewConnection() {
 
 	bool Pending;
 	// handle incoming connections
+	/*if (socket == NULL) {
+	UE_LOG(LogTemp, Error, TEXT("Socket es null en Pending "));
+
+	}
+	else {
+	UE_LOG(LogTemp, Error, TEXT("SocketNO NULL en Pending "));
+
+	}*/
 	if (socket->HasPendingConnection(Pending) && Pending)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Ha entrado a HasPendingConnection ! "));
+		UE_LOG(LogTemp, Warning, TEXT("Ha entrado a HasPendingConnection ! "));
 		FSocket* newFSocket;
 		PD_NW_Socket* newPD_NW_Socket;
 		//En principio no necesitamos guardar la direccion aqui. (Accept permite guardarla)
@@ -130,7 +142,7 @@ PD_NW_Socket* PD_NW_Socket::ReceiveNewConnection() {
 		newPD_NW_Socket = new PD_NW_Socket();
 		newPD_NW_Socket->SetFSocket(newFSocket);
 
-		UE_LOG(LogTemp, Error, TEXT("Ha creado el nuevo socket ! "));
+		UE_LOG(LogTemp, Warning, TEXT("Ha creado el nuevo socket ! "));
 
 		return newPD_NW_Socket;
 

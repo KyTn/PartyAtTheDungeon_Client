@@ -2,15 +2,25 @@
 
 #pragma once
 
+
+
 #include "Engine/GameInstance.h"
 #include "PD_ClientGameInstance.generated.h"
 
+
+
+
 //forward declarations
-class PD_NW_SocketManager;
+class PD_NW_NetworkManager;
 
 /**
  * 
  */
+
+
+
+
+
 
 UCLASS()
 class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
@@ -18,8 +28,8 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 	GENERATED_BODY()
 	
 	//Networking
-		PD_NW_SocketManager* socketManager;
-
+		//PD_NW_SocketManager* socketManager;
+		PD_NW_NetworkManager* networkManager;
 
 
 	//Functions ====
@@ -42,7 +52,10 @@ public:
 
 	//void Shutdown();
 
-	PD_NW_SocketManager* GetSocketManager();
+	//PD_NW_SocketManager* GetSocketManager();
 	
 	
 };
+
+
+
