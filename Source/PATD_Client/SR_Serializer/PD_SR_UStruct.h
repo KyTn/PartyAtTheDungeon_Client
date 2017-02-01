@@ -33,8 +33,14 @@ AllStructs=-1 para suscribirse a eventos para todos.
 */
 enum class UStructType { NoDefined = -9, AllStructs = -1, FStructMap = 0, FStructOrderMenu = 1 };
 
-
-enum class MenuOrderType {};
+//Ordenes. NullOrder significa que el paquete recibido no es de una orden
+enum class MenuOrderType {
+	NullOrder = -1,
+	//Ordenes que recibe el servidor. 
+	NewConnection = 0, GoToMainMenu = 1, GoToLobby = 2, GoToMap = 3, ClientReady = 4,
+	//Ordenes que recibe el cliente. La 5 cuenta como 6 pero ademas setea ClientMaster.
+	SetClientMaster = 5, Welcome = 6, ChangeToMainMenu = 7, ChangeToLobby = 8, ChangeToMap = 9, InvalidConnection = 10
+};
 
 //Struct Generico
 USTRUCT()
@@ -86,8 +92,6 @@ struct FStructGenericoHito2
 	//Constructor
 	FStructGenericoHito2()
 	{
-		stringMap = "";
-		orderType =-1;
 	}
 
 };

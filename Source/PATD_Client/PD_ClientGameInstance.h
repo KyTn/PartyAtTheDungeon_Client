@@ -41,6 +41,7 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 
 public:
 	bool isGameMaster = false;
+	FString numPlayer;
 	//Overwrites
 
 	///CONSTANTES
@@ -54,7 +55,7 @@ public:
 	//void Shutdown();
 
 	//PD_NW_SocketManager* GetSocketManager();
-	
+	void LoadMap(FString mapName);
 	
 };
 

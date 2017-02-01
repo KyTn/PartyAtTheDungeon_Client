@@ -36,12 +36,41 @@ void UPD_ClientGameInstance::Init()
 		}
 		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
 			
-			if (dataStruct->orderType == -1) {
-				gi->isGameMaster = true;
-			}
-				UE_LOG(LogTemp, Warning, TEXT("Recibido un mapa "));
 
-			
+			if (dataStruct->orderType != -1) { //NullOrder
+				FStructGenericoHito2 respuesta = FStructGenericoHito2();
+				switch (dataStruct->orderType) {
+				case 5: //SetClientMaster
+					gi->isGameMaster = true;
+					gi->numPlayer = dataStruct->stringMap;
+					break;
+
+				case 6://Welcome
+					gi->numPlayer = dataStruct->stringMap;
+					break;
+				case 7://ChangeToMainMenu
+					gi->LoadMap("LVL_2_MainMenu");
+		
+					break;
+				case 8://ChangeToLobby
+					gi->LoadMap("LVL_3_SelectChars_Lobby");
+
+					break;
+				case 9://ChangeToMap
+					gi->LoadMap("LVL_4_GameMap");
+
+					break;
+				case 10://InvalidConnection
+					//Que hacemos?
+
+					break;
+				}
+
+			}
+			else {//No es una order, asi que es un map
+				//Cargar el mapa que viene en el string.
+			}
+
 		}
 	};
 	ObservadorPrueba* obs = new ObservadorPrueba(this);
@@ -95,6 +124,14 @@ void UPD_ClientGameInstance::Init()
 
 		UE_LOG(LogTemp, Warning, TEXT("indice tras vuelta a serialize %d"), gg->list.Num());
 	}*/
+
+}
+
+
+void UPD_ClientGameInstance::LoadMap(FString mapName)
+{
+	UGameplayStatics::OpenLevel((UObject*)this, FName(*mapName));
+
 
 }
 
