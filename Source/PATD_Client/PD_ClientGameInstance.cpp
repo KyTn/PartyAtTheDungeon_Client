@@ -13,13 +13,6 @@
 //Includes de prueba
 #include "NW_Networking/EventLayer/PD_NW_iEventObserver.h"
 
-
-
-
-
-
-
-
 void UPD_ClientGameInstance::Init()
 {
 	Super::Init();
@@ -69,6 +62,7 @@ void UPD_ClientGameInstance::Init()
 			}
 			else {//No es una order, asi que es un map
 				//Cargar el mapa que viene en el string.
+				gi->LoadMap(dataStruct->stringMap);
 			}
 
 		}
@@ -135,6 +129,15 @@ void UPD_ClientGameInstance::LoadMap(FString mapName)
 
 }
 
+void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
+{
+	APD_NW_ServerActor* ServerActorSpawned = (APD_NW_ServerActor*)GetWorld()->SpawnActor(APD_NW_ServerActor::StaticClass());
+
+	//socketManager->InitServerActor(ServerActorSpawned);
+	networkManager->GetSocketManager()->InitServerActor(ServerActorSpawned);
+
+
+}
 
 void UPD_ClientGameInstance::InitializeNetworking()
 {

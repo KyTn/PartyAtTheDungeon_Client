@@ -56,6 +56,8 @@ public:
 
 	//PD_NW_SocketManager* GetSocketManager();
 	void LoadMap(FString mapName);
+
+	void InitClientActoWhenLoadMap();
 	
 };
 
