@@ -14,17 +14,11 @@
 #include "NW_Networking/EventLayer/PD_NW_iEventObserver.h"
 
 
-
-
-
-
-
-
 void UPD_ClientGameInstance::Init()
 {
 	Super::Init();
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
-	InitializeNetworking();
+	//InitializeNetworking();
 
 
 	class ObservadorPrueba : public PD_NW_iEventObserver
@@ -69,6 +63,7 @@ void UPD_ClientGameInstance::Init()
 			}
 			else {//No es una order, asi que es un map
 				//Cargar el mapa que viene en el string.
+				gi->LoadMap(dataStruct->stringMap);
 			}
 
 		}
@@ -76,11 +71,6 @@ void UPD_ClientGameInstance::Init()
 	ObservadorPrueba* obs = new ObservadorPrueba(this);
 	obs->setUpObserver(-1, UStructType::AllStructs);
 	networkManager->RegisterObserver(obs);
-
-
-
-
-
 
 
 	//PRUEBA
@@ -147,9 +137,18 @@ void UPD_ClientGameInstance::InitializeNetworking()
 
 	socketManager->SetNetworkManager(networkManager);
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
-	socketManager->Init(ServerActorSpawned, "127.0.0.1", defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
+	socketManager->Init(ServerActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
 
-	networkManager->ConnectTo("127.0.0.1", defaultServerPort);
+	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
+}
+
+void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
+	if (ip == "")
+		serverAddressToConnect = "127.0.0.1";
+	else
+		serverAddressToConnect = ip;
+
+	InitializeNetworking();
 }
 
 /*
