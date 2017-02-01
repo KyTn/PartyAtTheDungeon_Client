@@ -49,9 +49,11 @@ public:
 	*/
 
 	//Funciones publicas para enviar
-	bool SendNow(FStructGeneric* st, int player = -1);
-	bool SendNow(int player = -1);
-	bool AddToSendList(FStructGeneric* st, int player = -1);
+	bool SendNow(FStructGenericoHito2* st, int player = -1);
+
+	/*bool SendNow(FStructGeneric* st,int player=-1);
+	bool SendNow(int player=-1);
+	bool AddToSendList(FStructGeneric* st, int player=-1);*/
 	//Funcion para conectar (se usa en el cliente) Devuelve el "player" que seria el servidor
 	//que deberia ser 0 si solo tenemos un servidor. Es el que usaremos en las funciones de enviar y recibir.
 	//-1 para error. Encapsula una llamada al socketmanager y crea el buffer para esta conexion.

@@ -31,7 +31,7 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 		//PD_NW_SocketManager* socketManager;
 		PD_NW_NetworkManager* networkManager;
 
-
+	
 	//Functions ====
 	//Funcion para inicializar entre otros el socketManager. 
 	void InitializeNetworking();
@@ -40,6 +40,7 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 	void InitializeAfterTravel();
 
 public:
+	bool isGameMaster = false;
 	//Overwrites
 
 	///CONSTANTES

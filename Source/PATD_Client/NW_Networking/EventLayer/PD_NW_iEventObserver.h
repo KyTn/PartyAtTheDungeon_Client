@@ -3,8 +3,8 @@
 #pragma once
 #include "SR_Serializer/PD_SR_UStruct.h"
 /**
- * 
- */
+*
+*/
 class PATD_CLIENT_API PD_NW_iEventObserver
 {
 private:
@@ -25,5 +25,6 @@ public:
 	UStructType getType();
 
 	//El struct desaparecera despues de esta llamada. Si se desea guardar hay que copiarlo en la llamada.
-	virtual void handleEvent(FStructGeneric* dataStruct, int player, UStructType eventType) = 0;
+	//virtual void handleEvent(FStructGeneric* dataStruct, int inPlayer, UStructType inEventType) = 0;
+	virtual void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) = 0;
 };

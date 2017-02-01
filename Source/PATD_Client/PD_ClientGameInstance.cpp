@@ -11,6 +11,7 @@
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
 
 //Includes de prueba
+#include "NW_Networking/EventLayer/PD_NW_iEventObserver.h"
 
 
 
@@ -25,10 +26,38 @@ void UPD_ClientGameInstance::Init()
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	InitializeNetworking();
 
-	//PRUEBA
-	FStructMap* m =  new FStructMap();
 
-	UE_LOG(LogTemp, Warning, TEXT("Enviando MapStruct "));
+	class ObservadorPrueba : public PD_NW_iEventObserver
+	{
+	public:
+		UPD_ClientGameInstance *gi;
+		ObservadorPrueba(UPD_ClientGameInstance* i) {
+			gi = i;
+		}
+		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
+			
+			if (dataStruct->orderType == -1) {
+				gi->isGameMaster = true;
+			}
+				UE_LOG(LogTemp, Warning, TEXT("Recibido un mapa "));
+
+			
+		}
+	};
+	ObservadorPrueba* obs = new ObservadorPrueba(this);
+	obs->setUpObserver(-1, UStructType::AllStructs);
+	networkManager->RegisterObserver(obs);
+
+
+
+
+
+
+
+	//PRUEBA
+	FStructGenericoHito2* m =  new FStructGenericoHito2();
+	m->orderType = 0;
+	UE_LOG(LogTemp, Warning, TEXT("Enviando Order %d"), m->orderType);
 
 	networkManager->SendNow(m,0);
 

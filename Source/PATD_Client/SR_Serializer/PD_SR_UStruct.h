@@ -31,7 +31,10 @@ Por claridad es mejor que el nombre del struct coincida con el del enumerado. (a
 NoDefined=-9, para detectar errores de instanciacion.
 AllStructs=-1 para suscribirse a eventos para todos.
 */
-enum class UStructType { NoDefined = -9, AllStructs = -1, FStructMap = 0 };
+enum class UStructType { NoDefined = -9, AllStructs = -1, FStructMap = 0, FStructOrderMenu = 1 };
+
+
+enum class MenuOrderType {};
 
 //Struct Generico
 USTRUCT()
@@ -45,7 +48,7 @@ struct FStructGeneric
 	//Constructor
 	FStructGeneric() {
 
-		structType = static_cast<int>(UStructType::NoDefined);
+		structType = static_cast<uint8>(UStructType::NoDefined);
 	}
 };
 
@@ -64,68 +67,59 @@ struct FStructGenericList
 };
 
 
-/*
-USTRUCT()
-struct FStructListaPruebas
-{
-	GENERATED_BODY()
-
-		UPROPERTY()
-		TArray<FStructGeneric> list;
-
-	//Constructor
-	FStructListaPruebas() {
-	}
-};*/
-
-
 //=================================
 ///Definicion de structs usuario
 //=================================
 
+
 USTRUCT()
-struct FStructMap : public FStructGeneric
+struct FStructGenericoHito2
 {
 	GENERATED_BODY()
 
-		//Always make USTRUCT variables into UPROPERTY()
-		//    any non-UPROPERTY() struct vars are not replicated
-
-		// So to simplify your life for later debugging, always use UPROPERTY()
 		UPROPERTY()
-		FString stringPrueba;
+		FString stringMap;
 
 	UPROPERTY()
-		uint8 intPrueba;
+		uint8 orderType;
 
-	UPROPERTY()
-		TArray<FString> arrayPruebaStrings;
+	//Constructor
+	FStructGenericoHito2()
+	{
+		stringMap = "";
+		orderType =-1;
+	}
+
+};
 
 
+
+USTRUCT()
+struct FStructMap
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		FString stringMap;
 
 	//Constructor
 	FStructMap()
 	{
-		structType = static_cast<int>(UStructType::FStructMap);
-
-		intPrueba = 0;
-		arrayPruebaStrings = TArray<FString>();
-		arrayPruebaStrings.Add("prueba 0");
-		arrayPruebaStrings.Add("Prueba 1 tralalalalalla");
-		arrayPruebaStrings.Add("Prueba 2 patatin");
-
-		//Always initialize your USTRUCT variables!
-		//   exception is if you know the variable type has its own default constructor
-
 	}
 
-	FStructMap(int p)
-	{
-		intPrueba = p;
-		//structType = Enum.StrucMap;
-		//Always initialize your USTRUCT variables!
-		//   exception is if you know the variable type has its own default constructor
-
-	}
 };
 
+USTRUCT()
+struct FStructOrderMenu
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint8 orderType;
+
+	//Constructor
+	FStructOrderMenu()
+	{
+	}
+
+};

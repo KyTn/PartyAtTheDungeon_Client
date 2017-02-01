@@ -8,6 +8,10 @@
 #include "NW_NetWorking/EventLayer/PD_NW_EventManager.h"
 #include "SR_Serializer/PD_SR_SerializerManager.h"
 
+/*Todo la investigacion para hacerlo con structs genericos esta comentado
+Queda como codigo lo necesario para pasar solamente Mapa y MenuOrder (lo necesario para el hito2)
+*/
+
 PD_NW_NetworkManager::PD_NW_NetworkManager()
 {
 
@@ -25,6 +29,16 @@ PD_NW_NetworkManager::~PD_NW_NetworkManager()
 
 void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIndex) {
 
+
+	FStructGenericoHito2* structEventGenericHito2 = serializerManager->DeserializeData(data);
+	eventManager->GenerateEvent(structEventGenericHito2, socketIndex);
+
+
+	/*
+	FStructGeneric* structEvent = serializerManager->DeserializeData(data);
+
+	eventManager->GenerateEvent(structEvent, socketIndex);
+	*/
 	/* Con compresor
 
 	bool serializeOk;
@@ -53,14 +67,14 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 	//por eso hay que copiarlos si se quieren conservar). 
 	//	delete structList;
 
-	FStructGeneric* structEvent = serializerManager->DeserializeData(data);
 
-	eventManager->GenerateEvent(structEvent, socketIndex);
 }
 //Cuando hay una nueva conexion creamos un nuevo elemento para el array de structs-array
 //Este se borrara al hacer el delete de la clase 
+
 void PD_NW_NetworkManager::HandleNewConnectionSocketListener(int socketIndex) {
-	sendGenericStruct.Insert(new FStructGenericList(), socketIndex);
+	//Con compresor
+	//sendGenericStruct.Insert(new FStructGenericList(),socketIndex);
 
 	//Generar el evento de nuevo jugador.
 
@@ -78,22 +92,37 @@ PD_SR_SerializerManager* PD_NW_NetworkManager::GetSerializerManager() {
 	return serializerManager;
 }
 
-//Funciones publicas para enviar
-bool PD_NW_NetworkManager::SendNow(FStructGeneric* st, int player) {
-	//Para hacer broadcast con -1?
+bool PD_NW_NetworkManager::SendNow(FStructGenericoHito2* st, int player) {
 
-	TArray<uint8>* data = serializerManager->SerializeData(st);
-	socketManager->SendInfoTo(player, data);
+	
+	TArray<uint8>* data=serializerManager->SerializeData(st);
+	return socketManager->SendInfoTo(player, data);
 
-
-	/*AddToSendList(st, player);
-	SendNow(player);
-
-	*/
-	return true;
 }
+
+/*/
+//Funciones publicas para enviar
+bool PD_NW_NetworkManager::SendNow(FStructGeneric* st,int player) {
+//Para hacer broadcast con -1?
+
+TArray<uint8>* data = serializerManager->SerializeData(st);
+socketManager->SendInfoTo(player, data);
+
+
+//Con compresor
+/*AddToSendList(st, player);
+SendNow(player);
+
+*/
+/*
+return true;
+}*/
+//Con compresor
 /*
 bool PD_NW_NetworkManager::SendNow(int player) {//serializamos y enviamos los datos de un jugador, tras esto deberian borrarse¿?
+
+
+
 bool serializeOk;
 //Para enviar todo lo pendiente con -1?
 if (!sendGenericStruct.IsValidIndex(player) || !sendGenericStruct[player]) {

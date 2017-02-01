@@ -2,17 +2,17 @@
 
 #pragma once
 
-#include "SR_Serializer/PD_SR_UStruct.h"
+
 //Forward declarations
 class PD_NW_iEventObserver;
 
 
 //Includes prueba
-
+#include "SR_Serializer/PD_SR_UStruct.h"
 
 /**
- * 
- */
+*
+*/
 class PATD_CLIENT_API PD_NW_EventManager
 {
 private:
@@ -24,7 +24,8 @@ public:
 
 	//Funcion de entrada al gestor. Aqui llama la capa de abajo para mandar un evento
 	// (a todos los que escuchen) del tipo que sea el Struct.
-	void GenerateEvent(FStructGeneric* st, int player);
+	//void GenerateEvent(FStructGeneric* st, int player);
+	void GenerateEvent(FStructGenericoHito2* st, int player);
 
 	//Funciones de registro de un observer. El observer debe de estar instanciado y seteado.
 	bool RegisterObserver(PD_NW_iEventObserver* observer);

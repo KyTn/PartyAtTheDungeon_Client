@@ -21,11 +21,11 @@ public:
 	/*Realmente los booleanos podrian ser lo que devuelvan y que se les pase por parametro el struct
 	y el tArray.
 	*/
-	//Esta funcion la llama el socketManager cuando tiene un nuevo paquete de datos
+	/*//Esta funcion la llama el socketManager cuando tiene un nuevo paquete de datos
 	FStructGenericList* DeserializeData(TArray<uint8>* data, bool &correct);//El bool no lo veo necesario, total si fstruct es nulo no lo habra hecho bien
 
 
-																			//Esta funcion comunica con la capa superior para serializar datos
+	//Esta funcion comunica con la capa superior para serializar datos
 	TArray<uint8>* SerializeData(FStructGenericList* generycstructs, bool &correct);
 
 
@@ -33,8 +33,13 @@ public:
 	FStructGeneric* DeserializeData(TArray<uint8>* data);
 
 	TArray<uint8>* SerializeData(FStructGeneric* generycstructs);
+	*/
+
+	//template <typename T>
+	//T* Des(T*);
+
+	TArray<uint8>* PD_SR_SerializerManager::SerializeData(FStructGenericoHito2* genericstruct);
 
 
-
-
+	FStructGenericoHito2* PD_SR_SerializerManager::DeserializeData(TArray<uint8>* data);
 };
