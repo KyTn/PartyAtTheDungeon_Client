@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "PD_NW_ServerActor.generated.h"
+#include "PD_NW_ClientActor.generated.h"
 
 //forward declarations
 class PD_NW_SocketManager;
@@ -12,7 +12,7 @@ class PD_NW_SocketManager;
 class UPD_ServerGameInstance;
 
 UCLASS()
-class PATD_CLIENT_API APD_NW_ServerActor : public AActor
+class PATD_CLIENT_API APD_NW_ClientActor : public AActor
 {
 	GENERATED_BODY()
 
@@ -22,7 +22,7 @@ private:
 
 public:
 	// Sets default values for this actor's properties
-	APD_NW_ServerActor();
+	APD_NW_ClientActor();
 
 
 	FTimerHandle TimerHandleActor;
@@ -49,10 +49,10 @@ public:
 
 
 	//Declaraciones de prueba
-	
+
 	FTimerHandle TimerHandleActor3;
 
-	
+
 
 	void SendPruebaSockets();
 

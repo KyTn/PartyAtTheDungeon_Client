@@ -2,7 +2,7 @@
 
 #include "PATD_Client.h"
 #include "PD_ClientGameInstance.h"
-#include "NW_NetWorking/PD_NW_ServerActor.h"
+#include "NW_NetWorking/PD_NW_ClientActor.h"
 
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
 #include "SR_Serializer/PD_SR_UStruct.h"
@@ -121,9 +121,16 @@ void UPD_ClientGameInstance::Init()
 void UPD_ClientGameInstance::LoadMap(FString mapName)
 {
 	UGameplayStatics::OpenLevel((UObject*)this, FName(*mapName));
-
-
 }
+
+void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
+{
+	APD_NW_ClientActor* ClientActorSpawned = (APD_NW_ClientActor*)GetWorld()->SpawnActor(APD_NW_ClientActor::StaticClass());
+
+	//socketManager->InitServerActor(ServerActorSpawned);
+	networkManager->GetSocketManager()->InitClientActor(ClientActorSpawned);
+}
+
 
 
 void UPD_ClientGameInstance::InitializeNetworking()
@@ -133,11 +140,11 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	
 	socketManager->SetIsServer(false);
 
-	APD_NW_ServerActor* ServerActorSpawned = (APD_NW_ServerActor*)GetWorld()->SpawnActor(APD_NW_ServerActor::StaticClass());
+	APD_NW_ClientActor* ClientActorSpawned = (APD_NW_ClientActor*)GetWorld()->SpawnActor(APD_NW_ClientActor::StaticClass());
 
 	socketManager->SetNetworkManager(networkManager);
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
-	socketManager->Init(ServerActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
+	socketManager->Init(ClientActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
 
 	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
 }

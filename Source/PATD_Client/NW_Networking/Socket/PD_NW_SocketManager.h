@@ -4,7 +4,7 @@
 
 //forward declarations
 class PD_NW_Socket;
-class APD_NW_ServerActor;
+class APD_NW_ClientActor;
 
 class PD_NW_NetworkManager;
 /**
@@ -22,7 +22,7 @@ private:
 	PD_NW_Socket* listenerSocket;
 
 
-	APD_NW_ServerActor* myServerActor;
+	APD_NW_ClientActor* myClientActor;
 
 	bool isServer;
 
@@ -76,8 +76,8 @@ public:
 	///Funciones Get y Set de los Atributos
 	void SetIsServer(bool InIsServer);
 	bool GetIsServer();
-	void SetServerActor(APD_NW_ServerActor* InmyServerActor);
-	APD_NW_ServerActor* GetServerActor();
+	void SetClientActor(APD_NW_ClientActor* InmyClientActor);
+	APD_NW_ClientActor* GetClientActor();
 	PD_NW_NetworkManager* GetNetworkManager();
 	void SetNetworkManager(PD_NW_NetworkManager* networkManagerIn);
 
@@ -85,9 +85,9 @@ public:
 
 	///FUNCIONES 
 	//Inicializa el socketManager e inicia el timer. IP se usa solo en modo cliente.
-	void Init(APD_NW_ServerActor* InmyServerActor, FString ip, int port);
-	//Inicializa el ServerActor para ser llamado desde cualquier Mapa
-	void InitServerActor(APD_NW_ServerActor* InmyServerActor);
+	void Init(APD_NW_ClientActor* InmyClientActor, FString ip, int port);
+	//Inicializa el ClientActor para ser llamado desde cualquier Mapa
+	void InitClientActor(APD_NW_ClientActor* InmyClientActor);
 
 	///* SERVIDOR */
 	//Inicializa el SocketManager como Server

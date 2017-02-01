@@ -6,7 +6,7 @@
 //Includes of forward declaration
 #include "PD_NW_Socket.h" 
 #include "Networking.h"
-#include "NW_NetWorking/PD_NW_ServerActor.h"
+#include "NW_NetWorking/PD_NW_ClientActor.h"
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
 //Includes de prueba
 
@@ -33,11 +33,11 @@ PD_NW_SocketManager::~PD_NW_SocketManager()
 *** FUNCIONES **
 /******************************/
 //
-void PD_NW_SocketManager::Init(APD_NW_ServerActor* InmyServerActor, FString ip, int port)
+void PD_NW_SocketManager::Init(APD_NW_ClientActor* InmyClientActor, FString ip, int port)
 {
 	UE_LOG(LogTemp, Warning, TEXT("INICIANDO SOCKET MANAGER! "));
 	//Inicializacion actor
-	InitServerActor(InmyServerActor);
+	InitClientActor(InmyClientActor);
 
 	if (isServer)
 	{
@@ -110,14 +110,14 @@ bool PD_NW_SocketManager::InitListener(int port) {
 
 }
 
-void PD_NW_SocketManager::InitServerActor(APD_NW_ServerActor* InmyServerActor)
+void PD_NW_SocketManager::InitClientActor(APD_NW_ClientActor* InmyClientActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("InitServerActor"));
 
-	myServerActor = InmyServerActor;
-	myServerActor->SetSocketManager(this);
+	myClientActor = InmyClientActor;
+	myClientActor->SetSocketManager(this);
 
-	GetServerActor()->InitTimerActor();
+	GetClientActor()->InitTimerActor();
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 }
 
@@ -221,9 +221,9 @@ myServerActor = InmyServerActor;
 myServerActor->SetSocketManager(this);
 }*/
 
-APD_NW_ServerActor* PD_NW_SocketManager::GetServerActor()
+APD_NW_ClientActor* PD_NW_SocketManager::GetClientActor()
 {
-	return myServerActor;
+	return myClientActor;
 }
 
 
@@ -236,11 +236,11 @@ void PD_NW_SocketManager::SetNetworkManager(PD_NW_NetworkManager* networkManager
 
 FString PD_NW_SocketManager::StateString() {
 	FString out = "SocketManager state:";
-	if (GetServerActor()->isTimerActive()) {
+	if (GetClientActor()->isTimerActive()) {
 
 		out += "=[ServerActor OK]=";
 
-		if (GetServerActor()->isTimerActive()) {
+		if (GetClientActor()->isTimerActive()) {
 			out += "=[Timer running]=";
 		}
 		else {
