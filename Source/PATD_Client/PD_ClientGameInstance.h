@@ -42,6 +42,7 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 public:
 	bool isGameMaster = false;
 	FString numPlayer;
+	FString serverAddressToConnect = "127.0.0.1"; //Por defecto
 	//Overwrites
 
 	///CONSTANTES
@@ -51,8 +52,10 @@ public:
 	//Existe ya UWorld aqui, y GetTimerManager()??
 
 	virtual void Init();
-
+	
 	//void Shutdown();
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+	void SetServerAddressToConnect(FString ip);
 
 	//PD_NW_SocketManager* GetSocketManager();
 	void LoadMap(FString mapName);
