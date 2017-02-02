@@ -56,6 +56,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 	void SetServerAddressToConnect(FString ip);
 
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+	bool GetIsGameMaster();
+
 	//PD_NW_SocketManager* GetSocketManager();
 	void LoadMap(FString mapName);
 

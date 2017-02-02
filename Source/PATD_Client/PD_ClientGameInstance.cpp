@@ -170,6 +170,11 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	InitializeNetworking();
 }
 
+
+bool UPD_ClientGameInstance::GetIsGameMaster()
+{
+	return isGameMaster;
+}
 /*
 PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
 {
