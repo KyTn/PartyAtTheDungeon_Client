@@ -93,8 +93,9 @@ PD_SR_SerializerManager* PD_NW_NetworkManager::GetSerializerManager() {
 }
 
 bool PD_NW_NetworkManager::SendNow(FStructGenericoHito2* st, int player) {
-
 	
+	UE_LOG(LogTemp, Warning, TEXT(">>> SendNow >>> Enviando sockets! "));
+
 	TArray<uint8>* data=serializerManager->SerializeData(st);
 	return socketManager->SendInfoTo(player, data);
 

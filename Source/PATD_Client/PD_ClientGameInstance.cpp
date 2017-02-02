@@ -29,14 +29,15 @@ void UPD_ClientGameInstance::Init()
 			gi = i;
 		}
 		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
-			
-
 			if (dataStruct->orderType != -1) { //NullOrder
 				FStructGenericoHito2 respuesta = FStructGenericoHito2();
 				switch (dataStruct->orderType) {
 				case 5: //SetClientMaster
 					gi->isGameMaster = true;
 					gi->numPlayer = dataStruct->stringMap;
+
+					respuesta.orderType = 1;//SetClientMaster
+					gi->networkManager->SendNow(&respuesta, 0);
 					break;
 
 				case 6://Welcome
@@ -68,17 +69,18 @@ void UPD_ClientGameInstance::Init()
 
 		}
 	};
+
+	networkManager = new PD_NW_NetworkManager();
 	ObservadorPrueba* obs = new ObservadorPrueba(this);
 	obs->setUpObserver(-1, UStructType::AllStructs);
 	networkManager->RegisterObserver(obs);
 
-
 	//PRUEBA
-	FStructGenericoHito2* m =  new FStructGenericoHito2();
-	m->orderType = 0;
-	UE_LOG(LogTemp, Warning, TEXT("Enviando Order %d"), m->orderType);
+	//FStructGenericoHito2* m =  new FStructGenericoHito2();
+	//m->orderType = 0;
+	//UE_LOG(LogTemp, Warning, TEXT("Enviando Order %d"), m->orderType);
 
-	networkManager->SendNow(m,0);
+	//networkManager->SendNow(m,0);
 
 
 	/* //Pruebas feas del ustructLista
@@ -135,7 +137,7 @@ void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
 
 void UPD_ClientGameInstance::InitializeNetworking()
 {
-	networkManager = new PD_NW_NetworkManager();
+	
 	PD_NW_SocketManager* socketManager = networkManager->GetSocketManager();
 	
 	socketManager->SetIsServer(false);
@@ -145,9 +147,19 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	socketManager->SetNetworkManager(networkManager);
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
 	socketManager->Init(ClientActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
-
 	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
+
+	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	
 }
+
+
+
+
+
+/*********************************
+****** FUNCIONES BP / UTILIDAD 
+*********************************/
 
 void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	if (ip == "")

@@ -43,6 +43,15 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 
 
 	bool connected = socket->Connect(*addr);
+
+	if (connected) {
+		UE_LOG(LogTemp, Warning, TEXT(">>> Se ha conectado guay con el server "));
+
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT(">>> No se ha podido conectar con el servidor "));
+
+	}
 	return connected;
 
 	/*TSharedRef<FInternetAddr> addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
@@ -60,6 +69,12 @@ bool PD_NW_Socket::SendData(TArray<uint8>* sendData) {
 	//Mirar si la el CountBytes funciona adecuadamente o esta metiendo bytes de mas para el array. (este serializando de mas)
 
 	bool successful = socket->Send(sendData->GetData(), sendData->Num(), bytesReceived);
+	if (successful) {
+		UE_LOG(LogTemp, Error, TEXT(">>> Se ha enviado un paquete! "));
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT(">>> No se enviado nada! "));
+	}
 	return successful;
 }
 

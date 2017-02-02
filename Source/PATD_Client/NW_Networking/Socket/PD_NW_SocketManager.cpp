@@ -139,10 +139,17 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 }
 
 bool PD_NW_SocketManager::SendInfoTo(int indexSocket, TArray<uint8>* data) {
+	UE_LOG(LogTemp, Warning, TEXT(">>> SendInfoTo "));
+
 	if (socketArray.IsValidIndex(indexSocket) && socketArray[indexSocket] != nullptr) { //Comprobamos que el indice es valido
 		return socketArray[indexSocket]->SendData(data);
 	}
-	else return false;
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT(">>> Index Array no Vale "));
+
+		return false;
+	}
 }
 
 
