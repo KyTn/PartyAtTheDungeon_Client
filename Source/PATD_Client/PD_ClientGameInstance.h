@@ -59,6 +59,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 	bool GetIsGameMaster();
 
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void GetReadyToParty();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void GoToLobby();
 	//PD_NW_SocketManager* GetSocketManager();
 	void LoadMap(FString mapName);
 

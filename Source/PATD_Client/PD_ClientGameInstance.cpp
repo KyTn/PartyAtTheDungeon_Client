@@ -182,5 +182,17 @@ PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
 }
 */
 
+void UPD_ClientGameInstance::GoToLobby()
+{
+	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	respuesta.orderType = 2;
+	networkManager->SendNow(&respuesta, 0);
+}
 
 
+void UPD_ClientGameInstance::GetReadyToParty()
+{
+	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	respuesta.orderType = 4;
+	networkManager->SendNow(&respuesta, 0);
+}
