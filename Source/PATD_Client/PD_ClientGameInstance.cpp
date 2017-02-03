@@ -31,8 +31,9 @@ void UPD_ClientGameInstance::Init()
 		}
 		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
 			UE_LOG(LogTemp, Warning, TEXT("Recibido order:%d"), dataStruct->orderType);
-			if (dataStruct->orderType != -1) { //NullOrder
-				FStructGenericoHito2 respuesta = FStructGenericoHito2();
+			FStructGenericoHito2 respuesta = FStructGenericoHito2();
+			if (dataStruct->orderType != 255) { //NullOrder
+				;
 				switch (dataStruct->orderType) {
 				case 5: //SetClientMaster
 					gi->isGameMaster = true;
@@ -68,6 +69,8 @@ void UPD_ClientGameInstance::Init()
 				//Cargar el mapa que viene en el string.
 				UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
 				gi->mapString=dataStruct->stringMap;
+				respuesta.orderType = 11; //ChangeToLobby
+				gi->networkManager->SendNow(&respuesta, 0);
 			}
 
 		}
