@@ -31,8 +31,7 @@ public:
 
 	PD_MG_StaticMap* getMap() { return StaticMapRef; }
 
-	void Parsear();
-	void ParserElementByChar(PD_MG_LogicPosition* logpos, TCHAR* c);
+	
 	AActor* InstantiateTile(PD_MG_LogicPosition* logpos);
 	AActor* InstantiateWall(PD_MG_LogicPosition* logpos);
 };
