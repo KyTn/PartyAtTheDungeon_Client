@@ -111,15 +111,14 @@ socketManager->SendInfoTo(player, data);
 
 
 //Con compresor
-/*AddToSendList(st, player);
+AddToSendList(st, player);
 SendNow(player);
 
-*/
-/*
+
 return true;
-}*/
+}
 //Con compresor
-/*
+
 bool PD_NW_NetworkManager::SendNow(int player) {//serializamos y enviamos los datos de un jugador, tras esto deberian borrarse¿?
 
 

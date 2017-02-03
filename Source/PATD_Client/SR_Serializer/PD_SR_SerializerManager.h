@@ -38,8 +38,8 @@ public:
 	//template <typename T>
 	//T* Des(T*);
 
-	TArray<uint8>* PD_SR_SerializerManager::SerializeData(FStructGenericoHito2* genericstruct);
+	TArray<uint8>* SerializeData(FStructGenericoHito2* genericstruct);
 
 
-	FStructGenericoHito2* PD_SR_SerializerManager::DeserializeData(TArray<uint8>* data);
+	FStructGenericoHito2* DeserializeData(TArray<uint8>* data);
 };

@@ -12,6 +12,7 @@
 
 //Includes de prueba
 #include "NW_Networking/EventLayer/PD_NW_iEventObserver.h"
+#include "MapGeneration/ParserActor.h"
 
 
 void UPD_ClientGameInstance::Init()
@@ -29,6 +30,7 @@ void UPD_ClientGameInstance::Init()
 			gi = i;
 		}
 		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
+			UE_LOG(LogTemp, Warning, TEXT("Recibido order:%d"), dataStruct->orderType);
 			if (dataStruct->orderType != -1) { //NullOrder
 				FStructGenericoHito2 respuesta = FStructGenericoHito2();
 				switch (dataStruct->orderType) {
@@ -64,7 +66,8 @@ void UPD_ClientGameInstance::Init()
 			}
 			else {//No es una order, asi que es un map
 				//Cargar el mapa que viene en el string.
-				gi->LoadMap(dataStruct->stringMap);
+				UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
+				gi->mapString=dataStruct->stringMap;
 			}
 
 		}
@@ -133,7 +136,16 @@ void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
 	networkManager->GetSocketManager()->InitClientActor(ClientActorSpawned);
 }
 
+void UPD_ClientGameInstance::InitGameMap()
+{
+	FString s = GetWorld()->GetMapName();
+	UE_LOG(LogTemp, Warning, TEXT("Init GameMap %s"), *s);
 
+
+	AParserActor* ParseActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
+	ParseActor->InitGameMap(mapString);
+
+}
 
 void UPD_ClientGameInstance::InitializeNetworking()
 {
