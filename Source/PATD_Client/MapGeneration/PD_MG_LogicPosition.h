@@ -27,7 +27,7 @@ public:
 	}
 
 	
-	friend uint32 PD_MG_LogicPosition::GetTypeHash(const PD_MG_LogicPosition& logpos)
+	friend FORCEINLINE  uint32 GetTypeHash(const PD_MG_LogicPosition& logpos)
 	{
 		return (logpos._x << 16) + logpos._y;
 	}

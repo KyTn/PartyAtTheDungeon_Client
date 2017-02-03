@@ -12,6 +12,7 @@
 
 //Includes de prueba
 #include "NW_Networking/EventLayer/PD_NW_iEventObserver.h"
+#include "MapGeneration/ParserActor.h"
 
 
 void UPD_ClientGameInstance::Init()
@@ -29,8 +30,10 @@ void UPD_ClientGameInstance::Init()
 			gi = i;
 		}
 		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
-			if (dataStruct->orderType != -1) { //NullOrder
-				FStructGenericoHito2 respuesta = FStructGenericoHito2();
+			UE_LOG(LogTemp, Warning, TEXT("Recibido order:%d"), dataStruct->orderType);
+			FStructGenericoHito2 respuesta = FStructGenericoHito2();
+			if (dataStruct->orderType != 255) { //NullOrder
+				;
 				switch (dataStruct->orderType) {
 				case 5: //SetClientMaster
 					gi->isGameMaster = true;
@@ -64,7 +67,10 @@ void UPD_ClientGameInstance::Init()
 			}
 			else {//No es una order, asi que es un map
 				//Cargar el mapa que viene en el string.
-				gi->LoadMap(dataStruct->stringMap);
+				UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
+				gi->mapString=dataStruct->stringMap;
+				respuesta.orderType = 11; //ChangeToLobby
+				gi->networkManager->SendNow(&respuesta, 0);
 			}
 
 		}
@@ -133,7 +139,16 @@ void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
 	networkManager->GetSocketManager()->InitClientActor(ClientActorSpawned);
 }
 
+void UPD_ClientGameInstance::InitGameMap()
+{
+	FString s = GetWorld()->GetMapName();
+	UE_LOG(LogTemp, Warning, TEXT("Init GameMap %s"), *s);
 
+
+	AParserActor* ParseActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
+	ParseActor->InitGameMap(mapString);
+
+}
 
 void UPD_ClientGameInstance::InitializeNetworking()
 {
@@ -170,6 +185,11 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	InitializeNetworking();
 }
 
+
+bool UPD_ClientGameInstance::GetIsGameMaster()
+{
+	return isGameMaster;
+}
 /*
 PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
 {
@@ -177,5 +197,17 @@ PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
 }
 */
 
+void UPD_ClientGameInstance::GoToLobby()
+{
+	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	respuesta.orderType = 2;
+	networkManager->SendNow(&respuesta, 0);
+}
 
 
+void UPD_ClientGameInstance::GetReadyToParty()
+{
+	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	respuesta.orderType = 4;
+	networkManager->SendNow(&respuesta, 0);
+}

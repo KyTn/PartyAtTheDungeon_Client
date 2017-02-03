@@ -22,7 +22,7 @@ AParserActor::AParserActor()
 void AParserActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	/*
 	StaticMapRef = new PD_MG_StaticMap();
 
 
@@ -34,11 +34,27 @@ void AParserActor::BeginPlay()
 	parseMap->StartParsingFromFString(&data, StaticMapRef);
 	parseMap->InstantiateStaticMap(this);
 
-
+	*/
 
 }
 
+//Agregado para el hito2 MCG
+void AParserActor::InitGameMap(FString mapData)
+{
+	
 
+	StaticMapRef = new PD_MG_StaticMap();
+
+
+	PD_MG_MapParser* parseMap = new PD_MG_MapParser();
+	UE_LOG(LogTemp, Warning, TEXT("StartParsingFromFString %s  VACIO?"), *mapData);
+	
+	parseMap->StartParsingFromFString(&mapData, StaticMapRef);
+	parseMap->InstantiateStaticMap(this);
+
+
+
+}
 
 AActor* AParserActor::InstantiateTile(PD_MG_LogicPosition* logpos)
 {
