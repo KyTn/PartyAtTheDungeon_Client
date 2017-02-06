@@ -39,7 +39,7 @@ void APD_NW_ClientActor::InitTimerActor()
 
 	//Timers de prueba
 
-	GetWorldTimerManager().SetTimer(TimerHandleActor3, this, &APD_NW_ClientActor::SendPruebaSockets, 5.0f, true);
+	//GetWorldTimerManager().SetTimer(TimerHandleActor3, this, &APD_NW_ClientActor::SendPruebaSockets, 5.0f, true);
 }
 
 

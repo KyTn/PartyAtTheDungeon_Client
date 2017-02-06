@@ -11,9 +11,9 @@
 //Includes de prueba
 
 
-/******************************
-*** CONSTRUCTOR Y DESTRUCTOR DE LA CLASE **
-/******************************/
+//==============================================
+//=== CONSTRUCTOR Y DESTRUCTOR DE LA CLASE ==
+//==============================================
 PD_NW_SocketManager::PD_NW_SocketManager()
 {
 	socketArray = TArray<PD_NW_Socket*>();//Creo que no hace falta esta inicializacion.
@@ -29,9 +29,9 @@ PD_NW_SocketManager::~PD_NW_SocketManager()
 
 
 
-/******************************
-*** FUNCIONES **
-/******************************/
+//==============================================
+//=== FUNCIONES ==
+//==============================================
 //
 void PD_NW_SocketManager::Init(APD_NW_ClientActor* InmyClientActor, FString ip, int port)
 {
@@ -139,10 +139,17 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 }
 
 bool PD_NW_SocketManager::SendInfoTo(int indexSocket, TArray<uint8>* data) {
+	UE_LOG(LogTemp, Warning, TEXT(">>> SendInfoTo "));
+
 	if (socketArray.IsValidIndex(indexSocket) && socketArray[indexSocket] != nullptr) { //Comprobamos que el indice es valido
 		return socketArray[indexSocket]->SendData(data);
 	}
-	else return false;
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT(">>> Index Array no Vale "));
+
+		return false;
+	}
 }
 
 
@@ -197,9 +204,9 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 
 
 
-/******************************
-*** FUNCIONES GET Y SET / APOYO **
-/******************************/
+//==============================================
+//=== FUNCIONES GET Y SET / APOYO ==
+//==============================================
 void PD_NW_SocketManager::SetIsServer(bool InIsServer)
 {
 	isServer = InIsServer;

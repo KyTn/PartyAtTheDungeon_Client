@@ -25,6 +25,9 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFString(FString* data, PD_MG_S
 	// Obtenemos la version del parser que se debe usar. 
 
 	TArray<FString> fileSplitted;
+
+	UE_LOG(LogTemp, Warning, TEXT("StartParsingFromFString %s"), data);
+
 	data->ParseIntoArray(fileSplitted, TEXT("\n"), true);
 
 	if (fileSplitted[0].Contains("v0.1")) {
@@ -110,14 +113,14 @@ uint32 PD_MG_MapParser::ReadRawMap(TArray<FString> fileReaded, uint32 firstIndex
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, s);
 		
 	}
-	/**/
+	*/
 }
 
 void PD_MG_MapParser::InstantiateStaticMap(AParserActor* parserActor) {
 	
 	for (int i = 0; i < parserActor->getMap()->GetLogicPositions().Num(); i++) {
 
-		/**/
+		
 		switch (parserActor->getMap()->GetXYMap()[*parserActor->getMap()->GetLogicPositions()[i]]) {
 		case 'w':
 			parserActor->InstantiateWall(parserActor->getMap()->GetLogicPositions()[i]);
@@ -132,6 +135,6 @@ void PD_MG_MapParser::InstantiateStaticMap(AParserActor* parserActor) {
 			break;
 
 		}
-		/**/
+		
 	}
 }

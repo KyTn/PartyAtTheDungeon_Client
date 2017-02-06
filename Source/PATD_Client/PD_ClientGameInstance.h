@@ -31,7 +31,6 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 		//PD_NW_SocketManager* socketManager;
 		PD_NW_NetworkManager* networkManager;
 
-	
 	//Functions ====
 	//Funcion para inicializar entre otros el socketManager. 
 	void InitializeNetworking();
@@ -40,6 +39,8 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 	void InitializeAfterTravel();
 
 public:
+
+	FString mapString;
 	bool isGameMaster = false;
 	FString numPlayer;
 	FString serverAddressToConnect = "127.0.0.1"; //Por defecto
@@ -57,9 +58,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 	void SetServerAddressToConnect(FString ip);
 
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+	bool GetIsGameMaster();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void GetReadyToParty();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void GoToLobby();
 	//PD_NW_SocketManager* GetSocketManager();
 	void LoadMap(FString mapName);
 
+	void InitGameMap();
 	void InitClientActoWhenLoadMap();
 	
 };

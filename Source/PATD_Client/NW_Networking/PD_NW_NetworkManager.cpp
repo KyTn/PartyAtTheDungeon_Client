@@ -93,8 +93,9 @@ PD_SR_SerializerManager* PD_NW_NetworkManager::GetSerializerManager() {
 }
 
 bool PD_NW_NetworkManager::SendNow(FStructGenericoHito2* st, int player) {
-
 	
+	UE_LOG(LogTemp, Warning, TEXT(">>> SendNow >>> Enviando sockets! "));
+
 	TArray<uint8>* data=serializerManager->SerializeData(st);
 	return socketManager->SendInfoTo(player, data);
 
@@ -110,15 +111,14 @@ socketManager->SendInfoTo(player, data);
 
 
 //Con compresor
-/*AddToSendList(st, player);
+AddToSendList(st, player);
 SendNow(player);
 
-*/
-/*
+
 return true;
-}*/
+}
 //Con compresor
-/*
+
 bool PD_NW_NetworkManager::SendNow(int player) {//serializamos y enviamos los datos de un jugador, tras esto deberian borrarse¿?
 
 
