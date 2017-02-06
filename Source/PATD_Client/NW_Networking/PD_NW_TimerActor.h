@@ -3,16 +3,14 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "PD_NW_ClientActor.generated.h"
+#include "PD_NW_TimerActor.generated.h"
 
 //forward declarations
 class PD_NW_SocketManager;
 
-//declaraciones prueba
-class UPD_ServerGameInstance;
 
 UCLASS()
-class PATD_CLIENT_API APD_NW_ClientActor : public AActor
+class PATD_CLIENT_API APD_NW_TimerActor : public AActor
 {
 	GENERATED_BODY()
 
@@ -22,7 +20,7 @@ private:
 
 public:
 	// Sets default values for this actor's properties
-	APD_NW_ClientActor();
+	APD_NW_TimerActor();
 
 
 	FTimerHandle TimerHandleActor;
@@ -34,6 +32,7 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
+
 
 	//Setea e inicia el timer.
 	void InitTimerActor();
@@ -50,10 +49,5 @@ public:
 
 	//Declaraciones de prueba
 
-	FTimerHandle TimerHandleActor3;
-
-
-
-	void SendPruebaSockets();
 
 };

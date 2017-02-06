@@ -24,8 +24,9 @@ void AInitSocketManagerOnLevel::BeginPlay()
 	if (SGI)
 	{
 		SGI->InitClientActoWhenLoadMap();
+		FString s = GetWorld()->GetMapName();
+		UE_LOG(LogTemp, Warning, TEXT("BeginPlay ActorInitializer. Map: %s"), *s)
 
-		
 		if (GetWorld()->GetMapName() == "UEDPIE_0_LVL_4_GameMap") {
 			SGI->InitGameMap();
 		}

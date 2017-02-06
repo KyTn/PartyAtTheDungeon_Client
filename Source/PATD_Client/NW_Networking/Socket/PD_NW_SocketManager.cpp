@@ -6,14 +6,14 @@
 //Includes of forward declaration
 #include "PD_NW_Socket.h" 
 #include "Networking.h"
-#include "NW_NetWorking/PD_NW_ClientActor.h"
+#include "NW_NetWorking/PD_NW_TimerActor.h"
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
 //Includes de prueba
 
 
-//==============================================
-//=== CONSTRUCTOR Y DESTRUCTOR DE LA CLASE ==
-//==============================================
+//============================================
+//*** CONSTRUCTOR Y DESTRUCTOR DE LA CLASE **
+//============================================
 PD_NW_SocketManager::PD_NW_SocketManager()
 {
 	socketArray = TArray<PD_NW_Socket*>();//Creo que no hace falta esta inicializacion.
@@ -29,35 +29,35 @@ PD_NW_SocketManager::~PD_NW_SocketManager()
 
 
 
-//==============================================
-//=== FUNCIONES ==
-//==============================================
+/******************************
+*** FUNCIONES **
+/******************************/
 //
-void PD_NW_SocketManager::Init(APD_NW_ClientActor* InmyClientActor, FString ip, int port)
+void PD_NW_SocketManager::Init(APD_NW_TimerActor* InmyTimerActor, FString ip, int port)
 {
 	UE_LOG(LogTemp, Warning, TEXT("INICIANDO SOCKET MANAGER! "));
 	//Inicializacion actor
-	InitClientActor(InmyClientActor);
+	InitTimerActor(InmyTimerActor);
 
 	if (isServer)
 	{
-		InitSocketManager_ServerMode(port);
+		InitSocketManager_ServerMode(ip, port);
 	}
 	else
 	{
-		InitSocketManager_ClientMode(ip, port);
+		InitSocketManager_ClientMode("", port);
 	}
 
 }
 
 
 
-void PD_NW_SocketManager::InitSocketManager_ServerMode(int port)
+void PD_NW_SocketManager::InitSocketManager_ServerMode(FString ip, int port)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Socket MANAGER como SERVIDOR!! "));
 
 	//Inicializacion listener
-	if (InitListener(port))
+	if (InitListener(ip, port))
 	{
 		//Cuando se ha creado el Socket Listener, puedes llamar al Actor para que empiece el Timer de Escuchar.
 		// Se llama en el init para todos.
@@ -77,14 +77,15 @@ void PD_NW_SocketManager::InitSocketManager_ClientMode(FString ip, int port)
 	//1.Crear el Socket que va a comunicar con el Servidor
 	//2.Comprobar que hay comunicacion
 	//3.Cuando hay comunicacion, Guadar dicho socket en el Array de Socket del SocketManager
-	//Esto ya no se hace aqui.
 
+	//Esto ya no se hace aqui, sino llamando a la funcion de conectar del networkmanager.
 	/*
-	if (CreateDataSocket(ip, port) == -1) {
-		//ERROR!!
-		UE_LOG(LogTemp, Error, TEXT("No se ha podido crear el Socket Cliente! "));
-		return;
+	if (ConnectDataSocket(ip, port) == -1) {
+	//ERROR!!
+	UE_LOG(LogTemp, Error, TEXT("No se ha podido crear el Socket Cliente! "));
+	return;
 	}*/
+
 	//Y si no conecta aqui porque es demasiado pronto y no esta el server up? 
 	///R : Si no esta el Server UP, esta funcion se volveria a llamar con un boton de "refresh"
 
@@ -96,28 +97,29 @@ void PD_NW_SocketManager::InitSocketManager_ClientMode(FString ip, int port)
 
 //hay posibilidad de que esta funcion falle? quizas debe devolver void 
 ///R: Asi sabemos si se ha creado, antes de proceder a que el ServerActor empiece a escuhcar por ese puerto y genere errores
-bool PD_NW_SocketManager::InitListener(int port) {
+bool PD_NW_SocketManager::InitListener(FString ip, int port) {
 
 	/*if (listenerSocket) { //Esto es necesario?
 	//cerrar conexion del listener
 	//deletear
 	delete listenerSocket;
 	}*/
+
 	listenerSocket = new PD_NW_Socket();
-	listenerSocket->InitAsListener(port);
+	listenerSocket->InitAsListener(ip, port);
 
 	return true;
 
 }
 
-void PD_NW_SocketManager::InitClientActor(APD_NW_ClientActor* InmyClientActor)
+void PD_NW_SocketManager::InitTimerActor(APD_NW_TimerActor* InmyTimerActor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("InitServerActor"));
+	UE_LOG(LogTemp, Warning, TEXT("InitTimerActor"));
 
-	myClientActor = InmyClientActor;
-	myClientActor->SetSocketManager(this);
+	myTimerActor = InmyTimerActor;
+	myTimerActor->SetSocketManager(this);
 
-	GetClientActor()->InitTimerActor();
+	GetTimerActor()->InitTimerActor();
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 }
 
@@ -139,17 +141,22 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 }
 
 bool PD_NW_SocketManager::SendInfoTo(int indexSocket, TArray<uint8>* data) {
-	UE_LOG(LogTemp, Warning, TEXT(">>> SendInfoTo "));
 
-	if (socketArray.IsValidIndex(indexSocket) && socketArray[indexSocket] != nullptr) { //Comprobamos que el indice es valido
-		return socketArray[indexSocket]->SendData(data);
+	if (indexSocket == -1) { //support to broadcast
+		bool ok = true;
+		for (int i = 0; i < socketArray.Num(); i++)
+		{
+			ok = ok && SendInfoTo(i, data);
+		}
+		return ok;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT(">>> Index Array no Vale "));
+	else {
+		if (socketArray.IsValidIndex(indexSocket) && socketArray[indexSocket] != nullptr) { //Comprobamos que el indice es valido
+			return socketArray[indexSocket]->SendData(data);
+		}
+		else return false;
+	}
 
-		return false;
-	}
 }
 
 
@@ -168,6 +175,7 @@ void PD_NW_SocketManager::HandleNewListenerConnection(PD_NW_Socket* newSocket) {
 	UE_LOG(LogTemp, Warning, TEXT("New Listener Connection"));
 
 	int socketIndex = socketArray.Add(newSocket);
+	readyPlayersArray.Add(false); //Set siempre a false el ready inicial del cliente
 
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 
@@ -204,9 +212,9 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 
 
 
-//==============================================
-//=== FUNCIONES GET Y SET / APOYO ==
-//==============================================
+/******************************
+*** FUNCIONES GET Y SET / APOYO **
+/******************************/
 void PD_NW_SocketManager::SetIsServer(bool InIsServer)
 {
 	isServer = InIsServer;
@@ -219,6 +227,34 @@ bool PD_NW_SocketManager::GetIsServer()
 
 }
 
+TArray<PD_NW_Socket*> PD_NW_SocketManager::GetSocketArray()
+{
+	return socketArray;
+}
+
+TArray<bool> PD_NW_SocketManager::GetReadyPlayersArray()
+{
+	return readyPlayersArray;
+}
+
+bool PD_NW_SocketManager::SetSocketArrayIndex(int index)
+{
+	if (readyPlayersArray.Num() >= index)
+	{
+		if (readyPlayersArray[index])
+		{
+			readyPlayersArray[index] = false;
+		}
+		else {
+			readyPlayersArray[index] = true;
+		}
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 //Creo que esta funcion ya no es necesaria, se hace todo en el initServerActor y solo existe el GetServerActor
 //Nunca vamos a querer setearlo sin iniciar el timer... o si?
 /*
@@ -228,9 +264,9 @@ myServerActor = InmyServerActor;
 myServerActor->SetSocketManager(this);
 }*/
 
-APD_NW_ClientActor* PD_NW_SocketManager::GetClientActor()
+APD_NW_TimerActor* PD_NW_SocketManager::GetTimerActor()
 {
-	return myClientActor;
+	return myTimerActor;
 }
 
 
@@ -243,11 +279,11 @@ void PD_NW_SocketManager::SetNetworkManager(PD_NW_NetworkManager* networkManager
 
 FString PD_NW_SocketManager::StateString() {
 	FString out = "SocketManager state:";
-	if (GetClientActor()->isTimerActive()) {
+	if (GetTimerActor()->isTimerActive()) {
 
-		out += "=[ServerActor OK]=";
+		out += "=[TimerActor OK]=";
 
-		if (GetClientActor()->isTimerActive()) {
+		if (GetTimerActor()->isTimerActive()) {
 			out += "=[Timer running]=";
 		}
 		else {
@@ -255,7 +291,7 @@ FString PD_NW_SocketManager::StateString() {
 		}
 	}
 	else {
-		out += "=[ServerActor missing!]=";
+		out += "=[TimerActor missing!]=";
 	}
 
 	if (listenerSocket) {

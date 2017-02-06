@@ -2,7 +2,7 @@
 
 #include "PATD_Client.h"
 #include "PD_ClientGameInstance.h"
-#include "NW_NetWorking/PD_NW_ClientActor.h"
+#include "NW_NetWorking/PD_NW_TimerActor.h"
 
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
 #include "SR_Serializer/PD_SR_UStruct.h"
@@ -133,10 +133,10 @@ void UPD_ClientGameInstance::LoadMap(FString mapName)
 
 void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
 {
-	APD_NW_ClientActor* ClientActorSpawned = (APD_NW_ClientActor*)GetWorld()->SpawnActor(APD_NW_ClientActor::StaticClass());
+	APD_NW_TimerActor* ClientActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
 
 	//socketManager->InitServerActor(ServerActorSpawned);
-	networkManager->GetSocketManager()->InitClientActor(ClientActorSpawned);
+	networkManager->GetSocketManager()->InitTimerActor(ClientActorSpawned);
 }
 
 void UPD_ClientGameInstance::InitGameMap()
@@ -157,7 +157,7 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	
 	socketManager->SetIsServer(false);
 
-	APD_NW_ClientActor* ClientActorSpawned = (APD_NW_ClientActor*)GetWorld()->SpawnActor(APD_NW_ClientActor::StaticClass());
+	APD_NW_TimerActor* ClientActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
 
 	socketManager->SetNetworkManager(networkManager);
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
@@ -199,6 +199,7 @@ PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
 
 void UPD_ClientGameInstance::GoToLobby()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::GoToLobby()."));
 	FStructGenericoHito2 respuesta = FStructGenericoHito2();
 	respuesta.orderType = 2;
 	networkManager->SendNow(&respuesta, 0);

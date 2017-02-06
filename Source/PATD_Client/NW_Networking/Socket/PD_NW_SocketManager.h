@@ -4,7 +4,7 @@
 
 //forward declarations
 class PD_NW_Socket;
-class APD_NW_ClientActor;
+class APD_NW_TimerActor;
 
 class PD_NW_NetworkManager;
 /**
@@ -18,11 +18,12 @@ private:
 
 	///VARIABLES
 	TArray<PD_NW_Socket*> socketArray;
+	TArray<bool> readyPlayersArray;
 
 	PD_NW_Socket* listenerSocket;
 
 
-	APD_NW_ClientActor* myClientActor;
+	APD_NW_TimerActor* myTimerActor;
 
 	bool isServer;
 
@@ -63,8 +64,6 @@ private:
 
 	//Lo de la gestion de reconexiones va aqui (aunque puede llamar a otra clase)
 
-
-
 public:
 	///Inicializacion
 	PD_NW_SocketManager();
@@ -76,22 +75,28 @@ public:
 	///Funciones Get y Set de los Atributos
 	void SetIsServer(bool InIsServer);
 	bool GetIsServer();
-	void SetClientActor(APD_NW_ClientActor* InmyClientActor);
-	APD_NW_ClientActor* GetClientActor();
+
+	void SetTimerActor(APD_NW_TimerActor* InmyServerActor);
+	APD_NW_TimerActor* GetTimerActor();
+
+
 	PD_NW_NetworkManager* GetNetworkManager();
 	void SetNetworkManager(PD_NW_NetworkManager* networkManagerIn);
 
+	TArray<PD_NW_Socket*> GetSocketArray();
+	bool SetSocketArrayIndex(int index); //True si ha hecho bien el cambio / False contrario
 
+	TArray<bool> GetReadyPlayersArray();
 
 	///FUNCIONES 
 	//Inicializa el socketManager e inicia el timer. IP se usa solo en modo cliente.
-	void Init(APD_NW_ClientActor* InmyClientActor, FString ip, int port);
-	//Inicializa el ClientActor para ser llamado desde cualquier Mapa
-	void InitClientActor(APD_NW_ClientActor* InmyClientActor);
+	void Init(APD_NW_TimerActor* InmyServerActor, FString ip, int port);
+	//Inicializa el ServerActor para ser llamado desde cualquier Mapa
+	void InitTimerActor(APD_NW_TimerActor* InmyServerActor);
 
 	///* SERVIDOR */
 	//Inicializa el SocketManager como Server
-	void InitSocketManager_ServerMode(int port);
+	void InitSocketManager_ServerMode(FString ip, int port);
 	//Esta es la funcion que repetira el timer. Deberia recopilar los datos recibidos en los sockets e ir llamando a las funciones de salida
 	void TimerRefreshFunction();
 
@@ -107,7 +112,7 @@ public:
 
 
 
-	bool InitListener(int port);
+	bool InitListener(FString ip, int port);
 	bool CloseListener();
 
 

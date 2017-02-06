@@ -94,7 +94,7 @@ PD_SR_SerializerManager* PD_NW_NetworkManager::GetSerializerManager() {
 
 bool PD_NW_NetworkManager::SendNow(FStructGenericoHito2* st, int player) {
 	
-	UE_LOG(LogTemp, Warning, TEXT(">>> SendNow >>> Enviando sockets! "));
+	UE_LOG(LogTemp, Warning, TEXT("Nivel NetWorkManager:  SendNow >>> Enviando data! "));
 
 	TArray<uint8>* data=serializerManager->SerializeData(st);
 	return socketManager->SendInfoTo(player, data);
@@ -166,7 +166,7 @@ int  PD_NW_NetworkManager::ConnectTo(FString ip, int port) {
 	int player = socketManager->ConnectDataSocket(ip, port);
 	if (player == -1) {
 		//ERROR!!
-		UE_LOG(LogTemp, Error, TEXT("No se ha podido crear el Socket Cliente! "));
+		UE_LOG(LogTemp, Error, TEXT("Nivel NetWorkManager: No se ha podido crear el Socket Cliente! "));
 
 	}
 	else {

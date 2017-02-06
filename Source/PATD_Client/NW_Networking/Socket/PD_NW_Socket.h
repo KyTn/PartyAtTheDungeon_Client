@@ -23,11 +23,11 @@ public:
 	PD_NW_Socket();
 	~PD_NW_Socket();
 
-	void InitAsListener(int port);
+	void InitAsListener(FString ip, int port);
 	void InitAsDataSocket();
 
 	void SetFSocket(FSocket* inSocket);
-
+	FSocket* GetFSocket();
 	bool ConnectTo(FString ip, int port);
 	//Enviar datos
 	bool SendData(TArray<uint8>* sendData);
