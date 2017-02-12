@@ -33,7 +33,6 @@ void UPD_ClientGameInstance::Init()
 			UE_LOG(LogTemp, Warning, TEXT("Recibido order:%d"), dataStruct->orderType);
 			FStructGenericoHito2 respuesta = FStructGenericoHito2();
 			if (dataStruct->orderType != 255) { //NullOrder
-				;
 				switch (dataStruct->orderType) {
 				case 5: //SetClientMaster
 					gi->isGameMaster = true;

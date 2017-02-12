@@ -25,9 +25,16 @@ void AInitSocketManagerOnLevel::BeginPlay()
 	{
 		SGI->InitClientActoWhenLoadMap();
 		FString s = GetWorld()->GetMapName();
+
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay ActorInitializer. Map: %s"), *s)
 
-		if (GetWorld()->GetMapName() == "UEDPIE_0_LVL_4_GameMap") {
+		if (GetWorld()->IsPlayInEditor())
+		{
+			if (s == "UEDPIE_0_LVL_4_GameMap") {
+				SGI->InitGameMap();
+			}
+		}
+		if (s == "LVL_4_GameMap") {
 			SGI->InitGameMap();
 		}
 		/*Esto lo que hace es como el open level carga en un hilo diferente o algo asi, y las
