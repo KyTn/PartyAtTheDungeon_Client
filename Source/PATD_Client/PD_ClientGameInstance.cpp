@@ -21,6 +21,8 @@ void UPD_ClientGameInstance::Init()
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
 
+	levelsNameDictionary = LevelsNameDictionary();
+
 
 	class ObservadorPrueba : public PD_NW_iEventObserver
 	{

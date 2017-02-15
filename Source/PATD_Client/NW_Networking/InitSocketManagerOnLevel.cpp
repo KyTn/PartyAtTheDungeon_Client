@@ -28,15 +28,14 @@ void AInitSocketManagerOnLevel::BeginPlay()
 
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay ActorInitializer. Map: %s"), *s)
 
-		if (GetWorld()->IsPlayInEditor())
-		{
-			if (s == "UEDPIE_0_LVL_4_GameMap") {
-				SGI->InitGameMap();
-			}
-		}
-		if (s == "LVL_4_GameMap") {
+		FString currentMapName = SGI->levelsNameDictionary.GetMapName(4, SGI->GetWorld()->IsPlayInEditor());
+		if (GetWorld()->GetMapName() == currentMapName) {
+			UE_LOG(LogTemp, Warning, TEXT("If del LVL_4_Gamemap"));
 			SGI->InitGameMap();
 		}
+
+
+	
 		/*Esto lo que hace es como el open level carga en un hilo diferente o algo asi, y las
 		siguientes instrucciones que haya tras llamarlo, no tienen que ejecutarse con el mapa
 		ya cargado, tenemos este actor para inicializar cosas, que se instancia junto al mapa. (esta en el)

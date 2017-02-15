@@ -140,7 +140,7 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 
 }
 
-/*/
+/*
 //Funciones publicas para enviar
 bool PD_NW_NetworkManager::SendNow(FStructGeneric* st,int player) {
 //Para hacer broadcast con -1?
@@ -150,7 +150,7 @@ socketManager->SendInfoTo(player, data);
 
 
 //Con compresor
-/*AddToSendList(st, player);
+AddToSendList(st, player);
 SendNow(player);
 
 */

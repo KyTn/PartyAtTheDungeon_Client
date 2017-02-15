@@ -5,6 +5,7 @@
 
 
 #include "Engine/GameInstance.h"
+#include "LevelsNameDictionary.h"
 #include "PD_ClientGameInstance.generated.h"
 
 
@@ -16,9 +17,6 @@ class PD_NW_NetworkManager;
 /**
  * 
  */
-
-
-
 
 
 
@@ -39,6 +37,10 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
 	void InitializeAfterTravel();
 
 public:
+
+
+	//Para tener los nombres de los niveles - diferenciar ejecución en editor o en ejecutable
+	LevelsNameDictionary levelsNameDictionary;
 
 	FString mapString;
 	bool isGameMaster = false;
