@@ -29,8 +29,12 @@ void UPD_ClientGameInstance::Init()
 		ObservadorPrueba(UPD_ClientGameInstance* i) {
 			gi = i;
 		}
-		void handleEvent(FStructGenericoHito2* dataStruct, int inPlayer, UStructType inEventType) {
-			UE_LOG(LogTemp, Warning, TEXT("Recibido order:%d"), dataStruct->orderType);
+		void handleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
+
+
+			FStructGenericoHito2* dataStruct = (FStructGenericoHito2*)inDataStruct;
+
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Recibido order tipo:%d"), dataStruct->orderType);
 			FStructGenericoHito2 respuesta = FStructGenericoHito2();
 			if (dataStruct->orderType != 255) { //NullOrder
 				switch (dataStruct->orderType) {
@@ -38,7 +42,8 @@ void UPD_ClientGameInstance::Init()
 					gi->isGameMaster = true;
 					gi->numPlayer = dataStruct->stringMap;
 
-					respuesta.orderType = 1;//SetClientMaster
+					respuesta.orderType = 1;//GoToMainMenu
+					UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 1 - GoToMainMenu"));
 					gi->networkManager->SendNow(&respuesta, 0);
 					break;
 
@@ -68,7 +73,8 @@ void UPD_ClientGameInstance::Init()
 				//Cargar el mapa que viene en el string.
 				UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
 				gi->mapString=dataStruct->stringMap;
-				respuesta.orderType = 11; //ChangeToLobby
+				respuesta.orderType = 11; 
+				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 11 ??"));
 				gi->networkManager->SendNow(&respuesta, 0);
 			}
 
@@ -201,6 +207,7 @@ void UPD_ClientGameInstance::GoToLobby()
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::GoToLobby()."));
 	FStructGenericoHito2 respuesta = FStructGenericoHito2();
 	respuesta.orderType = 2;
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GoToLobby"));
 	networkManager->SendNow(&respuesta, 0);
 }
 
@@ -209,5 +216,6 @@ void UPD_ClientGameInstance::GetReadyToParty()
 {
 	FStructGenericoHito2 respuesta = FStructGenericoHito2();
 	respuesta.orderType = 4;
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
 	networkManager->SendNow(&respuesta, 0);
 }

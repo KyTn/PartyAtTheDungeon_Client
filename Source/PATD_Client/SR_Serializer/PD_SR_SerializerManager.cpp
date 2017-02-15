@@ -100,46 +100,65 @@ return genericStruct;
 //const std::type_info r= typeid(*genericstruct);
 //	Des(FMyStruct);
 
+/*
+template<typename T>
+TArray<uint8>* PD_SR_SerializerManager::SerializeData(T* genericstruct) {
+TArray<uint8>* data = new TArray<uint8>();
+UStruct* FMyStruct = T::StaticStruct();
+FMemoryWriter ArWriter(*data);
+FMyStruct->SerializeBin(ArWriter, genericstruct);
 
 
+return data;
+}*/
+/*
+template<typename T>
+T* PD_SR_SerializerManager::DeserializeData(TArray<uint8>* data)
+{
+
+T* generyStructs = new T();
+
+
+UStruct* FMyStruct = T::StaticStruct();
+
+
+FMemoryReader ArReader(*data);
+FMyStruct->SerializeBin(ArReader, generyStructs);
+
+
+return generyStructs;
+
+}
+*/
+
+/*
 TArray<uint8>* PD_SR_SerializerManager::SerializeData(FStructGenericoHito2* genericstruct) {
-
-	if (!genericstruct) {
-		UE_LOG(LogTemp, Warning, TEXT("Struct null en serializer "));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Struct NOnull en serializer "));
-
-	}
-	TArray<uint8>* data = new TArray<uint8>();
-	UStruct* FMyStruct = FStructGenericoHito2::StaticStruct();
-	if (FMyStruct &&FMyStruct->IsValidLowLevel()) {
-		FMemoryWriter ArWriter(*data);
-		FMyStruct->SerializeBin(ArWriter, genericstruct);
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Error en  UStruct"));
-
-	}
+TArray<uint8>* data = new TArray<uint8>();
+UStruct* FMyStruct = FStructGenericoHito2::StaticStruct();
+FMemoryWriter ArWriter(*data);
+FMyStruct->SerializeBin(ArWriter, genericstruct);
 
 
-	return data;
+return data;
 }
 
-
+*/
+/*
 FStructGenericoHito2* PD_SR_SerializerManager::DeserializeData(TArray<uint8>* data)
 {
 
-	FStructGenericoHito2* generyStructs = new FStructGenericoHito2();
+FStructGenericoHito2* generyStructs = new FStructGenericoHito2();
 
 
-	UStruct* FMyStruct = FStructGenericoHito2::StaticStruct();
+UStruct* FMyStruct = FStructGenericoHito2::StaticStruct();
 
 
-	FMemoryReader ArReader(*data);
-	FMyStruct->SerializeBin(ArReader, generyStructs);//No estoy seguro si añade las estructuras al array
+FMemoryReader ArReader(*data);
+FMyStruct->SerializeBin(ArReader, generyStructs);//No estoy seguro si añade las estructuras al array
 
 
-	return generyStructs;
+return generyStructs;
 
-}
+}*/
+
+

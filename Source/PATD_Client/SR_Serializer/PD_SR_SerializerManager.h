@@ -7,6 +7,8 @@
 */
 #include "SR_Serializer/PD_SR_UStruct.h"
 
+
+
 class PATD_CLIENT_API PD_SR_SerializerManager
 {
 public:
@@ -38,8 +40,99 @@ public:
 	//template <typename T>
 	//T* Des(T*);
 
-	TArray<uint8>* SerializeData(FStructGenericoHito2* genericstruct);
+	//TArray<uint8>* SerializeData(FStructGenericoHito2* genericstruct);
 
 
-	FStructGenericoHito2* DeserializeData(TArray<uint8>* data);
+
+	TArray<uint8>* SerializeData(FStructGeneric* structGeneric, UStructType type) {
+		switch (type) {
+		case UStructType::FStructMap: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructMap"));
+			FStructMap* structSpecialization = (FStructMap*)structGeneric;
+			return SerializeDataTemplate<FStructMap>(structSpecialization);
+
+		}break;
+
+		case UStructType::FStructGenericoHito2: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructGenericoHito2"));
+			FStructGenericoHito2* structSpecialization = (FStructGenericoHito2*)structGeneric;
+			return SerializeDataTemplate<FStructGenericoHito2>(structSpecialization);
+
+		}break;
+
+
+		default:
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct no reconocido"));
+			break;
+			/*case UStructType::FStructMap:
+			FStructMap* structSpecialization = (FStructMap*)structGeneric;
+			return SerializeDataTemplate<FStructMap>(structSpecialization);
+			break;*/
+		}
+
+		return nullptr;
+
+	}
+
+	FStructGeneric*  DeserializeData(TArray<uint8>* data, UStructType type) {
+		switch (type) {
+
+
+		case UStructType::FStructMap: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructMap"));
+			return DeserializeDataTemplate<FStructMap>(data);
+
+		}break;
+
+		case UStructType::FStructGenericoHito2: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructGenericoHito2"));
+			return DeserializeDataTemplate<FStructGenericoHito2>(data);
+
+		}break;
+
+
+		default:
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct no reconocido"));
+			break;
+		}
+
+		return nullptr;
+
+	}
+
+
+
+
+	template<typename T>
+	TArray<uint8>* SerializeDataTemplate(T* genericstruct) {
+		TArray<uint8>* data = new TArray<uint8>();
+		UStruct* FMyStruct = T::StaticStruct();
+		FMemoryWriter ArWriter(*data);
+		FMyStruct->SerializeBin(ArWriter, genericstruct);
+
+
+		return data;
+	}
+	/*
+	template<typename T>
+	TArray<uint8>* SerializeData(T* genericstruct);
+	*/
+
+	//FStructGenericoHito2* DeserializeData(TArray<uint8>* data);
+
+	template<typename T>
+	T* DeserializeDataTemplate(TArray<uint8>* data) {
+		T* generyStructs = new T();
+
+
+		UStruct* FMyStruct = T::StaticStruct();
+
+
+		FMemoryReader ArReader(*data);
+		FMyStruct->SerializeBin(ArReader, generyStructs);
+
+
+		return generyStructs;
+	}
+
 };

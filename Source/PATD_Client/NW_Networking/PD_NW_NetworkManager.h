@@ -23,7 +23,7 @@ private:
 	PD_NW_EventManager* eventManager;
 	PD_SR_SerializerManager* serializerManager;
 
-	TArray<FStructGenericList*> sendGenericStruct;
+	TArray<FStructDataList*> sendGenericStruct;
 	//	TArray<FStructGenericList>* reciveGenericStruct;
 
 
@@ -49,7 +49,10 @@ public:
 	*/
 
 	//Funciones publicas para enviar
-	bool SendNow(FStructGenericoHito2* st, int player = -1);
+
+	//bool SendNow(FStructGenericoHito2* st, int player = -1);
+
+	bool SendNow(FStructGeneric* st, int player = -1);
 
 	/*bool SendNow(FStructGeneric* st,int player=-1);
 	bool SendNow(int player=-1);
