@@ -36,36 +36,32 @@ void PD_NW_EventManager::GenerateEvent(FStructGeneric* st, int player) {
 		}
 		else {
 			UE_LOG(LogTemp, Warning, TEXT("EventManager:: GenerateEvent::Observador %d , structtype %d "), i, st->structType);
-			UStructType obsType = observerList[i]->getType();
-			int obsPlayer = observerList[i]->getPlayer();
+
 
 			//Para mostrar el nombre de un uenum.
 			//	const UEnum* enumHelper = FindObject<UEnum>(ANY_PACKAGE, TEXT("UStructType"));
 			//	enumHelper->GetDisplayNameText((int)st->structType.GetValue());
 			//UE_LOG(LogTemp, Warning, TEXT("Parada structtype %s "), (int)st->structType.GetValue());
-			UStructType eventType = UStructType::NoDefined;
+
+
+
+
+
+
 			if (st) {
 
+				//Comprobamos que el observador quiere recibir eventos del jugador y el tipo del que viene.
+				if (observerList[i]->SuscribeToEvents(player, UStructType(st->structType))) {
 
+					//Llamar a la funcion virtual de la interfaz. Aqui cada uno pondra su codigo.
+					observerList[i]->HandleEvent(st, player, UStructType(st->structType));
 
-
-
-				eventType = UStructType(st->structType);
+				}
 			}
 			else {
 				UE_LOG(LogTemp, Warning, TEXT("EventManager:: GenerateEvent:: struct de evento null"))
 			}
 
-			int eventPlayer = player;
-
-			//Comprobamos que el observador quiere recibir eventos del jugador y el tipo del que viene.
-			if ((obsType == UStructType::AllStructs || obsType == eventType)
-				&& (obsPlayer == -1 || obsPlayer == eventPlayer)) {
-
-				//Llamar a la funcion virtual de la interfaz. Aqui cada uno pondra su codigo.
-				observerList[i]->handleEvent(st, eventPlayer, eventType);
-
-			}
 		}
 	}
 }

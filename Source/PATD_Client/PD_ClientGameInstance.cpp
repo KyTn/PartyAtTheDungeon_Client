@@ -15,6 +15,67 @@
 #include "MapGeneration/ParserActor.h"
 
 
+
+
+void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
+
+
+	FStructGenericoHito2* dataStruct = (FStructGenericoHito2*)inDataStruct;
+
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Recibido order tipo:%d"), dataStruct->orderType);
+	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	if (dataStruct->orderType != 255) { //NullOrder
+		switch (dataStruct->orderType) {
+		case 5: //SetClientMaster
+			this->isGameMaster = true;
+			this->numPlayer = dataStruct->stringMap;
+
+			respuesta.orderType = 1;//GoToMainMenu
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 1 - GoToMainMenu"));
+			this->networkManager->SendNow(&respuesta, 0);
+			break;
+
+		case 6://Welcome
+			this->numPlayer = dataStruct->stringMap;
+			break;
+		case 7://ChangeToMainMenu
+			this->LoadMap("LVL_2_MainMenu");
+
+			break;
+		case 8://ChangeToLobby
+			this->LoadMap("LVL_3_SelectChars_Lobby");
+
+			break;
+		case 9://ChangeToMap
+			this->LoadMap("LVL_4_GameMap");
+
+			break;
+		case 10://InvalidConnection
+				//Que hacemos?
+
+			break;
+		}
+
+	}
+	else {//No es una order, asi que es un map
+		  //Cargar el mapa que viene en el string.
+		UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
+		this->mapString = dataStruct->stringMap;
+		UE_LOG(LogTemp, Warning, TEXT("Mapa recibido %s"), *this->mapString);
+
+		respuesta.orderType = 11;
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 11 ??"));
+		this->networkManager->SendNow(&respuesta, 0);
+	}
+
+}
+
+bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
+	return true; //de momento recibe todos, siempre es cierto.
+}
+
+
+
 void UPD_ClientGameInstance::Init()
 {
 	Super::Init();
@@ -24,69 +85,11 @@ void UPD_ClientGameInstance::Init()
 	levelsNameDictionary = LevelsNameDictionary();
 
 
-	class ObservadorPrueba : public PD_NW_iEventObserver
-	{
-	public:
-		UPD_ClientGameInstance *gi;
-		ObservadorPrueba(UPD_ClientGameInstance* i) {
-			gi = i;
-		}
-		void handleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
-
-
-			FStructGenericoHito2* dataStruct = (FStructGenericoHito2*)inDataStruct;
-
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Recibido order tipo:%d"), dataStruct->orderType);
-			FStructGenericoHito2 respuesta = FStructGenericoHito2();
-			if (dataStruct->orderType != 255) { //NullOrder
-				switch (dataStruct->orderType) {
-				case 5: //SetClientMaster
-					gi->isGameMaster = true;
-					gi->numPlayer = dataStruct->stringMap;
-
-					respuesta.orderType = 1;//GoToMainMenu
-					UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 1 - GoToMainMenu"));
-					gi->networkManager->SendNow(&respuesta, 0);
-					break;
-
-				case 6://Welcome
-					gi->numPlayer = dataStruct->stringMap;
-					break;
-				case 7://ChangeToMainMenu
-					gi->LoadMap("LVL_2_MainMenu");
-		
-					break;
-				case 8://ChangeToLobby
-					gi->LoadMap("LVL_3_SelectChars_Lobby");
-
-					break;
-				case 9://ChangeToMap
-					gi->LoadMap("LVL_4_GameMap");
-
-					break;
-				case 10://InvalidConnection
-					//Que hacemos?
-
-					break;
-				}
-
-			}
-			else {//No es una order, asi que es un map
-				//Cargar el mapa que viene en el string.
-				UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
-				gi->mapString=dataStruct->stringMap;
-				respuesta.orderType = 11; 
-				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 11 ??"));
-				gi->networkManager->SendNow(&respuesta, 0);
-			}
-
-		}
-	};
+	
 
 	networkManager = new PD_NW_NetworkManager();
-	ObservadorPrueba* obs = new ObservadorPrueba(this);
-	obs->setUpObserver(-1, UStructType::AllStructs);
-	networkManager->RegisterObserver(obs);
+	
+	networkManager->RegisterObserver(this);
 
 	//PRUEBA
 	//FStructGenericoHito2* m =  new FStructGenericoHito2();

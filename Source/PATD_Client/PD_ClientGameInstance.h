@@ -3,7 +3,10 @@
 #pragma once
 
 
+//Include de herencia (interfaz)
+#include "NW_NetWorking/EventLayer/PD_NW_iEventObserver.h"
 
+//Include de unreal
 #include "Engine/GameInstance.h"
 #include "LevelsNameDictionary.h"
 #include "PD_ClientGameInstance.generated.h"
@@ -20,8 +23,8 @@ class PD_NW_NetworkManager;
 
 
 
-UCLASS()
-class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance
+UCLASS()															//Interfaz observer para reaccionar a eventos del netmanager
+class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance, public PD_NW_iEventObserver
 {
 	GENERATED_BODY()
 	
@@ -56,6 +59,12 @@ public:
 
 	virtual void Init();
 	
+
+	//Funciones del eventObserver, para determinar que eventos recibimos y para procesarlos
+	virtual	bool SuscribeToEvents(int inPlayer, UStructType inType);
+	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+
+
 	//void Shutdown();
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 	void SetServerAddressToConnect(FString ip);

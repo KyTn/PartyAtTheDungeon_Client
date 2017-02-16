@@ -28,8 +28,8 @@ void AInitSocketManagerOnLevel::BeginPlay()
 
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay ActorInitializer. Map: %s"), *s)
 
-		FString currentMapName = SGI->levelsNameDictionary.GetMapName(4, SGI->GetWorld()->IsPlayInEditor());
-		if (GetWorld()->GetMapName() == currentMapName) {
+		FString currentMapName = SGI->levelsNameDictionary.GetMapName(4);
+		if (GetWorld()->GetMapName().Contains(currentMapName)) {
 			UE_LOG(LogTemp, Warning, TEXT("If del LVL_4_Gamemap"));
 			SGI->InitGameMap();
 		}

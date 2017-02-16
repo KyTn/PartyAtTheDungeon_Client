@@ -11,34 +11,30 @@ LevelsNameDictionary::~LevelsNameDictionary()
 {
 }
 
-FString LevelsNameDictionary::GetMapName(int lvl, bool inEditor)
+FString LevelsNameDictionary::GetMapName(int lvl)
 {
 	FString mapName = "";
 	switch (lvl)
 	{
 	case 1:
-		if (!inEditor)
-			mapName = name_LVL_1;
-		else
-			mapName = name_LVL_1_inEditor;
+
+		mapName = name_LVL_1;
+
 		break;
 	case 2:
-		if (!inEditor)
-			mapName = name_LVL_2;
-		else
-			mapName = name_LVL_2_inEditor;
+
+		mapName = name_LVL_2;
+
 		break;
 	case 3:
-		if (!inEditor)
-			mapName = name_LVL_3;
-		else
-			mapName = name_LVL_3_inEditor;
+
+		mapName = name_LVL_3;
+
 		break;
 	case 4:
-		if (!inEditor)
-			mapName = name_LVL_4;
-		else
-			mapName = name_LVL_4_inEditor;
+
+		mapName = name_LVL_4;
+
 		break;
 	}
 	return mapName;
