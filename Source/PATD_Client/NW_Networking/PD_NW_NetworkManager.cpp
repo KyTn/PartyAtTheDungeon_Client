@@ -8,9 +8,6 @@
 #include "NW_NetWorking/EventLayer/PD_NW_EventManager.h"
 #include "SR_Serializer/PD_SR_SerializerManager.h"
 
-/*Todo la investigacion para hacerlo con structs genericos esta comentado
-Queda como codigo lo necesario para pasar solamente Mapa y MenuOrder (lo necesario para el hito2)
-*/
 
 PD_NW_NetworkManager::PD_NW_NetworkManager()
 {
@@ -29,11 +26,6 @@ PD_NW_NetworkManager::~PD_NW_NetworkManager()
 
 void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIndex) {
 
-	//Necesitamos otro metodo, que con el numero nos diga que tipo esta recibiendo, y de esa manera poder instanciar ese tipo??
-	//Para poder darle a la funcion de plantilal ese tipo, tendriamos que tener algo dinamico.
-
-	//	FStructGenericoHito2* structEventGenericHito2 = serializerManager->DeserializeData(data);
-	//eventManager->GenerateEvent(serializerManager->DeserializeData(data), socketIndex);
 	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: socketIndex %d"), socketIndex);
 
 	FStructData dataStruct = *(serializerManager->DeserializeDataTemplate<FStructData>(data)); // Esto tambien es una copia?? ver bien que devolver en cada punto, si puntero referencia o tipo directo!
@@ -43,6 +35,8 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 	FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataStruct.data, UStructType(dataStruct.structType)); //Otra copia?
 
 	eventManager->GenerateEvent(genericStruct, socketIndex);
+
+	//Falta por hacer que se pueda enviar y recibir una lista (lo del compresor)
 
 
 
@@ -87,13 +81,14 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 //Este se borrara al hacer el delete de la clase 
 
 void PD_NW_NetworkManager::HandleNewConnectionSocketListener(int socketIndex) {
-	//Con compresor
-	//sendGenericStruct.Insert(new FStructGenericList(),socketIndex);
+
+
 	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewConnectionSocketListener:: socketIndex %d"), socketIndex);
 
-	//Generar el evento de nuevo jugador.
-	FStructGenericoHito2* structNewConnection = new FStructGenericoHito2(); //alaaaa otro new
-	structNewConnection->orderType = 0;
+	//Generar el evento de nuevo jugador. 
+	//TODO Transformar a struct de nueva conexion
+	FStructNewConnection* structNewConnection = new FStructNewConnection(); //alaaaa otro new
+
 	eventManager->GenerateEvent(structNewConnection, socketIndex);
 }
 
@@ -108,14 +103,12 @@ PD_NW_EventManager* PD_NW_NetworkManager::GetEventManager() {
 PD_SR_SerializerManager* PD_NW_NetworkManager::GetSerializerManager() {
 	return serializerManager;
 }
-/*
-bool PD_NW_NetworkManager::SendNow(FStructGenericoHito2* st, int player) {
 
-//return socketManager->SendInfoTo(player, serializerManager->SerializeData(st));
-return false;
-}*/
 
 bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
+
+	//Falta por hacer que se pueda enviar y recibir una lista (lo del compresor)
+
 
 	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d"), player, structGeneric->structType);
 
@@ -140,7 +133,7 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 
 }
 
-/*
+/*/
 //Funciones publicas para enviar
 bool PD_NW_NetworkManager::SendNow(FStructGeneric* st,int player) {
 //Para hacer broadcast con -1?
@@ -150,7 +143,7 @@ socketManager->SendInfoTo(player, data);
 
 
 //Con compresor
-AddToSendList(st, player);
+/*AddToSendList(st, player);
 SendNow(player);
 
 */
