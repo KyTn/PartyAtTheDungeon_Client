@@ -5,7 +5,7 @@
 #include "NW_NetWorking/PD_NW_TimerActor.h"
 
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
-#include "SR_Serializer/PD_SR_UStruct.h"
+#include "SR_Serializer/PD_SR_SerializerStructs.h"
 
 //Includes of forward declaration
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
@@ -19,7 +19,7 @@
 
 void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 
-
+/*
 	FStructGenericoHito2* dataStruct = (FStructGenericoHito2*)inDataStruct;
 
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Recibido order tipo:%d"), dataStruct->orderType);
@@ -67,7 +67,7 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 11 ??"));
 		this->networkManager->SendNow(&respuesta, 0);
 	}
-
+	*/
 }
 
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
@@ -174,7 +174,6 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	socketManager->Init(ClientActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
 	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
 
-	FStructGenericoHito2 respuesta = FStructGenericoHito2();
 	
 }
 
@@ -210,7 +209,7 @@ PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
 void UPD_ClientGameInstance::GoToLobby()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::GoToLobby()."));
-	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	FStructOrderMenu respuesta = FStructOrderMenu();
 	respuesta.orderType = 2;
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GoToLobby"));
 	networkManager->SendNow(&respuesta, 0);
@@ -219,7 +218,7 @@ void UPD_ClientGameInstance::GoToLobby()
 
 void UPD_ClientGameInstance::GetReadyToParty()
 {
-	FStructGenericoHito2 respuesta = FStructGenericoHito2();
+	FStructOrderMenu respuesta = FStructOrderMenu();
 	respuesta.orderType = 4;
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
 	networkManager->SendNow(&respuesta, 0);

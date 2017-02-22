@@ -5,7 +5,7 @@
 /**
 *
 */
-#include "SR_Serializer/PD_SR_UStruct.h"
+#include "Structs/PD_NetStructs.h"
 
 
 
@@ -19,31 +19,6 @@ public:
 	//No hace delete de la estructura vieja.
 	//Hay posibilidad de mejorar eso?
 
-
-	/*Realmente los booleanos podrian ser lo que devuelvan y que se les pase por parametro el struct
-	y el tArray.
-	*/
-	/*//Esta funcion la llama el socketManager cuando tiene un nuevo paquete de datos
-	FStructGenericList* DeserializeData(TArray<uint8>* data, bool &correct);//El bool no lo veo necesario, total si fstruct es nulo no lo habra hecho bien
-
-
-	//Esta funcion comunica con la capa superior para serializar datos
-	TArray<uint8>* SerializeData(FStructGenericList* generycstructs, bool &correct);
-
-
-
-	FStructGeneric* DeserializeData(TArray<uint8>* data);
-
-	TArray<uint8>* SerializeData(FStructGeneric* generycstructs);
-	*/
-
-	//template <typename T>
-	//T* Des(T*);
-
-	//TArray<uint8>* SerializeData(FStructGenericoHito2* genericstruct);
-
-
-
 	TArray<uint8>* SerializeData(FStructGeneric* structGeneric, UStructType type) {
 		switch (type) {
 		case UStructType::FStructMap: {
@@ -53,21 +28,24 @@ public:
 
 		}break;
 
-		case UStructType::FStructGenericoHito2: {
-			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructGenericoHito2"));
-			FStructGenericoHito2* structSpecialization = (FStructGenericoHito2*)structGeneric;
-			return SerializeDataTemplate<FStructGenericoHito2>(structSpecialization);
+		case UStructType::FStructOrderMenu: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructOrderMenu"));
+			FStructOrderMenu* structSpecialization = (FStructOrderMenu*)structGeneric;
+			return SerializeDataTemplate<FStructOrderMenu>(structSpecialization);
 
 		}break;
 
+		case UStructType::FStructTurnOrders: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructTurnOrders"));
+			FStructTurnOrders* structSpecialization = (FStructTurnOrders*)structGeneric;
+			return SerializeDataTemplate<FStructTurnOrders>(structSpecialization);
+
+		}break;
 
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct no reconocido"));
 			break;
-			/*case UStructType::FStructMap:
-			FStructMap* structSpecialization = (FStructMap*)structGeneric;
-			return SerializeDataTemplate<FStructMap>(structSpecialization);
-			break;*/
+
 		}
 
 		return nullptr;
@@ -84,12 +62,17 @@ public:
 
 		}break;
 
-		case UStructType::FStructGenericoHito2: {
-			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructGenericoHito2"));
-			return DeserializeDataTemplate<FStructGenericoHito2>(data);
+		case UStructType::FStructOrderMenu: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructOrderMenu"));
+			return DeserializeDataTemplate<FStructOrderMenu>(data);
 
 		}break;
 
+		case UStructType::FStructTurnOrders: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructTurnOrders"));
+			return DeserializeDataTemplate<FStructTurnOrders>(data);
+
+		}break;
 
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct no reconocido"));
@@ -99,9 +82,6 @@ public:
 		return nullptr;
 
 	}
-
-
-
 
 	template<typename T>
 	TArray<uint8>* SerializeDataTemplate(T* genericstruct) {
@@ -113,12 +93,6 @@ public:
 
 		return data;
 	}
-	/*
-	template<typename T>
-	TArray<uint8>* SerializeData(T* genericstruct);
-	*/
-
-	//FStructGenericoHito2* DeserializeData(TArray<uint8>* data);
 
 	template<typename T>
 	T* DeserializeDataTemplate(TArray<uint8>* data) {

@@ -2,11 +2,10 @@
 
 #pragma once
 
-#include "SR_Serializer/PD_SR_UStruct.h"
+#include "SR_Serializer/PD_SR_SerializerStructs.h"
 
 #include "PD_NetStructs.generated.h"
 
-/*
 
 //=================================
 ///Structs NO serializables -- (No se envian ellos mismos)
@@ -35,13 +34,13 @@ struct FStructOrderAction {
 	CharacterId targetCharacter;
 	etc.
 	int subtipo; para numero de consumible, numero de habilidad, etc.
-	
+	*/
 	FStructOrderAction() {
 
 	}
 
 };
-*/
+
 
 /*
 Procedimiento para agregar un struct:
@@ -70,7 +69,7 @@ AllStructs=1 para suscribirse a eventos para todos.
 FStructNewConnection=2 struct que crea el networkmanager (no necesita serializacion)
 */
 
-//enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30 };
+enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30 };
 
 
 
@@ -79,7 +78,6 @@ FStructNewConnection=2 struct que crea el networkmanager (no necesita serializac
 ///Structs SERIALIZABLES (heredan de FStructGeneric) (Se envian)
 //=================================
 
-/*
 
 USTRUCT()
 struct FStructNewConnection : public FStructGeneric
@@ -155,7 +153,7 @@ struct FStructTurnOrders : public FStructGeneric
 	}
 };
 
-*/
+
 
 
 

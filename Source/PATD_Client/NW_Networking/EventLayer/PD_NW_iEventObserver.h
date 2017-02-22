@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "SR_Serializer/PD_SR_UStruct.h"
+#include "Structs/PD_NetStructs.h"
 /**
 *
 */
