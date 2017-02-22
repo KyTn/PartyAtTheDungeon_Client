@@ -3,9 +3,8 @@
 #pragma once
 
 #include "PD_SR_UStruct.generated.h"
-/**
-*
-*/
+
+
 /*
 Procedimiento para agregar un struct:
 Añadir en UstructType el siguiente numero. (,FStruct NombreStruct=17)
@@ -32,7 +31,7 @@ NoDefined=-9, para detectar errores de instanciacion.
 AllStructs=-1 para suscribirse a eventos para todos.
 */
 
-enum class UStructType { NoDefined=-9, AllStructs=-1, FStructMap=1, FStructOrderMenu=2, FStructGenericoHito2=3 };
+enum class UStructType { NoDefined = -9, AllStructs = -1, FStructMap = 1, FStructOrderMenu = 2, FStructGenericoHito2 = 3 };
 
 //Ordenes. NullOrder significa que el paquete recibido no es de una orden
 enum class MenuOrderType {
@@ -44,6 +43,7 @@ enum class MenuOrderType {
 };
 
 //Struct Generico
+
 USTRUCT()
 struct FStructGeneric
 {
