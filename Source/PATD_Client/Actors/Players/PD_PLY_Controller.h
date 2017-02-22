@@ -13,14 +13,7 @@ class PATD_CLIENT_API APD_PLY_Controller : public AAIController
 {
 	GENERATED_BODY()
 	
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaSeconds) override;
-
-
-	void Move(float x, float y);
-
-	void Attack();
+	
 	
 	
 };
