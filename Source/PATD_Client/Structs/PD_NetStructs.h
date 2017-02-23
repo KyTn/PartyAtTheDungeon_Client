@@ -116,9 +116,9 @@ struct FStructMap : public FStructGeneric
 enum class MenuOrderType {
 	NullOrder = -1,
 	//Ordenes que recibe el servidor. 
-	NewConnection = 0, GoToMainMenu = 1, GoToLobby = 2, GoToMap = 3, ClientReady = 4,
-	//Ordenes que recibe el cliente. La 5 cuenta como 6 pero ademas setea ClientMaster.
-	SetClientMaster = 5, Welcome = 6, ChangeToMainMenu = 7, ChangeToLobby = 8, ChangeToMap = 9, InvalidConnection = 10
+	GameConfigurationDone = 1, ClientReady = 4,
+	//Ordenes que recibe el cliente. 
+	Welcome = 6, ChangeToLobby = 8, InvalidConnection = 10
 };
 USTRUCT()
 struct FStructOrderMenu : public FStructGeneric
@@ -127,6 +127,12 @@ struct FStructOrderMenu : public FStructGeneric
 
 		UPROPERTY()
 		uint8 orderType;
+
+	//Usadas por welcome
+	UPROPERTY()
+		uint8 playerIndex;
+	UPROPERTY()
+		bool isClientMaster;
 
 	//Constructor
 	FStructOrderMenu()

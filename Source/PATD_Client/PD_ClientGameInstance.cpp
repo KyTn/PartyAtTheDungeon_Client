@@ -4,20 +4,33 @@
 #include "PD_ClientGameInstance.h"
 #include "NW_NetWorking/PD_NW_TimerActor.h"
 
+//Includes de uso
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
 #include "SR_Serializer/PD_SR_SerializerStructs.h"
+#include "MapGeneration/ParserActor.h"
 
 //Includes of forward declaration
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
+#include "Structs/PD_ClientStructs.h" //Para todos los structs y enums
 
 //Includes de prueba
-#include "NW_Networking/EventLayer/PD_NW_iEventObserver.h"
-#include "MapGeneration/ParserActor.h"
+
 
 
 
 
 void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
+
+	if (structClientState->enumClientState == EClientState::NoConnection) {
+		if (inEventType == UStructType::FStructOrderMenu) {
+			FStructOrderMenu* menuOrder = (FStructOrderMenu*)inDataStruct;
+			if (MenuOrderType(menuOrder->orderType) == MenuOrderType::Welcome) {
+
+			}
+		}
+	}
+	else if (structClientState->enumClientState == EClientState::NoConnection) {
+	}
 
 /*
 	FStructGenericoHito2* dataStruct = (FStructGenericoHito2*)inDataStruct;
@@ -135,10 +148,37 @@ void UPD_ClientGameInstance::Init()
 
 }
 
+void UPD_ClientGameInstance::Shutdown()
+{
+	Super::Shutdown();
+
+	if (networkManager) {
+		delete networkManager;
+	}
+	//Aqui habria que hacer muchos deletes 
+
+}
 
 void UPD_ClientGameInstance::LoadMap(FString mapName)
 {
 	UGameplayStatics::OpenLevel((UObject*)this, FName(*mapName));
+}
+
+//Callback cuando el mapa este cargado
+void UPD_ClientGameInstance::OnMapFinishLoad() {
+	//Sin importar el estado hacemos:
+	APD_NW_TimerActor* TimerActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
+	networkManager->GetSocketManager()->InitTimerActor(TimerActorSpawned);
+
+	if (structClientState->enumClientState == EClientState::GameInProcess) {
+		//Quizas esto es tarea del gameManager.
+		parserActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
+		//mapParser->InstantiateStaticMap(parserActor, mapManager->StaticMapRef);
+		//mapParser->InstantiateDynamicMap(parserActor, mapManager->DynamicMapRef);
+	
+	
+
+	}
 }
 
 void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
@@ -151,12 +191,14 @@ void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
 
 void UPD_ClientGameInstance::InitGameMap()
 {
+	/*
 	FString s = GetWorld()->GetMapName();
 	UE_LOG(LogTemp, Warning, TEXT("Init GameMap %s"), *s);
 
 
 	AParserActor* ParseActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
 	ParseActor->InitGameMap(mapString);
+	*/
 
 }
 
@@ -197,7 +239,7 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 
 bool UPD_ClientGameInstance::GetIsGameMaster()
 {
-	return isGameMaster;
+	return structClientState->clientMaster;
 }
 /*
 PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
@@ -210,8 +252,8 @@ void UPD_ClientGameInstance::GoToLobby()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::GoToLobby()."));
 	FStructOrderMenu respuesta = FStructOrderMenu();
-	respuesta.orderType = 2;
-	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GoToLobby"));
+	respuesta.orderType = static_cast<uint8>(MenuOrderType::GameConfigurationDone);
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GameConfigurationDone"));
 	networkManager->SendNow(&respuesta, 0);
 }
 
@@ -219,7 +261,7 @@ void UPD_ClientGameInstance::GoToLobby()
 void UPD_ClientGameInstance::GetReadyToParty()
 {
 	FStructOrderMenu respuesta = FStructOrderMenu();
-	respuesta.orderType = 4;
+	respuesta.orderType = respuesta.orderType = static_cast<uint8>(MenuOrderType::ClientReady);
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
 	networkManager->SendNow(&respuesta, 0);
 }

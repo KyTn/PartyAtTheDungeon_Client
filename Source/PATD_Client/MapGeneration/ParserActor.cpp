@@ -46,7 +46,7 @@ void AParserActor::BeginPlay()
 void AParserActor::InitGameMap(FString mapData)
 {
 	
-
+	/*
 	StaticMapRef = new PD_MG_StaticMap();
 
 
@@ -56,7 +56,7 @@ void AParserActor::InitGameMap(FString mapData)
 	parseMap->StartParsingFromFString(&mapData, StaticMapRef);
 	parseMap->InstantiateStaticMap(this);
 
-
+	*/
 
 }
 
