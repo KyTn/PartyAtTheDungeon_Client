@@ -8,6 +8,7 @@ PD_MG_StaticMap::PD_MG_StaticMap()
 {
 	//_rooms = new TArray<PD_MG_Room*>();
 	//_LogicPositionsRefs = new TArray<PD_MG_LogicPosition*>();
+
 }
 
 PD_MG_StaticMap::~PD_MG_StaticMap()

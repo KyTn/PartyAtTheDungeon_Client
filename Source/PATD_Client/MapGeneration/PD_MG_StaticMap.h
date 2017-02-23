@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "../ElementActors/PD_E_TileActor.h"
 #include "PATD_Client/MapGeneration/PD_MG_LogicPosition.h"
 
 /// CLASS REFERENCES
@@ -50,7 +51,6 @@ public:
 	TArray<PD_MG_LogicPosition*> GetLogicPositions() { return _LogicPositionsRefs; }
 
 #pragma endregion
-
 
 	PD_MG_LogicPosition* AddNewLogicPosition(uint32 x, uint32 y, TCHAR c);
 

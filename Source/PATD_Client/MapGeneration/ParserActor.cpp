@@ -15,9 +15,13 @@ AParserActor::AParserActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-}
 
+	ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Blueprint'/Game/_Blueprints/Tile_BP.Tile_BP'"));
+	//TEXT("Blueprint'/Game/Character/MyCharacter.MyCharacter'")
+	if (ItemBlueprint.Object) {
+		tileBP = (UClass*)ItemBlueprint.Object->GeneratedClass;
+	}
+}
 // Called when the game starts or when spawned
 void AParserActor::BeginPlay()
 {
@@ -60,7 +64,9 @@ AActor* AParserActor::InstantiateTile(PD_MG_LogicPosition* logpos)
 {
 	//return GetWorld()->SpawnActor<APD_E_TileActor>(tileActor,FVector(logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 0.f), FRotator(0.0f, 0.f, 0.f), FActorSpawnParameters());
 
-	return GetWorld()->SpawnActor<APD_E_TileActor>(FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 0.f), FRotator(0.0f, 0.f, 0.f), FActorSpawnParameters());
+
+	return GetWorld()->SpawnActor<APD_E_TileActor>(tileBP, FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 0.f), FRotator(0.0f, 0.f, 0.f), FActorSpawnParameters());
+	//return GetWorld()->SpawnActor<APD_E_TileActor>(FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 0.f), FRotator(0.0f, 0.f, 0.f), FActorSpawnParameters());
 }
 
 

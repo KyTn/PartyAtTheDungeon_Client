@@ -38,4 +38,8 @@ public:
 
 	//Agregado para el hito2 MCG
 	void InitGameMap(FString mapData);
+
+	//BP donde esta el PROP del Tile
+	TSubclassOf<class APD_E_TileActor> tileBP; 
+
 };
