@@ -9,11 +9,13 @@
  * 
  */
 UCLASS()
-class PATD_CLIENT_API APD_GameStateInitializer : public AGameModeBase
+class PATD_CLIENT_API APD_GameStateInitializer : public AGameStateBase
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
+		// Called when the game starts or when spawned
+		virtual void BeginPlay() override;
+
+
+
 };

@@ -5,88 +5,156 @@
 #include "NW_NetWorking/PD_NW_TimerActor.h"
 
 //Includes de uso
+#include "MapGeneration/PD_MG_StaticMap.h"
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
-#include "SR_Serializer/PD_SR_SerializerStructs.h"
-#include "MapGeneration/ParserActor.h"
+
 
 //Includes of forward declaration
-#include "NW_NetWorking/PD_NW_NetworkManager.h"
 #include "Structs/PD_ClientStructs.h" //Para todos los structs y enums
-
+#include "NW_NetWorking/PD_NW_NetworkManager.h"
+#include "MapGeneration/PD_MG_MapParser.h"
+#include "MapGeneration/ParserActor.h"
 //Includes de prueba
 
 
-
-
-
-void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
-
-	if (structClientState->enumClientState == EClientState::NoConnection) {
-		if (inEventType == UStructType::FStructOrderMenu) {
-			FStructOrderMenu* menuOrder = (FStructOrderMenu*)inDataStruct;
-			if (MenuOrderType(menuOrder->orderType) == MenuOrderType::Welcome) {
-
-			}
-		}
-	}
-	else if (structClientState->enumClientState == EClientState::NoConnection) {
-	}
-
-/*
-	FStructGenericoHito2* dataStruct = (FStructGenericoHito2*)inDataStruct;
-
-	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Recibido order tipo:%d"), dataStruct->orderType);
-	FStructGenericoHito2 respuesta = FStructGenericoHito2();
-	if (dataStruct->orderType != 255) { //NullOrder
-		switch (dataStruct->orderType) {
-		case 5: //SetClientMaster
-			this->isGameMaster = true;
-			this->numPlayer = dataStruct->stringMap;
-
-			respuesta.orderType = 1;//GoToMainMenu
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 1 - GoToMainMenu"));
-			this->networkManager->SendNow(&respuesta, 0);
-			break;
-
-		case 6://Welcome
-			this->numPlayer = dataStruct->stringMap;
-			break;
-		case 7://ChangeToMainMenu
-			this->LoadMap("LVL_2_MainMenu");
-
-			break;
-		case 8://ChangeToLobby
-			this->LoadMap("LVL_3_SelectChars_Lobby");
-
-			break;
-		case 9://ChangeToMap
-			this->LoadMap("LVL_4_GameMap");
-
-			break;
-		case 10://InvalidConnection
-				//Que hacemos?
-
-			break;
-		}
-
-	}
-	else {//No es una order, asi que es un map
-		  //Cargar el mapa que viene en el string.
-		UE_LOG(LogTemp, Warning, TEXT("Recibido mapa"), *dataStruct->stringMap);
-		this->mapString = dataStruct->stringMap;
-		UE_LOG(LogTemp, Warning, TEXT("Mapa recibido %s"), *this->mapString);
-
-		respuesta.orderType = 11;
-		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 11 ??"));
-		this->networkManager->SendNow(&respuesta, 0);
-	}
-	*/
-}
 
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
 	return true; //de momento recibe todos, siempre es cierto.
 }
 
+void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Evento recibido%d. Estado: %d"), static_cast<uint8>(inEventType), static_cast<uint8>(structClientState->enumClientState));
+
+	if (structClientState->enumClientState == EClientState::NoConnection) {
+		if (inEventType == UStructType::FStructOrderMenu) {
+			FStructOrderMenu* menuOrder = (FStructOrderMenu*)inDataStruct;
+			if (MenuOrderType(menuOrder->orderType) == MenuOrderType::Welcome) {
+				structClientState->clientMaster = menuOrder->isClientMaster;
+				structClientState->numPlayer = menuOrder->playerIndex;
+				this->UpdateState();
+			}
+		}
+	}else if (structClientState->enumClientState == EClientState::ConfigureGame) {
+		if (inEventType == UStructType::FStructOrderMenu) {
+			FStructOrderMenu* menuOrder = (FStructOrderMenu*)inDataStruct;
+			if (MenuOrderType(menuOrder->orderType) == MenuOrderType::ChangeToLobby) {
+				structClientState->configurationGameDone = true;
+				this->UpdateState();
+			}
+		}
+	}else if (structClientState->enumClientState == EClientState::WaitingConfiguration) {
+		if (inEventType == UStructType::FStructOrderMenu) {
+			FStructOrderMenu* menuOrder = (FStructOrderMenu*)inDataStruct;
+			if (MenuOrderType(menuOrder->orderType) == MenuOrderType::ChangeToLobby) {
+				structClientState->configurationGameDone = true;
+				this->UpdateState();
+			}
+		}
+	}else if (structClientState->enumClientState == EClientState::ConfigureCharacter) {
+		if (inEventType == UStructType::FStructMap) {
+			FStructMap* mapStruct = (FStructMap*)inDataStruct;
+			structClientState->mapString = mapStruct->stringMap;
+			structClientState->configurationCharacterDone = true;
+			this->UpdateState();
+			
+		}
+	}
+}
+
+void UPD_ClientGameInstance::UpdateState() {
+	if (structClientState->enumClientState == EClientState::NoConnection) { //Estado incial.
+		//Transiciones de estados
+		if (structClientState->clientMaster && structClientState->numPlayer!=-1) {
+			this->ChangeState(EClientState::WaitingConfiguration);
+		}
+		else if (structClientState->clientMaster && structClientState->numPlayer != -1) {
+			this->ChangeState(EClientState::ConfigureGame);
+
+		}
+	}else  if (structClientState->enumClientState == EClientState::WaitingConfiguration) {//En este estado entran los demas mientras el clientMaster configura.
+		//Transiciones de estados
+		if (structClientState->configurationGameDone) {
+			this->ChangeState(EClientState::ConfigureCharacter);
+		}
+	}else if (structClientState->enumClientState == EClientState::ConfigureGame) { //En este estado solo entra el clientMaster y configura el juego
+		//Transiciones de estados
+		if (structClientState->configurationGameDone) {
+			this->ChangeState(EClientState::ConfigureCharacter);
+		}
+	}
+	else if (structClientState->enumClientState == EClientState::ConfigureCharacter) { //(Lobby) En este estado se envia el ready y el data del personaje.
+		if (structClientState->configurationCharacterDone) {
+			this->ChangeState(EClientState::GameInProcess);
+		}
+	}
+
+}
+
+
+void UPD_ClientGameInstance::OnBeginState() {
+	if (structClientState->enumClientState == EClientState::NoConnection) {
+
+	}else  if (structClientState->enumClientState == EClientState::WaitingConfiguration) {
+		this->LoadMap(levelsNameDictionary.GetMapName(2));
+
+	}else if (structClientState->enumClientState == EClientState::ConfigureGame) {
+		this->LoadMap(levelsNameDictionary.GetMapName(2));
+
+	}else if (structClientState->enumClientState == EClientState::ConfigureCharacter) { //Lobby
+		this->LoadMap(levelsNameDictionary.GetMapName(3));
+
+	
+	}else if (structClientState->enumClientState == EClientState::GameInProcess) {
+
+		mapParser = new PD_MG_MapParser();
+
+		staticMapRef = new PD_MG_StaticMap();
+	//	PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
+		
+		mapParser->StartParsingFromFString(&structClientState->mapString, staticMapRef );
+		//mapManager = new PD_GM_MapManager();
+		//mapManager->StaticMapRef = staticMapRef;
+		//mapManager->DynamicMapRef = dynamicMapRef;
+
+		
+		
+		//Enviar mapa al cliente
+		
+		this->LoadMap(levelsNameDictionary.GetMapName(4));//Mapa de juego
+	}
+	else //Caso indeterminado
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: WARNING: estado sin inicializacion"));
+	}
+
+}
+
+void UPD_ClientGameInstance::ChangeState(EClientState newState) {
+	structClientState->enumClientState = newState;
+	OnBeginState();
+}
+
+void UPD_ClientGameInstance::LoadMap(FString mapName)
+{
+	UGameplayStatics::OpenLevel((UObject*)this, FName(*mapName));
+}
+
+//Callback cuando el mapa este cargado
+void UPD_ClientGameInstance::OnMapFinishLoad() {
+	//Sin importar el estado hacemos:
+	APD_NW_TimerActor* TimerActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
+	networkManager->GetSocketManager()->InitTimerActor(TimerActorSpawned);
+
+	if (structClientState->enumClientState == EClientState::GameInProcess) {
+		//Quizas esto es tarea del gameManager.
+		parserActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
+		mapParser->InstantiateStaticMap(parserActor, staticMapRef);
+		
+		//Aqui cedemos el control al GameManager.
+		
+
+	}
+}
 
 
 void UPD_ClientGameInstance::Init()
@@ -97,11 +165,11 @@ void UPD_ClientGameInstance::Init()
 
 	levelsNameDictionary = LevelsNameDictionary();
 
+	structClientState = new StructClientState();
+	structClientState->enumClientState = EClientState::NoConnection;
 
-	
+	InitializeNetworking();
 
-	networkManager = new PD_NW_NetworkManager();
-	
 	networkManager->RegisterObserver(this);
 
 	//PRUEBA
@@ -159,51 +227,11 @@ void UPD_ClientGameInstance::Shutdown()
 
 }
 
-void UPD_ClientGameInstance::LoadMap(FString mapName)
-{
-	UGameplayStatics::OpenLevel((UObject*)this, FName(*mapName));
-}
 
-//Callback cuando el mapa este cargado
-void UPD_ClientGameInstance::OnMapFinishLoad() {
-	//Sin importar el estado hacemos:
-	APD_NW_TimerActor* TimerActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
-	networkManager->GetSocketManager()->InitTimerActor(TimerActorSpawned);
-
-	if (structClientState->enumClientState == EClientState::GameInProcess) {
-		//Quizas esto es tarea del gameManager.
-		parserActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
-		//mapParser->InstantiateStaticMap(parserActor, mapManager->StaticMapRef);
-		//mapParser->InstantiateDynamicMap(parserActor, mapManager->DynamicMapRef);
-	
-	
-
-	}
-}
-
-void UPD_ClientGameInstance::InitClientActoWhenLoadMap()
-{
-	APD_NW_TimerActor* ClientActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
-
-	//socketManager->InitServerActor(ServerActorSpawned);
-	networkManager->GetSocketManager()->InitTimerActor(ClientActorSpawned);
-}
-
-void UPD_ClientGameInstance::InitGameMap()
-{
-	/*
-	FString s = GetWorld()->GetMapName();
-	UE_LOG(LogTemp, Warning, TEXT("Init GameMap %s"), *s);
-
-
-	AParserActor* ParseActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
-	ParseActor->InitGameMap(mapString);
-	*/
-
-}
 
 void UPD_ClientGameInstance::InitializeNetworking()
 {
+	networkManager = new PD_NW_NetworkManager();
 	
 	PD_NW_SocketManager* socketManager = networkManager->GetSocketManager();
 	
@@ -214,7 +242,7 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	socketManager->SetNetworkManager(networkManager);
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
 	socketManager->Init(ClientActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
-	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
+	
 
 	
 }
@@ -233,7 +261,7 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	else
 		serverAddressToConnect = ip;
 
-	InitializeNetworking();
+	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
 }
 
 
@@ -241,12 +269,7 @@ bool UPD_ClientGameInstance::GetIsGameMaster()
 {
 	return structClientState->clientMaster;
 }
-/*
-PD_NW_SocketManager* UPD_ClientGameInstance::GetSocketManager()
-{
-	return socketManager;
-}
-*/
+
 
 void UPD_ClientGameInstance::GoToLobby()
 {

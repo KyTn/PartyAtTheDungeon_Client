@@ -3,8 +3,8 @@
 #pragma once
 
 /**
-*
-*/
+ * 
+ */
 class PATD_CLIENT_API LevelsNameDictionary
 {
 
@@ -12,7 +12,7 @@ class PATD_CLIENT_API LevelsNameDictionary
 
 	FString name_LVL_2 = "LVL_2_MainMenu";
 
-	FString name_LVL_3 = "LVL_3_LVL_3_SelectChars_Lobby";
+	FString name_LVL_3 = "LVL_3_SelectChars_Lobby";
 
 	FString name_LVL_4 = "LVL_4_GameMap";
 

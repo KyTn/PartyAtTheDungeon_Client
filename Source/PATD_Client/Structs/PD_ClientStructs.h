@@ -10,6 +10,9 @@
 struct StructClientState {
 	EClientState enumClientState;
 	bool clientMaster;
-	int numPlayer;
+	int numPlayer=-1; //-1 cuando no ha conectado aun.
+	bool configurationGameDone;
+	bool configurationCharacterDone;
+	FString mapString;
 };
 

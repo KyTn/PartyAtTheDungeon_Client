@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+/*
 #include "PATD_Client.h"
 #include "InitSocketManagerOnLevel.h"
 
@@ -36,11 +36,7 @@ void AInitSocketManagerOnLevel::BeginPlay()
 
 
 	
-		/*Esto lo que hace es como el open level carga en un hilo diferente o algo asi, y las
-		siguientes instrucciones que haya tras llamarlo, no tienen que ejecutarse con el mapa
-		ya cargado, tenemos este actor para inicializar cosas, que se instancia junto al mapa. (esta en el)
-		El cuando se le llame a su begin play, va a llamar a InitGameMap que spawnea el actor de parser.
-		*/
+
 	}
 
 }
@@ -52,3 +48,4 @@ void AInitSocketManagerOnLevel::Tick(float DeltaTime)
 
 }
 
+*/

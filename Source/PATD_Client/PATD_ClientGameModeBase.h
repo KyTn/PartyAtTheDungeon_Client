@@ -12,8 +12,8 @@ UCLASS()
 class PATD_CLIENT_API APATD_ClientGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+		APATD_ClientGameModeBase();
+
+
+
 };

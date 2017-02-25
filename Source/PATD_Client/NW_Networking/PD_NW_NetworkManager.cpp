@@ -26,11 +26,11 @@ PD_NW_NetworkManager::~PD_NW_NetworkManager()
 
 void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIndex) {
 
-	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: socketIndex %d"), socketIndex);
+	//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: socketIndex %d"), socketIndex);
 
 	FStructData dataStruct = *(serializerManager->DeserializeDataTemplate<FStructData>(data)); // Esto tambien es una copia?? ver bien que devolver en cada punto, si puntero referencia o tipo directo!
 
-	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: structType %d"), dataStruct.structType);
+	//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: structType %d"), dataStruct.structType);
 
 	FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataStruct.data, UStructType(dataStruct.structType)); //Otra copia?
 
@@ -110,7 +110,7 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 	//Falta por hacer que se pueda enviar y recibir una lista (lo del compresor)
 
 
-	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d"), player, structGeneric->structType);
+//	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d"), player, structGeneric->structType);
 
 	TArray<uint8>* dataIn = serializerManager->SerializeData(structGeneric, UStructType(structGeneric->structType));
 	if (dataIn) {

@@ -116,14 +116,14 @@ uint32 PD_MG_MapParser::ReadRawMap(TArray<FString> fileReaded, uint32 firstIndex
 	*/
 }
 
-void PD_MG_MapParser::InstantiateStaticMap(AParserActor* parserActor) {
+void PD_MG_MapParser::InstantiateStaticMap(AParserActor* parserActor, PD_MG_StaticMap* inStaticMapRef) {
 	
-	for (int i = 0; i < parserActor->getMap()->GetLogicPositions().Num(); i++) {
+	for (int i = 0; i < inStaticMapRef->GetLogicPositions().Num(); i++) {
 
 		
-		switch (parserActor->getMap()->GetXYMap()[*parserActor->getMap()->GetLogicPositions()[i]]) {
+		switch (inStaticMapRef->GetXYMap()[*inStaticMapRef->GetLogicPositions()[i]]) {
 		case 'w':
-			parserActor->InstantiateWall(parserActor->getMap()->GetLogicPositions()[i]);
+			parserActor->InstantiateWall(inStaticMapRef->GetLogicPositions()[i]);
 			break;
 
 		case 'd':
@@ -131,7 +131,7 @@ void PD_MG_MapParser::InstantiateStaticMap(AParserActor* parserActor) {
 
 		default: 
 
-			parserActor->InstantiateTile(parserActor->getMap()->GetLogicPositions()[i]);
+			parserActor->InstantiateTile(inStaticMapRef->GetLogicPositions()[i]);
 			break;
 
 		}

@@ -30,5 +30,5 @@ public:
 	PD_MG_StaticMap* StartParsingFromFString(FString* data);
 	PD_MG_StaticMap* StartParsingFromFString(FString* data, PD_MG_StaticMap* StaticMapRef);
 
-	void InstantiateStaticMap(AParserActor* parserActor);
+	void InstantiateStaticMap(AParserActor* parserActor, PD_MG_StaticMap* inStaticMapRef);
 };

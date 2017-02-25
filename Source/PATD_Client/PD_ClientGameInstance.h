@@ -10,7 +10,10 @@
 #include "Structs/PD_ClientEnums.h"
 struct StructClientState;
 class PD_NW_NetworkManager;
+class PD_MG_MapParser;
 class AParserActor;
+
+class PD_MG_StaticMap;
 #include "LevelsNameDictionary.h"
 
 //Include de unreal
@@ -38,8 +41,10 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance, public PD_N
 
 public:
 	PD_NW_NetworkManager* networkManager;
+	PD_MG_MapParser* mapParser;
 	AParserActor* parserActor;
-
+	//Aqui iria el mapManager si lo ponemos en el cliente igual que el server
+	PD_MG_StaticMap* staticMapRef;
 
 	//Para tener los nombres de los niveles - diferenciar ejecución en editor o en ejecutable
 	LevelsNameDictionary levelsNameDictionary;
@@ -95,8 +100,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void GoToLobby();
 
-	void InitGameMap();
-	void InitClientActoWhenLoadMap();
+
 	
 };
 
