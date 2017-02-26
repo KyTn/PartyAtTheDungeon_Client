@@ -5,7 +5,6 @@
 #include "GameFramework/Actor.h"
 #include "../MyCharacterParent.h"
 #include "PD_PLY_Controller.h"
-#include "GM_Game/LogicCharacter/PD_GM_PLY_LogicCharacter.h"
 #include "PD_PLY_GenericCharacter.generated.h"
 
 UCLASS()
@@ -34,7 +33,5 @@ public:
 	//Controller para el personaje
 	APD_PLY_Controller* playerController;
 
-	//Character Stats and Logic
-	PD_GM_PLY_LogicCharacter* LogicCharacter;
 	
 };
