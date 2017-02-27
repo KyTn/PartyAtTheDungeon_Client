@@ -14,6 +14,18 @@
 
 PD_GM_LogicCharacter::PD_GM_LogicCharacter()
 {
+	//Inicializar los Structs
+	 basicStats = new FStructBasicStats();
+	 initBaseStats = new FStructInitBaseStats();
+	 skills = new FStructSkills();
+	 weapon = new FStructWeapon();
+	 skin = new FStructSkin();
+	 totalStats = new FStructTotalStats();
+
+	 //inicializar las variables
+	 isDead = false;
+
+	 
 }
 
 PD_GM_LogicCharacter::~PD_GM_LogicCharacter()
@@ -142,6 +154,91 @@ void PD_GM_LogicCharacter::UpdateHPCurrent(float receivedDamage)
 	*/
 }
 
+//Devuelve la tirada que le pidan para resolver los conflictos
+int8 PD_GM_LogicCharacter::GetARoll(int8 numOfDice, int32 numOfFaces)
+{
+	int8 totalSum = 0;
+	for (int i = 0; i < numOfDice; i++)
+	{
+		totalSum = totalSum + FMath::RandRange(1, numOfFaces);
+	}
+	return totalSum;
+}
+
+//Metodo para saber el porcentaje de bonus de la probabilidad de IMPACTAR
+float PD_GM_LogicCharacter::ImpactPercentage()
+{
+	float totalBonusImpact = 1;
+	/*
+		- OBJETIVO: devuelve el porcentaje de impacto bonus que se añade por pasivas u otras fuentes
+		- PROCESO:
+			1. Recorrer tu lista de pasivas para encontrar si alguna coincide con una habilidad que 
+			afecte a este porcentaje
+			2. Si tiene alguna, suma al contador global de porcentaje el valor dado
+			3. devolver dicho valor
+		- SE LLAMA DESDE: la funcion GetImpactCharacter()
+	*/
+	return totalBonusImpact;
+}
+
+
+//Metodo para saber el porcentaje de bonus de la probabilidad de EVADIR
+float PD_GM_LogicCharacter::EvasionPercentage()
+{
+	float totalBonusEvasion = 1;
+	/*
+		- OBJETIVO: devuelve el porcentaje de impacto bonus que se añade por pasivas u otras fuentes
+		- PROCESO:
+			1. Recorrer tu lista de pasivas para encontrar si alguna coincide con una habilidad que
+			afecte a este porcentaje
+			2. Si tiene alguna, suma al contador global de porcentaje el valor dado
+			3. devolver dicho valor
+		- SE LLAMA DESDE: la funcion GetEvasionCharacter()
+	*/
+
+	return totalBonusEvasion;
+}
+
+
+//Metodo para saber el valor que determina si ha impactado sobre un enemigo o no
+int8 PD_GM_LogicCharacter::GetImpactCharacter()
+{
+	int8 ImpactTotal;
+	/*
+		- OBJETIVO: devuelve el valor  de impacto total para saber si da o no da
+		- PROCESO:
+			1. Conseguir el porcentaje de bonus de Impacto -- llamar a ImpactPercentage()
+			2. Conseguir el Bonus de Destreza
+			3. Calcular el Impacto total
+			4. devolver el valor
+		- SE LLAMA DESDE: cualuqier actor que quiera saber su valor de Impacto para saber si da o no da sobre otro actor
+	*/
+
+	ImpactTotal = roundf( (GetARoll(3, 6) + totalStats->DESBonus) * (1 + ImpactPercentage()) );
+
+	return ImpactTotal;
+}
+
+
+//Metodo para saber el valor que determina si ha evadido un ataque o no
+int8 PD_GM_LogicCharacter::GetEvasionCharacter()
+{
+	int8 EvasionTotal;
+	/*
+		- OBJETIVO: devuelve el valor  de evasion total de un personaje
+		- PROCESO:
+			1. Conseguir el porcentaje de bonus de Evasion -- llamar a EvasionPercentage()
+			2. Conseguir el Bonus de Agilidad
+			3. Calcular la evasion total
+			4. devolver el valor
+		- SE LLAMA DESDE: cualuqier actor que quiera saber su valor de Impacto para saber si da o no da sobre otro actor
+	*/
+
+	EvasionTotal = roundf( (GetARoll(3, 6) + totalStats->AGIBonus) * (1 + EvasionPercentage()) );
+
+	return EvasionTotal;
+
+}
 
 /* ===============
 METODOS GET Y SET PARA STRUCTS DE STATS y DATOS
@@ -157,6 +254,7 @@ FStructTotalStats* PD_GM_LogicCharacter::GetTotalStats( ) { return totalStats; }
 bool PD_GM_LogicCharacter::GetIsPlayer() { return isPlayer; }
 bool PD_GM_LogicCharacter::GetIsDead() { return isDead; }
 uint8 PD_GM_LogicCharacter::GetIDCharacter() { return ID_character; }
+uint8 PD_GM_LogicCharacter::GetTypeCharacter() { return type_character; }
 APD_GenericController* PD_GM_LogicCharacter::GetController() { return controller; }
 AMyCharacterParent* PD_GM_LogicCharacter::GetCharacterParent() { return characterParent; }
 TSubclassOf<class AMyCharacterParent> PD_GM_LogicCharacter::GetCharacterBP() { return character_Player_BP; }
@@ -173,10 +271,11 @@ void PD_GM_LogicCharacter::SetBasicStats(int nPOD, int nAGI, int nDES, int nCON,
 	basicStats->PER = nPER;
 	basicStats->MAL = nMAL;
 }
-void PD_GM_LogicCharacter::SetInitBaseStats(int nHP, int nDMG)
+void PD_GM_LogicCharacter::SetInitBaseStats(int nHP, int nDMG, int nAP)
 {
 	initBaseStats->HPBase = nHP;
 	initBaseStats->DMGBase = nDMG;
+	initBaseStats->APBase = nAP;
 }
 void PD_GM_LogicCharacter::SetSkills(TArray<uint8> nActSkills, TArray<uint8> nPasSkills) 
 {
@@ -185,7 +284,10 @@ void PD_GM_LogicCharacter::SetSkills(TArray<uint8> nActSkills, TArray<uint8> nPa
 }
 void PD_GM_LogicCharacter::SetWapon() 
 {
-
+	weapon->DMWeapon = 20;
+	weapon->ID_Weapon = 0;
+	weapon->TypeWeapon = 0;// 0-Melee, 1-Distancia, 2-Magia
+	weapon->RangeWeapon = 1;
 }
 void PD_GM_LogicCharacter::SetSkin()
 {
@@ -204,12 +306,12 @@ void PD_GM_LogicCharacter::SetTotalStats()
 		totalStats->PERBonus = 0.05 * basicStats->PER;
 	}
 	//rango
-	else if (weapon->TypeWeapon == 0) 
+	else if (weapon->TypeWeapon == 1) 
 	{
 		totalStats->PERBonus = (ceil(basicStats->PER / 2)) - 3;
 	}
 	//distancia
-	else if (weapon->TypeWeapon == 0)
+	else if (weapon->TypeWeapon == 2)
 	{
 		totalStats->PERBonus = (ceil(basicStats->PER / 2)) - 3;
 	}
@@ -225,6 +327,7 @@ void PD_GM_LogicCharacter::SetTotalStats()
 	{
 		totalStats->AP = ceil((basicStats->AGI + basicStats->DES) / 2) - 5;
 	}
+	totalStats->APTotal = initBaseStats->APBase + totalStats->AP;
 	//Choque
 	if ((basicStats->POD + basicStats->MAL) < 10)
 	{
@@ -235,19 +338,20 @@ void PD_GM_LogicCharacter::SetTotalStats()
 		totalStats->CH = ceil((basicStats->POD + basicStats->MAL) / 2) - 5;
 	}
 	//Salvacion
-	if ((basicStats->POD + basicStats->MAL) < 10)
+	if ((basicStats->CON + basicStats->PER) < 10)
 	{
-		totalStats->CH = floor((basicStats->POD + basicStats->MAL) / 2) - 5;
+		totalStats->SA = floor((basicStats->CON + basicStats->PER) / 2) - 5;
 	}
-	else if ((basicStats->POD + basicStats->MAL) >= 10)
+	else if ((basicStats->CON + basicStats->PER) >= 10)
 	{
-		totalStats->CH = ceil((basicStats->POD + basicStats->MAL) / 2) - 5;
+		totalStats->SA = ceil((basicStats->POD + basicStats->PER) / 2) - 5;
 	}
 
 	//Vida total
 	//	totalStats->HPTotal = (initBaseStats->HPBase + HPBonus) * (1 + totalStats->CONBonus); - HPBonus es por pasivas u otras fuentes
 	totalStats->HPTotal = (initBaseStats->HPBase) * (1 + totalStats->CONBonus);
 	totalStats->HPCurrent = totalStats->HPTotal;
+
 
 	//Damage Total
 	//	totalStats->DMGTotal = (initBaseStats->DMGBase) * (1 + totalStats->PODBonus);
@@ -256,11 +360,13 @@ void PD_GM_LogicCharacter::SetTotalStats()
 	/*
 	Para el bonus de Vida y Damage, hacer antes un IF para ver si entre la lista de pasivas, tienen algunas que le den bonus extra a eso
 	*/
+	totalStats->RangeTotal = weapon->RangeWeapon;
 }
 
 void PD_GM_LogicCharacter::SetIsPlayer(bool nIsPlayer){ isPlayer = nIsPlayer; }
 void PD_GM_LogicCharacter::SetIsDead(bool nIsDead){ isDead = nIsDead; }
 void PD_GM_LogicCharacter::SetIDCharacter(uint8 nID_character){ ID_character = nID_character; }
+void PD_GM_LogicCharacter::SetTypeCharacter(uint8 nID_character) { type_character = nID_character; }
 void PD_GM_LogicCharacter::SetController(APD_GenericController* ncontroller){ controller = ncontroller; }
 void PD_GM_LogicCharacter::SetCharacterParent(AMyCharacterParent* ncharacterParent){ characterParent = ncharacterParent; }
 void PD_GM_LogicCharacter::SetCharacterBP(TSubclassOf<class AMyCharacterParent> ncharacter_Player_BP){ character_Player_BP = ncharacter_Player_BP; }

@@ -13,6 +13,7 @@ Es el Struct principal del Cliente.
 	Tiene datos referentes a su información de Internet (IP, device, etc)
 	Datos del Character
 */
+
 struct StructPlayer {
 	//Menu options and configuration
 	bool readyMenu;
@@ -30,7 +31,16 @@ struct StructPlayer {
 	!!!IMPORTANTE: Esta referencia se tendra que ACTUALIZAR cada vez que el jugador cambie de personaje con los nuevos datos
 	*/
 	FStructCharacter* player_character; //Envio de la informacion LOGICA del personaje
+	FStructUpdateCharacter* update_character;
+	PD_GM_LogicCharacter* logic_Character;
 
+	StructPlayer() {
+		clientMaster = false;
+		readyMenu = false; //¿que es esto?
+		turnOrders = new FStructTurnOrders();
+		player_character = new FStructCharacter();
+		update_character = new FStructUpdateCharacter();
+	}
 };
 
 

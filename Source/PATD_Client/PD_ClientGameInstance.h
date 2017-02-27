@@ -9,11 +9,13 @@
 //Include de enums (no se pueden hacer forward declaration)
 #include "Structs/PD_ClientEnums.h"
 struct StructClientState;
+struct StructPlayer;
 class PD_NW_NetworkManager;
 class PD_MG_MapParser;
 class AParserActor;
-
+class PD_GM_LogicCharacter;
 class PD_MG_StaticMap;
+
 #include "LevelsNameDictionary.h"
 
 //Include de unreal
@@ -32,14 +34,11 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance, public PD_N
 {
 	GENERATED_BODY()
 	
-
-	
-
-
 	void InitializeNetworking();
 
 
 public:
+
 	PD_NW_NetworkManager* networkManager;
 	PD_MG_MapParser* mapParser;
 	AParserActor* parserActor;
@@ -77,6 +76,8 @@ public:
 	//Struct con el estado del client
 	StructClientState* structClientState;
 
+	//Struct con la info del player - Internet y más adelante de su personaje
+	StructPlayer* playerInfo;
 	//Funciones de configuracion de la maquina
 	//Transiciones
 	void UpdateState();
@@ -100,8 +101,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void GoToLobby();
 
-
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL);
 	
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG);
+	//Se pasa por referencia el parametro "&" para que Unreal Engine lo detecte como parametro de salida
+	//si pones const siempre lo va a detectar como parametro de entrada. Puedes entonces poner un mismo parametro como entrada y salida asi.
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		bool SendCharacterToServer();
 };
 
 

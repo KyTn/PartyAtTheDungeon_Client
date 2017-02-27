@@ -14,6 +14,7 @@
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
 #include "MapGeneration/PD_MG_MapParser.h"
 #include "MapGeneration/ParserActor.h"
+#include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
 //Includes de prueba
 
 
@@ -168,6 +169,14 @@ void UPD_ClientGameInstance::Init()
 	structClientState = new StructClientState();
 	structClientState->enumClientState = EClientState::NoConnection;
 
+	playerInfo = new StructPlayer(); //El constructor del StructPlayer inicializa sus variables
+	/*
+		Construimos el logicCharacter, para luego poder rellenarlo. Lo configuramos como Jugador. 
+	*/
+	playerInfo->logic_Character = new PD_GM_LogicCharacter();
+	playerInfo->logic_Character->SetIsPlayer(true);
+	playerInfo->logic_Character->SetTypeCharacter(0); //Al ser player. 0 vuelve a indicar que es Jugador.
+
 	InitializeNetworking();
 
 	networkManager->RegisterObserver(this);
@@ -288,3 +297,42 @@ void UPD_ClientGameInstance::GetReadyToParty()
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
 	networkManager->SendNow(&respuesta, 0);
 }
+
+void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL) 
+{
+	playerInfo->logic_Character->SetBasicStats(nPOD, nAGI, nDES, nCON, nPER, nMAL);
+	playerInfo->logic_Character->SetInitBaseStats(100, 20,5); //HP - DMG
+	playerInfo->logic_Character->SetWapon();
+	playerInfo->logic_Character->SetTotalStats();
+}
+
+void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG)
+{
+	nAP = playerInfo->logic_Character->GetTotalStats()->APTotal;
+	nCH = playerInfo->logic_Character->GetTotalStats()->CH;
+	nSA = playerInfo->logic_Character->GetTotalStats()->SA;
+	nHP = playerInfo->logic_Character->GetTotalStats()->HPTotal;
+	nRAN = playerInfo->logic_Character->GetTotalStats()->RangeTotal;
+	nDMG = playerInfo->logic_Character->GetTotalStats()->DMGTotal;
+
+}
+
+
+bool UPD_ClientGameInstance::SendCharacterToServer()
+{
+	if (!playerInfo->logic_Character) {
+		return false;
+	}
+	FStructCharacter structCharacterToSend =  FStructCharacter();
+	structCharacterToSend.totalStats = *(playerInfo->logic_Character->GetTotalStats());
+	structCharacterToSend.initBaseStats = *(playerInfo->logic_Character->GetInitBaseStats());
+	structCharacterToSend.skils = *(playerInfo->logic_Character->GetSkills());
+	structCharacterToSend.skin = *(playerInfo->logic_Character->GetSkin());
+	structCharacterToSend.weapon = *(playerInfo->logic_Character->GetWeapon());
+
+	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
+	networkManager->SendNow(&structCharacterToSend, 0);
+	
+	return true;
+}
+

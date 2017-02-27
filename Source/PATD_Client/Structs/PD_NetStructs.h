@@ -3,7 +3,6 @@
 #pragma once
 
 #include "SR_Serializer/PD_SR_SerializerStructs.h"
-
 #include "PD_NetStructs.generated.h"
 
 
@@ -41,7 +40,22 @@ struct FStructOrderAction {
 
 };
 
+USTRUCT()
+struct FStructLogicPosition {
 
+
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint32 positionX;
+		UPROPERTY()
+		uint32 positionY;
+
+	FStructLogicPosition() {
+
+	}
+
+};
 /*
 STRUCTS PARA EL CHARACTER LOGIC
  - Stats básicos - Los que elige el jugador
@@ -86,7 +100,8 @@ struct FStructInitBaseStats
 		uint8 HPBase;
 		UPROPERTY()
 		uint8 DMGBase;
-
+		UPROPERTY()
+		uint8 APBase;
 
 	//Constructor
 	FStructInitBaseStats()
@@ -164,6 +179,8 @@ struct FStructTotalStats
 		UPROPERTY()
 		uint8 HPTotal;
 		UPROPERTY()
+		uint8 APTotal;
+		UPROPERTY()
 		uint8 HPCurrent;
 		UPROPERTY()
 		uint8 RangeTotal;
@@ -172,25 +189,25 @@ struct FStructTotalStats
 
 		//stats principales - siendo el valor de estas el BONUS que da cada stat (no los puntos dados - diferencia respecto al FStructBasicStats
 		UPROPERTY()
-		uint8 PODBonus;
+		float PODBonus;
 		UPROPERTY()
-		uint8 AGIBonus;
+		int8 AGIBonus;
 		UPROPERTY()
-		uint8 DESBonus;
+		int8 DESBonus;
 		UPROPERTY()
-		uint8 CONBonus;
+		float CONBonus;
 		UPROPERTY()
-		uint8 PERBonus;		
+		float PERBonus;		
 		UPROPERTY()
-		uint8 MALBonus;
+		float MALBonus;
 
 		//stats secundarios - AP - SAL - CH (dependen de los BONUS de los stats principales
 		UPROPERTY()
-		uint8 AP;
+		int8 AP;
 		UPROPERTY()
-		uint8 CH;		
+		int8 CH;		
 		UPROPERTY()
-		uint8 SA;
+		int8 SA;
 
 
 	//Constructor
@@ -229,7 +246,8 @@ AllStructs=1 para suscribirse a eventos para todos.
 FStructNewConnection=2 struct que crea el networkmanager (no necesita serializacion)
 */
 
-enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30, FStructCharacter = 40 };
+enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30,
+	FStructCharacter = 40, FStructUpdateCharacter = 41 };
 
 
 
@@ -259,6 +277,28 @@ struct FStructCharacter : public  FStructGeneric
 	FStructCharacter()
 	{
 		structType = static_cast<uint8>(UStructType::FStructCharacter);
+	}
+};
+
+//Sirve para actualizar el estado de un character cuando se ha iniciado la partida
+//Solo se van a enviar los atributos del character que sean necesarios
+USTRUCT()
+struct FStructUpdateCharacter : public  FStructGeneric
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint8 HPCurrent;
+		UPROPERTY()
+		uint8 ID_character; //Identifica al Jugador que realiza la modificacion
+		UPROPERTY()
+		FStructLogicPosition currentCharacterPosition;
+	
+
+	//Constructor
+	FStructUpdateCharacter()
+	{
+		structType = static_cast<uint8>(UStructType::FStructUpdateCharacter);
 	}
 };
 

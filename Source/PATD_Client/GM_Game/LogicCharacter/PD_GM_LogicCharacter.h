@@ -24,7 +24,8 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 
 	//Variables del Character Generico 
 	bool isPlayer; //Define si es Jugador (0) o Enemigo (1) - Sirve para el Casteo de Controllers entre otras cosas
-	uint8 ID_character;//Si es Player = 0, Si es Enemigo = 1, n. DEfine el tipo de enemigo que es para rellenar los Stats u el Aspecto (BP)
+	uint8 ID_character;//Si es Player = 00, Si es Enemigo = 01, n. DEfine el tipo de enemigo que es para rellenar los Stats u el Aspecto (BP)
+	uint8 type_character; //0 si es player, N depende del enemigo
 	bool isDead; //cuando su HPcurrent =< 0 -> True, sino False ---> Para acabar el juego
 	
 
@@ -109,7 +110,44 @@ public:
 	*/
 	void UpdateHPCurrent(float receivedDamage);
 
+	/*
+	//Metodo para conseguir la tirada de un numero determinado de dados 
+	con un numero concreto de caras
+	Recibe:
+	- Un int con el numero de dados que se lanzan
+	- Un int con el número de caras del dado
+	Devuelve:
+	- La suma de lo que salga en cada dado
+	*/
+	int8 GetARoll(int8 numOfDice, int32 numOfFaces);
 
+	/*
+	//Metodo para saber el porcentaje de bonus de la probabilidad de IMPACTAR
+	Devuelve:
+	- el porcentaje que se tiene que añadir al Impact Bonus%
+	*/
+	float ImpactPercentage();
+
+	/*
+	//Metodo para saber el porcentaje de bonus de la probabilidad de EVADIR
+	Devuelve:
+	- el porcentaje que se tiene que añadir al Impact Bonus%
+	*/
+	float EvasionPercentage();
+
+	/*
+	//Metodo para saber el valor que determina si ha impactado sobre un enemigo o no
+	Devuelve:
+	- el porcentaje que se tiene que añadir al Impact Bonus%
+	*/
+	int8 GetImpactCharacter();
+
+	/*
+	//Metodo para saber el valor que determina si ha evadido un ataque o no
+	Devuelve:
+	- el porcentaje que se tiene que añadir al Impact Bonus%
+	*/
+	int8 GetEvasionCharacter();
 
 	/* ===================
 	METODOS AUXILIARES GET Y SET
@@ -126,6 +164,7 @@ public:
 	bool GetIsPlayer();
 	bool GetIsDead();
 	uint8 GetIDCharacter();
+	uint8 GetTypeCharacter();
 	APD_GenericController* GetController();
 	AMyCharacterParent* GetCharacterParent();
 	TSubclassOf<class AMyCharacterParent> GetCharacterBP();
@@ -134,7 +173,7 @@ public:
 
 	//Métodos SET para cada Struct
 	void SetBasicStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL);
-	void SetInitBaseStats(int nHP, int nDMG);
+	void SetInitBaseStats(int nHP, int nDMG, int nAP);
 	void SetSkills(TArray<uint8> nActSkills, TArray<uint8> nPasSkills);
 	void SetWapon();
 	void SetSkin();
@@ -144,6 +183,7 @@ public:
 	void SetIsPlayer(bool nIsPlayer);
 	void SetIsDead(bool nIsDead);
 	void SetIDCharacter(uint8 nID_character);
+	void SetTypeCharacter(uint8 ntype_character);
 	void SetController(APD_GenericController* ncontroller);
 	void SetCharacterParent(AMyCharacterParent* ncharacterParent);
 	void SetCharacterBP(TSubclassOf<class AMyCharacterParent> ncharacter_Player_BP); //BP donde esta el PROP del Character
