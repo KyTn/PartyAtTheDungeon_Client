@@ -247,7 +247,7 @@ FStructNewConnection=2 struct que crea el networkmanager (no necesita serializac
 */
 
 enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30,
-	FStructCharacter = 40, FStructUpdateCharacter = 41 };
+	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructStartMatchOnGM = 50 };
 
 
 
