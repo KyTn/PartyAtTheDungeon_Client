@@ -32,8 +32,7 @@ bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 // Inicializa la maquina de estados.
 void PD_GM_GameManager::InitState() {
 	structGameState = new StructGameState();
-	structGameState->enumGameState = EGameState::Instantiate_Map;
-
+	ChangeState(EGameState::Instantiate_Map);
 }
 
 #pragma region GM STATE MACHINE 
@@ -47,7 +46,10 @@ void PD_GM_GameManager::ChangeState(EGameState newState) {
 // Dado un paquete de red, actualiza el estado correspondiente y realiza las acciones pertinentes. 
 void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
-
+		// Si se recibe del servidor un Start_Match, ir a ese estado. 
+		if (inEventType == UStructType::FStructStartMatchOnGM) {
+			ChangeState(EGameState::Start_Match);
+		}
 	}
 	else if(structGameState->enumGameState == EGameState::Start_Match) {
 		 
