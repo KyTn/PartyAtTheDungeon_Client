@@ -45,14 +45,68 @@ PD_MG_LogicPosition* PD_GM_MapManager::WorldToLogicPosition(FVector* pos) {
 
 void PD_GM_MapManager::InstantiateMap()
 {
+	InstantiateStaticMap();
+	InstantiateDynamicMap(_GAMEMANAGER->enemyManager);
+
 }
 
 void PD_GM_MapManager::InstantiateStaticMap()
 {
+
+	for (int i = 0; i < StaticMapRef->GetLogicPositions().Num(); i++) {
+
+		/**/
+		switch (StaticMapRef->GetXYMap()[*StaticMapRef->GetLogicPositions()[i]]) {
+		case 'w':
+			instantiator->InstantiateWall(StaticMapRef->GetLogicPositions()[i]);
+			break;
+
+		case '.':
+			instantiator->InstantiateTile(StaticMapRef->GetLogicPositions()[i]);
+			break;
+		case 'd':
+
+			instantiator->InstantiateTile(StaticMapRef->GetLogicPositions()[i]);
+			break;
+			/*default:
+
+			parserActor->InstantiateTile(staticMap->GetLogicPositions()[i]);
+			break;
+			*/
+		}
+	}
 }
 
-void PD_GM_MapManager::InstantiateDynamicMap(PD_GM_EnemyManager * enemyMan)
+void PD_GM_MapManager::InstantiateDynamicMap(PD_GM_EnemyManager* enemyMan)
 {
+
+	ECharacterType enemyType;
+	///necesitamos comprobar ya el ID
+	for (int i = 0; i < DynamicMapRef->GetLogicPositions().Num(); i++) {
+
+
+		enemyType = DynamicMapRef->getEnemies()[*DynamicMapRef->GetLogicPositions()[i]][0]->GetTypeCharacter();///Cogemos el tipo
+
+		for (int j = 0; j < enemyMan->GetEnemies().Num(); j++) {
+			if (enemyMan->GetEnemies()[j]->GetIDCharacter() == DynamicMapRef->getEnemies()[*DynamicMapRef->GetLogicPositions()[i]][0]->GetIDCharacter()) {///Comprobamos el ID, para asignar el Character correctamente
+
+				switch (enemyType) {
+				case ECharacterType::Archer: {
+					APD_E_EnemyCharacter* charac = instantiator->InstantiateArcher(DynamicMapRef->GetLogicPositions()[i]);
+					//DynamicMapRef->UpdateActor(charac, DynamicMapRef->GetLogicPositions()[i]);///instancia el objeto fisico en el lógico
+					enemyMan->GetEnemies()[j]->SetCharacterBP(charac);
+					break;
+				}
+				case ECharacterType::Zombie: {
+					APD_E_EnemyCharacter* charac = instantiator->InstantiateZombie(DynamicMapRef->GetLogicPositions()[i]);
+					//DynamicMapRef->UpdateActor(charac, DynamicMapRef->GetLogicPositions()[i]);///instancia el objeto fisico en el lógico
+					enemyMan->GetEnemies()[j]->SetCharacterBP(charac);
+					break;
+				}
+				}
+			}
+		}
+	}
 }
 
 #pragma endregion 
