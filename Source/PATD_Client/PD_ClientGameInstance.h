@@ -111,6 +111,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		bool SendCharacterToServer();
+
+	//Function para crear una orden de movimiento para enviar
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		bool CreateMoveOrderToSend(float positionX, float positionY);
+
+	//Function para crear una orden de movimiento para enviar
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		bool CreateActionOrderToSend(float positionX, float positionY);
+
+	//Function para enviar el paquete con la orden entera al servidor
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		bool SendTurnOrderActionsToServer();
 };
 
 
