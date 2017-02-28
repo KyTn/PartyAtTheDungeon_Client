@@ -7,7 +7,7 @@
 /// FORWARD DECLARATIONS
 class PD_GM_MapManager;
 class PD_GM_EnemyManager;
-
+class PD_PlayersManager;
 struct StructGameState;
 /**
  * 
@@ -15,13 +15,13 @@ struct StructGameState;
 class PATD_CLIENT_API PD_GM_GameManager : public PD_NW_iEventObserver
 {
 public:
-	PD_GM_GameManager();
+	PD_GM_GameManager(PD_GM_MapManager* mapManager, PD_GM_EnemyManager* enemyManager, PD_PlayersManager* playersManager);
 	~PD_GM_GameManager();
 
 
 	PD_GM_MapManager* mapManager;
 	PD_GM_EnemyManager* enemyManager;
-	// Angel: no hay player manager en el cliente ???
+	PD_PlayersManager* playerManager;
 
 	bool SuscribeToEvents(int inPlayer, UStructType inType);
 	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) = 0;
