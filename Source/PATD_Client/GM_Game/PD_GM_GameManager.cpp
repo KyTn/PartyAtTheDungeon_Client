@@ -4,17 +4,18 @@
 #include "PD_GM_GameManager.h"
 #include "PD_GM_MapManager.h"
 #include "PD_GM_EnemyManager.h"
+#include "PD_PlayersManager.h"
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
 
 
 
-PD_GM_GameManager::PD_GM_GameManager()
+PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_GM_EnemyManager* inEnemyManager, PD_PlayersManager* inPlayerManager)
 {
 
-
-	mapManager = new PD_GM_MapManager;
-	enemyManager = new PD_GM_EnemyManager;
+	playerManager = inPlayerManager;
+	mapManager =  inMapManager;
+	enemyManager = inEnemyManager;
 
 	InitState();
 }
