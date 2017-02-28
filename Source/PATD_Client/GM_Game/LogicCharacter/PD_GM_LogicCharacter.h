@@ -24,8 +24,8 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 
 	//Variables del Character Generico 
 	bool isPlayer; //Define si es Jugador (0) o Enemigo (1) - Sirve para el Casteo de Controllers entre otras cosas
-	uint8 ID_character;//Si es Player = 00, Si es Enemigo = 01, n. DEfine el tipo de enemigo que es para rellenar los Stats u el Aspecto (BP)
-	uint8 type_character; //0 si es player, N depende del enemigo
+	FString ID_character;//Si es Player = 00, Si es Enemigo = 01, n. DEfine el tipo de enemigo que es para rellenar los Stats u el Aspecto (BP)
+	ECharacterType type_character; //0 si es player, N depende del enemigo
 	bool isDead; //cuando su HPcurrent =< 0 -> True, sino False ---> Para acabar el juego
 	
 
@@ -163,8 +163,8 @@ public:
 	//Metodos GET para variables globales de la clase
 	bool GetIsPlayer();
 	bool GetIsDead();
-	uint8 GetIDCharacter();
-	uint8 GetTypeCharacter();
+	FString GetIDCharacter();
+	ECharacterType GetTypeCharacter();
 	APD_GenericController* GetController();
 	AMyCharacterParent* GetCharacterParent();
 	TSubclassOf<class AMyCharacterParent> GetCharacterBP();
@@ -182,8 +182,8 @@ public:
 	//Metodos SET para variables globales de la clase
 	void SetIsPlayer(bool nIsPlayer);
 	void SetIsDead(bool nIsDead);
-	void SetIDCharacter(uint8 nID_character);
-	void SetTypeCharacter(uint8 ntype_character);
+	void SetIDCharacter(FString nID_character);
+	void SetTypeCharacter(ECharacterType ntype_character);
 	void SetController(APD_GenericController* ncontroller);
 	void SetCharacterParent(AMyCharacterParent* ncharacterParent);
 	void SetCharacterBP(TSubclassOf<class AMyCharacterParent> ncharacter_Player_BP); //BP donde esta el PROP del Character

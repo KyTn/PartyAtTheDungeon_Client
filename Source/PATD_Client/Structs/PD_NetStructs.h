@@ -13,6 +13,21 @@
 enum class EDirections { Up = 1, Down = 2, Left = 3, Right = 4 };
 
 enum class EOrderAction { Move = 1, Attack = 2 };
+
+USTRUCT()
+struct FStructLogicPosition {
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint32 positionX;
+	UPROPERTY()
+		uint32 positionY;
+
+	FStructLogicPosition() {
+
+	}
+};
+
 //Los struct tienen que ser USTRUCT para poder meterlos en un array de otro USTRUCT.
 USTRUCT()
 struct FStructOrderAction {
@@ -26,8 +41,8 @@ struct FStructOrderAction {
 
 	//EDirections
 	UPROPERTY()
-		uint8 targetDirection;
-
+		//uint8 targetDirection;
+		FStructLogicPosition targetDirection;
 	/*
 	LogicPosition targetTile;
 	CharacterId targetCharacter;
@@ -40,22 +55,7 @@ struct FStructOrderAction {
 
 };
 
-USTRUCT()
-struct FStructLogicPosition {
 
-
-	GENERATED_BODY()
-
-		UPROPERTY()
-		uint32 positionX;
-		UPROPERTY()
-		uint32 positionY;
-
-	FStructLogicPosition() {
-
-	}
-
-};
 /*
 STRUCTS PARA EL CHARACTER LOGIC
  - Stats básicos - Los que elige el jugador

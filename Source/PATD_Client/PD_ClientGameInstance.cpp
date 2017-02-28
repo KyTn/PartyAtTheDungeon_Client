@@ -5,7 +5,8 @@
 #include "NW_NetWorking/PD_NW_TimerActor.h"
 
 //Includes de uso
-#include "MapGeneration/PD_MG_StaticMap.h"
+#include "MapGeneration/Static/PD_MG_StaticMap.h"
+#include "MapGeneration/Dynamic/PD_MG_DynamicMap.h"
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
 
 
@@ -13,7 +14,6 @@
 #include "Structs/PD_ClientStructs.h" //Para todos los structs y enums
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
 #include "MapGeneration/PD_MG_MapParser.h"
-#include "MapGeneration/ParserActor.h"
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
 //Includes de prueba
 
@@ -110,10 +110,10 @@ void UPD_ClientGameInstance::OnBeginState() {
 		mapParser = new PD_MG_MapParser();
 
 		staticMapRef = new PD_MG_StaticMap();
-	//	PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
+		PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
 		
-		mapParser->StartParsingFromFString(&structClientState->mapString, staticMapRef );
-		//mapManager = new PD_GM_MapManager();
+//		mapParser->StartParsingFromFString(&structClientState->mapString, staticMapRef );
+	//  mapManager = new PD_GM_MapManager();
 		//mapManager->StaticMapRef = staticMapRef;
 		//mapManager->DynamicMapRef = dynamicMapRef;
 
@@ -148,8 +148,8 @@ void UPD_ClientGameInstance::OnMapFinishLoad() {
 
 	if (structClientState->enumClientState == EClientState::GameInProcess) {
 		//Quizas esto es tarea del gameManager.
-		parserActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
-		mapParser->InstantiateStaticMap(parserActor, staticMapRef);
+		//parserActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
+//		mapParser->InstantiateStaticMap(parserActor, staticMapRef);
 		
 		//Aqui cedemos el control al GameManager.
 		
@@ -175,7 +175,7 @@ void UPD_ClientGameInstance::Init()
 	*/
 	playerInfo->logic_Character = new PD_GM_LogicCharacter();
 	playerInfo->logic_Character->SetIsPlayer(true);
-	playerInfo->logic_Character->SetTypeCharacter(0); //Al ser player. 0 vuelve a indicar que es Jugador.
+	playerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
 
 	InitializeNetworking();
 

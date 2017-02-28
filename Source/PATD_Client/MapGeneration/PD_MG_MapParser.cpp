@@ -1,9 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.'
+
 
 #include "PATD_Client.h"
-#include "PATD_Client/MapGeneration/PD_MG_MapParser.h"
-#include "PATD_Client/MapGeneration/PD_MG_StaticMap.h"
-#include "PATD_Client/MapGeneration/ParserActor.h"
+#include "MapGeneration/PD_MG_MapParser.h"
+#include "MapGeneration/Static/PD_MG_StaticMap.h"
+#include "MapGeneration/Dynamic/PD_MG_DynamicMap.h"
+#include "Structs/PD_ClientEnums.h"
+#include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
+#include "GM_Game/PD_GM_EnemyManager.h"
 
 PD_MG_MapParser::PD_MG_MapParser()
 {
@@ -14,44 +18,67 @@ PD_MG_MapParser::~PD_MG_MapParser()
 }
 
 
-PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFString(FString* data) {
-	return StartParsingFromFString(data, new PD_MG_StaticMap());
+#pragma region Parse From File
+
+PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath)
+{
+	return StartParsingFromFile(filepath, new PD_MG_StaticMap(), new PD_MG_DynamicMap(), new PD_GM_EnemyManager());
 }
 
+PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_StaticMap* staticMapRef, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan)
+{
+	staticMapRef->Clear();
+	dynamicMapRef->Clear();
+	// Leamos el fichero
+	//Estamos metiendo el FPaths::GameDir() aqui y en el parserActor, asi que solo hay que ponerlo en uno de los sitios
+	FString FilePath = FPaths::GameDir() + *filepath;
+	FString FileData = "";
 
-PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFString(FString* data, PD_MG_StaticMap* StaticMapRef) {
-	StaticMapRef->Clear();
-
-	// Obtenemos la version del parser que se debe usar. 
-
-	TArray<FString> fileSplitted;
-
-	UE_LOG(LogTemp, Warning, TEXT("StartParsingFromFString %s"), data);
-
-	data->ParseIntoArray(fileSplitted, TEXT("\n"), true);
-
-	if (fileSplitted[0].Contains("v0.1")) {
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
-
-		Parsing_v_0_1(fileSplitted, StaticMapRef);
-	}
-	else
+	if (FFileHelper::LoadFileToString(FileData, *FilePath))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
+		//Agregado para el hito2 MCG
+		UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromFile::  Llamando a SetMapString . Path :%s  Mapa: %s"), *FilePath, *FileData);
+		staticMapRef->SetMapString(FileData);
+
+		// Enviar a los clientes el mapa leido ... 
+
+
+		// Obtenemos la version del parser que se debe usar. 
+
+		TArray<FString> fileSplitted;
+		FileData.ParseIntoArray(fileSplitted, TEXT("\n"), true);
+
+		if (fileSplitted[0].Contains("v0.1")) {
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
+
+			Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef, enemyMan);
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
+		}
+
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::StartParsingFromFile::  Error loading map! Failed to load file!. Path :%s "), *FilePath);
+
 	}
 
 
-	return StaticMapRef;
+	return staticMapRef;
 }
 
+#pragma endregion
 
 
-PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_MG_StaticMap* staticMapRef)
+#pragma region VERSION OF PARSERS
+
+PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_MG_StaticMap* staticMapRef, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan)
 {
 	//if (!fileReaded[0].Equals("v0.1")) { return staticMapRef; }
 
 	uint32 nextIndexRead = 0;
-
+	uint32 mapIndex = 0;
 	// Cual es el tipo de misión para este mapa?
 	if (fileReaded[1].Contains("defeatBoss")) {
 		staticMapRef->SetTypeMission(TypeOfMission::DefeatBoss);
@@ -65,76 +92,121 @@ PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_M
 
 	// Tamaño de la matriz
 	staticMapRef->SetHeight((uint32)FCString::Atoi(*(fileReaded[2])));
+	dynamicMapRef->SetHeight((uint32)FCString::Atoi(*(fileReaded[2])));
 	staticMapRef->SetWidth((uint32)FCString::Atoi(*(fileReaded[3])));
+	dynamicMapRef->SetWidth((uint32)FCString::Atoi(*(fileReaded[3])));
 
 	nextIndexRead = 4;
-
+	mapIndex = nextIndexRead;
 	// Cargamos los caractares planos sin referencias de comportamiento
 	nextIndexRead = ReadRawMap(fileReaded, nextIndexRead, staticMapRef);
-	
-	//InstantiateStaticMap(staticMapRef);
 
+	//Cargamos los enemigos que hay en el map, y los instanciamos en el enemyManager
+	nextIndexRead = ReadEnemiesMap(fileReaded, nextIndexRead, dynamicMapRef, enemyMan);
+
+	//Cargamos los objetos interactuables en el mapa
+	//nextIndexRead = ReadInteractiveObjectMap(fileReaded, nextIndexRead, dynamicMapRef);
 
 
 	return staticMapRef;
 }
 
-///Rellena el diccionario interno del staticMapRef con la info en crudo del mapa, sin referencias de comportamiento. 
+#pragma endregion 
+
+//Rellena el diccionario interno del staticMapRef con la info en crudo del mapa, sin referencias de comportamiento. 
 uint32 PD_MG_MapParser::ReadRawMap(TArray<FString> fileReaded, uint32 firstIndex, PD_MG_StaticMap* staticMapRef)
 {
 
 	for (uint32 i = firstIndex; i < staticMapRef->GetHeight() + firstIndex; i++) {
 		TArray<TCHAR> ta = fileReaded[i].GetCharArray();
 		for (uint32 j = 0; j < staticMapRef->GetWidth(); j++) {
-			staticMapRef->AddNewLogicPosition(i- firstIndex, j, ta[j]);
+			staticMapRef->AddNewLogicPosition(i - firstIndex, j, ta[j]);
 		}
 	}
-
 	return staticMapRef->GetHeight() + firstIndex;
-	// Test
-	/*
-	FString s;
-	s = "";
-	s.AppendInt(staticMapRef->GetLogicPositions().Num());
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Testing " + s);
-	for (int i = firstIndex; i < staticMapRef->GetLogicPositions().Num(); i++) {
-	
-		
-		FString s;
-		TMap<PD_MG_LogicPosition, TCHAR> m = staticMapRef->GetXYMap();
-		TArray<PD_MG_LogicPosition*> lps = staticMapRef->GetLogicPositions();
-		PD_MG_LogicPosition* lp = lps[i];
-		s.AppendInt(lp->GetX());
-		s.Append(",");
-		s.AppendInt(lp->GetY());
-		s.Append("-");
-		s.AppendChar(m[*lp]);
-		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, s);
-		
-	}
-	*/
 }
 
-void PD_MG_MapParser::InstantiateStaticMap(AParserActor* parserActor, PD_MG_StaticMap* inStaticMapRef) {
-	
-	for (int i = 0; i < inStaticMapRef->GetLogicPositions().Num(); i++) {
+//Rellena la parte de los enemigos del DynamicMap pasado por parametros
+uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstIndex, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan) {
+	TArray <TCHAR> enemyLine;
+	FString f;
+	uint32 Enemynum = (uint32)FCString::Atoi(*(fileReaded[firstIndex]));
+	uint32 intType, x, y;
+	int32 num, j;
+	firstIndex++;
+	ECharacterType type;
+	for (uint32 i = firstIndex; i < Enemynum + firstIndex; i++) {
+		/*enemyValue = fileReaded[i].RightChop(2);
+		enemyValue.RemoveAt(enemyValue.Len()-1);//Hay que hacer esto, dado que guardaba basura, un "\n", o un "\0" que se comportaba al hacer el cout como "\n"
+		dynamicMapRef->AddEnemyDictionary(fileReaded[i].GetCharArray()[0], enemyValue);*/
+		enemyLine = fileReaded[i].GetCharArray();
+		enemyLine.RemoveAt(enemyLine.Num() - 1);
+		enemyLine.RemoveAt(enemyLine.Num() - 1);
 
-		
-		switch (inStaticMapRef->GetXYMap()[*inStaticMapRef->GetLogicPositions()[i]]) {
-		case 'w':
-			parserActor->InstantiateWall(inStaticMapRef->GetLogicPositions()[i]);
-			break;
-
-		case 'd':
-			
-
-		default: 
-
-			parserActor->InstantiateTile(inStaticMapRef->GetLogicPositions()[i]);
-			break;
-
+		j = 0; num = 1; intType = 0; x = 0; y = 0;
+		while (enemyLine[j] != ':')
+		{
+			intType = enemyLine[j] - '0' + (intType*num);
+			j++;
+			num = num * 10;
 		}
-		
+		type = ECharacterType(intType);
+		num = 1; j++;
+		while (enemyLine[j] != ',')
+		{
+			x = enemyLine[j] - '0' + (x*num);
+			j++;
+			num = num * 10;
+		}
+		num = 1; j++;
+		while (j<enemyLine.Num())
+		{
+			y = enemyLine[j] - '0' + (y*num);
+			j++;
+			num = num * 10;
+		}
+		PD_GM_LogicCharacter* ch = new PD_GM_LogicCharacter();
+		PD_MG_LogicPosition* lp = new PD_MG_LogicPosition(x, y);
+		ch->SetCurrentLogicalPosition(lp);
+		switch (type) {///En este switch metemos la IA lógica de cada uno
+		case ECharacterType::Archer: {
+			FString id = "Arch" + i;
+			ch->SetIDCharacter(id);
+			ch->SetTypeCharacter(type);
+			enemyMan->AddEnemie(ch);
+			dynamicMapRef->AddNewEnemy(lp, ch, type);
+			break;
+		}
+		case ECharacterType::Zombie: {
+			FString id = "Zomb" + i;
+			ch->SetIDCharacter(id);
+			ch->SetTypeCharacter(type);
+			enemyMan->AddEnemie(ch);
+			dynamicMapRef->AddNewEnemy(lp, ch, type);
+			break;
+		}
+		}
 	}
+	return firstIndex + Enemynum + 1;
 }
+
+
+/*uint32 PD_MG_MapParser::ReadInteraciveObjectMap(TArray<FString> fileReaded, uint32 firstIndex, PD_MG_DynamicMap* dynamicMapRef) {
+TArray <TCHAR> intObjLine;
+FString f;
+uint32 intObjNum = (uint32)FCString::Atoi(*(fileReaded[firstIndex]));
+uint32 intType, x, y;
+int32 num, j;
+firstIndex++;
+for (uint32 i = firstIndex; i < intObjNum + firstIndex; i++) {
+/*enemyValue = fileReaded[i].RightChop(2);
+enemyValue.RemoveAt(enemyValue.Len()-1);//Hay que hacer esto, dado que guardaba basura, un "\n", o un "\0" que se comportaba al hacer el cout como "\n"
+dynamicMapRef->AddEnemyDictionary(fileReaded[i].GetCharArray()[0], enemyValue);
+intObjLine = fileReaded[i].GetCharArray();
+intObjLine.RemoveAt(intObjLine.Num() - 1);
+intObjLine.RemoveAt(intObjLine.Num() - 1);
+
+///Falta decidir como se va a definir en el fichero, el parseo y guardarlo en el mapa dinámico
+}
+return firstIndex + intObjNum + 1;
+}*/
