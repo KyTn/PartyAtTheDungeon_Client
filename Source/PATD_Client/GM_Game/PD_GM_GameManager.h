@@ -1,13 +1,41 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "NW_NetWorking/EventLayer/PD_NW_iEventObserver.h"
+#include "Structs/PD_ClientEnums.h"
 
+/// FORWARD DECLARATIONS
+
+
+struct StructGameState;
 /**
  * 
  */
-class PATD_CLIENT_API PD_GM_GameManager
+class PATD_CLIENT_API PD_GM_GameManager : public PD_NW_iEventObserver
 {
 public:
 	PD_GM_GameManager();
 	~PD_GM_GameManager();
+
+
+	bool SuscribeToEvents(int inPlayer, UStructType inType);
+	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) = 0;
+
+	//Struct con el estado para la maquina de estados del gameManager
+	StructGameState* structGameState;
+
+	//Funciones de gestion del estado (maquina de estados)
+
+	//Funciones de configuracion de la maquina
+	//Transiciones
+	void UpdateState();
+	//Acciones al empezar el estado
+	void OnBeginState();
+
+	//Funciones auxiliares
+	//Control directo del estado, llama a OnBeginState
+	void ChangeState(EGameState newState);
+	void InitState();
+
+
 };

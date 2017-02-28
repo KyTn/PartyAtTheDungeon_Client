@@ -55,3 +55,9 @@ struct StructClientState {
 	FString mapString;
 };
 
+//Usado por: GameManager
+struct StructGameState {
+	EGameState enumGameState;
+	EActionPhase enumActionPhase;
+
+};
