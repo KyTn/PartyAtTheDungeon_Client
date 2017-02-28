@@ -60,6 +60,8 @@ public:
 
 #pragma region INSTANTIATE MAP
 
+
+	void InstantiateMap();
 	void InstantiateStaticMap();
 	void InstantiateDynamicMap(PD_GM_EnemyManager* enemyMan);
 

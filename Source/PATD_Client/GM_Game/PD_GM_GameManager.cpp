@@ -2,6 +2,8 @@
 
 #include "PATD_Client.h"
 #include "PD_GM_GameManager.h"
+#include "PD_GM_MapManager.h"
+#include "PD_GM_EnemyManager.h"
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
 
@@ -9,6 +11,11 @@
 
 PD_GM_GameManager::PD_GM_GameManager()
 {
+
+
+	mapManager = new PD_GM_MapManager;
+	enemyManager = new PD_GM_EnemyManager;
+
 	InitState();
 }
 
@@ -98,7 +105,7 @@ void PD_GM_GameManager::OnBeginState() {
 
 
 	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
-
+		mapManager->InstantiateMap();
 	}
 	else if (structGameState->enumGameState == EGameState::Start_Match) {
 
