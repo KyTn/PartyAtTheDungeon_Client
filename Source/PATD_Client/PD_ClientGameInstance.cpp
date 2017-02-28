@@ -336,3 +336,45 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	return true;
 }
 
+bool UPD_ClientGameInstance::CreateMoveOrderToSend(float positionX, float positionY)
+{
+	/*
+	Recibe por parametros una posicion X e Y en Float.
+	Con eso consulta al MapManager por la posición FÍSICA (transformarlo previamente en FVector
+	para obtener un LogicPosition.
+	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Move
+	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
+	*/
+}
+
+bool UPD_ClientGameInstance::CreateActionOrderToSend(float positionX, float positionY)
+{
+	/*
+	Recibe por parametros una posicion X e Y en Float.
+	Con eso consulta al MapManager por la posición FÍSICA (transformarlo previamente en FVector
+	para obtener un LogicPosition.
+	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Atack
+	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
+	*/
+}
+
+
+
+bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
+{
+	if (!playerInfo->turnOrders) {
+		return false;
+	}
+
+	FStructTurnOrders turnsOrdersToSend = FStructTurnOrders();
+	turnsOrdersToSend = *(playerInfo->turnOrders);
+
+	bool sentOk = networkManager->SendNow(&turnsOrdersToSend, 0);
+
+	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
+	{
+		playerInfo->turnOrders = nullptr;
+	}
+	
+	return sentOk;
+}
