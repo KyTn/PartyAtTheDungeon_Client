@@ -345,6 +345,7 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(float positionX, float positi
 	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Move
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
+	return true;
 }
 
 bool UPD_ClientGameInstance::CreateActionOrderToSend(float positionX, float positionY)
@@ -356,6 +357,7 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(float positionX, float posi
 	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Atack
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
+	return true;
 }
 
 
