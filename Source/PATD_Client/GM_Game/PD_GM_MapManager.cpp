@@ -43,6 +43,18 @@ PD_MG_LogicPosition* PD_GM_MapManager::WorldToLogicPosition(FVector* pos) {
 	return new PD_MG_LogicPosition((int)roundf(x), (int)roundf(y));
 }
 
+void PD_GM_MapManager::InstantiateMap()
+{
+}
+
+void PD_GM_MapManager::InstantiateStaticMap()
+{
+}
+
+void PD_GM_MapManager::InstantiateDynamicMap(PD_GM_EnemyManager * enemyMan)
+{
+}
+
 #pragma endregion 
 
 

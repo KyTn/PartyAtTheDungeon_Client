@@ -5,7 +5,6 @@
 #include "Structs/PD_ClientEnums.h"
 
 /// FORWARD DECLARATIONS
-class PD_PlayersManager;
 class PD_GM_MapManager;
 class PD_GM_EnemyManager;
 
@@ -19,9 +18,10 @@ public:
 	PD_GM_GameManager();
 	~PD_GM_GameManager();
 
-	PD_PlayersManager* playersManager;
+
 	PD_GM_MapManager* mapManager;
 	PD_GM_EnemyManager* enemyManager;
+	// Angel: no hay player manager en el cliente ???
 
 	bool SuscribeToEvents(int inPlayer, UStructType inType);
 	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) = 0;
