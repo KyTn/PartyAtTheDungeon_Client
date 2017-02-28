@@ -2,7 +2,7 @@
 #pragma once
 
 #include "Structs/PD_ClientStructs.h"
-
+#include "GameFramework/Character.h"
 
 //forward declarations
 #include "Structs/PD_ClientEnums.h"
@@ -33,8 +33,7 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 	APD_GenericController* controller;
 
 	//Character
-	AMyCharacterParent* characterParent;
-	TSubclassOf<class AMyCharacterParent> character_Player_BP; //BP donde esta el PROP del Character
+	ACharacter* character_Player_BP; //BP donde esta el PROP del Character
 
 
 	PD_MG_LogicPosition* currentLogicalPosition; //Posicion actual del personaje
@@ -167,7 +166,7 @@ public:
 	ECharacterType GetTypeCharacter();
 	APD_GenericController* GetController();
 	AMyCharacterParent* GetCharacterParent();
-	TSubclassOf<class AMyCharacterParent> GetCharacterBP();
+	ACharacter* GetCharacterBP();
 	PD_MG_LogicPosition* GetCurrentLogicalPosition();
 	PD_MG_LogicPosition* GetMovingLogicalPosition();
 
@@ -185,8 +184,7 @@ public:
 	void SetIDCharacter(FString nID_character);
 	void SetTypeCharacter(ECharacterType ntype_character);
 	void SetController(APD_GenericController* ncontroller);
-	void SetCharacterParent(AMyCharacterParent* ncharacterParent);
-	void SetCharacterBP(TSubclassOf<class AMyCharacterParent> ncharacter_Player_BP); //BP donde esta el PROP del Character
+	void SetCharacterBP(ACharacter* ncharacter_Player_BP); //BP donde esta el PROP del Character
 	void SetCurrentLogicalPosition(PD_MG_LogicPosition* ncurrentLogicalPosition);
 	void SetMovingLogicalPosition(PD_MG_LogicPosition* nmovingLogicalPosition);
 	

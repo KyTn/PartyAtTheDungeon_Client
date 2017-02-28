@@ -53,7 +53,9 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 		}
 	}
 	else if(structGameState->enumGameState == EGameState::Start_Match) {
-		 
+		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
+			ChangeState(EGameState::GenerateOrders);
+		 }
 	}	 
 	else if(structGameState->enumGameState == EGameState::GenerateOrders) {
 		 
@@ -114,6 +116,9 @@ void PD_GM_GameManager::OnBeginState() {
 
 	}
 	else if (structGameState->enumGameState == EGameState::GenerateOrders) {
+
+		// Load UI
+
 
 	}
 	else if (structGameState->enumGameState == EGameState::SendOrdersToServer) {
