@@ -30,8 +30,6 @@ public:
 	// Inicializa el vector de rooms dado un staticMap
 	void CalculateRooms(PD_MG_StaticMap* sm);
 
-	bool PD_MM_MapInfo::IsLogicPositionAlreadyOnRoom(PD_MG_LogicPosition* logpos, PD_MM_Room* room);
-
 };
 
 
