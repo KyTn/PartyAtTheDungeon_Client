@@ -41,6 +41,18 @@ public:
 			return SerializeDataTemplate<FStructTurnOrders>(structSpecialization);
 
 		}break;
+		case UStructType::FStructCharacter: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructCharacter"));
+			FStructCharacter* structSpecialization = (FStructCharacter*)structGeneric;
+			return SerializeDataTemplate<FStructCharacter>(structSpecialization);
+
+		}break;
+		case UStructType::FStructUpdateCharacter: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructUpdateCharacter"));
+			FStructUpdateCharacter* structSpecialization = (FStructUpdateCharacter*)structGeneric;
+			return SerializeDataTemplate<FStructUpdateCharacter>(structSpecialization);
+
+		}break;
 
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct no reconocido"));
@@ -71,6 +83,16 @@ public:
 		case UStructType::FStructTurnOrders: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructTurnOrders"));
 			return DeserializeDataTemplate<FStructTurnOrders>(data);
+
+		}break;
+		case UStructType::FStructCharacter: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructCharacter"));
+			return DeserializeDataTemplate<FStructCharacter>(data);
+
+		}break;
+		case UStructType::FStructUpdateCharacter: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructUpdateCharacter"));
+			return DeserializeDataTemplate<FStructUpdateCharacter>(data);
 
 		}break;
 
