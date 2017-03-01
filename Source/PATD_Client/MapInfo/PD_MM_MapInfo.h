@@ -25,10 +25,13 @@ public:
 
 
 	// Devuelve un puntero al Room que tenga ese logPos. True si existe. 
-	bool RoomOf(PD_MG_LogicPosition logpos, PD_MM_Room* room);
+	bool RoomOf(PD_MG_LogicPosition* logpos, PD_MM_Room* room);
 
 	// Inicializa el vector de rooms dado un staticMap
 	void CalculateRooms(PD_MG_StaticMap* sm);
+
+	bool PD_MM_MapInfo::IsLogicPositionAlreadyOnRoom(PD_MG_LogicPosition* logpos, PD_MM_Room* room);
+
 };
 
 
@@ -38,6 +41,7 @@ public:
 	PD_MM_Room();
 	~PD_MM_Room();
 
+	bool IsSpawnRoom = false;
 
 	TArray<PD_MG_LogicPosition> LogicPosInRoom;
 

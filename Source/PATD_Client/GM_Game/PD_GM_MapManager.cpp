@@ -13,6 +13,7 @@
 //include of forward declaration
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "Actors/PD_GenericController.h"
+#include "MapInfo/PD_MM_MapInfo.h"
 
 PD_GM_MapManager::PD_GM_MapManager()
 {
@@ -32,11 +33,11 @@ bool PD_GM_MapManager::getEnemyAt(PD_MG_LogicPosition* logpos, APD_PLY_GenericCh
 
 TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetSpawnPoints() {
 
-	mapInfo->rooms;
-
-	//Recorrer habitaciones
-	// devolver las posiciones logicas de la room que esté marcada como spawn. 
-
+	for (int i = 0; i < MapInfo->rooms.Num(); i++) {
+		if (MapInfo->rooms[i].IsSpawnRoom) {
+			return MapInfo->rooms[i].LogicPosInRoom;
+		}
+	}
 
 	return TArray<PD_MG_LogicPosition>();
 }
@@ -56,6 +57,18 @@ PD_MG_LogicPosition* PD_GM_MapManager::WorldToLogicPosition(FVector* pos) {
 
 	return new PD_MG_LogicPosition((int)roundf(x), (int)roundf(y));
 }
+
+
+
+TArray<PD_MG_LogicPosition*> PD_GM_MapManager::Get_LogicPosition_Adyacents_To(PD_MG_LogicPosition* logPos) {
+
+	return logPos->GetAdjacents(StaticMapRef->GetLogicPositions());
+}
+
+#pragma endregion
+
+#pragma region INSTANTIATES 
+
 
 void PD_GM_MapManager::InstantiateMap()
 {

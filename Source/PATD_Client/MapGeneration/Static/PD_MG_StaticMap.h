@@ -28,7 +28,6 @@ private:
 
 	TMap<PD_MG_LogicPosition, TCHAR> _xymap;
 
-
 	TArray<PD_MG_LogicPosition*> _LogicPositionsRefs;
 
 	PD_MG_LogicPosition* _StartPointLP;
