@@ -115,10 +115,9 @@ void UPD_ClientGameInstance::OnBeginState() {
 
 		PD_MG_StaticMap* staticMapRef = new PD_MG_StaticMap();
 		PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
-		enemyManager = new PD_GM_EnemyManager();
 
 		// Parsea el chorizo
-		mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef, enemyManager);
+		mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef);
 		mapManager = new PD_GM_MapManager();
 		mapManager->StaticMapRef = staticMapRef;
 		mapManager->DynamicMapRef = dynamicMapRef;

@@ -22,10 +22,10 @@ PD_MG_MapParser::~PD_MG_MapParser()
 
 PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath)
 {
-	return StartParsingFromFile(filepath, new PD_MG_StaticMap(), new PD_MG_DynamicMap(), new PD_GM_EnemyManager());
+	return StartParsingFromFile(filepath, new PD_MG_StaticMap(), new PD_MG_DynamicMap());
 }
 
-PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_StaticMap* staticMapRef, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan)
+PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_StaticMap* staticMapRef, PD_MG_DynamicMap* dynamicMapRef)
 {
 	staticMapRef->Clear();
 	dynamicMapRef->Clear();
@@ -51,7 +51,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 		if (fileSplitted[0].Contains("v0.1")) {
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
 
-			Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef, enemyMan);
+			Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef);
 		}
 		else
 		{
@@ -69,7 +69,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 }
 
 
-PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_MG_StaticMap*  staticMapRef, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan) {
+PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_MG_StaticMap*  staticMapRef, PD_MG_DynamicMap* dynamicMapRef) {
 
 	staticMapRef->Clear();
 	dynamicMapRef->Clear();
@@ -85,7 +85,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_M
 	if (fileSplitted[0].Contains("v0.1")) {
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
 
-		Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef, enemyMan);
+		Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef);
 	}
 	else
 	{
@@ -105,7 +105,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_M
 
 #pragma region VERSION OF PARSERS
 
-PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_MG_StaticMap* staticMapRef, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan)
+PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_MG_StaticMap* staticMapRef, PD_MG_DynamicMap* dynamicMapRef)
 {
 	//if (!fileReaded[0].Equals("v0.1")) { return staticMapRef; }
 
@@ -134,7 +134,7 @@ PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_M
 	nextIndexRead = ReadRawMap(fileReaded, nextIndexRead, staticMapRef);
 
 	//Cargamos los enemigos que hay en el map, y los instanciamos en el enemyManager
-	nextIndexRead = ReadEnemiesMap(fileReaded, nextIndexRead, dynamicMapRef, enemyMan);
+	nextIndexRead = ReadEnemiesMap(fileReaded, nextIndexRead, dynamicMapRef);
 
 	//Cargamos los objetos interactuables en el mapa
 	//nextIndexRead = ReadInteractiveObjectMap(fileReaded, nextIndexRead, dynamicMapRef);
@@ -159,7 +159,7 @@ uint32 PD_MG_MapParser::ReadRawMap(TArray<FString> fileReaded, uint32 firstIndex
 }
 
 //Rellena la parte de los enemigos del DynamicMap pasado por parametros
-uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstIndex, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan) {
+uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstIndex, PD_MG_DynamicMap* dynamicMapRef) {
 	TArray <TCHAR> enemyLine;
 	FString f;
 	uint32 Enemynum = (uint32)FCString::Atoi(*(fileReaded[firstIndex]));
@@ -205,7 +205,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 			FString id = "Arch" + i;
 			ch->SetIDCharacter(id);
 			ch->SetTypeCharacter(type);
-			enemyMan->AddEnemie(ch);
+			//enemyMan->AddEnemie(ch);
 			dynamicMapRef->AddNewEnemy(lp, ch, type);
 			break;
 		}
@@ -213,7 +213,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 			FString id = "Zomb" + i;
 			ch->SetIDCharacter(id);
 			ch->SetTypeCharacter(type);
-			enemyMan->AddEnemie(ch);
+			//enemyMan->AddEnemie(ch);
 			dynamicMapRef->AddNewEnemy(lp, ch, type);
 			break;
 		}

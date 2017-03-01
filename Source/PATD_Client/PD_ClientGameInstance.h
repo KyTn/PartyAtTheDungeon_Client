@@ -18,7 +18,6 @@ class PD_MG_StaticMap;
 class AMapInstantiatorActor;
 class PD_GM_MapManager;
 class PD_GM_GameManager;
-class PD_GM_EnemyManager;
 class PD_PlayersManager; 
 
 #include "LevelsNameDictionary.h"
@@ -47,8 +46,6 @@ public:
 	PD_NW_NetworkManager* networkManager;
 	PD_MG_MapParser* mapParser;
 	AParserActor* parserActor;
-	//Aqui iria el mapManager si lo ponemos en el cliente igual que el server
-	PD_MG_StaticMap* staticMapRef;
 
 	//Para tener los nombres de los niveles - diferenciar ejecución en editor o en ejecutable
 	LevelsNameDictionary levelsNameDictionary;
@@ -56,7 +53,6 @@ public:
 	//Managers
 	PD_GM_MapManager* mapManager;
 	PD_GM_GameManager* gameManager;
-	PD_GM_EnemyManager* enemyManager;
 	PD_PlayersManager* playersManager;
 
 	//Overwrites
