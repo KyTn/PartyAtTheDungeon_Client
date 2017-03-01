@@ -15,6 +15,11 @@ class PD_MG_MapParser;
 class AParserActor;
 class PD_GM_LogicCharacter;
 class PD_MG_StaticMap;
+class AMapInstantiatorActor;
+class PD_GM_MapManager;
+class PD_GM_GameManager;
+class PD_GM_EnemyManager;
+class PD_PlayersManager; 
 
 #include "LevelsNameDictionary.h"
 
@@ -47,6 +52,12 @@ public:
 
 	//Para tener los nombres de los niveles - diferenciar ejecución en editor o en ejecutable
 	LevelsNameDictionary levelsNameDictionary;
+
+	//Managers
+	PD_GM_MapManager* mapManager;
+	PD_GM_GameManager* gameManager;
+	PD_GM_EnemyManager* enemyManager;
+
 
 	//Overwrites
 
@@ -114,15 +125,26 @@ public:
 
 	//Function para crear una orden de movimiento para enviar
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateMoveOrderToSend(float positionX, float positionY);
+		bool CreateMoveOrderToSend(FVector positionTile);
 
 	//Function para crear una orden de movimiento para enviar
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateActionOrderToSend(float positionX, float positionY);
+		bool CreateActionOrderToSend(FVector positionTile);
 
 	//Function para enviar el paquete con la orden entera al servidor
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		bool SendTurnOrderActionsToServer();
+
+	//Function para cambiar el tipo de accion sobre una tile
+	/*
+	0 - Nada
+	1 - Movimiento
+	2 - Ataque
+	*/
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void SetTypeOfAction(int ntypeAction);
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		uint8 GetTypeOfAction();
 };
 
 

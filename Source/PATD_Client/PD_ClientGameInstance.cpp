@@ -336,7 +336,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	return true;
 }
 
-bool UPD_ClientGameInstance::CreateMoveOrderToSend(float positionX, float positionY)
+bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 {
 	/*
 	Recibe por parametros una posicion X e Y en Float.
@@ -345,10 +345,24 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(float positionX, float positi
 	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Move
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
+
+	PD_MG_LogicPosition* newLogicPosition = mapManager->WorldToLogicPosition(&positionTile);
+
+	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
+	LogicPosToMove.positionX = newLogicPosition->GetX();
+	LogicPosToMove.positionY = newLogicPosition->GetY();
+
+	FStructOrderAction newOrderMove = FStructOrderAction();
+	newOrderMove.targetDirection = LogicPosToMove;
+	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Move);
+
+	playerInfo->turnOrders->listMove.Add(newOrderMove);
+
+	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
 	return true;
 }
 
-bool UPD_ClientGameInstance::CreateActionOrderToSend(float positionX, float positionY)
+bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 {
 	/*
 	Recibe por parametros una posicion X e Y en Float.
@@ -357,6 +371,20 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(float positionX, float posi
 	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Atack
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
+
+	PD_MG_LogicPosition* newLogicPosition = mapManager->WorldToLogicPosition(&positionTile);
+
+	FStructLogicPosition LogicPosToAction = FStructLogicPosition();
+	LogicPosToAction.positionX = newLogicPosition->GetX();
+	LogicPosToAction.positionY = newLogicPosition->GetY();
+
+	FStructOrderAction newOrderAction = FStructOrderAction();
+	newOrderAction.targetDirection = LogicPosToAction;
+	newOrderAction.orderType = static_cast<uint8>(EOrderAction::Attack);
+
+	playerInfo->turnOrders->listAttack.Add(newOrderAction);
+
+	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
 	return true;
 }
 
@@ -379,4 +407,14 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 	}
 	
 	return sentOk;
+}
+
+void UPD_ClientGameInstance::SetTypeOfAction(int ntypeAction)
+{
+	playerInfo->typeOfAction = ntypeAction;
+}
+
+uint8 UPD_ClientGameInstance::GetTypeOfAction()
+{
+	return playerInfo->typeOfAction;
 }

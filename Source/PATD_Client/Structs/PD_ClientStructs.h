@@ -22,6 +22,9 @@ struct StructPlayer {
 	//Ingame data
 	FStructTurnOrders* turnOrders;
 
+	//Define si lo que estas haciendo es un Ataque o un Movimiento
+	uint8 typeOfAction;
+
 	//PD_MG_LogicPosition* logicPosition;
 	//	PD_GM_GameManager* gameManager;
 	//Puntero a Struct de caracteristicas del jugador.
