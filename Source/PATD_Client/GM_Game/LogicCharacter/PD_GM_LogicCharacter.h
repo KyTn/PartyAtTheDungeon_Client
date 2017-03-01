@@ -14,7 +14,6 @@ struct FStructSkin;
 struct FStructTotalStats;
 
 class PD_MG_LogicPosition;
-class AMyCharacterParent;
 class APD_GenericController;
 /**
  * 
@@ -165,7 +164,6 @@ public:
 	FString GetIDCharacter();
 	ECharacterType GetTypeCharacter();
 	APD_GenericController* GetController();
-	AMyCharacterParent* GetCharacterParent();
 	ACharacter* GetCharacterBP();
 	PD_MG_LogicPosition* GetCurrentLogicalPosition();
 	PD_MG_LogicPosition* GetMovingLogicalPosition();
