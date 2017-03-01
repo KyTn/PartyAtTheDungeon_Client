@@ -57,7 +57,7 @@ public:
 	PD_GM_MapManager* mapManager;
 	PD_GM_GameManager* gameManager;
 	PD_GM_EnemyManager* enemyManager;
-
+	PD_PlayersManager* playersManager;
 
 	//Overwrites
 
@@ -78,7 +78,7 @@ public:
 																								   //Carga de mapa
 	void LoadMap(FString mapName);
 	//Callback cuando el mapa este cargado (Lo llama el estado GameStateInitializer en su beginPlay)
-	void OnMapFinishLoad();
+	void OnLoadedLevel();
 
 	//=========
 	//Funciones de gestion del estado (maquina de estados)

@@ -45,6 +45,8 @@ PD_MG_LogicPosition* PD_GM_MapManager::WorldToLogicPosition(FVector* pos) {
 
 void PD_GM_MapManager::InstantiateMap()
 {
+	UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
+
 	InstantiateStaticMap();
 	InstantiateDynamicMap(_GAMEMANAGER->enemyManager);
 

@@ -15,6 +15,10 @@
 #include "NW_NetWorking/PD_NW_NetworkManager.h"
 #include "MapGeneration/PD_MG_MapParser.h"
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
+#include "GM_Game/PD_GM_MapManager.h"
+#include "GM_Game/PD_GM_GameManager.h"
+#include "GM_Game/PD_GM_EnemyManager.h"
+
 //Includes de prueba
 
 
@@ -109,17 +113,16 @@ void UPD_ClientGameInstance::OnBeginState() {
 
 		mapParser = new PD_MG_MapParser();
 
-		staticMapRef = new PD_MG_StaticMap();
+		PD_MG_StaticMap* staticMapRef = new PD_MG_StaticMap();
 		PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
-		
-//		mapParser->StartParsingFromFString(&structClientState->mapString, staticMapRef );
-	//  mapManager = new PD_GM_MapManager();
-		//mapManager->StaticMapRef = staticMapRef;
-		//mapManager->DynamicMapRef = dynamicMapRef;
+		enemyManager = new PD_GM_EnemyManager();
 
+		// Parsea el chorizo
+		mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef, enemyManager);
+		mapManager = new PD_GM_MapManager();
+		mapManager->StaticMapRef = staticMapRef;
+		mapManager->DynamicMapRef = dynamicMapRef;
 		
-		
-		//Enviar mapa al cliente
 		
 		this->LoadMap(levelsNameDictionary.GetMapName(4));//Mapa de juego
 	}
@@ -141,18 +144,24 @@ void UPD_ClientGameInstance::LoadMap(FString mapName)
 }
 
 //Callback cuando el mapa este cargado
-void UPD_ClientGameInstance::OnMapFinishLoad() {
+void UPD_ClientGameInstance::OnLoadedLevel() {
 	//Sin importar el estado hacemos:
 	APD_NW_TimerActor* TimerActorSpawned = (APD_NW_TimerActor*)GetWorld()->SpawnActor(APD_NW_TimerActor::StaticClass());
 	networkManager->GetSocketManager()->InitTimerActor(TimerActorSpawned);
 
 	if (structClientState->enumClientState == EClientState::GameInProcess) {
 		//Quizas esto es tarea del gameManager.
-		//parserActor = (AParserActor*)GetWorld()->SpawnActor(AParserActor::StaticClass());
-//		mapParser->InstantiateStaticMap(parserActor, staticMapRef);
-		
+
 		//Aqui cedemos el control al GameManager.
-		
+
+		// le pasamos al mapManager un instanciador
+		AMapInstantiatorActor* InstantiatorActor = (AMapInstantiatorActor*)GetWorld()->SpawnActor(AMapInstantiatorActor::StaticClass());
+		mapManager->instantiator = InstantiatorActor;
+
+		//Aqui cedemos el control al GameManager.
+		gameManager = new PD_GM_GameManager(mapManager, playersManager);
+		mapManager->_GAMEMANAGER = gameManager;
+		networkManager->RegisterObserver(gameManager);
 
 	}
 }

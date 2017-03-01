@@ -10,13 +10,13 @@
 
 
 
-PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_GM_EnemyManager* inEnemyManager, PD_PlayersManager* inPlayerManager)
+PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager)
 {
+	UE_LOG(LogTemp, Log, TEXT("Constructor Game Manager"));
 
 	playerManager = inPlayerManager;
 	mapManager =  inMapManager;
-	enemyManager = inEnemyManager;
-
+	enemyManager = new PD_GM_EnemyManager();
 	InitState();
 }
 
@@ -32,6 +32,7 @@ bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 
 // Inicializa la maquina de estados.
 void PD_GM_GameManager::InitState() {
+	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
 	structGameState = new StructGameState();
 	ChangeState(EGameState::Instantiate_Map);
 }
