@@ -28,18 +28,19 @@ bool PD_MM_MapInfo::RoomOf(PD_MG_LogicPosition logpos, PD_MM_Room * room)
 
 void PD_MM_MapInfo::CalculateRooms(PD_MG_StaticMap * sm)
 {
-	TArray<PD_MG_LogicPosition> visited;
-	visited.Empty();
+	TArray<PD_MG_LogicPosition> closed = TArray<PD_MG_LogicPosition>(); // posiciones logicas ya cerradas
+	TArray<PD_MG_LogicPosition> open = TArray<PD_MG_LogicPosition>(); //posiciones logicas no se han visitado (abiertas)
+
 	PD_MG_LogicPosition* StartFlood = new PD_MG_LogicPosition(0, 0);
 
 	for (int i = 0; i < sm->GetLogicPositions().Num(); i++) {
-		//if (visited.Contains(sm->GetLogicPositions()[i])) {
+		if (open.Contains(*(sm->GetLogicPositions()[i]))) {
 
-		//}
+
+
+
+		}
 	}
-
-
-
 }
 
 PD_MM_Room::PD_MM_Room()

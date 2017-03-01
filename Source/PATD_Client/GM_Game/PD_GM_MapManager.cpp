@@ -27,6 +27,18 @@ bool PD_GM_MapManager::getGenericCharacterAt(PD_MG_LogicPosition* logpos, APD_PL
 bool PD_GM_MapManager::getPlayerAt(PD_MG_LogicPosition* logpos, APD_PLY_GenericCharacter* genCharacter) { return false; }
 bool PD_GM_MapManager::getEnemyAt(PD_MG_LogicPosition* logpos, APD_PLY_GenericCharacter* genCharacter) { return false; }
 */
+
+TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetSpawnPoints() {
+
+	mapInfo->rooms;
+
+	//Recorrer habitaciones
+	// devolver las posiciones logicas de la room que esté marcada como spawn. 
+
+
+	return TArray<PD_MG_LogicPosition>();
+}
+
 AActor* PD_GM_MapManager::getInteractuableAt(PD_MG_LogicPosition* logpos) { return 0; }
 
 
@@ -48,7 +60,7 @@ void PD_GM_MapManager::InstantiateMap()
 	UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
 
 	InstantiateStaticMap();
-	InstantiateDynamicMap(_GAMEMANAGER->enemyManager);
+	InstantiateDynamicMap();
 
 }
 

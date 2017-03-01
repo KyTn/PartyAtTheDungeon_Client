@@ -40,6 +40,8 @@ public:
 
 #pragma region GET INFO OF THE MAP
 
+	// Te devuelve la lista de posiciones lógicas en las que puede spawnear un pj.
+	TArray<PD_MG_LogicPosition> GetSpawnPoints();
 
 	// Dada una posición lógica, devuelve el GenericCharacter que está en esa posición, que además es un Player. 0 si no hay ninguno. 
 	//bool getPlayerAt(PD_MG_LogicPosition* logpos, APD_PLY_GenericCharacter* genCharacter);
