@@ -3,19 +3,22 @@
 #pragma once
 
 #include "MapGeneration/PD_MG_LogicPosition.h"
-
+#include "GameFramework/Actor.h"
 
 // FORWARD DECLARATIONS
 class PD_MG_LogicPosition;
 class PD_MG_StaticMap;
 class PD_MM_Room;
-
+class PD_GM_MapManager;
 
 class PATD_CLIENT_API PD_MM_MapInfo
 {
 public:
 	PD_MM_MapInfo();
 	~PD_MM_MapInfo();
+
+	PD_GM_MapManager* mapManager;
+
 
 	TArray<PD_MG_LogicPosition> allLogicPos;
 	TArray<PD_MM_Room> rooms;
@@ -38,11 +41,9 @@ public:
 
 	TArray<PD_MG_LogicPosition> LogicPosInRoom;
 
-	TMap<PD_MG_LogicPosition, uint32> tiles;
-	TMap<PD_MG_LogicPosition, uint32> walls;
-	TMap<PD_MG_LogicPosition, uint32> interactuables;
-	TMap<PD_MG_LogicPosition, uint32> players;
-	TMap<PD_MG_LogicPosition, uint32> enemies;
+	TMap<PD_MG_LogicPosition, AActor*> tiles;
+	TMap<PD_MG_LogicPosition, AActor*> walls;
+	TMap<PD_MG_LogicPosition, AActor*> interactuables;
 };
 
 

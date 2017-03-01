@@ -5,6 +5,10 @@
 #include "GameFramework/Actor.h"
 #include "PD_E_ElementActor.generated.h"
 
+
+///Forward Declaration
+class PD_MG_LogicPosition;
+
 UCLASS()
 class PATD_CLIENT_API APD_E_ElementActor : public AActor
 {
@@ -13,6 +17,9 @@ class PATD_CLIENT_API APD_E_ElementActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APD_E_ElementActor();
+
+	PD_MG_LogicPosition* logicPosition;
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -4,17 +4,18 @@
 #include "PD_GM_GameManager.h"
 #include "PD_GM_MapManager.h"
 #include "PD_GM_EnemyManager.h"
+#include "PD_PlayersManager.h"
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
 
 
 
-PD_GM_GameManager::PD_GM_GameManager()
+PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_GM_EnemyManager* inEnemyManager, PD_PlayersManager* inPlayerManager)
 {
 
-
-	mapManager = new PD_GM_MapManager;
-	enemyManager = new PD_GM_EnemyManager;
+	playerManager = inPlayerManager;
+	mapManager =  inMapManager;
+	enemyManager = inEnemyManager;
 
 	InitState();
 }
@@ -32,8 +33,7 @@ bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 // Inicializa la maquina de estados.
 void PD_GM_GameManager::InitState() {
 	structGameState = new StructGameState();
-	structGameState->enumGameState = EGameState::Instantiate_Map;
-
+	ChangeState(EGameState::Instantiate_Map);
 }
 
 #pragma region GM STATE MACHINE 
@@ -47,10 +47,15 @@ void PD_GM_GameManager::ChangeState(EGameState newState) {
 // Dado un paquete de red, actualiza el estado correspondiente y realiza las acciones pertinentes. 
 void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
-
+		// Si se recibe del servidor un Start_Match, ir a ese estado. 
+		if (inEventType == UStructType::FStructStartMatchOnGM) {
+			ChangeState(EGameState::Start_Match);
+		}
 	}
 	else if(structGameState->enumGameState == EGameState::Start_Match) {
-		 
+		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
+			ChangeState(EGameState::GenerateOrders);
+		 }
 	}	 
 	else if(structGameState->enumGameState == EGameState::GenerateOrders) {
 		 
@@ -111,6 +116,9 @@ void PD_GM_GameManager::OnBeginState() {
 
 	}
 	else if (structGameState->enumGameState == EGameState::GenerateOrders) {
+
+		// Load UI
+
 
 	}
 	else if (structGameState->enumGameState == EGameState::SendOrdersToServer) {
