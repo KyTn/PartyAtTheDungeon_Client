@@ -42,9 +42,7 @@ public:
 			if ( abs((int)(list[i]->GetX()) - (int)(this->GetX())) <= 1 || abs((int)(list[i]->GetY()) - (int)(this->GetY())) <= 1) {
 				res.Add(list[i]);
 			}
-
 		}
-
 		return res;
 	}
 
