@@ -247,7 +247,7 @@ FStructNewConnection=2 struct que crea el networkmanager (no necesita serializac
 */
 
 enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30,
-	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructStartMatchOnGM = 50, FStructClientCanGenerateOrders = 51 };
+	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52 };
 
 
 
@@ -383,6 +383,39 @@ struct FStructTurnOrders : public FStructGeneric
 };
 
 
+
+
+USTRUCT()
+struct FStructClientMapAlreadyInstantiated : public FStructGeneric
+{
+	GENERATED_BODY()
+
+		FStructClientMapAlreadyInstantiated() {}
+
+	
+};
+
+
+USTRUCT()
+struct FStructClientStartMatchOnGM : public FStructGeneric
+{
+	GENERATED_BODY()
+
+		FStructClientStartMatchOnGM() {}
+
+	
+};
+
+
+USTRUCT()
+struct FStructClientCanGenerateOrders : public FStructGeneric
+{
+	GENERATED_BODY()
+
+		FStructClientCanGenerateOrders() {}
+
+	
+};
 
 
 

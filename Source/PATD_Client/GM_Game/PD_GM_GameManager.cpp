@@ -48,7 +48,7 @@ void PD_GM_GameManager::ChangeState(EGameState newState) {
 void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
 		// Si se recibe del servidor un Start_Match, ir a ese estado. 
-		if (inEventType == UStructType::FStructStartMatchOnGM) {
+		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
 			ChangeState(EGameState::Start_Match);
 		}
 	}

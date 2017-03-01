@@ -68,6 +68,38 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 	return staticMapRef;
 }
 
+
+PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_MG_StaticMap*  staticMapRef, PD_MG_DynamicMap* dynamicMapRef, PD_GM_EnemyManager* enemyMan) {
+
+	staticMapRef->Clear();
+	dynamicMapRef->Clear();
+	//Agregado para el hito2 MCG
+	//UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromChorizo::  Llamando a SetMapString. Mapa: %s"), *chorizo);
+	staticMapRef->SetMapString(*chorizo);
+
+	// Obtenemos la version del parser que se debe usar. 
+
+	TArray<FString> fileSplitted;
+	chorizo->ParseIntoArray(fileSplitted, TEXT("\n"), true);
+
+	if (fileSplitted[0].Contains("v0.1")) {
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
+
+		Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef, enemyMan);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
+	}
+
+
+
+
+	return staticMapRef;
+}
+
+
+
 #pragma endregion
 
 
@@ -189,6 +221,10 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 	}
 	return firstIndex + Enemynum + 1;
 }
+
+
+
+
 
 
 /*uint32 PD_MG_MapParser::ReadInteraciveObjectMap(TArray<FString> fileReaded, uint32 firstIndex, PD_MG_DynamicMap* dynamicMapRef) {

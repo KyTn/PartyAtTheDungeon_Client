@@ -32,4 +32,5 @@ public:
 	
 	PD_MG_StaticMap* StartParsingFromFile(FString* filepath, PD_MG_StaticMap*  staticMapRef, PD_MG_DynamicMap* DynamicMapRef, PD_GM_EnemyManager* enemyMan);
 
+	PD_MG_StaticMap* StartParsingFromChorizo(FString* filepath, PD_MG_StaticMap*  staticMapRef, PD_MG_DynamicMap* DynamicMapRef, PD_GM_EnemyManager* enemyMan);
 };
