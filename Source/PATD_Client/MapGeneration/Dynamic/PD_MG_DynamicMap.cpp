@@ -16,12 +16,16 @@ PD_MG_DynamicMap::~PD_MG_DynamicMap()
 {
 }
 
-void PD_MG_DynamicMap::AddNewEnemy(PD_MG_LogicPosition* lp, PD_GM_LogicCharacter* ch, ECharacterType type) {
-	
+void PD_MG_DynamicMap::AddNewEnemy(PD_MG_LogicPosition* lp, ECharacterType type, FString ID_Character) {
+
 	_LogicPositionsRefs.Add(lp);
-	TArray<	PD_GM_LogicCharacter*> chs;
-	chs.Add(ch);
-	enemies.Add(*lp, chs);
+
+	struct StructEnemy  structEnemy = StructEnemy();
+	structEnemy.currentPosition = lp;
+	structEnemy.ID_Character = ID_Character;
+	structEnemy.type_Character = type;
+
+	enemies.Add(*lp, structEnemy);
 }
 
 void PD_MG_DynamicMap::UpdateActor(AActor* actor, PD_MG_LogicPosition* lp) {
