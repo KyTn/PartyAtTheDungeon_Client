@@ -43,9 +43,9 @@ public:
 	TSubclassOf<class APD_E_ElementActor> WallClass;
 	//Enemies
 	/// seria la class generica
-	TSubclassOf<class APD_E_EnemyCharacter> ArcherClass;
-	TSubclassOf<class APD_E_EnemyCharacter> ZombieClass;
-	TSubclassOf<class APD_E_EnemyCharacter> PlayerClass;
+	TSubclassOf<class APD_E_Character> ArcherClass;
+	TSubclassOf<class APD_E_Character> ZombieClass;
+	TSubclassOf<class APD_E_Character> PlayerClass;
 
 	
 
