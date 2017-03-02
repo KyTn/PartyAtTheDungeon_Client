@@ -197,7 +197,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 			j++;
 			num = num * 10;
 		}
-		PD_MG_LogicPosition* lp = new PD_MG_LogicPosition(x, y);
+		PD_MG_LogicPosition lp = PD_MG_LogicPosition(x, y);
 		switch (type) {///En este switch metemos la IA lógica de cada uno
 		case ECharacterType::Archer: {
 			FString id = "Arch" + i;

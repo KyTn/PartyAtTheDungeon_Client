@@ -4,12 +4,16 @@
 #include "PATD_Client/MapInfo/MapInstantiaton/MapInstantiatorActor.h"
 
 // FORWARD DECLARATIONS
-class PD_MG_LogicPosition;
+
 class PD_MM_MapInfo;
+
+class PD_MG_LogicPosition;
 class PD_MG_StaticMap;
 class PD_MG_DynamicMap;
+
 class PD_GM_GameManager;
 class PD_GM_EnemyManager;
+
 class APD_GenericController;
 
 
@@ -30,6 +34,8 @@ public:
 	PD_GM_MapManager();
 	~PD_GM_MapManager();
 
+	void Init(PD_MG_StaticMap* sm, PD_MG_DynamicMap* dm);
+
 	AMapInstantiatorActor* instantiator;
 
 	PD_MM_MapInfo* MapInfo;
@@ -37,6 +43,7 @@ public:
 	PD_MG_DynamicMap* DynamicMapRef;
 
 	PD_GM_GameManager* _GAMEMANAGER;
+
 
 
 #pragma region GET INFO OF THE MAP
@@ -50,15 +57,15 @@ public:
 	//bool getEnemyAt(PD_MG_LogicPosition* logpos, APD_PLY_GenericCharacter* genCharacter);
 
 	// Esta funcion devolverá un Interactuable
-	AActor* getInteractuableAt(PD_MG_LogicPosition* logpos);
+	AActor* getInteractuableAt(PD_MG_LogicPosition logpos);
 
 	//Dada un LogicPosition, te da la posición en el mundo.
-	FVector* LogicToWorldPosition(PD_MG_LogicPosition* pos);
+	FVector LogicToWorldPosition(PD_MG_LogicPosition pos);
 
 	//Dada la posición en el mundo, te devuelve la posición lógica que estaría asignada a posición en el mundo, exista o no en el mapa. 
-	PD_MG_LogicPosition* WorldToLogicPosition(FVector* pos);
+	PD_MG_LogicPosition WorldToLogicPosition(FVector pos);
 
-	TArray<PD_MG_LogicPosition*> Get_LogicPosition_Adyacents_To(PD_MG_LogicPosition * logPos);
+	TArray<PD_MG_LogicPosition> Get_LogicPosition_Adyacents_To(PD_MG_LogicPosition logPos);
 
 
 #pragma endregion

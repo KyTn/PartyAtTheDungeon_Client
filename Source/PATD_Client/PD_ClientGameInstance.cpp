@@ -354,11 +354,11 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
 
-	PD_MG_LogicPosition* newLogicPosition = mapManager->WorldToLogicPosition(&positionTile);
+	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
 
 	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
-	LogicPosToMove.positionX = newLogicPosition->GetX();
-	LogicPosToMove.positionY = newLogicPosition->GetY();
+	LogicPosToMove.positionX = newLogicPosition.GetX();
+	LogicPosToMove.positionY = newLogicPosition.GetY();
 
 	FStructOrderAction newOrderMove = FStructOrderAction();
 	newOrderMove.targetDirection = LogicPosToMove;
@@ -380,11 +380,11 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
 
-	PD_MG_LogicPosition* newLogicPosition = mapManager->WorldToLogicPosition(&positionTile);
+	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
 
 	FStructLogicPosition LogicPosToAction = FStructLogicPosition();
-	LogicPosToAction.positionX = newLogicPosition->GetX();
-	LogicPosToAction.positionY = newLogicPosition->GetY();
+	LogicPosToAction.positionX = newLogicPosition.GetX();
+	LogicPosToAction.positionY = newLogicPosition.GetY();
 
 	FStructOrderAction newOrderAction = FStructOrderAction();
 	newOrderAction.targetDirection = LogicPosToAction;

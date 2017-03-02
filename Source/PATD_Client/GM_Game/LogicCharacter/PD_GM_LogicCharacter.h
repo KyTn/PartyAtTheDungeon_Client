@@ -13,6 +13,7 @@ struct FStructWeapon;
 struct FStructSkin;
 struct FStructTotalStats;
 
+class PD_GM_MapManager;
 class PD_MG_LogicPosition;
 class APD_GenericController;
 /**
@@ -35,8 +36,8 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 	ACharacter* character_Player_BP; //BP donde esta el PROP del Character
 
 
-	PD_MG_LogicPosition* currentLogicalPosition; //Posicion actual del personaje
-	PD_MG_LogicPosition* movingLogicalPosition; //Posicion del personaje en cada tick (Todo Logico, el personaje NO SE MUEVE)
+	PD_MG_LogicPosition currentLogicalPosition; //Posicion actual del personaje
+	PD_MG_LogicPosition movingLogicalPosition; //Posicion del personaje en cada tick (Todo Logico, el personaje NO SE MUEVE)
 
 	//Variables - Stats del personaje , arma y habilidades
 	FStructBasicStats* basicStats;
@@ -47,7 +48,7 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 	FStructTotalStats* totalStats;
 
 	//Referencia al Mapa de la partida para que se pueda Mover-atacar-interactuar con los elementos del mismo
-	//MapManager* mapMng;
+	PD_GM_MapManager* mapMng;
 	//PlayerManager* playerMng;
 	//EnemiesManager* EnemiesMng;
 
@@ -72,7 +73,7 @@ public:
 	Devuelve:
 	- Un posicion logica, indicando la casilla destino del movimiento despues de la simulacion
 	*/
-	PD_MG_LogicPosition* MoveToLogicPosition(uint8 tick, TArray<FStructOrderAction> listMove);
+	PD_MG_LogicPosition MoveToLogicPosition(uint8 tick, FStructOrderAction* order);
 	
 	/*
 	//Metodo para moverse visualmente por el mapa
@@ -165,8 +166,8 @@ public:
 	ECharacterType GetTypeCharacter();
 	APD_GenericController* GetController();
 	ACharacter* GetCharacterBP();
-	PD_MG_LogicPosition* GetCurrentLogicalPosition();
-	PD_MG_LogicPosition* GetMovingLogicalPosition();
+	PD_MG_LogicPosition GetCurrentLogicalPosition();
+	PD_MG_LogicPosition GetMovingLogicalPosition();
 
 	//Métodos SET para cada Struct
 	void SetBasicStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL);
@@ -183,8 +184,8 @@ public:
 	void SetTypeCharacter(ECharacterType ntype_character);
 	void SetController(APD_GenericController* ncontroller);
 	void SetCharacterBP(ACharacter* ncharacter_Player_BP); //BP donde esta el PROP del Character
-	void SetCurrentLogicalPosition(PD_MG_LogicPosition* ncurrentLogicalPosition);
-	void SetMovingLogicalPosition(PD_MG_LogicPosition* nmovingLogicalPosition);
+	void SetCurrentLogicalPosition(PD_MG_LogicPosition ncurrentLogicalPosition);
+	void SetMovingLogicalPosition(PD_MG_LogicPosition nmovingLogicalPosition);
 	
 
 

@@ -15,12 +15,12 @@ PD_MG_StaticMap::~PD_MG_StaticMap()
 }
 
 
-PD_MG_LogicPosition* PD_MG_StaticMap::AddNewLogicPosition(uint32 x, uint32 y, TCHAR c)
+PD_MG_LogicPosition PD_MG_StaticMap::AddNewLogicPosition(uint32 x, uint32 y, TCHAR c)
 {
-	PD_MG_LogicPosition* lp = new PD_MG_LogicPosition(x, y);
+	PD_MG_LogicPosition lp = PD_MG_LogicPosition(x, y);
 
 	_LogicPositionsRefs.Add(lp);
-	_xymap.Add(*lp, c);
+	_xymap.Add(lp, c);
 
 	/*
 	FString s;

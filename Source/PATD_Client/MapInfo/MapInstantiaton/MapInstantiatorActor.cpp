@@ -36,6 +36,11 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 	if (ZombieBlueprint.Object) {
 		ZombieClass = (UClass*)ZombieBlueprint.Object->GeneratedClass;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> PlayerBlueprint(TEXT("Blueprint'/Game/Blueprints/Players/Player.Player'"));
+	if (PlayerBlueprint.Object) {
+		PlayerClass = (UClass*)PlayerBlueprint.Object->GeneratedClass;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -55,22 +60,26 @@ void AMapInstantiatorActor::Tick(float DeltaTime)
 
 #pragma region INSTANTIATORS
 
-AActor* AMapInstantiatorActor::InstantiateTile(PD_MG_LogicPosition* logpos)
+AActor* AMapInstantiatorActor::InstantiateTile(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(TileClass, FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 0.f), FRotator(0.0f, 0.f, 0.f));
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(TileClass, logpos.ToWorldPosition() , FRotator(0.0f, 0.f, 0.f));
 }
 
-AActor* AMapInstantiatorActor::InstantiateWall(PD_MG_LogicPosition* logpos)
+AActor* AMapInstantiatorActor::InstantiateWall(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(WallClass, FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 0.f), FRotator(0.0f, 0.f, 0.f));
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(WallClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
-APD_E_EnemyCharacter* AMapInstantiatorActor::InstantiateArcher(PD_MG_LogicPosition* logpos) {
-	return GetWorld()->SpawnActor<APD_E_EnemyCharacter>(ArcherClass, FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 100.f), FRotator(0.0f, 0.f, 0.f));
+APD_E_EnemyCharacter* AMapInstantiatorActor::InstantiateArcher(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_Character>(ArcherClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
-APD_E_EnemyCharacter* AMapInstantiatorActor::InstantiateZombie(PD_MG_LogicPosition* logpos) {
-	return GetWorld()->SpawnActor<APD_E_EnemyCharacter>(ZombieClass, FVector(-1.0f * logpos->GetX()*100.0f, logpos->GetY() * 100.0f, 100.f), FRotator(0.0f, 0.f, 0.f));
+APD_E_EnemyCharacter* AMapInstantiatorActor::InstantiateZombie(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_Character>(ZombieClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+APD_E_EnemyCharacter* AMapInstantiatorActor::InstantiatePlayer(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_Character>(PlayerClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
 #pragma endregion

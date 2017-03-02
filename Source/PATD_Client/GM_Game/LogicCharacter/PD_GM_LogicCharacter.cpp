@@ -9,6 +9,7 @@
 //Includes of forward declaration
 #include "Structs/PD_ClientStructs.h" //Para todos los structs y enums
 #include "MapGeneration/PD_MG_LogicPosition.h"
+#include "GM_Game/PD_GM_MapManager.h"
 #include "Actors/PD_GenericController.h"
 
 PD_GM_LogicCharacter::PD_GM_LogicCharacter()
@@ -57,7 +58,7 @@ TArray<FStructOrderAction>* PD_GM_LogicCharacter::FindPathToMove(PD_MG_LogicPosi
 
 
 
-PD_MG_LogicPosition* PD_GM_LogicCharacter::MoveToLogicPosition(uint8 tick, TArray<FStructOrderAction> listMove)
+PD_MG_LogicPosition PD_GM_LogicCharacter::MoveToLogicPosition(uint8 tick, FStructOrderAction* order)
 {
 	/*
 		- OBJETIVO: Simula el movimiento del personaje siguiendo una lista de movimientos dada (el camino calculado hasta una
@@ -74,10 +75,10 @@ PD_MG_LogicPosition* PD_GM_LogicCharacter::MoveToLogicPosition(uint8 tick, TArra
 		que se mueven y actue en consecuencia. 
 		- Tras el choque habría que cambiar esa movingLogicalPosition
 	*/
-	PD_MG_LogicPosition* targetPosition;
-	targetPosition = movingLogicalPosition;
+	currentLogicalPosition = PD_MG_LogicPosition(order->targetLogicPosition.positionX, order->targetLogicPosition.positionY);
+	movingLogicalPosition = PD_MG_LogicPosition(order->targetLogicPosition.positionX, order->targetLogicPosition.positionY);
 
-	return targetPosition;
+	return currentLogicalPosition;
 }
 
 
@@ -94,6 +95,9 @@ bool PD_GM_LogicCharacter::MoveToPhysicalPosition(PD_MG_LogicPosition targetPosi
 		Devuelve true si todo ha ido bien, si algo ha fallado, devuelve false (normalmente a raiz de que la funcion move del controlador
 		devuelva tambien false
 	*/
+
+	FVector realPosition = mapMng->LogicToWorldPosition(targetPosition);
+	controller->MoveTo(realPosition.X, realPosition.Y);
 	
 	return true;
 }
@@ -256,8 +260,8 @@ FString PD_GM_LogicCharacter::GetIDCharacter() { return ID_character; }
 ECharacterType PD_GM_LogicCharacter::GetTypeCharacter() { return type_character; }
 APD_GenericController* PD_GM_LogicCharacter::GetController() { return controller; }
 ACharacter* PD_GM_LogicCharacter::GetCharacterBP() { return character_Player_BP; }
-PD_MG_LogicPosition* PD_GM_LogicCharacter::GetCurrentLogicalPosition() { return currentLogicalPosition; }
-PD_MG_LogicPosition* PD_GM_LogicCharacter::GetMovingLogicalPosition() { return movingLogicalPosition; }
+PD_MG_LogicPosition PD_GM_LogicCharacter::GetCurrentLogicalPosition() { return currentLogicalPosition; }
+PD_MG_LogicPosition PD_GM_LogicCharacter::GetMovingLogicalPosition() { return movingLogicalPosition; }
 
 //SET
 void PD_GM_LogicCharacter::SetBasicStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL) 
@@ -367,5 +371,5 @@ void PD_GM_LogicCharacter::SetIDCharacter(FString nID_character){ ID_character =
 void PD_GM_LogicCharacter::SetTypeCharacter(ECharacterType nID_character) { type_character = nID_character; }
 void PD_GM_LogicCharacter::SetController(APD_GenericController* ncontroller){ controller = ncontroller; }
 void PD_GM_LogicCharacter::SetCharacterBP(ACharacter* ncharacter_Player_BP){ character_Player_BP = ncharacter_Player_BP; }
-void PD_GM_LogicCharacter::SetCurrentLogicalPosition(PD_MG_LogicPosition* ncurrentLogicalPosition){ currentLogicalPosition = ncurrentLogicalPosition; }
-void PD_GM_LogicCharacter::SetMovingLogicalPosition(PD_MG_LogicPosition* nmovingLogicalPosition) { movingLogicalPosition = nmovingLogicalPosition; }
+void PD_GM_LogicCharacter::SetCurrentLogicalPosition(PD_MG_LogicPosition ncurrentLogicalPosition){ currentLogicalPosition = ncurrentLogicalPosition; }
+void PD_GM_LogicCharacter::SetMovingLogicalPosition(PD_MG_LogicPosition nmovingLogicalPosition) { movingLogicalPosition = nmovingLogicalPosition; }

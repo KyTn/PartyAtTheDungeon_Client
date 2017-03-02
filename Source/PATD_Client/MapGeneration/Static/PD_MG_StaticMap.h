@@ -18,9 +18,9 @@ enum class TypeOfMission : uint8
 	RecoverTreasure     UMETA(DisplayName = "RecoverTreasure")
 };
 
+
 class PATD_CLIENT_API PD_MG_StaticMap
 {
-
 private:
 
 	uint32 _Height, _Width;
@@ -28,9 +28,8 @@ private:
 
 	TMap<PD_MG_LogicPosition, TCHAR> _xymap;
 
-	TArray<PD_MG_LogicPosition*> _LogicPositionsRefs;
 
-	PD_MG_LogicPosition* _StartPointLP;
+	TArray<PD_MG_LogicPosition> _LogicPositionsRefs;
 
 	//Agregado para el hito2 MCG
 	FString mapString;
@@ -51,7 +50,7 @@ public:
 	void SetWidth(uint32 val) { _Width = val; }
 
 	TMap<PD_MG_LogicPosition, TCHAR> GetXYMap() { return _xymap; }
-	TArray<PD_MG_LogicPosition*> GetLogicPositions() { return _LogicPositionsRefs; }
+	TArray<PD_MG_LogicPosition> GetLogicPositions() { return _LogicPositionsRefs; }
 
 	//Agregado para el hito2 MCG
 	FString GetMapString();
@@ -60,7 +59,7 @@ public:
 #pragma endregion
 
 
-	PD_MG_LogicPosition* AddNewLogicPosition(uint32 x, uint32 y, TCHAR c);
+	PD_MG_LogicPosition AddNewLogicPosition(uint32 x, uint32 y, TCHAR c);
 
 	bool Clear();
 };
