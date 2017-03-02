@@ -23,7 +23,7 @@ public:
 	PD_GM_MapManager* mapManager;
 	PD_GM_EnemyManager* enemyManager;
 	PD_PlayersManager* playersManager;
-	PD_NW_NetworkManager* networkManager
+	PD_NW_NetworkManager* networkManager;
 
 	bool SuscribeToEvents(int inPlayer, UStructType inType);
 	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
