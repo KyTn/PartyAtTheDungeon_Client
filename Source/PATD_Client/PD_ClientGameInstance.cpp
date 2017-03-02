@@ -118,9 +118,8 @@ void UPD_ClientGameInstance::OnBeginState() {
 
 		// Parsea el chorizo
 		mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef);
-		mapManager = new PD_GM_MapManager();
-		mapManager->StaticMapRef = staticMapRef;
-		mapManager->DynamicMapRef = dynamicMapRef;
+		mapManager = new PD_GM_MapManager(staticMapRef, dynamicMapRef, );
+		mapManager.Init();
 		
 		
 		this->LoadMap(levelsNameDictionary.GetMapName(4));//Mapa de juego
@@ -158,9 +157,8 @@ void UPD_ClientGameInstance::OnLoadedLevel() {
 		mapManager->instantiator = InstantiatorActor;
 
 		//Aqui cedemos el control al GameManager.
-		gameManager = new PD_GM_GameManager(mapManager, playersManager);
-		mapManager->_GAMEMANAGER = gameManager;
-		networkManager->RegisterObserver(gameManager);
+		gameManager = new PD_GM_GameManager(mapManager, playersManager, networkManager);
+		
 
 	}
 }

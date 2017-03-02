@@ -5,12 +5,13 @@
 #include "PD_GM_MapManager.h"
 #include "PD_GM_EnemyManager.h"
 #include "PD_PlayersManager.h"
+#include "NW_Networking/PD_NW_NetworkManager.h"
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
 
 
 
-PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager)
+PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager)
 {
 	UE_LOG(LogTemp, Log, TEXT("Constructor Game Manager"));
 
@@ -18,6 +19,7 @@ PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersM
 	mapManager =  inMapManager;
 	mapManager->_GAMEMANAGER = this;
 	enemyManager = new PD_GM_EnemyManager();
+	networkManager->RegisterObserver(gameManager);
 	InitState();
 }
 
