@@ -3,6 +3,7 @@
 #pragma once
 
 #include "SR_Serializer/PD_SR_SerializerStructs.h"
+
 #include "PD_NetStructs.generated.h"
 
 
@@ -10,12 +11,10 @@
 ///Structs NO serializables -- (No se envian ellos mismos)
 //=================================
 
-enum class EDirections { Up = 1, Down = 2, Left = 3, Right = 4 };
-
-enum class EOrderAction { Move = 1, Attack = 2 };
 
 USTRUCT()
 struct FStructLogicPosition {
+
 	GENERATED_BODY()
 
 		UPROPERTY()
@@ -26,8 +25,11 @@ struct FStructLogicPosition {
 	FStructLogicPosition() {
 
 	}
+
 };
 
+enum class EDirections { Up = 1, Down = 2, Left = 3, Right = 4 };
+enum class EOrderAction { Move = 1, Attack = 2 };
 //Los struct tienen que ser USTRUCT para poder meterlos en un array de otro USTRUCT.
 USTRUCT()
 struct FStructOrderAction {
@@ -41,8 +43,9 @@ struct FStructOrderAction {
 
 	//EDirections
 	UPROPERTY()
-		//uint8 targetDirection;
-		FStructLogicPosition targetDirection;
+		uint8 targetDirection;
+	UPROPERTY()
+		FStructLogicPosition targetLogicPosition;
 	/*
 	LogicPosition targetTile;
 	CharacterId targetCharacter;
@@ -56,14 +59,16 @@ struct FStructOrderAction {
 };
 
 
+
+
 /*
 STRUCTS PARA EL CHARACTER LOGIC
- - Stats básicos - Los que elige el jugador
- - Stats base - Stats base del personaje - unas constantes
- - Weapons
- - Skills
- - Skin
- - Stats Totales
+- Stats básicos - Los que elige el jugador
+- Stats base - Stats base del personaje - unas constantes
+- Weapons
+- Skills
+- Skin
+- Stats Totales
 */
 
 //Stats Basicos - Poder, Agilidad, Destreza, ...
@@ -74,15 +79,15 @@ struct FStructBasicStats
 
 		UPROPERTY()
 		uint8 POD;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 AGI;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 DES;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 CON;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 PER;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 MAL;
 	//Constructor
 	FStructBasicStats()
@@ -98,9 +103,9 @@ struct FStructInitBaseStats
 
 		UPROPERTY()
 		uint8 HPBase;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 DMGBase;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 APBase;
 
 	//Constructor
@@ -118,7 +123,7 @@ struct FStructSkills
 		UPROPERTY()
 		TArray<uint8> listActiveSkills;
 
-		UPROPERTY()
+	UPROPERTY()
 		TArray<uint8> listPasiveSkills;
 	//Constructor
 	FStructSkills()
@@ -135,14 +140,14 @@ struct FStructWeapon
 	GENERATED_BODY()
 		UPROPERTY()
 		uint8 ID_Weapon;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 TypeWeapon;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 DMWeapon;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 RangeWeapon;
-		//UPROPERTY()
-		//TSubclassOf<class WeaponParent> SkinWeapon;
+	//UPROPERTY()
+	//TSubclassOf<class WeaponParent> SkinWeapon;
 
 	//Constructor
 	FStructWeapon()
@@ -163,8 +168,8 @@ struct FStructSkin
 
 		/* !!NOTA: Estos datos se tienen que pasar al GenericCharacter.h  para que elija en el Character_BP elija el mesh adecuado en base a estos datos.
 		*/
-	//Constructor
-	FStructSkin()
+		//Constructor
+		FStructSkin()
 	{
 	}
 };
@@ -178,35 +183,35 @@ struct FStructTotalStats
 		//stats generales del jugador
 		UPROPERTY()
 		uint8 HPTotal;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 APTotal;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 HPCurrent;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 RangeTotal;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 DMGTotal;
 
-		//stats principales - siendo el valor de estas el BONUS que da cada stat (no los puntos dados - diferencia respecto al FStructBasicStats
-		UPROPERTY()
+	//stats principales - siendo el valor de estas el BONUS que da cada stat (no los puntos dados - diferencia respecto al FStructBasicStats
+	UPROPERTY()
 		float PODBonus;
-		UPROPERTY()
+	UPROPERTY()
 		int8 AGIBonus;
-		UPROPERTY()
+	UPROPERTY()
 		int8 DESBonus;
-		UPROPERTY()
+	UPROPERTY()
 		float CONBonus;
-		UPROPERTY()
-		float PERBonus;		
-		UPROPERTY()
+	UPROPERTY()
+		float PERBonus;
+	UPROPERTY()
 		float MALBonus;
 
-		//stats secundarios - AP - SAL - CH (dependen de los BONUS de los stats principales
-		UPROPERTY()
+	//stats secundarios - AP - SAL - CH (dependen de los BONUS de los stats principales
+	UPROPERTY()
 		int8 AP;
-		UPROPERTY()
-		int8 CH;		
-		UPROPERTY()
+	UPROPERTY()
+		int8 CH;
+	UPROPERTY()
 		int8 SA;
 
 
@@ -217,7 +222,27 @@ struct FStructTotalStats
 };
 
 
+USTRUCT()
+struct FStructPlayerInfoAtClient
+{
+	GENERATED_BODY()
 
+		UPROPERTY()
+		FStructSkin structSkin;
+	UPROPERTY()
+		FString ID_character; //Identifica al Jugador que realiza la modificacion
+	UPROPERTY()
+		uint8 playerNum;
+	UPROPERTY()
+		FStructLogicPosition logicPosition;
+
+
+	//Constructor
+	FStructPlayerInfoAtClient()
+	{
+
+	}
+};
 
 /*
 Procedimiento para agregar un struct:
@@ -246,32 +271,35 @@ AllStructs=1 para suscribirse a eventos para todos.
 FStructNewConnection=2 struct que crea el networkmanager (no necesita serializacion)
 */
 
-enum class UStructType { NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30,
-	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52 };
-
+enum class UStructType {
+	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30,
+	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52,
+	FStructInstatiatePlayers = 60
+};
 
 
 
 //=================================
 ///Structs SERIALIZABLES (heredan de FStructGeneric) (Se envian)
 //=================================
+
 USTRUCT()
 struct FStructCharacter : public  FStructGeneric
 {
 	GENERATED_BODY()
 
 		UPROPERTY()
-			FStructTotalStats totalStats;
-		UPROPERTY()
-			FStructBasicStats basicStats;
-		UPROPERTY()
-			FStructInitBaseStats initBaseStats;
-		UPROPERTY()
-			FStructSkills skils;
-		UPROPERTY()
-			FStructWeapon weapon;
-		UPROPERTY()
-			FStructSkin skin;
+		FStructTotalStats totalStats;
+	UPROPERTY()
+		FStructBasicStats basicStats;
+	UPROPERTY()
+		FStructInitBaseStats initBaseStats;
+	UPROPERTY()
+		FStructSkills skills;
+	UPROPERTY()
+		FStructWeapon weapon;
+	UPROPERTY()
+		FStructSkin skin;
 
 	//Constructor
 	FStructCharacter()
@@ -289,11 +317,11 @@ struct FStructUpdateCharacter : public  FStructGeneric
 
 		UPROPERTY()
 		uint8 HPCurrent;
-		UPROPERTY()
+	UPROPERTY()
 		uint8 ID_character; //Identifica al Jugador que realiza la modificacion
-		UPROPERTY()
+	UPROPERTY()
 		FStructLogicPosition currentCharacterPosition;
-	
+
 
 	//Constructor
 	FStructUpdateCharacter()
@@ -302,9 +330,26 @@ struct FStructUpdateCharacter : public  FStructGeneric
 	}
 };
 
+
+USTRUCT()
+struct FStructInstatiatePlayers : public FStructGeneric
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		TArray<FStructPlayerInfoAtClient> listInfoPlayerAtClient;
+
+
+	//Constructor
+	FStructInstatiatePlayers()
+	{
+		structType = static_cast<uint8>(UStructType::FStructInstatiatePlayers);
+	}
+};
+
 USTRUCT()
 struct FStructNewConnection : public FStructGeneric
-{
+{	//No necesita estar en el serializeManager
 	//FStructNewConnection: struct que crea el networkmanager(no necesita serializacion)
 	GENERATED_BODY()
 
@@ -355,7 +400,7 @@ struct FStructOrderMenu : public FStructGeneric
 	UPROPERTY()
 		uint8 playerIndex;
 	UPROPERTY()
-		bool isClientMaster;
+		bool isClientMaster = false;
 
 	//Constructor
 	FStructOrderMenu()
@@ -384,7 +429,6 @@ struct FStructTurnOrders : public FStructGeneric
 
 
 
-
 USTRUCT()
 struct FStructClientMapAlreadyInstantiated : public FStructGeneric
 {
@@ -392,7 +436,7 @@ struct FStructClientMapAlreadyInstantiated : public FStructGeneric
 
 		FStructClientMapAlreadyInstantiated() {}
 
-	
+
 };
 
 
@@ -403,7 +447,7 @@ struct FStructClientStartMatchOnGM : public FStructGeneric
 
 		FStructClientStartMatchOnGM() {}
 
-	
+
 };
 
 
@@ -414,7 +458,7 @@ struct FStructClientCanGenerateOrders : public FStructGeneric
 
 		FStructClientCanGenerateOrders() {}
 
-	
+
 };
 
 
