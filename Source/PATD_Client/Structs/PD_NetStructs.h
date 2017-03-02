@@ -43,8 +43,6 @@ struct FStructOrderAction {
 
 	//EDirections
 	UPROPERTY()
-		uint8 targetDirection;
-	UPROPERTY()
 		FStructLogicPosition targetLogicPosition;
 	/*
 	LogicPosition targetTile;
@@ -460,7 +458,6 @@ struct FStructClientCanGenerateOrders : public FStructGeneric
 
 
 };
-
 
 
 

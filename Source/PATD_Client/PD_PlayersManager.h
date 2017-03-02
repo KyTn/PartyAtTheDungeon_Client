@@ -17,12 +17,21 @@ public:
 	~PD_PlayersManager();
 	int GetNumPlayers();
 	//Funciones de gestion de conexion
+	void AddNewPlayer(FStructPlayerInfoAtClient conn);
+	//int GetMaxLenghtActions(EActionPhase phase);
+	//int GetPlayerMaxLenghtActions(EActionPhase phase);
 
-	int GetMaxLenghtActions(EActionPhase phase);
-	int GetPlayerMaxLenghtActions(EActionPhase phase);
+
 	//Funciones de consulta de mision y objetivos de la partida
 
 	//FStructTurnOrders* getTurnOrders(int player);
 	//Funcion de acceso directo al struct 
 	StructPlayer* GetDataStructPlayer(int player);
+
+	TArray<StructPlayer*> GetDataPlayers() {
+		return dataPlayers;
+	}
+
 };
+
+

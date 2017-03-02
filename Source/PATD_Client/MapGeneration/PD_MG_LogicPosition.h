@@ -12,7 +12,7 @@ private:
 	uint32 _y;
 
 public:
-
+	PD_MG_LogicPosition();
 	PD_MG_LogicPosition(uint32 x, uint32 y);
 	~PD_MG_LogicPosition();
 

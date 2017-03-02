@@ -334,7 +334,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	FStructCharacter structCharacterToSend =  FStructCharacter();
 	structCharacterToSend.totalStats = *(playerInfo->logic_Character->GetTotalStats());
 	structCharacterToSend.initBaseStats = *(playerInfo->logic_Character->GetInitBaseStats());
-	structCharacterToSend.skils = *(playerInfo->logic_Character->GetSkills());
+	structCharacterToSend.skills = *(playerInfo->logic_Character->GetSkills());
 	structCharacterToSend.skin = *(playerInfo->logic_Character->GetSkin());
 	structCharacterToSend.weapon = *(playerInfo->logic_Character->GetWeapon());
 
@@ -361,7 +361,7 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	LogicPosToMove.positionY = newLogicPosition.GetY();
 
 	FStructOrderAction newOrderMove = FStructOrderAction();
-	newOrderMove.targetDirection = LogicPosToMove;
+	newOrderMove.targetLogicPosition = LogicPosToMove;
 	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Move);
 
 	playerInfo->turnOrders->listMove.Add(newOrderMove);
@@ -387,7 +387,7 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 	LogicPosToAction.positionY = newLogicPosition.GetY();
 
 	FStructOrderAction newOrderAction = FStructOrderAction();
-	newOrderAction.targetDirection = LogicPosToAction;
+	newOrderAction.targetLogicPosition = LogicPosToAction;
 	newOrderAction.orderType = static_cast<uint8>(EOrderAction::Attack);
 
 	playerInfo->turnOrders->listAttack.Add(newOrderAction);

@@ -148,7 +148,7 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 		{
 		case ECharacterType::Archer:
 		{
-			APD_E_EnemyCharacter* charac = instantiator->InstantiateArcher(DynamicMapRef->GetLogicPositions()[i]);
+			APD_E_Character* charac = instantiator->InstantiateArcher(DynamicMapRef->GetLogicPositions()[i]);
 			PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 			logicCha->SetIsPlayer(false);
 			logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
@@ -163,7 +163,7 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 		}
 		case ECharacterType::Zombie:
 		{
-			APD_E_EnemyCharacter* charac = instantiator->InstantiateZombie(DynamicMapRef->GetLogicPositions()[i]);
+			APD_E_Character* charac = instantiator->InstantiateZombie(DynamicMapRef->GetLogicPositions()[i]);
 			PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 			logicCha->SetIsPlayer(false);
 			logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);

@@ -3,7 +3,7 @@
 
 #include "Structs/PD_ClientStructs.h"
 #include "GameFramework/Character.h"
-
+#include "MapGeneration/PD_MG_LogicPosition.h"
 //forward declarations
 #include "Structs/PD_ClientEnums.h"
 struct FStructBasicStats;

@@ -21,6 +21,7 @@ int PD_PlayersManager::GetNumPlayers() {
 }
 
 //Devuelve el numero de acciones de la lista mas larga
+/*
 int PD_PlayersManager::GetMaxLenghtActions(EActionPhase phase) {
 	int indexplayer = this->GetPlayerMaxLenghtActions(phase);
 	if (indexplayer != -1) {
@@ -32,10 +33,13 @@ int PD_PlayersManager::GetMaxLenghtActions(EActionPhase phase) {
 		}
 	}
 	return 0;
-
-
 }
+*/
+
+
+
 //Devuelve el index del jugador con la lista de acciones mas larga
+/*
 int PD_PlayersManager::GetPlayerMaxLenghtActions(EActionPhase phase) {
 	int numTicks = 0;
 	int indexPlayer = -1;
@@ -57,6 +61,14 @@ int PD_PlayersManager::GetPlayerMaxLenghtActions(EActionPhase phase) {
 	}
 	return numTicks;
 }
+*/
+
+
+void PD_PlayersManager::AddNewPlayer(FStructPlayerInfoAtClient conn) {
+
+}
+
+
 
 //Funcion de acceso directo al struct
 StructPlayer* PD_PlayersManager::GetDataStructPlayer(int player) {

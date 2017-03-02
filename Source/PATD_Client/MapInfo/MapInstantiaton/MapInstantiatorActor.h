@@ -55,7 +55,7 @@ public:
 	AActor* InstantiateTile(PD_MG_LogicPosition logpos);
 	AActor* InstantiateWall(PD_MG_LogicPosition logpos);
 
-	APD_E_EnemyCharacter* InstantiateArcher(PD_MG_LogicPosition logpos);
-	APD_E_EnemyCharacter* InstantiateZombie(PD_MG_LogicPosition logpos);
-	APD_E_EnemyCharacter* InstantiatePlayer(PD_MG_LogicPosition logpos);
+	APD_E_Character* InstantiateArcher(PD_MG_LogicPosition logpos);
+	APD_E_Character* InstantiateZombie(PD_MG_LogicPosition logpos);
+	APD_E_Character* InstantiatePlayer(PD_MG_LogicPosition logpos);
 };
