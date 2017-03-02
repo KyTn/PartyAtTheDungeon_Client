@@ -4,7 +4,7 @@
 #include "PD_PlayersManager.h"
 
 #include "Structs/PD_ClientStructs.h"//Para todos los structs
-
+#include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
 
 PD_PlayersManager::PD_PlayersManager()
 {
@@ -65,7 +65,16 @@ int PD_PlayersManager::GetPlayerMaxLenghtActions(EActionPhase phase) {
 
 
 void PD_PlayersManager::AddNewPlayer(FStructPlayerInfoAtClient conn) {
+	
+	PD_GM_LogicCharacter* ch = new PD_GM_LogicCharacter();
+	ch->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
+	ch->SetIDCharacter(conn.ID_character);
 
+	StructPlayer* sp = new StructPlayer();
+	sp->ID_Player = conn.playerNum;
+
+	sp->logic_Character = ch;
+	dataPlayers.Add(sp);
 }
 
 

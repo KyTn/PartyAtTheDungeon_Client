@@ -18,6 +18,7 @@
 #include "GM_Game/PD_GM_MapManager.h"
 #include "GM_Game/PD_GM_GameManager.h"
 #include "GM_Game/PD_GM_EnemyManager.h"
+#include "PD_PlayersManager.h"
 
 //Includes de prueba
 
@@ -60,10 +61,18 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 			FStructMap* mapStruct = (FStructMap*)inDataStruct;
 			structClientState->mapString = mapStruct->stringMap;
 			structClientState->configurationCharacterDone = true;
-			this->UpdateState();
-			
+			this->UpdateState();	
+		}
+		if (inEventType == UStructType::FStructInstatiatePlayers) {
+			FStructInstatiatePlayers* InstaPlayers = (FStructInstatiatePlayers*)inDataStruct;
+			for (int i = 0; i < InstaPlayers->listInfoPlayerAtClient.Num(); i++)
+			{
+				playersManager->AddNewPlayer(InstaPlayers->listInfoPlayerAtClient[i]);
+			}
+			//this->UpdateState();
 		}
 	}
+
 }
 
 void UPD_ClientGameInstance::UpdateState() {
@@ -171,6 +180,8 @@ void UPD_ClientGameInstance::Init()
 	//InitializeNetworking();
 
 	levelsNameDictionary = LevelsNameDictionary();
+
+	playersManager = new PD_PlayersManager();
 
 	structClientState = new StructClientState();
 	structClientState->enumClientState = EClientState::NoConnection;

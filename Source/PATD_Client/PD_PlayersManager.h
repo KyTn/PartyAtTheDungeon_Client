@@ -3,6 +3,10 @@
 #pragma once
 
 struct StructPlayer;
+struct FStructPlayerInfoAtClient;
+
+class PD_GM_LogicCharacter;
+
 class PATD_CLIENT_API PD_PlayersManager
 {
 

@@ -130,11 +130,9 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 	TArray<PD_MG_LogicPosition> spawn = GetSpawnPoints();
 	for (int i = 0; i < _GAMEMANAGER->playersManager->GetNumPlayers(); i++)
 	{
-		
 		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCurrentLogicalPosition(PD_MG_LogicPosition(1, 1));
 		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCharacterBP(instantiator->InstantiatePlayer(PD_MG_LogicPosition(1, 1)));
 		///actualizamos la referencia del BP
-
 	}
 
 

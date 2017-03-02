@@ -17,7 +17,7 @@ Es el Struct principal del Cliente.
 struct StructPlayer {
 	//Menu options and configuration
 	bool readyMenu;
-
+	int ID_Player;
 	bool clientMaster;
 	//Ingame data
 	FStructTurnOrders* turnOrders;
