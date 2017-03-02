@@ -420,7 +420,7 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 
 	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
 	{
-		playerInfo->turnOrders = nullptr;
+		//playerInfo->turnOrders = nullptr;
 	}
 	
 	return sentOk;
