@@ -343,7 +343,7 @@ struct FStructInstatiatePlayers : public FStructGeneric
 	//Constructor
 	FStructInstatiatePlayers()
 	{
-		structType = static_cast<uint8>(UStructType::FStructMap);
+		structType = static_cast<uint8>(UStructType::FStructInstatiatePlayers);
 	}
 };
 
