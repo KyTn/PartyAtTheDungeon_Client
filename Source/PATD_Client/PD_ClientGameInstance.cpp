@@ -118,8 +118,8 @@ void UPD_ClientGameInstance::OnBeginState() {
 
 		// Parsea el chorizo
 		mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef);
-		mapManager = new PD_GM_MapManager(staticMapRef, dynamicMapRef, );
-		mapManager.Init();
+		mapManager = new PD_GM_MapManager();
+		mapManager->Init(staticMapRef, dynamicMapRef);
 		
 		
 		this->LoadMap(levelsNameDictionary.GetMapName(4));//Mapa de juego
