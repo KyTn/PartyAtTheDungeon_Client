@@ -78,7 +78,7 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 void UPD_ClientGameInstance::UpdateState() {
 	if (structClientState->enumClientState == EClientState::NoConnection) { //Estado incial.
 		//Transiciones de estados
-		if (structClientState->clientMaster && structClientState->numPlayer!=-1) {
+		if (!structClientState->clientMaster && structClientState->numPlayer!=-1) {
 			this->ChangeState(EClientState::WaitingConfiguration);
 		}
 		else if (structClientState->clientMaster && structClientState->numPlayer != -1) {
@@ -420,7 +420,7 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 
 	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
 	{
-		//playerInfo->turnOrders = nullptr;
+		playerInfo->turnOrders = new FStructTurnOrders();
 	}
 	
 	return sentOk;
