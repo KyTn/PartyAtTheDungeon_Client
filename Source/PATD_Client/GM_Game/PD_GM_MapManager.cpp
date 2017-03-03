@@ -108,6 +108,7 @@ void PD_GM_MapManager::InstantiateStaticMap()
 
 		case '.':
 		case 'd':
+		case 's':
 			MapInfo->AddTile(StaticMapRef->GetLogicPositions()[i], instantiator->InstantiateTile(StaticMapRef->GetLogicPositions()[i]));
 
 			break;
@@ -127,11 +128,16 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 
 	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Enemies Num %d"), _GAMEMANAGER->enemyManager->GetEnemies().Num());
 
-	TArray<PD_MG_LogicPosition> spawn = GetSpawnPoints();
+	//TArray<PD_MG_LogicPosition> spawn = GetSpawnPoints();
 	for (int i = 0; i < _GAMEMANAGER->playersManager->GetNumPlayers(); i++)
 	{
-		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCurrentLogicalPosition(PD_MG_LogicPosition(1, 1));
-		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCharacterBP(instantiator->InstantiatePlayer(PD_MG_LogicPosition(1, 1)));
+		//_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCurrentLogicalPosition(PD_MG_LogicPosition(1, 1));
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - InstantiatePlayer %d at (%d,%d)"), i, 
+			_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition().GetX(),
+			_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition().GetY());
+
+		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCharacterBP(instantiator->InstantiatePlayer(_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition()));
 		///actualizamos la referencia del BP
 	}
 

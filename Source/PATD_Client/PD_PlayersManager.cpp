@@ -67,6 +67,8 @@ int PD_PlayersManager::GetPlayerMaxLenghtActions(EActionPhase phase) {
 void PD_PlayersManager::AddNewPlayer(FStructPlayerInfoAtClient conn) {
 	
 	PD_GM_LogicCharacter* ch = new PD_GM_LogicCharacter();
+
+	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding player at(%d,%d)"), conn.logicPosition.positionX, conn.logicPosition.positionY);
 	ch->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
 	ch->SetIDCharacter(conn.ID_character);
 
