@@ -198,15 +198,15 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 			num = num * 10;
 		}
 		PD_MG_LogicPosition lp = PD_MG_LogicPosition(x, y);
-		switch (type) {///En este switch metemos la IA lógica de cada uno
+		switch (type) {//En este switch metemos la IA lógica de cada uno
 		case ECharacterType::Archer: {
-			FString id = "Arch" + i;
+			FString id = "Arch" + FString::FromInt(i);	
 			//enemyMan->AddEnemie(ch);
 			dynamicMapRef->AddNewEnemy(lp, type, id);
 			break;
 		}
 		case ECharacterType::Zombie: {
-			FString id = "Zomb" + i;
+			FString id = "Zomb" + FString::FromInt(i);
 			//enemyMan->AddEnemie(ch);
 			dynamicMapRef->AddNewEnemy(lp, type, id);
 			break;
@@ -229,7 +229,7 @@ uint32 intType, x, y;
 int32 num, j;
 firstIndex++;
 for (uint32 i = firstIndex; i < intObjNum + firstIndex; i++) {
-/*enemyValue = fileReaded[i].RightChop(2);
+enemyValue = fileReaded[i].RightChop(2);
 enemyValue.RemoveAt(enemyValue.Len()-1);//Hay que hacer esto, dado que guardaba basura, un "\n", o un "\0" que se comportaba al hacer el cout como "\n"
 dynamicMapRef->AddEnemyDictionary(fileReaded[i].GetCharArray()[0], enemyValue);
 intObjLine = fileReaded[i].GetCharArray();
