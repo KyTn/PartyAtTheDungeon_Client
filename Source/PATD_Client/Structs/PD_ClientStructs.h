@@ -53,14 +53,15 @@ struct StructClientState {
 	EClientState enumClientState;
 	bool clientMaster;
 	int numPlayer=-1; //-1 cuando no ha conectado aun.
-	bool configurationGameDone;
-	bool configurationCharacterDone;
+	bool ConfigMatchDone;
+	bool ConfigAllCharactersDone;
+	bool AllCharactersIncoming;
 	FString mapString;
 };
 
 //Usado por: GameManager
 struct StructGameState {
-	EGameState enumGameState;
+	EClientGameState enumGameState;
 	EActionPhase enumActionPhase;
 
 };

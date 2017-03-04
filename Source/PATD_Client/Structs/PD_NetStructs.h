@@ -270,7 +270,7 @@ FStructNewConnection=2 struct que crea el networkmanager (no necesita serializac
 */
 
 enum class UStructType {
-	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructTurnOrders = 30,
+	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructMatchConfig = 21, FStructMatchConfigDone = 22, FStructTurnOrders = 30,
 	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52,
 	FStructInstatiatePlayers = 60
 };
@@ -426,15 +426,55 @@ struct FStructTurnOrders : public FStructGeneric
 };
 
 
+USTRUCT()
+struct FStructMatchConfig : public FStructGeneric
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint8 id;
+
+	UPROPERTY()
+		uint8 intvalue;
+	UPROPERTY()
+		FString FStringvalue;
+
+
+
+	//Constructor
+	FStructMatchConfig()
+	{
+		structType = static_cast<uint8>(UStructType::FStructMatchConfig);
+		id = -1;
+		intvalue = 0;
+		FStringvalue = "";
+	}
+
+};
+
+USTRUCT()
+struct FStructMatchConfigDone : public FStructGeneric
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint8 from; // 0 is server, 1 is masterclient
+
+	FStructMatchConfigDone() {
+		structType = static_cast<uint8>(UStructType::FStructMatchConfigDone);
+	}
+};
+
+
 
 USTRUCT()
 struct FStructClientMapAlreadyInstantiated : public FStructGeneric
 {
 	GENERATED_BODY()
 
-		FStructClientMapAlreadyInstantiated() {}
-
-
+	FStructClientMapAlreadyInstantiated() {
+		structType = static_cast<uint8>(UStructType::FStructClientMapAlreadyInstantiated);
+	}
 };
 
 
@@ -443,9 +483,9 @@ struct FStructClientStartMatchOnGM : public FStructGeneric
 {
 	GENERATED_BODY()
 
-		FStructClientStartMatchOnGM() {}
-
-
+	FStructClientStartMatchOnGM() {
+		structType = static_cast<uint8>(UStructType::FStructClientStartMatchOnGM);
+	}
 };
 
 
@@ -454,10 +494,15 @@ struct FStructClientCanGenerateOrders : public FStructGeneric
 {
 	GENERATED_BODY()
 
-		FStructClientCanGenerateOrders() {}
-
-
+	FStructClientCanGenerateOrders() {
+		structType = static_cast<uint8>(UStructType::FStructClientCanGenerateOrders);
+	}
 };
+
+
+
+
+
 
 
 

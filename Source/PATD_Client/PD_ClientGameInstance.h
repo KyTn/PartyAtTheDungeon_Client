@@ -70,8 +70,17 @@ public:
 	//Overwrites - iEventObserver
 	virtual	bool SuscribeToEvents(int inPlayer, UStructType inType);
 	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType); //Aqui controlamos la mayoria de entradas.
-
 																								   //Carga de mapa
+	void HandleEvent_Welcome(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_ConfigMatch(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_ConfigMatchDone(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_MapIncoming(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_AllCharactersInfoIncoming(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_StartMatch_GoGameMnager(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+
+	
+	
 	void LoadMap(FString mapName);
 	//Callback cuando el mapa este cargado (Lo llama el estado GameStateInitializer en su beginPlay)
 	void OnLoadedLevel();

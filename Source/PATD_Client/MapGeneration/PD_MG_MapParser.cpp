@@ -82,6 +82,11 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_M
 	TArray<FString> fileSplitted;
 	chorizo->ParseIntoArray(fileSplitted, TEXT("\n"), true);
 
+	if (fileSplitted.Num() == 0) {
+		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::StartParsingFromChorizo::  Error loading map! chorizo=%s "), chorizo);
+
+	}
+
 	if (fileSplitted[0].Contains("v0.1")) {
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
 

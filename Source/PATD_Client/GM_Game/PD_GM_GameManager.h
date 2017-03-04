@@ -41,7 +41,7 @@ public:
 
 	//Funciones auxiliares
 	//Control directo del estado, llama a OnBeginState
-	void ChangeState(EGameState newState);
+	void ChangeState(EClientGameState newState);
 	void InitState();
 
 

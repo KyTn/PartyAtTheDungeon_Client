@@ -37,43 +37,43 @@ bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 void PD_GM_GameManager::InitState() {
 	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
 	structGameState = new StructGameState();
-	ChangeState(EGameState::Instantiate_Map);
+	ChangeState(EClientGameState::Instantiate_Map);
 }
 
 #pragma region GM STATE MACHINE 
 
 // Esta funcion cambia el estado actual al pasado por parametros y llama al OnBeginState del mismo.
-void PD_GM_GameManager::ChangeState(EGameState newState) {
+void PD_GM_GameManager::ChangeState(EClientGameState newState) {
 	structGameState->enumGameState = newState;
 	OnBeginState();
 }
 
 // Dado un paquete de red, actualiza el estado correspondiente y realiza las acciones pertinentes. 
 void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
-	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
+	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
 		// Si se recibe del servidor un Start_Match, ir a ese estado. 
 		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
-			ChangeState(EGameState::Start_Match);
+			ChangeState(EClientGameState::Start_Match);
 		}
 	}
-	else if(structGameState->enumGameState == EGameState::Start_Match) {
+	else if(structGameState->enumGameState == EClientGameState::Start_Match) {
 		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
-			ChangeState(EGameState::GenerateOrders);
+			ChangeState(EClientGameState::GenerateOrders);
 		 }
 	}	 
-	else if(structGameState->enumGameState == EGameState::GenerateOrders) {
+	else if(structGameState->enumGameState == EClientGameState::GenerateOrders) {
 		 
 	}	 
-	else if(structGameState->enumGameState == EGameState::SendOrdersToServer) {
+	else if(structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 		 
 	}	 
-	else if(structGameState->enumGameState == EGameState::WaitingServer) {
+	else if(structGameState->enumGameState == EClientGameState::WaitingServer) {
 		 
 	}	 
-	else if(structGameState->enumGameState == EGameState::UpdateInfo) {
+	else if(structGameState->enumGameState == EClientGameState::UpdateInfo) {
 		 
 	}	 
-	else if(structGameState->enumGameState == EGameState::EndOfTurn) {
+	else if(structGameState->enumGameState == EClientGameState::EndOfTurn) {
 
 	}
 
@@ -83,25 +83,25 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 // Actualiza el estado actual
 void PD_GM_GameManager::UpdateState() {
 
-	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
+	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::Start_Match) {
+	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::GenerateOrders) {
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::SendOrdersToServer) {
+	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::WaitingServer) {
+	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::UpdateInfo) {
+	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::EndOfTurn) {
+	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 
 	}
 	else { //Caso indeterminado
@@ -113,28 +113,28 @@ void PD_GM_GameManager::UpdateState() {
 void PD_GM_GameManager::OnBeginState() {
 
 
-	if (structGameState->enumGameState == EGameState::Instantiate_Map) {
+	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
 		mapManager->InstantiateMap();
 	}
-	else if (structGameState->enumGameState == EGameState::Start_Match) {
+	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::GenerateOrders) {
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
 
 		// Load UI
 
 
 	}
-	else if (structGameState->enumGameState == EGameState::SendOrdersToServer) {
+	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::WaitingServer) {
+	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::UpdateInfo) {
+	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
 
 	}
-	else if (structGameState->enumGameState == EGameState::EndOfTurn) {
+	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 
 	}
 	else //Caso indeterminado
