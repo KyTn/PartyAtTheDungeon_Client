@@ -31,7 +31,7 @@ PD_NW_SocketManager::~PD_NW_SocketManager()
 
 /******************************
 *** FUNCIONES **
-*/
+/******************************/
 //
 void PD_NW_SocketManager::Init(APD_NW_TimerActor* InmyTimerActor, FString ip, int port)
 {
@@ -198,12 +198,14 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 		}
 	}
 
-	for (int i = 0; i < socketArray.Num(); i++) {
+	for (int iSocket = 0; iSocket < socketArray.Num(); iSocket++) {
 		//UE_LOG(LogTemp, Warning, TEXT(">>>> Comprobando sockets lista abiertos ! "));
 		//Preguntar si hay data y en caso de haberla llamar a la funcion void socketHasReceivedData(TArray<uint8> data, int socketIndex);
-		TArray<uint8>* inData = socketArray[i]->ReceiveData();
-		if (inData) {
-			HandleNewSocketData(inData, i);
+		TArray<TArray<uint8>*> listPackages = socketArray[iSocket]->ReceiveData();
+		for (int iPackages = 0; iPackages < listPackages.Num(); iPackages++) {
+
+			HandleNewSocketData(listPackages[iPackages], iSocket);
+
 		}
 
 	}
@@ -214,7 +216,7 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 
 /******************************
 *** FUNCIONES GET Y SET / APOYO **
-*/
+/******************************/
 void PD_NW_SocketManager::SetIsServer(bool InIsServer)
 {
 	isServer = InIsServer;
@@ -227,42 +229,10 @@ bool PD_NW_SocketManager::GetIsServer()
 
 }
 
-TArray<PD_NW_Socket*> PD_NW_SocketManager::GetSocketArray()
-{
-	return socketArray;
-}
 
-TArray<bool> PD_NW_SocketManager::GetReadyPlayersArray()
-{
-	return readyPlayersArray;
-}
 
-bool PD_NW_SocketManager::SetSocketArrayIndex(int index)
-{
-	if (readyPlayersArray.Num() >= index)
-	{
-		if (readyPlayersArray[index])
-		{
-			readyPlayersArray[index] = false;
-		}
-		else {
-			readyPlayersArray[index] = true;
-		}
-		return true;
-	}
-	else {
-		return false;
-	}
-}
 
-//Creo que esta funcion ya no es necesaria, se hace todo en el initServerActor y solo existe el GetServerActor
-//Nunca vamos a querer setearlo sin iniciar el timer... o si?
-/*
-void PD_NW_SocketManager::SetServerActor(APD_NW_ServerActor* InmyServerActor)
-{
-myServerActor = InmyServerActor;
-myServerActor->SetSocketManager(this);
-}*/
+
 
 APD_NW_TimerActor* PD_NW_SocketManager::GetTimerActor()
 {

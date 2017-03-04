@@ -89,14 +89,15 @@ bool PD_NW_Socket::SendData(TArray<uint8>* sendData) {
 	return successful;
 }
 
-TArray<uint8>* PD_NW_Socket::ReceiveData() {
+TArray<TArray<uint8>*> PD_NW_Socket::ReceiveData() {
 
+	TArray<TArray<uint8>*> listPackages;
 	//Ahora mismo, al no tener datos para recibir y el que haya un error se devuelve lo mismo, null.
 	// ERROR!
 	if (!socket)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> No hay Socket Creado! "));
-		return nullptr;
+		return listPackages;
 	}
 
 	TArray<uint8>* receivedData = nullptr;
@@ -104,8 +105,11 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 	uint32 Size;
 	//El while nos come todos los pendings pero solo se queda con el ultimo. No tiene mucho sentido
 	//Lo dejamos en un unico if, y la informacion que pueda seguir habiendo se quedara para el siguiente tick
-	if (socket->HasPendingData(Size))
+	int i = 0;
+	while (socket->HasPendingData(Size))
 	{
+
+
 		//Estamos creando los datos nuevos en el HEAP
 		receivedData = new TArray<uint8>(); //Aqui creamos reserva de memoria en heap para el array.
 		receivedData->Init(0, FMath::Min(Size, 65507u));
@@ -113,20 +117,26 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 		int32 Read = 0;
 		socket->Recv(receivedData->GetData(), receivedData->Num(), Read);
 
-	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> ReceiveData : bucle while numero %d:, size: %d, read: %d"), i, Size, Read);
 
-	// ERROR!
-	if (receivedData == nullptr || receivedData->Num() <= 0)
-	{
-		//	UE_LOG(LogTemp, Error, TEXT(">>>> No se han enviado datos ! "));
-		return nullptr; //No Data Received
-	}
-	else {
-		//	UE_LOG(LogTemp, Warning, TEXT(">>>> Se van a enviar DATOS :) ! "));
-	}
-	return receivedData;
 
+
+		// ERROR!
+		if (receivedData == nullptr || receivedData->Num() <= 0)
+		{
+			//	UE_LOG(LogTemp, Error, TEXT(">>>> No se han enviado datos ! "));
+			return listPackages; //No Data Received
+		}
+		else {
+			//	UE_LOG(LogTemp, Warning, TEXT(">>>> Se van a enviar DATOS :) ! "));
+		}
+
+		listPackages.Add(receivedData);
+
+		i++; //solo para debug
+	}
+
+	return listPackages;
 }
 
 
