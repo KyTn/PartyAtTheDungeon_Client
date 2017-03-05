@@ -19,6 +19,8 @@ struct StructPlayer {
 	bool readyMenu;
 	int ID_Player;
 	bool clientMaster;
+
+	bool isSetPlayerCharacter; //Para comprobar que se ha enviado al Server el Personaje o no (al menos una vez)
 	//Ingame data
 	FStructTurnOrders* turnOrders;
 
@@ -43,6 +45,7 @@ struct StructPlayer {
 		turnOrders = new FStructTurnOrders();
 		player_character = new FStructCharacter();
 		update_character = new FStructUpdateCharacter();
+		isSetPlayerCharacter = false;
 	}
 };
 

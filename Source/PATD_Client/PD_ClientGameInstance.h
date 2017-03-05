@@ -112,7 +112,7 @@ public:
 	bool GetIsGameMaster();
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		void GetReadyToParty();
+		bool GetReadyToParty();
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void GoToLobby();
@@ -150,6 +150,10 @@ public:
 		void SetTypeOfAction(int ntypeAction);
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetTypeOfAction();
+
+	//Para saber el estado del GameManager desde la UI (o el propio Juego)
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		uint8 GetGameMngStatus();
 };
 
 

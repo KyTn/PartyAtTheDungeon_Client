@@ -8,4 +8,5 @@
 APATD_ClientGameModeBase::APATD_ClientGameModeBase() {
 	//Super();
 	GameStateClass = APD_GameStateInitializer::StaticClass();
+	
 }

@@ -21,7 +21,7 @@
 #include "PD_PlayersManager.h"
 
 //Includes de prueba
-
+#include "MapInfo/PD_MM_MapInfo.h"
 
 
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
@@ -511,12 +511,25 @@ void UPD_ClientGameInstance::GoToLobby()
 }
 
 
-void UPD_ClientGameInstance::GetReadyToParty()
+bool UPD_ClientGameInstance::GetReadyToParty()
 {
-	FStructOrderMenu respuesta = FStructOrderMenu();
-	respuesta.orderType = respuesta.orderType = static_cast<uint8>(MenuOrderType::ClientReady);
-	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
-	networkManager->SendNow(&respuesta, 0);
+	// Comprobamos APTotal para comprobar si el usuario ha metido valores o no. Sera distinto de 0 si hubiera un personaje seleccionado.
+	//Hasta que vea otra forma de ver si el Jugador ha elegido personaje o no
+	if (playerInfo->isSetPlayerCharacter) { 
+
+		FStructOrderMenu respuesta = FStructOrderMenu();
+		respuesta.orderType = respuesta.orderType = static_cast<uint8>(MenuOrderType::ClientReady);
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
+		networkManager->SendNow(&respuesta, 0);
+		playerInfo->readyMenu = !playerInfo->readyMenu;
+		return playerInfo->readyMenu;
+	}
+	else 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, "ERROR!!  Tienes que ACEPTAR y ENVIAR tu personaje antes del READY !");
+
+	}
+	return false;
 }
 
 void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL) 
@@ -554,6 +567,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
 	networkManager->SendNow(&structCharacterToSend, 0);
 	
+	playerInfo->isSetPlayerCharacter = true;
 	return true;
 }
 
@@ -566,6 +580,42 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Move
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
+
+	if (playerInfo->turnOrders->listMove.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
+	{
+		/*
+		1. Conseguir la LogicPosition de la casilla
+		2. Conseguir la referencia de la tile de la casilla
+		3. ejecutar el método ResetToInitMaterial
+		4. borrar el structOrdern de la lista
+		*/
+
+		PD_MG_LogicPosition tile_pos = PD_MG_LogicPosition(playerInfo->turnOrders->listMove[0].targetLogicPosition.positionX,
+			playerInfo->turnOrders->listMove[0].targetLogicPosition.positionY);
+
+		PD_MM_Room* roomSelected = nullptr;
+		
+		/*if (mapManager->MapInfo->RoomOf(tile_pos, roomSelected))  ----> PREGUNTAR A ANGEL -> FUNCION ROOMOF
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la sala "));
+			AActor* tileSelected = nullptr;
+			tileSelected = *(roomSelected->tiles.Find(tile_pos));
+			
+			FVector v = tileSelected->GetActorLocation();
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> tile en pos %s"),*v.ToString());
+
+			if (tileSelected)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la tile"));
+				FOutputDeviceNull ar;
+				tileSelected->CallFunctionByNameWithArguments(TEXT("ResetToInitMaterial"), ar, NULL, true);
+			}
+		
+		}*/
+		
+		playerInfo->turnOrders->listMove.RemoveAt(0);
+
+	}
 
 	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
 
@@ -625,6 +675,7 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
 	{
 		playerInfo->turnOrders = new FStructTurnOrders();
+		gameManager->structGameState->enumGameState = EClientGameState::WaitingServer;
 	}
 	
 	return sentOk;
@@ -640,4 +691,49 @@ uint8 UPD_ClientGameInstance::GetTypeOfAction()
 	return playerInfo->typeOfAction;
 }
 
+
+uint8 UPD_ClientGameInstance::GetGameMngStatus()
+{
+	uint8 GameStatusInt = 10;
+	switch (gameManager->structGameState->enumGameState)
+	{
+		case EClientGameState::Instantiate_Map:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::Instantiate_Map);
+			break;
+		}
+		case EClientGameState::Start_Match:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::Start_Match);
+			break;
+		}
+		case EClientGameState::GenerateOrders: 
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders);
+			break; }
+
+		case EClientGameState::SendOrdersToServer: 
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::SendOrdersToServer);
+			break;
+		}
+		case EClientGameState::WaitingServer: 
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::WaitingServer);
+			break;
+		}
+		case EClientGameState::UpdateInfo: 
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::UpdateInfo);
+			break; 
+		}
+		case EClientGameState::EndOfTurn: 
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::EndOfTurn);
+				break;
+		}
+	}
+
+	return GameStatusInt;
+}
 #pragma endregion
