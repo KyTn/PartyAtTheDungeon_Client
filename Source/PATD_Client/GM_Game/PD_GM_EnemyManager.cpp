@@ -66,3 +66,13 @@ int PD_GM_EnemyManager::GetEnemyMaxLenghtActions(EActionPhase phase) {
 	}
 	return numTicks;
 }
+
+PD_GM_LogicCharacter* PD_GM_EnemyManager::GetCharacterByID(FString id) {
+	for (int i = 0; i < enemies.Num(); i++) {
+		if (enemies[i]->GetIDCharacter() == id) {
+			return enemies[i];
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("PlayerManager:: GetCharacterByID ERROR: No se ha encontrado character con id %s"), *id);
+	return nullptr;
+}

@@ -20,6 +20,8 @@ public:
 	//Hay posibilidad de mejorar eso?
 
 	TArray<uint8>* SerializeData(FStructGeneric* structGeneric, UStructType type) {
+		//UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: intentando serializar algo de tipo %d"), );
+
 		switch (type) {
 		case UStructType::FStructMap: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructMap"));
@@ -41,18 +43,21 @@ public:
 			return SerializeDataTemplate<FStructTurnOrders>(structSpecialization);
 
 		}break;
+
 		case UStructType::FStructCharacter: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructCharacter"));
 			FStructCharacter* structSpecialization = (FStructCharacter*)structGeneric;
 			return SerializeDataTemplate<FStructCharacter>(structSpecialization);
 
 		}break;
-		case UStructType::FStructUpdateCharacter: {
-			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructUpdateCharacter"));
-			FStructUpdateCharacter* structSpecialization = (FStructUpdateCharacter*)structGeneric;
-			return SerializeDataTemplate<FStructUpdateCharacter>(structSpecialization);
+
+		case UStructType::FStructUpdateTurn: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructUpdateTurn"));
+			FStructUpdateTurn* structSpecialization = (FStructUpdateTurn*)structGeneric;
+			return SerializeDataTemplate<FStructUpdateTurn>(structSpecialization);
 
 		}break;
+
 		case UStructType::FStructInstatiatePlayers: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructInstatiatePlayers"));
 			FStructInstatiatePlayers* structSpecialization = (FStructInstatiatePlayers*)structGeneric;
@@ -100,13 +105,11 @@ public:
 
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct no reconocido"));
-			break;
+			return nullptr;
 
 		}
-
-		return nullptr;
-
 	}
+
 
 	FStructGeneric*  DeserializeData(TArray<uint8>* data, UStructType type) {
 		switch (type) {
@@ -134,9 +137,9 @@ public:
 			return DeserializeDataTemplate<FStructCharacter>(data);
 
 		}break;
-		case UStructType::FStructUpdateCharacter: {
-			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructUpdateCharacter"));
-			return DeserializeDataTemplate<FStructUpdateCharacter>(data);
+		case UStructType::FStructUpdateTurn: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructUpdateTurn"));
+			return DeserializeDataTemplate<FStructUpdateTurn>(data);
 
 		}break;
 		case UStructType::FStructInstatiatePlayers: {
@@ -144,6 +147,7 @@ public:
 			return DeserializeDataTemplate<FStructInstatiatePlayers>(data);
 
 		}break;
+
 
 		case UStructType::FStructMatchConfig: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructMatchConfig"));
@@ -182,10 +186,10 @@ public:
 
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct no reconocido"));
-			break;
+			return nullptr;
 		}
 
-		return nullptr;
+
 
 	}
 

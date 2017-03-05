@@ -36,6 +36,8 @@ public:
 		return dataPlayers;
 	}
 
+	PD_GM_LogicCharacter* GetCharacterByID(FString id);
+
 };
 
 

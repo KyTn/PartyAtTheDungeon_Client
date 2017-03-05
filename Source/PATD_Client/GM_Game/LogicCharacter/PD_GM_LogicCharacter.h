@@ -73,7 +73,7 @@ public:
 	Devuelve:
 	- Un posicion logica, indicando la casilla destino del movimiento despues de la simulacion
 	*/
-	PD_MG_LogicPosition MoveToLogicPosition(uint8 tick, FStructOrderAction* order);
+	//PD_MG_LogicPosition MoveToLogicPosition(uint8 tick, FStructOrderAction* order);
 	
 	/*
 	//Metodo para moverse visualmente por el mapa
@@ -82,9 +82,9 @@ public:
 	Devuelve:
 	- Un bool para indicar si la accion se ha resuelto con exito o no
 	*/
-	bool MoveToPhysicalPosition(PD_MG_LogicPosition targetPosition);
+	//bool MoveToPhysicalPosition(PD_MG_LogicPosition targetPosition);
 
-
+	bool MoveAtUpdate(PD_MG_LogicPosition targetPosition);
 	/*
 	//Metodo para realizar una acción
 	Recibe: 

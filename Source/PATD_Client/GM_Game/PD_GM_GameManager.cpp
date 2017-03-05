@@ -9,7 +9,11 @@
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
 
-
+//Includes de uso de objetos
+#include "MapGeneration/PD_MG_LogicPosition.h"
+#include "LogicCharacter/PD_GM_LogicCharacter.h"
+#include "Actors/PD_GenericController.h"
+#include "Actors/Players/PD_CharacterController.h"
 
 PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager)
 {
@@ -30,7 +34,7 @@ PD_GM_GameManager::~PD_GM_GameManager()
 
 bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 	if (inType == UStructType::FStructTurnOrders) return true; //Suscrito a TurnOrders
-	else return false;
+	else return true; //Hasta que quede definido todo lo que tiene que recibir, recibe todos.
 }
 
 // Inicializa la maquina de estados.
@@ -68,7 +72,12 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 		 
 	}	 
 	else if(structGameState->enumGameState == EClientGameState::WaitingServer) {
-		 
+		if (inEventType == UStructType::FStructUpdateTurn) {
+			FStructUpdateTurn* updateTurn = (FStructUpdateTurn*)inDataStruct;
+			structGameState->update_turn = *updateTurn;
+
+			ChangeState(EClientGameState::UpdateInfo);
+		}
 	}	 
 	else if(structGameState->enumGameState == EClientGameState::UpdateInfo) {
 		 
@@ -90,7 +99,7 @@ void PD_GM_GameManager::UpdateState() {
 
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
-
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 
@@ -117,22 +126,45 @@ void PD_GM_GameManager::OnBeginState() {
 		mapManager->InstantiateMap();
 	}
 	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
-
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
 
-		// Load UI
-
+		ChangeState(EClientGameState::SendOrdersToServer);
 
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
-
+		ChangeState(EClientGameState::WaitingServer);
 	}
 	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
-
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: UpdateInfo"));
 
+		
+		for (int iPlayers = 0; iPlayers < structGameState->update_turn.listPlayerCharacters.Num(); iPlayers++) {
+			UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: PlayerFor %d"), iPlayers);
+			FStructUpdateCharacter updateCharacter = structGameState->update_turn.listPlayerCharacters[iPlayers];
+			PD_GM_LogicCharacter* logicCharacter = playersManager->GetCharacterByID(updateCharacter.ID_character);
+			//Conversion de Struct a LogicPosition
+			PD_MG_LogicPosition logicPosition;
+			logicPosition.SetX(updateCharacter.currentCharacterPosition.positionX);
+			logicPosition.SetY(updateCharacter.currentCharacterPosition.positionY);
+
+			logicCharacter->MoveAtUpdate(logicPosition);
+		}
+
+		for (int iEnemies = 0; iEnemies < structGameState->update_turn.listEnemyCharacters.Num(); iEnemies++) {
+			FStructUpdateCharacter updateCharacter = structGameState->update_turn.listEnemyCharacters[iEnemies];
+			PD_GM_LogicCharacter* logicCharacter = enemyManager->GetCharacterByID(updateCharacter.ID_character);
+			//Conversion de Struct a LogicPosition
+			PD_MG_LogicPosition logicPosition;
+			logicPosition.SetX(updateCharacter.currentCharacterPosition.positionX);
+			logicPosition.SetY(updateCharacter.currentCharacterPosition.positionY);
+
+			logicCharacter->MoveAtUpdate(logicPosition);
+		}
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 

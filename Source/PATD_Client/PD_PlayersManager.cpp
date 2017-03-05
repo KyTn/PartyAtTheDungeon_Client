@@ -101,3 +101,13 @@ bool PD_PlayersManager::CheckPlayerIndex(int player) {
 	}
 }
 
+
+PD_GM_LogicCharacter* PD_PlayersManager::GetCharacterByID(FString id) {
+	for (int i = 0; i < dataPlayers.Num(); i++) {
+		if (dataPlayers[i]->logic_Character->GetIDCharacter() == id) {
+			return dataPlayers[i]->logic_Character;
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("PlayerManager:: GetCharacterByID ERROR: No se ha encontrado character con id %s"),*id);
+	return nullptr;
+}

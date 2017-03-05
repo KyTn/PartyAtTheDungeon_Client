@@ -62,6 +62,6 @@ struct StructClientState {
 //Usado por: GameManager
 struct StructGameState {
 	EClientGameState enumGameState;
-	EActionPhase enumActionPhase;
+	FStructUpdateTurn update_turn;
 
 };

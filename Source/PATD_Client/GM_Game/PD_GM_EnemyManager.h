@@ -26,5 +26,7 @@ public:
 	FStructTurnOrders* GetTurnOrders(int indexEnemy);
 	int GetEnemyMaxLenghtActions(EActionPhase phase);
 	int GetMaxLenghtActions(EActionPhase phase);
+
+	PD_GM_LogicCharacter* GetCharacterByID(FString id);
 };
 

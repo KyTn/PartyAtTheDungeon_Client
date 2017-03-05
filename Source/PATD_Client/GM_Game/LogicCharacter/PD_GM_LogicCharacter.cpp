@@ -3,6 +3,8 @@
 #include "PATD_Client.h"
 #include "PD_GM_LogicCharacter.h"
 
+//Includes de uso 
+#include "Actors/Players/PD_CharacterController.h"
 
 #include <math.h>       /* ceil */
 
@@ -58,46 +60,19 @@ TArray<FStructOrderAction>* PD_GM_LogicCharacter::FindPathToMove(PD_MG_LogicPosi
 
 
 
-PD_MG_LogicPosition PD_GM_LogicCharacter::MoveToLogicPosition(uint8 tick, FStructOrderAction* order)
+
+
+
+bool PD_GM_LogicCharacter:: MoveAtUpdate(PD_MG_LogicPosition targetPosition)
 {
-	/*
-		- OBJETIVO: Simula el movimiento del personaje siguiendo una lista de movimientos dada (el camino calculado hasta una
-		posicion casilla a casilla)
-		- PROCESO:
-			1. Recibe como parametro un array con la lista de movimientos casilla a casilla y el indice del array (tick) de 
-			la casilla a comprobar la simulacion
-			2. Simula donde va casilla por casilla comprobando que es posible el movimiento
-			3. Actualizar la variable movingLogicPosition
-			3. Al acabar de simular devuelve un LogicPosition con la posicion final tras la simulacion
-		- SE LLAMA DESDE: Desde el GameManager cuando sea el turno de simular el movimiento. Se pasa el parametro tick, para asegurar
-		de que todos los actors que se mueven lo hacen a la vez.
-		**Se devuelve un LogicPosition para que el GamenManager pueda ver si hay conflictos dados las posiciones logicas de ese tick de todos los personajes 
-		que se mueven y actue en consecuencia. 
-		- Tras el choque habría que cambiar esa movingLogicalPosition
-	*/
-	currentLogicalPosition = PD_MG_LogicPosition(order->targetLogicPosition.positionX, order->targetLogicPosition.positionY);
-	movingLogicalPosition = PD_MG_LogicPosition(order->targetLogicPosition.positionX, order->targetLogicPosition.positionY);
-
-	return currentLogicalPosition;
-}
-
-
-bool PD_GM_LogicCharacter::MoveToPhysicalPosition(PD_MG_LogicPosition targetPosition)
-{
-	/*
-		- OBJETIVO: Mueve al personaje hasta la posicion fisica establecida anteriormente en simulacion
-		- PROCESO:
-			1. Recibe la posicion logica a la que se tiene que mover el personaje durante la Fase de Movimiento
-			2. Con el MapManager convierte la posicion logica en fisica
-			3.  Actualiza  las variables currentLogicalPosition a la recibida por parametro
-			4.Con el PlayerManager coge su personaje y llama a la funcion MoveTo() de su controlador
-		- SE LLAMA DESDE: Desde el GameManager cuando sea el turno de visualizar el movimiento. 
-		Devuelve true si todo ha ido bien, si algo ha fallado, devuelve false (normalmente a raiz de que la funcion move del controlador
-		devuelva tambien false
-	*/
-
-	FVector realPosition = mapMng->LogicToWorldPosition(targetPosition);
-	controller->MoveTo(realPosition.X, realPosition.Y);
+	
+	this->SetCurrentLogicalPosition( targetPosition);
+	if (isPlayer) {
+		Cast<APD_CharacterController>(controller)->MoveTo(targetPosition.GetX(), targetPosition.GetY());
+	}
+	else {
+		//Cast<APD_EnemyController> (controller)->MoveTo(realPosition.X, realPosition.Y);
+	}
 	
 	return true;
 }

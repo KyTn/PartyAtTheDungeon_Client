@@ -41,7 +41,7 @@ struct FStructOrderAction {
 		UPROPERTY()
 		uint8 orderType;
 
-	//EDirections
+
 	UPROPERTY()
 		FStructLogicPosition targetLogicPosition;
 	/*
@@ -242,6 +242,29 @@ struct FStructPlayerInfoAtClient
 	}
 };
 
+//Sirve para actualizar el estado de un character cuando se ha iniciado la partida
+//Solo se van a enviar los atributos del character que sean necesarios
+USTRUCT()
+struct FStructUpdateCharacter
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint8 HPCurrent;
+	UPROPERTY()
+		FString ID_character; //Identifica al LogicCharacter que realiza la modificacion
+	UPROPERTY()
+		FStructLogicPosition currentCharacterPosition;
+
+
+	//Constructor
+	FStructUpdateCharacter()
+	{
+	}
+};
+
+
+
 /*
 Procedimiento para agregar un struct:
 Añadir en UstructType el siguiente numero. (,FStruct NombreStruct=17)
@@ -271,7 +294,7 @@ FStructNewConnection=2 struct que crea el networkmanager (no necesita serializac
 
 enum class UStructType {
 	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructMatchConfig = 21, FStructMatchConfigDone = 22, FStructTurnOrders = 30,
-	FStructCharacter = 40, FStructUpdateCharacter = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52,
+	FStructCharacter = 40, FStructUpdateTurn = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52,
 	FStructInstatiatePlayers = 60
 };
 
@@ -306,27 +329,7 @@ struct FStructCharacter : public  FStructGeneric
 	}
 };
 
-//Sirve para actualizar el estado de un character cuando se ha iniciado la partida
-//Solo se van a enviar los atributos del character que sean necesarios
-USTRUCT()
-struct FStructUpdateCharacter : public  FStructGeneric
-{
-	GENERATED_BODY()
 
-		UPROPERTY()
-		uint8 HPCurrent;
-	UPROPERTY()
-		uint8 ID_character; //Identifica al Jugador que realiza la modificacion
-	UPROPERTY()
-		FStructLogicPosition currentCharacterPosition;
-
-
-	//Constructor
-	FStructUpdateCharacter()
-	{
-		structType = static_cast<uint8>(UStructType::FStructUpdateCharacter);
-	}
-};
 
 
 USTRUCT()
@@ -426,6 +429,7 @@ struct FStructTurnOrders : public FStructGeneric
 };
 
 
+
 USTRUCT()
 struct FStructMatchConfig : public FStructGeneric
 {
@@ -472,7 +476,7 @@ struct FStructClientMapAlreadyInstantiated : public FStructGeneric
 {
 	GENERATED_BODY()
 
-	FStructClientMapAlreadyInstantiated() {
+		FStructClientMapAlreadyInstantiated() {
 		structType = static_cast<uint8>(UStructType::FStructClientMapAlreadyInstantiated);
 	}
 };
@@ -483,7 +487,7 @@ struct FStructClientStartMatchOnGM : public FStructGeneric
 {
 	GENERATED_BODY()
 
-	FStructClientStartMatchOnGM() {
+		FStructClientStartMatchOnGM() {
 		structType = static_cast<uint8>(UStructType::FStructClientStartMatchOnGM);
 	}
 };
@@ -494,7 +498,7 @@ struct FStructClientCanGenerateOrders : public FStructGeneric
 {
 	GENERATED_BODY()
 
-	FStructClientCanGenerateOrders() {
+		FStructClientCanGenerateOrders() {
 		structType = static_cast<uint8>(UStructType::FStructClientCanGenerateOrders);
 	}
 };
@@ -502,7 +506,24 @@ struct FStructClientCanGenerateOrders : public FStructGeneric
 
 
 
+//
+//Sirve para actualizar el estado de un character cuando se ha iniciado la partida
+//Solo se van a enviar los atributos del character que sean necesarios
+USTRUCT()
+struct FStructUpdateTurn : public  FStructGeneric
+{
+	GENERATED_BODY()
 
 
+		UPROPERTY()
+		TArray<FStructUpdateCharacter> listPlayerCharacters;
 
+	UPROPERTY()
+		TArray<FStructUpdateCharacter> listEnemyCharacters;
 
+	//Constructor
+	FStructUpdateTurn()
+	{
+		structType = static_cast<uint8>(UStructType::FStructUpdateTurn);
+	}
+};
