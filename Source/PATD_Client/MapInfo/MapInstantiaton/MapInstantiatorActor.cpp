@@ -80,6 +80,7 @@ APD_E_Character* AMapInstantiatorActor::InstantiateZombie(PD_MG_LogicPosition lo
 
 APD_E_Character* AMapInstantiatorActor::InstantiatePlayer(PD_MG_LogicPosition logpos) {
 	return GetWorld()->SpawnActor<APD_E_Character>(PlayerClass, logpos.ToWorldPosition() + FVector::UpVector*200, FRotator(0.0f, 0.f, 0.f));
+
 }
 
 #pragma endregion
