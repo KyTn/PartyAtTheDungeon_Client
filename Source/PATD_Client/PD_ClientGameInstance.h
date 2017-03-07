@@ -154,6 +154,10 @@ public:
 	//Para saber el estado del GameManager desde la UI (o el propio Juego)
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetGameMngStatus();
+
+	//Para saber el numero del jugador -> Caracter Visual a nivel de Interfaz
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		uint8 GetPlayerNumber();
 };
 
 

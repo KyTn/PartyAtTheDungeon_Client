@@ -622,6 +622,7 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
 	LogicPosToMove.positionX = newLogicPosition.GetX();
 	LogicPosToMove.positionY = newLogicPosition.GetY();
+	UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::LogicMoveTick -> Nueva POS LOGICA -> %d %d"), LogicPosToMove.positionY, LogicPosToMove.positionY);
 
 	FStructOrderAction newOrderMove = FStructOrderAction();
 	newOrderMove.targetLogicPosition = LogicPosToMove;
@@ -735,5 +736,10 @@ uint8 UPD_ClientGameInstance::GetGameMngStatus()
 	}
 
 	return GameStatusInt;
+}
+
+uint8 UPD_ClientGameInstance::GetPlayerNumber()
+{
+	return structClientState->numPlayer;
 }
 #pragma endregion
