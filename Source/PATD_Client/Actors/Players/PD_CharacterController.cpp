@@ -6,7 +6,7 @@
 
 bool APD_CharacterController::MoveTo(float x, float y)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Init GameMap"));
+	
 
 	FVector currentPosition = GetPawn()->GetActorLocation();
 	UE_LOG(LogTemp, Warning, TEXT("MyCharacter's Location is %s"), *currentPosition.ToString());

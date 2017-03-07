@@ -54,6 +54,7 @@ void PD_GM_GameManager::ChangeState(EClientGameState newState) {
 
 // Dado un paquete de red, actualiza el estado correspondiente y realiza las acciones pertinentes. 
 void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
+	//Estos dos eventos van aqui?
 	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
 		// Si se recibe del servidor un Start_Match, ir a ese estado. 
 		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
@@ -142,7 +143,7 @@ void PD_GM_GameManager::OnBeginState() {
 	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: UpdateInfo"));
 
-		
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Players"));
 		for (int iPlayers = 0; iPlayers < structGameState->update_turn.listPlayerCharacters.Num(); iPlayers++) {
 			UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: PlayerFor %d"), iPlayers);
 			FStructUpdateCharacter updateCharacter = structGameState->update_turn.listPlayerCharacters[iPlayers];
@@ -151,10 +152,15 @@ void PD_GM_GameManager::OnBeginState() {
 			PD_MG_LogicPosition logicPosition;
 			logicPosition.SetX(updateCharacter.currentCharacterPosition.positionX);
 			logicPosition.SetY(updateCharacter.currentCharacterPosition.positionY);
-
-			logicCharacter->MoveAtUpdate(logicPosition);
+			if (logicCharacter) {
+				logicCharacter->MoveAtUpdate(logicPosition);
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de player con id %s"), *updateCharacter.ID_character);
+			}
 		}
-
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Enemigos"));
+		/*
 		for (int iEnemies = 0; iEnemies < structGameState->update_turn.listEnemyCharacters.Num(); iEnemies++) {
 			FStructUpdateCharacter updateCharacter = structGameState->update_turn.listEnemyCharacters[iEnemies];
 			PD_GM_LogicCharacter* logicCharacter = enemyManager->GetCharacterByID(updateCharacter.ID_character);
@@ -164,7 +170,7 @@ void PD_GM_GameManager::OnBeginState() {
 			logicPosition.SetY(updateCharacter.currentCharacterPosition.positionY);
 
 			logicCharacter->MoveAtUpdate(logicPosition);
-		}
+		}*/
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 
