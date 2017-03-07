@@ -41,7 +41,9 @@ struct FStructOrderAction {
 		UPROPERTY()
 		uint8 orderType;
 
-
+	//EDirections
+	UPROPERTY()
+		uint8 targetDirection;
 	UPROPERTY()
 		FStructLogicPosition targetLogicPosition;
 	/*
@@ -424,6 +426,8 @@ struct FStructTurnOrders : public FStructGeneric
 
 
 	FStructTurnOrders() {
+		listMove = TArray<FStructOrderAction>();
+		listAttack = TArray<FStructOrderAction>();
 		structType = static_cast<uint8>(UStructType::FStructTurnOrders);
 	}
 };

@@ -52,6 +52,8 @@ void UPD_ClientGameInstance::Init()
 									 Construimos el logicCharacter, para luego poder rellenarlo. Lo configuramos como Jugador.
 									 */
 	playerInfo->logic_Character = new PD_GM_LogicCharacter();
+	playerInfo->turnOrders = new FStructTurnOrders();
+
 	playerInfo->logic_Character->SetIsPlayer(true);
 	playerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
 
@@ -622,12 +624,11 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
 	LogicPosToMove.positionX = newLogicPosition.GetX();
 	LogicPosToMove.positionY = newLogicPosition.GetY();
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::LogicMoveTick -> Nueva POS LOGICA -> %d %d"), LogicPosToMove.positionY, LogicPosToMove.positionY);
 
 	FStructOrderAction newOrderMove = FStructOrderAction();
 	newOrderMove.targetLogicPosition = LogicPosToMove;
 	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Move);
-
+	newOrderMove.targetDirection = 1;
 	playerInfo->turnOrders->listMove.Add(newOrderMove);
 
 	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
@@ -644,17 +645,53 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
 
+	if (playerInfo->turnOrders->listAttack.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
+	{
+		/*
+		1. Conseguir la LogicPosition de la casilla
+		2. Conseguir la referencia de la tile de la casilla
+		3. ejecutar el método ResetToInitMaterial
+		4. borrar el structOrdern de la lista
+		*/
+
+		//PD_MG_LogicPosition tile_pos = PD_MG_LogicPosition(playerInfo->turnOrders->[0],
+			//playerInfo->turnOrders->listMove[0].targetLogicPosition.positionY);
+
+		//PD_MM_Room* roomSelected = nullptr;
+
+		/*if (mapManager->MapInfo->RoomOf(tile_pos, roomSelected))  ----> PREGUNTAR A ANGEL -> FUNCION ROOMOF
+		{
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la sala "));
+		AActor* tileSelected = nullptr;
+		tileSelected = *(roomSelected->tiles.Find(tile_pos));
+
+		FVector v = tileSelected->GetActorLocation();
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> tile en pos %s"),*v.ToString());
+
+		if (tileSelected)
+		{
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la tile"));
+		FOutputDeviceNull ar;
+		tileSelected->CallFunctionByNameWithArguments(TEXT("ResetToInitMaterial"), ar, NULL, true);
+		}
+
+		}*/
+
+		playerInfo->turnOrders->listAttack.RemoveAt(0);
+
+	}
+
 	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
 
-	FStructLogicPosition LogicPosToAction = FStructLogicPosition();
-	LogicPosToAction.positionX = newLogicPosition.GetX();
-	LogicPosToAction.positionY = newLogicPosition.GetY();
+	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
+	LogicPosToMove.positionX = newLogicPosition.GetX();
+	LogicPosToMove.positionY = newLogicPosition.GetY();
 
-	FStructOrderAction newOrderAction = FStructOrderAction();
-	newOrderAction.targetLogicPosition = LogicPosToAction;
-	newOrderAction.orderType = static_cast<uint8>(EOrderAction::Attack);
-
-	playerInfo->turnOrders->listAttack.Add(newOrderAction);
+	FStructOrderAction newOrderMove = FStructOrderAction();
+	newOrderMove.targetLogicPosition = LogicPosToMove;
+	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Attack);
+	newOrderMove.targetDirection = 1;
+	playerInfo->turnOrders->listAttack.Add(newOrderMove);
 
 	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
 	return true;
@@ -664,6 +701,7 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 
 bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 {
+
 	if (!playerInfo->turnOrders) {
 		return false;
 	}
@@ -673,10 +711,12 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 
 	bool sentOk = networkManager->SendNow(&turnsOrdersToSend, 0);
 
+
 	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
 	{
 		playerInfo->turnOrders = new FStructTurnOrders();
 		gameManager->structGameState->enumGameState = EClientGameState::WaitingServer;
+
 	}
 	
 	return sentOk;
