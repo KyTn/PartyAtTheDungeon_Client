@@ -27,20 +27,23 @@ public:
 		return this->_x == other._x && this->_y == other._y;
 	}
 
-	friend uint32 PD_MG_LogicPosition::GetTypeHash(const PD_MG_LogicPosition& logpos)
+	friend uint32 GetTypeHash(const PD_MG_LogicPosition& logpos)
 	{
 		return (logpos._x << 16) + logpos._y;
 	}
-
+	
+	
 	/*
 	static FVector* LogicToWorldPosition(PD_MG_LogicPosition pos) {
 	return new FVector(-1.0f * pos.GetX()*100.0f, pos.GetY() * 100.0f, 0.f);
 	}
-	*/
-	/*
+	
+
 	Se pone el bool isCharacter para determina si hay que subir su Z en 100 unidades, y que asi no caiga cuando empiece el mapa
 	en tiempo de ejecucion.
 	*/
+
+
 	const FVector ToWorldPosition(bool isCharacter) {
 		if (isCharacter)
 			return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 100.f);

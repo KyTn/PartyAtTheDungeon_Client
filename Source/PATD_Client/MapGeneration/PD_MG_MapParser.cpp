@@ -60,7 +60,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::StartParsingFromFile::  Error loading map! Failed to load file!. Path :%s "), *FilePath);
+		UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromFile::  Error loading map! Failed to load file!. Path :%s "), *FilePath);
 
 	}
 
@@ -83,7 +83,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_M
 	chorizo->ParseIntoArray(fileSplitted, TEXT("\n"), true);
 
 	if (fileSplitted.Num() == 0) {
-		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::StartParsingFromChorizo::  Error loading map! chorizo=%s "), chorizo);
+		UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromChorizo::  Error loading map! chorizo=%s "), chorizo);
 
 	}
 

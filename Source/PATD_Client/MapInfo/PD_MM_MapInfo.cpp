@@ -49,7 +49,7 @@ bool PD_MM_MapInfo::AddWall(PD_MG_LogicPosition logpos, AActor *wall)
 		s.Append(",");
 		s.AppendInt(logpos.GetY());
 		s.Append(")");
-		wall->SetActorLabel(*s);
+	//	wall->SetActorLabel(*s);
 		roomByLogPos[logpos].walls.Add(logpos, wall);
 		return true;
 	}
@@ -66,7 +66,7 @@ bool PD_MM_MapInfo::AddTile(PD_MG_LogicPosition logpos, AActor* tile)
 		s.Append(",");
 		s.AppendInt(logpos.GetY());
 		s.Append(")");
-		tile->SetActorLabel(*s);
+	//	tile->SetActorLabel(*s);
 		roomByLogPos[logpos].tiles.Add(logpos, tile);
 		return true;
 	}

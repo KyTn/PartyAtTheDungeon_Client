@@ -29,10 +29,10 @@ PD_NW_SocketManager::~PD_NW_SocketManager()
 
 
 
-/******************************
-*** FUNCIONES **
-/******************************/
+/*
+ FUNCIONES 
 //
+*/
 void PD_NW_SocketManager::Init(APD_NW_TimerActor* InmyTimerActor, FString ip, int port)
 {
 	UE_LOG(LogTemp, Warning, TEXT("INICIANDO SOCKET MANAGER! "));
@@ -214,9 +214,9 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 
 
 
-/******************************
-*** FUNCIONES GET Y SET / APOYO **
-/******************************/
+/*
+ FUNCIONES GET Y SET / APOYO 
+*/
 void PD_NW_SocketManager::SetIsServer(bool InIsServer)
 {
 	isServer = InIsServer;

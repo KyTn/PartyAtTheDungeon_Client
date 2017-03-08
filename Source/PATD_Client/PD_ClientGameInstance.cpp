@@ -504,7 +504,7 @@ void UPD_ClientGameInstance::GoToLobby()
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GameConfigurationDone"));
 	networkManager->SendNow(&respuesta, 0);
 
-	/*  */
+	*/
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::GoToLobby()."));
 	FStructMatchConfigDone configDone = FStructMatchConfigDone();
 	configDone.from = 1;
