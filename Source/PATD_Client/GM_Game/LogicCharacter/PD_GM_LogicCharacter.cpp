@@ -5,6 +5,7 @@
 
 //Includes de uso 
 #include "Actors/Players/PD_CharacterController.h"
+#include "Actors/Enemies/PD_EnemyController.h"
 
 #include <math.h>       /* ceil */
 
@@ -73,7 +74,9 @@ bool PD_GM_LogicCharacter:: MoveAtUpdate(PD_MG_LogicPosition targetPosition)
 		controllerCharacter->MoveTo(realPosition.X, realPosition.Y);
 	}
 	else {
-		//Cast<APD_EnemyController> (controller)->MoveTo(realPosition.X, realPosition.Y);
+		FVector realPosition = mapMng->LogicToWorldPosition(targetPosition);
+		APD_EnemyController* controllerCharacter = Cast<APD_EnemyController>(controller);
+		controllerCharacter->MoveTo(realPosition.X, realPosition.Y);
 	}
 	
 	return true;

@@ -152,6 +152,7 @@ void PD_GM_GameManager::OnBeginState() {
 			PD_MG_LogicPosition logicPosition;
 			logicPosition.SetX(updateCharacter.currentCharacterPosition.positionX);
 			logicPosition.SetY(updateCharacter.currentCharacterPosition.positionY);
+			
 			if (logicCharacter) {
 				logicCharacter->MoveAtUpdate(logicPosition);
 			}
@@ -160,17 +161,24 @@ void PD_GM_GameManager::OnBeginState() {
 			}
 		}
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Enemigos"));
-		/*
+		
 		for (int iEnemies = 0; iEnemies < structGameState->update_turn.listEnemyCharacters.Num(); iEnemies++) {
+	
 			FStructUpdateCharacter updateCharacter = structGameState->update_turn.listEnemyCharacters[iEnemies];
+			UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: EnemyFor %d con id: %s"), iEnemies, *updateCharacter.ID_character);
 			PD_GM_LogicCharacter* logicCharacter = enemyManager->GetCharacterByID(updateCharacter.ID_character);
 			//Conversion de Struct a LogicPosition
 			PD_MG_LogicPosition logicPosition;
 			logicPosition.SetX(updateCharacter.currentCharacterPosition.positionX);
 			logicPosition.SetY(updateCharacter.currentCharacterPosition.positionY);
 
-			logicCharacter->MoveAtUpdate(logicPosition);
-		}*/
+			if (logicCharacter) {
+				logicCharacter->MoveAtUpdate(logicPosition);
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de enemigo con id %s"), *updateCharacter.ID_character);
+			}
+		}
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 

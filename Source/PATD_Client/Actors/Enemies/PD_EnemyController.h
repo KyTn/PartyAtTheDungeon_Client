@@ -11,6 +11,7 @@
 UCLASS()
 class PATD_CLIENT_API APD_EnemyController : public APD_GenericController
 {
+public:
 	GENERATED_BODY()
 	
 	virtual bool MoveTo(float x, float y) override;
