@@ -42,7 +42,7 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance, public PD_N
 
 
 public:
-
+	
 	PD_NW_NetworkManager* networkManager;
 	PD_MG_MapParser* mapParser;
 	AParserActor* parserActor;
@@ -158,6 +158,12 @@ public:
 	//Para saber el numero del jugador -> Caracter Visual a nivel de Interfaz
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetPlayerNumber();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void SaveCharacterLogicData();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void LoadCharacterLogicData();
 };
 
 

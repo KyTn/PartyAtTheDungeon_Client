@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PATD_Client.h"
+#include "PD_SaveCharacterData.h"
 #include "PD_ClientGameInstance.h"
 #include "NW_NetWorking/PD_NW_TimerActor.h"
 
@@ -781,5 +782,31 @@ uint8 UPD_ClientGameInstance::GetGameMngStatus()
 uint8 UPD_ClientGameInstance::GetPlayerNumber()
 {
 	return structClientState->numPlayer;
+}
+
+void UPD_ClientGameInstance::SaveCharacterLogicData() {
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+	//Set the save game instance location equal to the players current location
+	SaveGameInstance->basicStatsArray.Add(*playerInfo->logic_Character->GetBasicStats());
+	//SaveGameInstance->Character_ID = playerInfo->logic_Character->GetIDCharacter();
+	//Save game instance
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
+	//Log a message to show we have saved the game
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
+}
+
+void UPD_ClientGameInstance::LoadCharacterLogicData() {
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+	//Load the save game into our savegameinstance variable
+	SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
+	//Set the players position from the saved game file
+	FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
+	playerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
+	UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
+	//playerInfo->logic_Character->SetIDCharacter(SaveGameInstance->Character_ID);
+	//Log a message to show we have loaded the game
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
 }
 #pragma endregion
