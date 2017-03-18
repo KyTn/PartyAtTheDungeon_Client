@@ -28,16 +28,8 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 
 
 	int sizeAll = data->Num();
-	int v = 0;
 
 	while (sizeAll > 0) {
-		//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: socketIndex %d"), socketIndex);
-
-
-		//FStructData dataStruct = *(serializerManager->DeserializeDataTemplate<FStructData>(data)); // Esto tambien es una copia?? ver bien que devolver en cada punto, si puntero referencia o tipo directo!
-
-		//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: structType %d"), dataStruct.structType);
-
 		FString s = "[";
 		for (int i = 0; i < (*data).Num(); i++) {
 
@@ -55,23 +47,14 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 
 
 
-		uint32 size = 0;
-		uint8 type;
-
-		uint32 aux = (*data)[0] << 24;
-		uint32 aux2 = (*data)[1] << 16;
-		uint32 aux3 = (*data)[2] << 8;
-		uint32 aux4 = (*data)[3];
-
-		size = aux + aux2 + aux3 + aux4;
-		type = (*data)[4];
+		uint32 size = ((*data)[0] << 24) + ((*data)[1] << 16) + ((*data)[2] << 8) + ((*data)[3]);
+		uint8 type = (*data)[4];
 
 		TArray<uint8> dataaux = TArray<uint8>();
 
-
 		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Size SIN cabecera : %d"), size);
 		dataaux.Init(0, size);
-		for (uint32 i = 5; i < 5 + size; i++) {
+		for (uint32 i = 5; i < 5+size; i++) {
 
 			UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Limpiando cabecera ... [%d:%d]"), i, (*data)[i]);
 
@@ -96,55 +79,27 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 
 
 		FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataaux, UStructType(type)); //Otra copia?
-		//genericStruct->structType = type;
-		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: While vuelta %d  : type: %d : type2: %d"), v, type, genericStruct->structType);
+																										 //genericStruct->structType = type;
+		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: While: type: %d : type2: %d"), type, genericStruct->structType);
 
 		eventManager->GenerateEvent(genericStruct, socketIndex);
 
+
+
+
+
 		sizeAll -= (5 + size);
-		v++;
+
+
+		for (uint32 i = 0; i < 5 + size; i++) {
+			(*data).RemoveAt(0);
+		}
+
 	}
-	//Falta por hacer que se pueda enviar y recibir una lista (lo del compresor)
-
-
-
-	//serializerManager->DeserializeData(data,
-
-	/*
-	FStructGeneric* structEvent = serializerManager->DeserializeData(data);
-
-	eventManager->GenerateEvent(structEvent, socketIndex);
-	*/
-	/* Con compresor
-
-	bool serializeOk;
-	//No necesitamos pasar por el compresor aqui
-	UE_LOG(LogTemp, Warning, TEXT("Handle Paso1 "));
-
-	FStructGenericList* structList=serializerManager->DeserializeData(data, serializeOk);
-	UE_LOG(LogTemp, Warning, TEXT("Handle Paso2 "));
-
-	//Aqui ya podemos hacer delete del array de datos pues el serializer crea datos nuevos.
-	//delete data;
-	UE_LOG(LogTemp, Warning, TEXT("Handle Paso3 %d"), structList->list.Num());
-
-	for (int i = 0; i < structList->list.Num(); i++)
-	{
-	UE_LOG(LogTemp, Warning, TEXT("Handle Paso4 "));
-
-
-	FStructGeneric* structEvent = &(structList->list[i]); //Cogemos la referencia. El struct sigue alojado en el array
-	UE_LOG(LogTemp, Warning, TEXT("Handle Paso5 "));
-
-	eventManager->GenerateEvent(structEvent, socketIndex);//Generamos el evento con el puntero.
-
-	}*/
-	//una vez lanzados todos los eventos debemos borrar los datos creados (aqui se borran los structs que reciben en los eventos,
-	//por eso hay que copiarlos si se quieren conservar). 
-	//	delete structList;
-
 
 }
+
+
 //Cuando hay una nueva conexion creamos un nuevo elemento para el array de structs-array
 //Este se borrara al hacer el delete de la clase 
 
