@@ -26,16 +26,83 @@ PD_NW_NetworkManager::~PD_NW_NetworkManager()
 
 void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIndex) {
 
-	//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: socketIndex %d"), socketIndex);
 
-	FStructData dataStruct = *(serializerManager->DeserializeDataTemplate<FStructData>(data)); // Esto tambien es una copia?? ver bien que devolver en cada punto, si puntero referencia o tipo directo!
+	int sizeAll = data->Num();
+	int v = 0;
 
-	//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: structType %d"), dataStruct.structType);
+	while (sizeAll > 0) {
+		//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: socketIndex %d"), socketIndex);
 
-	FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataStruct.data, UStructType(dataStruct.structType)); //Otra copia?
 
-	eventManager->GenerateEvent(genericStruct, socketIndex);
+		//FStructData dataStruct = *(serializerManager->DeserializeDataTemplate<FStructData>(data)); // Esto tambien es una copia?? ver bien que devolver en cada punto, si puntero referencia o tipo directo!
 
+		//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: structType %d"), dataStruct.structType);
+
+		FString s = "[";
+		for (int i = 0; i < (*data).Num(); i++) {
+
+			s.AppendInt(i);
+			s.AppendChar(':');
+			s.AppendInt((*data)[i]);
+			s.AppendChar(',');
+		}
+		s.AppendChar(']');
+
+		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Recibiendo info: tamaño CON cabecera: %d --> %s"), (*data).Num(), *s);
+
+
+
+
+
+
+		uint32 size = 0;
+		uint8 type;
+
+		uint32 aux = (*data)[0] << 24;
+		uint32 aux2 = (*data)[1] << 16;
+		uint32 aux3 = (*data)[2] << 8;
+		uint32 aux4 = (*data)[3];
+
+		size = aux + aux2 + aux3 + aux4;
+		type = (*data)[4];
+
+		TArray<uint8> dataaux = TArray<uint8>();
+
+
+		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Size SIN cabecera : %d"), size);
+		dataaux.Init(0, size);
+		for (uint32 i = 5; i < 5 + size; i++) {
+
+			UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Limpiando cabecera ... [%d:%d]"), i, (*data)[i]);
+
+
+			dataaux.Add((*data)[i]);
+		}
+
+		s = "[";
+		for (int i = 0; i < dataaux.Num(); i++) {
+
+			s.AppendInt(i);
+			s.AppendChar(':');
+			s.AppendInt(dataaux[i]);
+			s.AppendChar(',');
+		}
+		s.AppendChar(']');
+
+		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Recibiendo info: tamaño SIN cabecera: %d --> %s"), dataaux.Num(), *s);
+
+
+
+
+		FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataaux, UStructType(type)); //Otra copia?
+		genericStruct->structType = type;
+		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: While vuelta %d  : type: %d : type2: %d"), v, type, genericStruct->structType);
+
+		eventManager->GenerateEvent(genericStruct, socketIndex);
+
+		sizeAll -= (5 + size);
+		v++;
+	}
 	//Falta por hacer que se pueda enviar y recibir una lista (lo del compresor)
 
 
@@ -110,20 +177,62 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 	//Falta por hacer que se pueda enviar y recibir una lista (lo del compresor)
 
 
-//	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d"), player, structGeneric->structType);
+	//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d"),player, structGeneric->structType);
 
 	TArray<uint8>* dataIn = serializerManager->SerializeData(structGeneric, UStructType(structGeneric->structType));
+
+	FString s = "[";
+	for (int i = 0; i < dataIn->Num(); i++) {
+
+		s.AppendInt(i);
+		s.AppendChar(':');
+		s.AppendInt((*dataIn)[i]);
+		s.AppendChar(',');
+	}
+	s.AppendChar(']');
+
+	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d - tamaño precabecera: %d --> %s"), player, structGeneric->structType, dataIn->Num(), *s);
+
+
+	// size + dataIn 
+
+
 	if (dataIn) {
+
+		uint32 size = dataIn->Num();
+		uint8 mask = 255;
+		uint8 aux = size >> 24;
+		uint8 aux2 = (size >> 16) & mask;
+		uint8 aux3 = (size >> 8) & mask;
+		uint8 aux4 = size & mask;
+		dataIn->Insert(aux, 0);
+		dataIn->Insert(aux2, 1);
+		dataIn->Insert(aux3, 2);
+		dataIn->Insert(aux4, 3);
+		dataIn->Insert(structGeneric->structType, 4);
+
+		s = "[";
+		for (int i = 0; i < dataIn->Num(); i++) {
+
+			s.AppendInt(i);
+			s.AppendChar(':');
+			s.AppendInt((*dataIn)[i]);
+			s.AppendChar(',');
+		}
+		s.AppendChar(']');
+
+		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d - tamaño POSTcabecera: %d --> %s"), player, structGeneric->structType, dataIn->Num(), *s);
 
 
 		//Construyendo el dataStruct
-		FStructData dataStruct;
-		dataStruct.data = *dataIn; //Hace una copia o simplemente se asigna??
-		dataStruct.structType = structGeneric->structType;
+		//FStructData dataStruct;
+		//dataStruct.data = *dataIn; //Hace una copia o simplemente se asigna??
+		//dataStruct.structType = structGeneric->structType;
 
-		TArray<uint8>* dataSend = serializerManager->SerializeDataTemplate<FStructData>(&dataStruct);
+		//TArray<uint8>* dataSend = serializerManager->SerializeDataTemplate<FStructData>(&dataStruct);
 		//Enviar dataStruct, en realidad deberiamos meter este dataStruct en el struct de lista y enviar ese.
-		return socketManager->SendInfoTo(player, dataSend);
+
+		return socketManager->SendInfoTo(player, dataIn);
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: data recibida del serializador null"));
@@ -133,7 +242,7 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 
 }
 
-/*
+/*/
 //Funciones publicas para enviar
 bool PD_NW_NetworkManager::SendNow(FStructGeneric* st,int player) {
 //Para hacer broadcast con -1?
@@ -143,7 +252,7 @@ socketManager->SendInfoTo(player, data);
 
 
 //Con compresor
-AddToSendList(st, player);
+/*AddToSendList(st, player);
 SendNow(player);
 
 */

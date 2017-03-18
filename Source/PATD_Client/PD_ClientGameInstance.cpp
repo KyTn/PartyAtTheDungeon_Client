@@ -216,8 +216,14 @@ void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, i
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_Welcome"));
 
 	if (inEventType == UStructType::FStructOrderMenu) {
+		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_Welcome:esta entrando en el oren menu"));
+
 		FStructOrderMenu* menuOrder = (FStructOrderMenu*)inDataStruct;
+		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_Welcome: Menuorder ordertype = %d"), menuOrder->orderType);
+
 		if (MenuOrderType(menuOrder->orderType) == MenuOrderType::Welcome) {
+			UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_Welcome: si que lo esta recibiendo"));
+
 			structClientState->clientMaster = menuOrder->isClientMaster;
 			structClientState->numPlayer = menuOrder->playerIndex;
 			this->UpdateState();
