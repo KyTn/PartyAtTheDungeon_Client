@@ -75,8 +75,9 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 
 			UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Limpiando cabecera ... [%d:%d]"), i, (*data)[i]);
 
-
-			dataaux.Add((*data)[i]);
+			dataaux[i - 5] = (*data)[i];
+			//dataaux.Emplace((*data)[i], (int)i - 5);
+			//dataaux.Add((*data)[i]);
 		}
 
 		s = "[";
@@ -95,7 +96,7 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 
 
 		FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataaux, UStructType(type)); //Otra copia?
-		genericStruct->structType = type;
+		//genericStruct->structType = type;
 		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: While vuelta %d  : type: %d : type2: %d"), v, type, genericStruct->structType);
 
 		eventManager->GenerateEvent(genericStruct, socketIndex);
