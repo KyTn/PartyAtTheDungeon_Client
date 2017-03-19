@@ -119,6 +119,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL);
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void GetCharacterBasicStats(int &nPOD, int &nAGI, int &nDES, int &nCON, int &nPER, int &nMAL);
 	
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG);
@@ -164,6 +167,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void LoadCharacterLogicData();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void DeleteCharacterLogicData(FString slotName, int slotNumber);
 };
 
 

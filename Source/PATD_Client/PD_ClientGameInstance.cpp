@@ -549,6 +549,16 @@ void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, in
 	playerInfo->logic_Character->SetTotalStats();
 }
 
+void UPD_ClientGameInstance::GetCharacterBasicStats(int &nPOD, int &nAGI, int &nDES, int &nCON, int &nPER, int &nMAL)
+{
+	nPOD = playerInfo->logic_Character->GetBasicStats()->POD;
+	nAGI = playerInfo->logic_Character->GetBasicStats()->AGI;
+	nDES = playerInfo->logic_Character->GetBasicStats()->DES;
+	nCON = playerInfo->logic_Character->GetBasicStats()->CON;
+	nPER = playerInfo->logic_Character->GetBasicStats()->PER;
+	nMAL = playerInfo->logic_Character->GetBasicStats()->MAL;
+}
+
 void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG)
 {
 	nAP = playerInfo->logic_Character->GetTotalStats()->APTotal;
@@ -557,9 +567,7 @@ void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA
 	nHP = playerInfo->logic_Character->GetTotalStats()->HPTotal;
 	nRAN = playerInfo->logic_Character->GetTotalStats()->RangeTotal;
 	nDMG = playerInfo->logic_Character->GetTotalStats()->DMGTotal;
-
 }
-
 
 bool UPD_ClientGameInstance::SendCharacterToServer()
 {
@@ -623,7 +631,6 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 		}*/
 		
 		playerInfo->turnOrders->listMove.RemoveAt(0);
-
 	}
 
 	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
@@ -685,7 +692,6 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 		}*/
 
 		playerInfo->turnOrders->listAttack.RemoveAt(0);
-
 	}
 
 	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
@@ -704,11 +710,8 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 	return true;
 }
 
-
-
 bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 {
-
 	if (!playerInfo->turnOrders) {
 		return false;
 	}
@@ -718,12 +721,10 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 
 	bool sentOk = networkManager->SendNow(&turnsOrdersToSend, 0);
 
-
 	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
 	{
 		playerInfo->turnOrders = new FStructTurnOrders();
 		gameManager->structGameState->enumGameState = EClientGameState::WaitingServer;
-
 	}
 	
 	return sentOk;
@@ -738,7 +739,6 @@ uint8 UPD_ClientGameInstance::GetTypeOfAction()
 {
 	return playerInfo->typeOfAction;
 }
-
 
 uint8 UPD_ClientGameInstance::GetGameMngStatus()
 {
@@ -793,26 +793,34 @@ uint8 UPD_ClientGameInstance::GetPlayerNumber()
 void UPD_ClientGameInstance::SaveCharacterLogicData() {
 	//Create an instance of our savegame class
 	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-	//Set the save game instance location equal to the players current location
 	SaveGameInstance->basicStatsArray.Add(*playerInfo->logic_Character->GetBasicStats());
-	//SaveGameInstance->Character_ID = playerInfo->logic_Character->GetIDCharacter();
-	//Save game instance
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
-	//Log a message to show we have saved the game
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
 }
 
 void UPD_ClientGameInstance::LoadCharacterLogicData() {
 	//Create an instance of our savegame class
 	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-	//Load the save game into our savegameinstance variable
-	SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
-	//Set the players position from the saved game file
-	FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
-	playerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
-	UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
-	//playerInfo->logic_Character->SetIDCharacter(SaveGameInstance->Character_ID);
-	//Log a message to show we have loaded the game
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
+
+	if (UGameplayStatics::DoesSaveGameExist("MySlot", 0)) {
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
+		FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
+		playerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
+		UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
+	}
+
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+}
+
+void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slotNumber) {
+	if (UGameplayStatics::DoesSaveGameExist(slotName, slotNumber)) {
+		UGameplayStatics::DeleteGameInSlot(slotName, slotNumber);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Slot Deleted."));
+	}
+
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
 }
 #pragma endregion
