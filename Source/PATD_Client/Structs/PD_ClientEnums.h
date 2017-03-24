@@ -21,6 +21,10 @@ public:
 //enum class EServerGameState { Instantiate_Map, Start_Match, WaitingPlayerOrders, ExecutingPlayersLogic, ExecutingPlayersVisualization, ExecutingEnemiesLogic, ExecutingEnemiesVisualization, EndOfTurn };
 enum class EClientGameState { Instantiate_Map = 0, Start_Match = 1, GenerateOrders = 2, SendOrdersToServer = 3, WaitingServer = 4, UpdateInfo = 5, EndOfTurn = 6};
 
+UENUM(BlueprintType)
+enum class EClientGamePhase { ConsumablePhase = 0, MovementPhase = 1, InteractionPhase = 2, ActionPhase = 3 };
+
+
 //enum class EServerState { StartApp, WaitingMasterClient, WaitingGameConfiguration, Lobby_Tabern, Launch_Match, GameInProcess, Podium, OnExit };
 
 enum class EServerState { WaitingClientMaster, WaitingGameConfiguration, WaitingReady, GameInProcess };

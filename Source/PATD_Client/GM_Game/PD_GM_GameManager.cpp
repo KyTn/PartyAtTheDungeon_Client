@@ -44,6 +44,13 @@ void PD_GM_GameManager::InitState() {
 	ChangeState(EClientGameState::Instantiate_Map);
 }
 
+// Inicializa la maquina de estados.
+void PD_GM_GameManager::InitPhase() {
+	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
+	structGamePhase = new StructGamePhase();
+	ChangePhase(EClientGamePhase::ConsumablePhase);
+}
+
 #pragma region GM STATE MACHINE 
 
 // Esta funcion cambia el estado actual al pasado por parametros y llama al OnBeginState del mismo.
@@ -63,6 +70,7 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 	}
 	else if(structGameState->enumGameState == EClientGameState::Start_Match) {
 		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
+			InitPhase(); //Inicializa la maquina de estados de fase de juego (primero consumablePhase)
 			ChangeState(EClientGameState::GenerateOrders);
 		 }
 	}	 
@@ -103,16 +111,16 @@ void PD_GM_GameManager::UpdateState() {
 		
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
-
+		ChangeState(EClientGameState::WaitingServer);
 	}
 	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
 
 	}
 	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
-
+		ChangeState(EClientGameState::EndOfTurn);
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
-
+		ChangeState(EClientGameState::GenerateOrders);
 	}
 	else { //Caso indeterminado
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdateState: WARNING: estado sin update"));
@@ -130,12 +138,10 @@ void PD_GM_GameManager::OnBeginState() {
 		
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
-
-		ChangeState(EClientGameState::SendOrdersToServer);
-
+		//ChangeState(EClientGameState::SendOrdersToServer); //Cambiar a cuando se le da a aceptar todas las ordenes.
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
-		ChangeState(EClientGameState::WaitingServer);
+		// 
 	}
 	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
 		
@@ -188,8 +194,73 @@ void PD_GM_GameManager::OnBeginState() {
 		//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: WARNING: estado sin inicializacion"));
 	}
 
+	UpdateState();
 }
 
 #pragma endregion
 
+#pragma region GM PHASE MACHINE 
 
+// Esta funcion cambia el estado actual al pasado por parametros y llama al OnBeginState del mismo.
+void PD_GM_GameManager::ChangePhase(EClientGamePhase newPhase) 
+{
+	structGamePhase->enumGamePhase = newPhase;
+	OnBeginPhase();
+}
+
+void PD_GM_GameManager::UpdatePhase() 
+{
+	if (structGamePhase->enumGamePhase == EClientGamePhase::ConsumablePhase) 
+	{
+		ChangePhase(EClientGamePhase::MovementPhase);
+	}
+	else if (structGamePhase->enumGamePhase == EClientGamePhase::MovementPhase) 
+	{
+		ChangePhase(EClientGamePhase::InteractionPhase);
+	}
+	else if (structGamePhase->enumGamePhase == EClientGamePhase::InteractionPhase)
+	{
+		ChangePhase(EClientGamePhase::ActionPhase);
+	}
+	else if (structGamePhase->enumGamePhase == EClientGamePhase::ActionPhase)
+	{
+		/*
+		Cuando actualizas el estado de Accion es para enviar todo al servidor.
+		*/
+		ChangeState(EClientGameState::SendOrdersToServer); 
+	}
+	else //Caso indeterminado
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdatePhase: WARNING: estado sin inicializacion"));
+	}
+
+}
+
+void PD_GM_GameManager::OnBeginPhase() 
+{
+	if (structGamePhase->enumGamePhase == EClientGamePhase::ConsumablePhase)
+	{
+		//Poner un Consumable Widget
+	}
+	else if (structGamePhase->enumGamePhase == EClientGamePhase::MovementPhase)
+	{
+		//Poner un Movement Widget
+
+	}
+	else if (structGamePhase->enumGamePhase == EClientGamePhase::InteractionPhase)
+	{
+		//Poner un Interaction Widget
+
+	}
+	else if (structGamePhase->enumGamePhase == EClientGamePhase::ActionPhase)
+	{
+		//Poner un Action Widget
+
+	}
+	else //Caso indeterminado
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdatePhase: WARNING: estado sin inicializacion"));
+	}
+
+}
+#pragma endregion
