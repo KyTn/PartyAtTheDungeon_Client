@@ -65,12 +65,17 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
 		// Si se recibe del servidor un Start_Match, ir a ese estado. 
 		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
+			UE_LOG(LogTemp, Log, TEXT(" PD_GM_GameManager::HandleEvent - Instiante"));
+
+			InitPhase(); //Inicializa la maquina de estados de fase de juego (primero consumablePhase)
 			ChangeState(EClientGameState::Start_Match);
 		}
 	}
 	else if(structGameState->enumGameState == EClientGameState::Start_Match) {
+		UE_LOG(LogTemp, Log, TEXT(" PD_GM_GameManager::HandleEvent"));
+
 		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
-			InitPhase(); //Inicializa la maquina de estados de fase de juego (primero consumablePhase)
+		    
 			ChangeState(EClientGameState::GenerateOrders);
 		 }
 	}	 
@@ -102,9 +107,10 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 void PD_GM_GameManager::UpdateState() {
 
 	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
-
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
+		
 
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
@@ -120,7 +126,7 @@ void PD_GM_GameManager::UpdateState() {
 		ChangeState(EClientGameState::EndOfTurn);
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
-		ChangeState(EClientGameState::GenerateOrders);
+		
 	}
 	else { //Caso indeterminado
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdateState: WARNING: estado sin update"));
