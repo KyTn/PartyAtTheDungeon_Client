@@ -102,11 +102,13 @@ void PD_GM_MapManager::InstantiateStaticMap()
 		/**/
 		switch (StaticMapRef->GetXYMap()[StaticMapRef->GetLogicPositions()[i]]) {
 		case 'w':
+		case 'W':
 			MapInfo->AddWall(StaticMapRef->GetLogicPositions()[i], instantiator->InstantiateWall(StaticMapRef->GetLogicPositions()[i]));
-
+			
 			break;
 
 		case '.':
+		case ',':
 		case 'd':
 		case 's':
 			MapInfo->AddTile(StaticMapRef->GetLogicPositions()[i], instantiator->InstantiateTile(StaticMapRef->GetLogicPositions()[i]));
