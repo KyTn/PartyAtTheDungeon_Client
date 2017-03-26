@@ -23,8 +23,10 @@ PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersM
 	mapManager =  inMapManager;
 	mapManager->_GAMEMANAGER = this;
 	enemyManager = new PD_GM_EnemyManager();
-	networkManager->RegisterObserver(this);
+	this->networkManager = networkManager;
+	this->networkManager->RegisterObserver(this);
 	InitState();
+	InitPhase(); //Inicializa la maquina de estados de fase de juego (primero consumablePhase)
 }
 
 PD_GM_GameManager::~PD_GM_GameManager()
@@ -67,7 +69,7 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
 			UE_LOG(LogTemp, Log, TEXT(" PD_GM_GameManager::HandleEvent - Instiante"));
 
-			InitPhase(); //Inicializa la maquina de estados de fase de juego (primero consumablePhase)
+		
 			ChangeState(EClientGameState::Start_Match);
 		}
 	}
