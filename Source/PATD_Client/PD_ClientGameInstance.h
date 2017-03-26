@@ -19,7 +19,7 @@ class AMapInstantiatorActor;
 class PD_GM_MapManager;
 class PD_GM_GameManager;
 class PD_PlayersManager; 
-
+class APD_E_Character;
 #include "LevelsNameDictionary.h"
 
 //Include de unreal
@@ -174,6 +174,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void DeleteCharacterLogicData(FString slotName, int slotNumber);
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		APD_E_Character* GetCharacterPlayerAtPosition(FVector position, bool& existe);
 };
 
 

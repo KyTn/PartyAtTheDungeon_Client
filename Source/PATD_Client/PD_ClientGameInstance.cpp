@@ -24,6 +24,7 @@
 //Includes de prueba
 #include "MapInfo/PD_MM_MapInfo.h"
 
+#include "Actors/PD_E_Character.h"
 
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
 	return true; //de momento recibe todos, siempre es cierto.
@@ -827,5 +828,17 @@ void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slot
 
 	else
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
+}
+
+APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector position, bool& existe) {
+	PD_MG_LogicPosition lp = mapManager->WorldToLogicPosition(position);
+	for (int i = 0; i < playersManager->GetDataPlayers().Num(); i++) {
+		if (lp == playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition()) {
+			existe = true;
+			return playersManager->GetDataPlayers()[i]->logic_Character->GetCharacterBP();
+		}
+	}	
+	existe = false;
+	return nullptr;
 }
 #pragma endregion
