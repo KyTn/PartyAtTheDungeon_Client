@@ -10,7 +10,7 @@
 #include "GM_Game/PD_GM_GameManager.h"
 #include "PD_PlayersManager.h"
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
-#include "Actors/Enemies/PD_E_EnemyCharacter.h"
+#include "Actors/PD_E_Character.h"
 //include of forward declaration
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "Actors/PD_GenericController.h"

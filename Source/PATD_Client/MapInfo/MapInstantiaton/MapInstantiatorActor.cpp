@@ -8,8 +8,9 @@
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "MapGeneration/PD_MG_MapParser.h"
 #include "MapGeneration/Dynamic/PD_MG_DynamicMap.h"
-#include "Actors/Enemies/PD_E_EnemyCharacter.h"
-#include "Actors/PD_E_ElementActor.h"
+#include "Actors/PD_E_Character.h"
+#include "ElementActors/PD_E_TileActor.h"
+#include "ElementActors/PD_E_WallActor.h"
 
 #pragma region BUILT IN FUNTIONS 
 
@@ -62,12 +63,12 @@ void AMapInstantiatorActor::Tick(float DeltaTime)
 
 AActor* AMapInstantiatorActor::InstantiateTile(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(TileClass, logpos.ToWorldPosition() , FRotator(0.0f, 0.f, 0.f));
+	return GetWorld()->SpawnActor<APD_E_TileActor>(TileClass, logpos.ToWorldPosition() , FRotator(0.0f, 0.f, 0.f));
 }
 
 AActor* AMapInstantiatorActor::InstantiateWall(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(WallClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+	return GetWorld()->SpawnActor<APD_E_WallActor>(WallClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
 APD_E_Character* AMapInstantiatorActor::InstantiateArcher(PD_MG_LogicPosition logpos) {
