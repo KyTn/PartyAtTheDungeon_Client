@@ -26,6 +26,8 @@
 
 #include "Actors/PD_E_Character.h"
 
+#include "Actors/Accesors/MapManagerAccesor.h"
+
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
 	return true; //de momento recibe todos, siempre es cierto.
 }
@@ -449,10 +451,12 @@ void UPD_ClientGameInstance::OnLoadedLevel() {
 
 		// le pasamos al mapManager un instanciador
 		AMapInstantiatorActor* InstantiatorActor = (AMapInstantiatorActor*)GetWorld()->SpawnActor(AMapInstantiatorActor::StaticClass());
+		MapManagerAccesor = (AMapManagerAccesor*)GetWorld()->SpawnActor(AMapManagerAccesor::StaticClass());
 		mapManager->instantiator = InstantiatorActor;
+		MapManagerAccesor->mapManager = mapManager;
 
 		//Aqui cedemos el control al GameManager.
-		gameManager = new PD_GM_GameManager(mapManager, playersManager, networkManager);
+		gameManager = new PD_GM_GameManager(this, mapManager, playersManager, networkManager);
 		
 
 	}
@@ -828,6 +832,20 @@ void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slot
 
 	else
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
+}
+
+
+AMapManagerAccesor* UPD_ClientGameInstance::GetMapManagerAccessor(bool& existe) {
+	
+	if (MapManagerAccesor != nullptr) {
+		existe = true;
+		return MapManagerAccesor;
+	}
+	else {
+		existe = false;
+		return nullptr;
+	}
+
 }
 
 APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector position, bool& existe) {

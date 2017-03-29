@@ -37,6 +37,7 @@ public:
 	}
 
 	PD_GM_LogicCharacter* GetCharacterByID(FString id);
+	//PD_GM_LogicCharacter* GetMyCharacter();
 
 };
 

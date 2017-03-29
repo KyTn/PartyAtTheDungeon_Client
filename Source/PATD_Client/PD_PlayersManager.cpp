@@ -111,3 +111,11 @@ PD_GM_LogicCharacter* PD_PlayersManager::GetCharacterByID(FString id) {
 	UE_LOG(LogTemp, Warning, TEXT("PlayerManager:: GetCharacterByID ERROR: No se ha encontrado character con id %s"),*id);
 	return nullptr;
 }
+
+
+
+/*
+PD_GM_LogicCharacter* PD_PlayersManager::GetMyCharacter() {
+	return GetCharacterByID(0);
+}
+*/

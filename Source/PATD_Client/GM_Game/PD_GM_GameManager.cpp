@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PATD_Client.h"
+
+#include "PD_ClientGameInstance.h"
+
 #include "PD_GM_GameManager.h"
 #include "PD_GM_MapManager.h"
 #include "PD_GM_EnemyManager.h"
@@ -15,10 +18,11 @@
 #include "Actors/PD_GenericController.h"
 #include "Actors/Players/PD_CharacterController.h"
 
-PD_GM_GameManager::PD_GM_GameManager(PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager)
+PD_GM_GameManager::PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager)
 {
 	UE_LOG(LogTemp, Log, TEXT("Constructor Game Manager"));
 
+	_GAMEINSTANCE = gameInstance;
 	playersManager = inPlayerManager;
 	mapManager =  inMapManager;
 	mapManager->_GAMEMANAGER = this;

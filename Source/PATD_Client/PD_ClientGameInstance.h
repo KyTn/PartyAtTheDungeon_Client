@@ -20,6 +20,8 @@ class PD_GM_MapManager;
 class PD_GM_GameManager;
 class PD_PlayersManager; 
 class APD_E_Character;
+
+class AMapManagerAccesor;
 #include "LevelsNameDictionary.h"
 
 //Include de unreal
@@ -42,18 +44,29 @@ class PATD_CLIENT_API UPD_ClientGameInstance : public UGameInstance, public PD_N
 
 
 public:
-	
+
+	//Managers
 	PD_NW_NetworkManager* networkManager;
-	PD_MG_MapParser* mapParser;
-	AParserActor* parserActor;
+	PD_GM_MapManager* mapManager;
+	PD_GM_GameManager* gameManager;
+	PD_PlayersManager* playersManager;
+
+
+
+#pragma region ACCESSORS
+
+	AMapManagerAccesor * MapManagerAccesor;
+
+
+#pragma endregion
+
+
 
 	//Para tener los nombres de los niveles - diferenciar ejecución en editor o en ejecutable
 	LevelsNameDictionary levelsNameDictionary;
 
-	//Managers
-	PD_GM_MapManager* mapManager;
-	PD_GM_GameManager* gameManager;
-	PD_PlayersManager* playersManager;
+	PD_MG_MapParser* mapParser;
+	AParserActor* parserActor;
 
 	//Overwrites
 
@@ -61,16 +74,18 @@ public:
 	const int32 defaultServerPort = 8890;
 	FString serverAddressToConnect = "127.0.0.1"; //Por defecto
 
-	//Funcion que llama al inicializar 
-	//Existe ya UWorld aqui, y GetTimerManager()??
+	
+#pragma region State Machine GI
 
 	//Overwrites - GameInstance
 	virtual void Init();
 	virtual void Shutdown();
 	//Overwrites - iEventObserver
 	virtual	bool SuscribeToEvents(int inPlayer, UStructType inType);
-	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType); //Aqui controlamos la mayoria de entradas.
+	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType); //Aqui controlamos la mayoria de entradas
 																								   //Carga de mapa
+
+#pragma region State Machine - Handlers
 	void HandleEvent_Welcome(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 	void HandleEvent_ConfigMatch(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 	void HandleEvent_ConfigMatchDone(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
@@ -79,21 +94,8 @@ public:
 	void HandleEvent_AllCharactersInfoIncoming(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 	void HandleEvent_StartMatch_GoGameMnager(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 
-	
-	
-	void LoadMap(FString mapName);
-	//Callback cuando el mapa este cargado (Lo llama el estado GameStateInitializer en su beginPlay)
-	void OnLoadedLevel();
+#pragma endregion
 
-	//=========
-	//Funciones de gestion del estado (maquina de estados)
-	//=========
-
-	//Struct con el estado del client
-	StructClientState* structClientState;
-
-	//Struct con la info del player - Internet y más adelante de su personaje
-	StructPlayer* playerInfo;
 	//Funciones de configuracion de la maquina
 	//Transiciones
 	void UpdateState();
@@ -104,6 +106,19 @@ public:
 	void ChangeState(EClientState newState);
 	//void InitState();
 
+#pragma endregion
+	
+	void LoadMap(FString mapName);
+	//Callback cuando el mapa este cargado (Lo llama el estado GameStateInitializer en su beginPlay)
+	void OnLoadedLevel();
+
+	//Struct con el estado del client
+	StructClientState* structClientState;
+
+	//Struct con la info del player - Internet y más adelante de su personaje
+	StructPlayer* playerInfo;
+	
+#pragma region Blueprint Functions 
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 	void SetServerAddressToConnect(FString ip);
@@ -177,6 +192,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		APD_E_Character* GetCharacterPlayerAtPosition(FVector position, bool& existe);
+
+	UFUNCTION(BlueprintCallable, Category = "GetAccessors")
+		AMapManagerAccesor* GetMapManagerAccessor(bool& existe);
+
+#pragma endregion
+
+
 };
 
 
