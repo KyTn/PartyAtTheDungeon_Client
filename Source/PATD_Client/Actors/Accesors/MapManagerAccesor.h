@@ -38,4 +38,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		bool IsMyCharacterPlayerAtPosition(FVector position);
 	
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		int GetIdOfCharacterAt(FVector position);
 };

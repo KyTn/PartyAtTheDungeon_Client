@@ -114,8 +114,8 @@ PD_GM_LogicCharacter* PD_PlayersManager::GetCharacterByID(FString id) {
 
 
 
-/*
+
 PD_GM_LogicCharacter* PD_PlayersManager::GetMyCharacter() {
-	return GetCharacterByID(0);
+	return MyPlayerInfo->logic_Character;
 }
-*/
+

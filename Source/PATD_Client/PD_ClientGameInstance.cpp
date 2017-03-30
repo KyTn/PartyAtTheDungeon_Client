@@ -51,15 +51,14 @@ void UPD_ClientGameInstance::Init()
 	ChangeState(EClientState::StartApp);
 	//structClientState->enumClientState = EClientState::NoConnection;
 
-	playerInfo = new StructPlayer(); //El constructor del StructPlayer inicializa sus variables
+	playersManager->MyPlayerInfo = new StructPlayer(); //El constructor del StructPlayer inicializa sus variables
 									 /*
 									 Construimos el logicCharacter, para luego poder rellenarlo. Lo configuramos como Jugador.
 									 */
-	playerInfo->logic_Character = new PD_GM_LogicCharacter();
-	playerInfo->turnOrders = new FStructTurnOrders();
-
-	playerInfo->logic_Character->SetIsPlayer(true);
-	playerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
+	playersManager->MyPlayerInfo->logic_Character = new PD_GM_LogicCharacter();
+	playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
+	playersManager->MyPlayerInfo->logic_Character->SetIsPlayer(true);
+	playersManager->MyPlayerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
 
 	InitializeNetworking();
 
@@ -529,14 +528,14 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 {
 	// Comprobamos APTotal para comprobar si el usuario ha metido valores o no. Sera distinto de 0 si hubiera un personaje seleccionado.
 	//Hasta que vea otra forma de ver si el Jugador ha elegido personaje o no
-	if (playerInfo->isSetPlayerCharacter) { 
+	if (playersManager->MyPlayerInfo->isSetPlayerCharacter) {
 
 		FStructOrderMenu respuesta = FStructOrderMenu();
 		respuesta.orderType = respuesta.orderType = static_cast<uint8>(MenuOrderType::ClientReady);
 		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
 		networkManager->SendNow(&respuesta, 0);
-		playerInfo->readyMenu = !playerInfo->readyMenu;
-		return playerInfo->readyMenu;
+		playersManager->MyPlayerInfo->readyMenu = !playersManager->MyPlayerInfo->readyMenu;
+		return playersManager->MyPlayerInfo->readyMenu;
 	}
 	else 
 	{
@@ -548,48 +547,48 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 
 void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL) 
 {
-	playerInfo->logic_Character->SetBasicStats(nPOD, nAGI, nDES, nCON, nPER, nMAL);
-	playerInfo->logic_Character->SetInitBaseStats(100, 20,5); //HP - DMG
-	playerInfo->logic_Character->SetWapon();
-	playerInfo->logic_Character->SetTotalStats();
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(nPOD, nAGI, nDES, nCON, nPER, nMAL);
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20,5); //HP - DMG
+	playersManager->MyPlayerInfo->logic_Character->SetWapon();
+	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
 
 void UPD_ClientGameInstance::GetCharacterBasicStats(int &nPOD, int &nAGI, int &nDES, int &nCON, int &nPER, int &nMAL)
 {
-	nPOD = playerInfo->logic_Character->GetBasicStats()->POD;
-	nAGI = playerInfo->logic_Character->GetBasicStats()->AGI;
-	nDES = playerInfo->logic_Character->GetBasicStats()->DES;
-	nCON = playerInfo->logic_Character->GetBasicStats()->CON;
-	nPER = playerInfo->logic_Character->GetBasicStats()->PER;
-	nMAL = playerInfo->logic_Character->GetBasicStats()->MAL;
+	nPOD = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->POD;
+	nAGI = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->AGI;
+	nDES = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->DES;
+	nCON = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->CON;
+	nPER = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->PER;
+	nMAL = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->MAL;
 }
 
 void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG)
 {
-	nAP = playerInfo->logic_Character->GetTotalStats()->APTotal;
-	nCH = playerInfo->logic_Character->GetTotalStats()->CH;
-	nSA = playerInfo->logic_Character->GetTotalStats()->SA;
-	nHP = playerInfo->logic_Character->GetTotalStats()->HPTotal;
-	nRAN = playerInfo->logic_Character->GetTotalStats()->RangeTotal;
-	nDMG = playerInfo->logic_Character->GetTotalStats()->DMGTotal;
+	nAP =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
+	nCH =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->CH;
+	nSA =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->SA;
+	nHP =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal;
+	nRAN = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
+	nDMG = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->DMGTotal;
 }
 
 bool UPD_ClientGameInstance::SendCharacterToServer()
 {
-	if (!playerInfo->logic_Character) {
+	if (!playersManager->MyPlayerInfo->logic_Character) {
 		return false;
 	}
 	FStructCharacter structCharacterToSend =  FStructCharacter();
-	structCharacterToSend.totalStats = *(playerInfo->logic_Character->GetTotalStats());
-	structCharacterToSend.initBaseStats = *(playerInfo->logic_Character->GetInitBaseStats());
-	structCharacterToSend.skills = *(playerInfo->logic_Character->GetSkills());
-	structCharacterToSend.skin = *(playerInfo->logic_Character->GetSkin());
-	structCharacterToSend.weapon = *(playerInfo->logic_Character->GetWeapon());
+	structCharacterToSend.totalStats =		*(playersManager->MyPlayerInfo->logic_Character->GetTotalStats());
+	structCharacterToSend.initBaseStats =	*(playersManager->MyPlayerInfo->logic_Character->GetInitBaseStats());
+	structCharacterToSend.skills =			*(playersManager->MyPlayerInfo->logic_Character->GetSkills());
+	structCharacterToSend.skin =			*(playersManager->MyPlayerInfo->logic_Character->GetSkin());
+	structCharacterToSend.weapon =			*(playersManager->MyPlayerInfo->logic_Character->GetWeapon());
 
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
 	networkManager->SendNow(&structCharacterToSend, 0);
 	
-	playerInfo->isSetPlayerCharacter = true;
+	playersManager->MyPlayerInfo->isSetPlayerCharacter = true;
 	return true;
 }
 
@@ -603,7 +602,7 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
 
-	if (playerInfo->turnOrders->listMove.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
+	if (playersManager->MyPlayerInfo->turnOrders->listMove.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
 	{
 		/*
 		1. Conseguir la LogicPosition de la casilla
@@ -612,8 +611,8 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 		4. borrar el structOrdern de la lista
 		*/
 
-		PD_MG_LogicPosition tile_pos = PD_MG_LogicPosition(playerInfo->turnOrders->listMove[0].targetLogicPosition.positionX,
-			playerInfo->turnOrders->listMove[0].targetLogicPosition.positionY);
+		PD_MG_LogicPosition tile_pos = PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->listMove[0].targetLogicPosition.positionX,
+			playersManager->MyPlayerInfo->turnOrders->listMove[0].targetLogicPosition.positionY);
 
 		PD_MM_Room* roomSelected = nullptr;
 		
@@ -635,7 +634,7 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 		
 		}*/
 		
-		playerInfo->turnOrders->listMove.RemoveAt(0);
+		playersManager->MyPlayerInfo->turnOrders->listMove.RemoveAt(0);
 	}
 
 	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
@@ -648,7 +647,7 @@ bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
 	newOrderMove.targetLogicPosition = LogicPosToMove;
 	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Move);
 	newOrderMove.targetDirection = 1;
-	playerInfo->turnOrders->listMove.Add(newOrderMove);
+	playersManager->MyPlayerInfo->turnOrders->listMove.Add(newOrderMove);
 
 	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
 	return true;
@@ -664,7 +663,7 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
 	*/
 
-	if (playerInfo->turnOrders->listAttack.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
+	if (playersManager->MyPlayerInfo->turnOrders->listAttack.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
 	{
 		/*
 		1. Conseguir la LogicPosition de la casilla
@@ -696,7 +695,7 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 
 		}*/
 
-		playerInfo->turnOrders->listAttack.RemoveAt(0);
+		playersManager->MyPlayerInfo->turnOrders->listAttack.RemoveAt(0);
 	}
 
 	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
@@ -709,7 +708,7 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 	newOrderMove.targetLogicPosition = LogicPosToMove;
 	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Attack);
 	newOrderMove.targetDirection = 1;
-	playerInfo->turnOrders->listAttack.Add(newOrderMove);
+	playersManager->MyPlayerInfo->turnOrders->listAttack.Add(newOrderMove);
 
 	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
 	return true;
@@ -717,18 +716,18 @@ bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
 
 bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 {
-	if (!playerInfo->turnOrders) {
+	if (!playersManager->MyPlayerInfo->turnOrders) {
 		return false;
 	}
 
 	FStructTurnOrders turnsOrdersToSend = FStructTurnOrders();
-	turnsOrdersToSend = *(playerInfo->turnOrders);
+	turnsOrdersToSend = *(playersManager->MyPlayerInfo->turnOrders);
 
 	bool sentOk = networkManager->SendNow(&turnsOrdersToSend, 0);
 
 	if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
 	{
-		playerInfo->turnOrders = new FStructTurnOrders();
+		playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
 		gameManager->structGameState->enumGameState = EClientGameState::WaitingServer;
 	}
 	
@@ -737,12 +736,12 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 
 void UPD_ClientGameInstance::SetTypeOfAction(int ntypeAction)
 {
-	playerInfo->typeOfAction = ntypeAction;
+	playersManager->MyPlayerInfo->typeOfAction = ntypeAction;
 }
 
 uint8 UPD_ClientGameInstance::GetTypeOfAction()
 {
-	return playerInfo->typeOfAction;
+	return playersManager->MyPlayerInfo->typeOfAction;
 }
 
 uint8 UPD_ClientGameInstance::GetGameMngStatus()
@@ -803,7 +802,7 @@ uint8 UPD_ClientGameInstance::GetPlayerNumber()
 void UPD_ClientGameInstance::SaveCharacterLogicData() {
 	//Create an instance of our savegame class
 	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-	SaveGameInstance->basicStatsArray.Add(*playerInfo->logic_Character->GetBasicStats());
+	SaveGameInstance->basicStatsArray.Add(*playersManager->MyPlayerInfo->logic_Character->GetBasicStats());
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
 }
@@ -815,7 +814,7 @@ void UPD_ClientGameInstance::LoadCharacterLogicData() {
 	if (UGameplayStatics::DoesSaveGameExist("MySlot", 0)) {
 		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
 		FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
-		playerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
+		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
 		UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
 	}

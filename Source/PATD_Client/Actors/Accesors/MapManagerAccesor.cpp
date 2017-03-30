@@ -51,16 +51,24 @@ APD_E_Character*  AMapManagerAccesor::GetCharacterPlayerAtPosition(FVector posit
 
 bool AMapManagerAccesor::IsMyCharacterPlayerAtPosition(FVector position) {
 
+	PD_MG_LogicPosition A = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition();
+	PD_MG_LogicPosition B = mapManager->WorldToLogicPosition(position);
 
+	UE_LOG(LogTemp, Warning, TEXT("Cheking if (%d,%d) == (%d,%d)"), A.GetX(), A.GetY(), B.GetX(), B.GetY());
+
+	return mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition() == mapManager->WorldToLogicPosition(position);
+}
+
+
+
+
+int AMapManagerAccesor::GetIdOfCharacterAt(FVector position) {
 	PD_MG_LogicPosition lp = mapManager->WorldToLogicPosition(position);
 
 	for (int i = 0; i < mapManager->_GAMEMANAGER->playersManager->GetDataPlayers().Num(); i++) {
-		if (mapManager->_GAMEMANAGER->playersManager->GetDataPlayers()[i]->ID_Player == 0
-			
-			&& lp == mapManager->_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition()) {
-			return true;
+		if (lp == mapManager->_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition()) {
+			return mapManager->_GAMEMANAGER->playersManager->GetDataPlayers()[i]->ID_Player;
 		}
 	}
-
-	return false;
+	return -999;
 }

@@ -115,8 +115,7 @@ public:
 	//Struct con el estado del client
 	StructClientState* structClientState;
 
-	//Struct con la info del player - Internet y más adelante de su personaje
-	StructPlayer* playerInfo;
+	
 	
 #pragma region Blueprint Functions 
 

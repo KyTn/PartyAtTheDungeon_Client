@@ -20,6 +20,12 @@ public:
 	PD_PlayersManager();
 	~PD_PlayersManager();
 	int GetNumPlayers();
+
+
+	//Struct con la info del player - Internet y más adelante de su personaje
+	StructPlayer* MyPlayerInfo;
+
+
 	//Funciones de gestion de conexion
 	void AddNewPlayer(FStructPlayerInfoAtClient conn);
 	//int GetMaxLenghtActions(EActionPhase phase);
@@ -37,7 +43,7 @@ public:
 	}
 
 	PD_GM_LogicCharacter* GetCharacterByID(FString id);
-	//PD_GM_LogicCharacter* GetMyCharacter();
+	PD_GM_LogicCharacter* GetMyCharacter();
 
 };
 
