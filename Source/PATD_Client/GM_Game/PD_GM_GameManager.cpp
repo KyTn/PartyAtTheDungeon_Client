@@ -166,22 +166,25 @@ void PD_GM_GameManager::OnBeginState() {
 		mapManager->InstantiateMap();
 	}
 	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
-		
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: Start_Match"));
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Start) {
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Start"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
-
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ConsumablePhase"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_MovementPhase) {
-
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_MovementPhase"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_InteractionPhase) {
-
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_InteractionPhase"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ActionPhase) {
-
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ActionPhase"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
-
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Validate"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 		// 
