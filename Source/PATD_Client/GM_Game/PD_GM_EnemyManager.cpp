@@ -34,10 +34,10 @@ int PD_GM_EnemyManager::GetMaxLenghtActions(EActionPhase phase) {
 	int indexplayer = this->GetEnemyMaxLenghtActions(phase);
 	if (indexplayer != -1) {
 		if (phase == EActionPhase::Move) {
-			return this->listTurnOrders[indexplayer]->listMove.Num();
+			return this->listTurnOrders[indexplayer]->positionsToMove.Num();
 		}
 		else if (phase == EActionPhase::Attack) {
-			return this->listTurnOrders[indexplayer]->listAttack.Num();
+			return this->listTurnOrders[indexplayer]->actions.Num();
 		}
 	}
 	return 0;
@@ -52,10 +52,10 @@ int PD_GM_EnemyManager::GetEnemyMaxLenghtActions(EActionPhase phase) {
 	for (int i = 0; this->GetEnemies().Num(); i++) {
 		TArray<FStructOrderAction> listActions;
 		if (phase == EActionPhase::Move) {
-			listActions = this->listTurnOrders[i]->listMove;
+			//listActions = this->listTurnOrders[i]->positionsToMove;
 		}
 		else if (phase == EActionPhase::Attack) {
-			listActions = this->listTurnOrders[i]->listAttack;
+			//listActions = this->listTurnOrders[i]->actions;
 		}
 
 
