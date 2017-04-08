@@ -66,22 +66,6 @@ public:
 
 
 
-#pragma region Machine State of Phases
-
-	///Funciones de configuracion de la maquina de estados de Fase
-	//Transiciones
-	void UpdatePhase();
-	//Acciones al empezar la fase
-	void OnBeginPhase();
-	//Funciones auxiliares
-	//Control directo del estado, llama a OnBeginState
-	void ChangePhase(EClientGamePhase newPhase);
-	void InitPhase();
-
-
-#pragma endregion
-
-
 
 
 

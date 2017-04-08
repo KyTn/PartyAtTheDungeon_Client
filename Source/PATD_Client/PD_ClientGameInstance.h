@@ -189,7 +189,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetGameMngStatus();
 
-	//Para saber el estado de la Fase del GameManager desde la UI
+	// Para saber el estado actual del GameManager
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		EClientGameState GetGameState();
+
+	//Para saber la phase actual del GameManager
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		EClientGamePhase GetGamePhase();
 
