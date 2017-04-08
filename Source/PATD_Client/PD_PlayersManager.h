@@ -25,6 +25,9 @@ public:
 	//Struct con la info del player - Internet y más adelante de su personaje
 	StructPlayer* MyPlayerInfo;
 
+	
+
+
 
 	//Funciones de gestion de conexion
 	void AddNewPlayer(FStructPlayerInfoAtClient conn);
@@ -44,6 +47,18 @@ public:
 
 	PD_GM_LogicCharacter* GetCharacterByID(FString id);
 	PD_GM_LogicCharacter* GetMyCharacter();
+
+
+
+#pragma region ORDER FUNCTIONS
+		bool CreateConsumableOrder(int id_consumable);
+		bool CreateMovementOrder(int positionX, int positionY);
+		bool DeleteLastMovementOrder(int positionX, int positionY);
+		bool CreateInteractableOrder(int id_interactable);
+		bool CreateActionToPosition(int id_action, TArray<FVector> positions);
+		bool CreateActionToCharacter(int id_action, TArray<FString> id_character);
+
+#pragma endregion
 
 };
 

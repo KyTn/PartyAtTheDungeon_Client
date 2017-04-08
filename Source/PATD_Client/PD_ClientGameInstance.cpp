@@ -27,6 +27,9 @@
 #include "Actors/PD_E_Character.h"
 
 #include "Actors/Accesors/MapManagerAccesor.h"
+#include "Actors/Accesors/PlayerManagerAccesor.h"
+
+
 
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
 	return true; //de momento recibe todos, siempre es cierto.
@@ -451,8 +454,11 @@ void UPD_ClientGameInstance::OnLoadedLevel() {
 		// le pasamos al mapManager un instanciador
 		AMapInstantiatorActor* InstantiatorActor = (AMapInstantiatorActor*)GetWorld()->SpawnActor(AMapInstantiatorActor::StaticClass());
 		MapManagerAccesor = (AMapManagerAccesor*)GetWorld()->SpawnActor(AMapManagerAccesor::StaticClass());
+		PlayersManagerAccesor = (APlayerManagerAccesor*)GetWorld()->SpawnActor(APlayerManagerAccesor::StaticClass());
+
 		mapManager->instantiator = InstantiatorActor;
 		MapManagerAccesor->mapManager = mapManager;
+		PlayersManagerAccesor->playersManager = playersManager;
 
 		//Aqui cedemos el control al GameManager.
 		gameManager = new PD_GM_GameManager(this, mapManager, playersManager, networkManager);
@@ -592,83 +598,6 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	return true;
 }
 
-bool UPD_ClientGameInstance::CreateConsumableOrder(int id_consumable)
-{
-	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
-	playersManager->MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_consumable);
-
-	return true;
-}
-
-
-bool UPD_ClientGameInstance::CreateMovementOrder(int positionX, int positionY)
-{
-	FStructLogicPosition tile = FStructLogicPosition();
-	tile.positionX = positionX;
-	tile.positionY = positionY;
-
-	playersManager->MyPlayerInfo->turnOrders->positionsToMove.Add(tile);
-
-	return true;
-
-}
-
-bool UPD_ClientGameInstance::DeleteLastMovementOrder(int positionX, int positionY)
-{
-	playersManager->MyPlayerInfo->turnOrders->positionsToMove.Pop();
-	
-	return true;
-
-}
-
-
-bool UPD_ClientGameInstance::CreateInteractableOrder(int id_interactable)
-{
-	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
-
-	playersManager->MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_interactable);
-
-	return true;
-}
-
-
-bool UPD_ClientGameInstance::CreateActionToPosition(int id_action, TArray<FVector> positions)
-{
-	FStructTargetToAction target = FStructTargetToAction();
-	target.id_action = id_action;
-
-	for (int i = 0; i < positions.Num(); i++)
-	{
-		FStructLogicPosition tile = FStructLogicPosition();
-		tile.positionX = positions[i].X;
-		tile.positionY = positions[i].Y;
-
-		target.positions.Add(tile);
-	}
-	
-
-	playersManager->MyPlayerInfo->turnOrders->actions.Add(target);
-	return true;
-
-
-}
-
-bool UPD_ClientGameInstance::CreateActionToCharacter(int id_action, TArray<FString> id_character)
-{
-	FStructTargetToAction target = FStructTargetToAction();
-	target.id_action = id_action;
-
-	for (int i = 0; i < id_character.Num(); i++)
-	{
-		
-		target.id_character.Add(id_character[i]);
-	}
-
-
-	playersManager->MyPlayerInfo->turnOrders->actions.Add(target);
-	return true;
-
-}
 
 bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 {
@@ -833,6 +762,21 @@ AMapManagerAccesor* UPD_ClientGameInstance::GetMapManagerAccessor(bool& existe) 
 	}
 
 }
+
+APlayerManagerAccesor* UPD_ClientGameInstance::GetPlayersManagerAccessor(bool& existe){
+
+	if (PlayersManagerAccesor != nullptr) {
+		existe = true;
+		return PlayersManagerAccesor;
+	}
+	else {
+		existe = false;
+		return nullptr;
+	}
+
+}
+
+
 
 APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector position, bool& existe) {
 	PD_MG_LogicPosition lp = mapManager->WorldToLogicPosition(position);

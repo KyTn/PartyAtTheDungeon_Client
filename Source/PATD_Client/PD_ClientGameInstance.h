@@ -22,6 +22,7 @@ class PD_PlayersManager;
 class APD_E_Character;
 
 class AMapManagerAccesor;
+class APlayerManagerAccesor;
 #include "LevelsNameDictionary.h"
 
 //Include de unreal
@@ -56,6 +57,7 @@ public:
 #pragma region ACCESSORS
 
 	AMapManagerAccesor * MapManagerAccesor;
+	APlayerManagerAccesor * PlayersManagerAccesor;
 
 
 #pragma endregion
@@ -146,29 +148,6 @@ public:
 		bool SendCharacterToServer();
 
 
-	/// Funciones para crear Ordenes en cada Fase
-
-	//Function para crear una orden de consumible para enviar
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateConsumableOrder(int id_consumable);
-
-	//Function para crear una orden de movimiento para enviar
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateMovementOrder(int positionX, int positionY);
-	//Function para quitar una orden de movimiento para enviar
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool DeleteLastMovementOrder(int positionX, int positionY);
-
-	//Function para crear una orden de interactuable para enviar
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateInteractableOrder (int id_interactable);
-
-	//Function para crear una orden de Accion sobre baldosa para enviar
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateActionToPosition (int id_action, TArray<FVector> positions);
-	//Function para crear una orden de Accion sobre baldosa para enviar
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool CreateActionToCharacter(int id_action, TArray<FString> id_character);
 
 	//Function para enviar el paquete con la orden entera al servidor
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
@@ -215,6 +194,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GetAccessors")
 		AMapManagerAccesor* GetMapManagerAccessor(bool& existe);
+
+	UFUNCTION(BlueprintCallable, Category = "GetAccessors")
+		APlayerManagerAccesor* GetPlayersManagerAccessor(bool& existe);
 
 #pragma endregion
 

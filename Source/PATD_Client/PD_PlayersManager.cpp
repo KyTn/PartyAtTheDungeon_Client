@@ -119,3 +119,90 @@ PD_GM_LogicCharacter* PD_PlayersManager::GetMyCharacter() {
 	return MyPlayerInfo->logic_Character;
 }
 
+
+
+#pragma region ORDER FUNCTIONS
+
+
+
+bool PD_PlayersManager::CreateConsumableOrder(int id_consumable)
+{
+	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
+	MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_consumable);
+	return true;
+}
+
+
+bool PD_PlayersManager::CreateMovementOrder(int positionX, int positionY)
+{
+	FStructLogicPosition tile = FStructLogicPosition();
+	tile.positionX = positionX;
+	tile.positionY = positionY;
+
+	MyPlayerInfo->turnOrders->positionsToMove.Add(tile);
+
+	return true;
+
+}
+
+bool PD_PlayersManager::DeleteLastMovementOrder(int positionX, int positionY)
+{
+	MyPlayerInfo->turnOrders->positionsToMove.Pop();
+
+	return true;
+
+}
+
+
+bool PD_PlayersManager::CreateInteractableOrder(int id_interactable)
+{
+	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
+
+	MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_interactable);
+
+	return true;
+}
+
+
+bool PD_PlayersManager::CreateActionToPosition(int id_action, TArray<FVector> positions)
+{
+	FStructTargetToAction target = FStructTargetToAction();
+	target.id_action = id_action;
+
+	for (int i = 0; i < positions.Num(); i++)
+	{
+		FStructLogicPosition tile = FStructLogicPosition();
+		tile.positionX = positions[i].X;
+		tile.positionY = positions[i].Y;
+
+		target.positions.Add(tile);
+	}
+
+
+	MyPlayerInfo->turnOrders->actions.Add(target);
+	return true;
+
+
+}
+
+bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> id_character)
+{
+	FStructTargetToAction target = FStructTargetToAction();
+	target.id_action = id_action;
+
+	for (int i = 0; i < id_character.Num(); i++)
+	{
+
+		target.id_character.Add(id_character[i]);
+	}
+
+
+	MyPlayerInfo->turnOrders->actions.Add(target);
+	return true;
+
+}
+
+
+#pragma endregion
+
+
