@@ -592,126 +592,82 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	return true;
 }
 
-bool UPD_ClientGameInstance::CreateMoveOrderToSend(FVector positionTile)
+bool UPD_ClientGameInstance::CreateConsumableOrder(int id_consumable)
 {
-	/*
-	Recibe por parametros una posicion X e Y en Float.
-	Con eso consulta al MapManager por la posición FÍSICA (transformarlo previamente en FVector
-	para obtener un LogicPosition.
-	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Move
-	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
-	*/
+	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
+	playersManager->MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_consumable);
 
-	if (playersManager->MyPlayerInfo->turnOrders->listMove.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
-	{
-		/*
-		1. Conseguir la LogicPosition de la casilla
-		2. Conseguir la referencia de la tile de la casilla
-		3. ejecutar el método ResetToInitMaterial
-		4. borrar el structOrdern de la lista
-		*/
-
-		PD_MG_LogicPosition tile_pos = PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->listMove[0].targetLogicPosition.positionX,
-			playersManager->MyPlayerInfo->turnOrders->listMove[0].targetLogicPosition.positionY);
-
-		PD_MM_Room* roomSelected = nullptr;
-		
-		/*if (mapManager->MapInfo->RoomOf(tile_pos, roomSelected))  ----> PREGUNTAR A ANGEL -> FUNCION ROOMOF
-		{
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la sala "));
-			AActor* tileSelected = nullptr;
-			tileSelected = *(roomSelected->tiles.Find(tile_pos));
-			
-			FVector v = tileSelected->GetActorLocation();
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> tile en pos %s"),*v.ToString());
-
-			if (tileSelected)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la tile"));
-				FOutputDeviceNull ar;
-				tileSelected->CallFunctionByNameWithArguments(TEXT("ResetToInitMaterial"), ar, NULL, true);
-			}
-		
-		}*/
-		
-		playersManager->MyPlayerInfo->turnOrders->listMove.RemoveAt(0);
-	}
-
-	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
-
-	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
-	LogicPosToMove.positionX = newLogicPosition.GetX();
-	LogicPosToMove.positionY = newLogicPosition.GetY();
-
-	FStructOrderAction newOrderMove = FStructOrderAction();
-	newOrderMove.targetLogicPosition = LogicPosToMove;
-	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Move);
-	newOrderMove.targetDirection = 1;
-	playersManager->MyPlayerInfo->turnOrders->listMove.Add(newOrderMove);
-
-	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
 	return true;
 }
 
-bool UPD_ClientGameInstance::CreateActionOrderToSend(FVector positionTile)
+
+bool UPD_ClientGameInstance::CreateMovementOrder(int positionX, int positionY)
 {
-	/*
-	Recibe por parametros una posicion X e Y en Float.
-	Con eso consulta al MapManager por la posición FÍSICA (transformarlo previamente en FVector
-	para obtener un LogicPosition.
-	- Con ese logic position crear un nuevo FStructLogicPosition y un nuevo FStructOrderAction de tipo Atack
-	- Guardar este Struct en el Array de PlayerInfo->TurnOders (crear estruct TurnOrders si no estuviera creado)
-	*/
+	FStructLogicPosition tile = FStructLogicPosition();
+	tile.positionX = positionX;
+	tile.positionY = positionY;
 
-	if (playersManager->MyPlayerInfo->turnOrders->listAttack.Num() >= 1) //Si hay ya una casilla seleccionada, borrarla y reset de material a esta casilla
+	playersManager->MyPlayerInfo->turnOrders->positionsToMove.Add(tile);
+
+	return true;
+
+}
+
+bool UPD_ClientGameInstance::DeleteLastMovementOrder(int positionX, int positionY)
+{
+	playersManager->MyPlayerInfo->turnOrders->positionsToMove.Pop();
+	
+	return true;
+
+}
+
+
+bool UPD_ClientGameInstance::CreateInteractableOrder(int id_interactable)
+{
+	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
+
+	playersManager->MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_interactable);
+
+	return true;
+}
+
+
+bool UPD_ClientGameInstance::CreateActionToPosition(int id_action, TArray<FVector> positions)
+{
+	FStructTargetToAction target = FStructTargetToAction();
+	target.id_action = id_action;
+
+	for (int i = 0; i < positions.Num(); i++)
 	{
-		/*
-		1. Conseguir la LogicPosition de la casilla
-		2. Conseguir la referencia de la tile de la casilla
-		3. ejecutar el método ResetToInitMaterial
-		4. borrar el structOrdern de la lista
-		*/
+		FStructLogicPosition tile = FStructLogicPosition();
+		tile.positionX = positions[i].X;
+		tile.positionY = positions[i].Y;
 
-		//PD_MG_LogicPosition tile_pos = PD_MG_LogicPosition(playerInfo->turnOrders->[0],
-			//playerInfo->turnOrders->listMove[0].targetLogicPosition.positionY);
+		target.positions.Add(tile);
+	}
+	
 
-		//PD_MM_Room* roomSelected = nullptr;
+	playersManager->MyPlayerInfo->turnOrders->actions.Add(target);
+	return true;
 
-		/*if (mapManager->MapInfo->RoomOf(tile_pos, roomSelected))  ----> PREGUNTAR A ANGEL -> FUNCION ROOMOF
-		{
-		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la sala "));
-		AActor* tileSelected = nullptr;
-		tileSelected = *(roomSelected->tiles.Find(tile_pos));
 
-		FVector v = tileSelected->GetActorLocation();
-		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> tile en pos %s"),*v.ToString());
+}
 
-		if (tileSelected)
-		{
-		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::CreateMoveOrderToSend ------> ha encontrado la tile"));
-		FOutputDeviceNull ar;
-		tileSelected->CallFunctionByNameWithArguments(TEXT("ResetToInitMaterial"), ar, NULL, true);
-		}
+bool UPD_ClientGameInstance::CreateActionToCharacter(int id_action, TArray<FString> id_character)
+{
+	FStructTargetToAction target = FStructTargetToAction();
+	target.id_action = id_action;
 
-		}*/
-
-		playersManager->MyPlayerInfo->turnOrders->listAttack.RemoveAt(0);
+	for (int i = 0; i < id_character.Num(); i++)
+	{
+		
+		target.id_character.Add(id_character[i]);
 	}
 
-	PD_MG_LogicPosition newLogicPosition = mapManager->WorldToLogicPosition(positionTile);
 
-	FStructLogicPosition LogicPosToMove = FStructLogicPosition();
-	LogicPosToMove.positionX = newLogicPosition.GetX();
-	LogicPosToMove.positionY = newLogicPosition.GetY();
-
-	FStructOrderAction newOrderMove = FStructOrderAction();
-	newOrderMove.targetLogicPosition = LogicPosToMove;
-	newOrderMove.orderType = static_cast<uint8>(EOrderAction::Attack);
-	newOrderMove.targetDirection = 1;
-	playersManager->MyPlayerInfo->turnOrders->listAttack.Add(newOrderMove);
-
-	SetTypeOfAction(0); //seteas el tipo de accion a 0, para reiniciar las acciones
+	playersManager->MyPlayerInfo->turnOrders->actions.Add(target);
 	return true;
+
 }
 
 bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
