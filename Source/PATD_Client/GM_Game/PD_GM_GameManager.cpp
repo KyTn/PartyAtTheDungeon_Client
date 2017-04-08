@@ -30,7 +30,6 @@ PD_GM_GameManager::PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM
 	this->networkManager = networkManager;
 	this->networkManager->RegisterObserver(this);
 	InitState();
-	InitPhase(); //Inicializa la maquina de estados de fase de juego (primero consumablePhase)
 }
 
 PD_GM_GameManager::~PD_GM_GameManager()
@@ -48,13 +47,6 @@ void PD_GM_GameManager::InitState() {
 	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
 	structGameState = new StructGameState();
 	ChangeState(EClientGameState::Instantiate_Map);
-}
-
-// Inicializa la maquina de estados.
-void PD_GM_GameManager::InitPhase() {
-	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
-	structGamePhase = new StructGamePhase();
-	ChangePhase(EClientGamePhase::ConsumablePhase);
 }
 
 #pragma region GM STATE MACHINE 
@@ -82,12 +74,27 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 
 		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
 		    
-			ChangeState(EClientGameState::GenerateOrders);
+			ChangeState(EClientGameState::GenerateOrders_Start);
 		 }
-	}	 
-	else if(structGameState->enumGameState == EClientGameState::GenerateOrders) {
-		 
-	}	 
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Start) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_MovementPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_InteractionPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ActionPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
+
+	}
 	else if(structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 		 
 	}	 
@@ -119,8 +126,20 @@ void PD_GM_GameManager::UpdateState() {
 		
 
 	}
-	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
-		
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_MovementPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_InteractionPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ActionPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
+
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 		ChangeState(EClientGameState::WaitingServer);
@@ -149,8 +168,20 @@ void PD_GM_GameManager::OnBeginState() {
 	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
 		
 	}
-	else if (structGameState->enumGameState == EClientGameState::GenerateOrders) {
-		//ChangeState(EClientGameState::SendOrdersToServer); //Cambiar a cuando se le da a aceptar todas las ordenes.
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_MovementPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_InteractionPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ActionPhase) {
+
+	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
+
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 		// 
@@ -209,70 +240,4 @@ void PD_GM_GameManager::OnBeginState() {
 	UpdateState();
 }
 
-#pragma endregion
-
-#pragma region GM PHASE MACHINE 
-
-// Esta funcion cambia el estado actual al pasado por parametros y llama al OnBeginState del mismo.
-void PD_GM_GameManager::ChangePhase(EClientGamePhase newPhase) 
-{
-	structGamePhase->enumGamePhase = newPhase;
-	OnBeginPhase();
-}
-
-void PD_GM_GameManager::UpdatePhase() 
-{
-	if (structGamePhase->enumGamePhase == EClientGamePhase::ConsumablePhase) 
-	{
-		ChangePhase(EClientGamePhase::MovementPhase);
-	}
-	else if (structGamePhase->enumGamePhase == EClientGamePhase::MovementPhase) 
-	{
-		ChangePhase(EClientGamePhase::InteractionPhase);
-	}
-	else if (structGamePhase->enumGamePhase == EClientGamePhase::InteractionPhase)
-	{
-		ChangePhase(EClientGamePhase::ActionPhase);
-	}
-	else if (structGamePhase->enumGamePhase == EClientGamePhase::ActionPhase)
-	{
-		/*
-		Cuando actualizas el estado de Accion es para enviar todo al servidor.
-		*/
-		ChangeState(EClientGameState::SendOrdersToServer); 
-	}
-	else //Caso indeterminado
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdatePhase: WARNING: estado sin inicializacion"));
-	}
-
-}
-
-void PD_GM_GameManager::OnBeginPhase() 
-{
-	if (structGamePhase->enumGamePhase == EClientGamePhase::ConsumablePhase)
-	{
-		//Poner un Consumable Widget
-	}
-	else if (structGamePhase->enumGamePhase == EClientGamePhase::MovementPhase)
-	{
-		//Poner un Movement Widget
-
-	}
-	else if (structGamePhase->enumGamePhase == EClientGamePhase::InteractionPhase)
-	{
-		//Poner un Interaction Widget
-
-	}
-	else if (structGamePhase->enumGamePhase == EClientGamePhase::ActionPhase)
-	{
-		//Poner un Action Widget
-
-	}
-	else //Caso indeterminado
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdatePhase: WARNING: estado sin inicializacion"));
-	}
-
-}
 #pragma endregion

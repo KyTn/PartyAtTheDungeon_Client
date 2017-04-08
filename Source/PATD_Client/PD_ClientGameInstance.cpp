@@ -759,9 +759,34 @@ uint8 UPD_ClientGameInstance::GetGameMngStatus()
 			GameStatusInt = static_cast<uint8>(EClientGameState::Start_Match);
 			break;
 		}
-		case EClientGameState::GenerateOrders: 
+		case EClientGameState::GenerateOrders_Start:
 		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders);
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_Start);
+			break; }
+
+		case EClientGameState::GenerateOrders_ConsumablePhase:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_ConsumablePhase);
+			break; }
+
+		case EClientGameState::GenerateOrders_MovementPhase:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_MovementPhase);
+			break; }
+
+		case EClientGameState::GenerateOrders_InteractionPhase:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_InteractionPhase);
+			break; }
+
+		case EClientGameState::GenerateOrders_ActionPhase:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_ActionPhase);
+			break; }
+
+		case EClientGameState::GenerateOrders_Validate:
+		{
+			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_Validate);
 			break; }
 
 		case EClientGameState::SendOrdersToServer: 
@@ -792,6 +817,12 @@ uint8 UPD_ClientGameInstance::GetGameMngStatus()
 EClientGamePhase UPD_ClientGameInstance::GetGamePhase()
 {
 	return gameManager->structGamePhase->enumGamePhase;
+}
+
+
+EClientGameState UPD_ClientGameInstance::GetGameState()
+{
+	return gameManager->structGameState->enumGameState;
 }
 
 uint8 UPD_ClientGameInstance::GetPlayerNumber()
