@@ -33,3 +33,15 @@ bool APlayerManagerAccesor::DeleteLastMovementOrder(int positionX, int positionY
 bool APlayerManagerAccesor::CreateInteractableOrder(int id_interactable) { return playersManager->CreateInteractableOrder(id_interactable); }
 bool APlayerManagerAccesor::CreateActionToPosition(int id_action, TArray<FVector> positions) { return playersManager->CreateActionToPosition(id_action, positions); }
 bool APlayerManagerAccesor::CreateActionToCharacter(int id_action, TArray<FString> id_character) { return playersManager->CreateActionToCharacter(id_action, id_character); }
+
+
+bool APlayerManagerAccesor::ResetAll() { return playersManager->ResetAll(); }
+bool APlayerManagerAccesor::ResetConsumables() { return playersManager->ResetConsumables(); }
+bool APlayerManagerAccesor::ResetMovements() { return playersManager->ResetMovements(); }
+bool APlayerManagerAccesor::ResetInteractuables() { return playersManager->ResetInteractuables(); }
+bool APlayerManagerAccesor::ResetActions() { return playersManager->ResetActions(); }
+
+
+
+
+

@@ -41,3 +41,4 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		int GetIdOfCharacterAt(FVector position);
 };
+ 

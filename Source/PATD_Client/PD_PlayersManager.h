@@ -58,6 +58,15 @@ public:
 		bool CreateActionToPosition(int id_action, TArray<FVector> positions);
 		bool CreateActionToCharacter(int id_action, TArray<FString> id_character);
 
+		bool ResetAll();
+		bool ResetConsumables();
+		bool ResetMovements();
+		bool ResetInteractuables();
+		bool ResetActions();
+
+
+
+
 #pragma endregion
 
 };

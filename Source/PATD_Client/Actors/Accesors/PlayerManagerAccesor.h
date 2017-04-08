@@ -40,4 +40,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
 		bool CreateActionToCharacter(int id_action, TArray<FString> id_character);
 	
+
+	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
+	bool ResetAll();
+
+	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
+	bool ResetConsumables();
+
+	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
+	bool ResetMovements();
+
+	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
+	bool ResetInteractuables();
+
+	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
+	bool ResetActions();
+
 };

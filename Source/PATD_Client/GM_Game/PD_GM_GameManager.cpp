@@ -126,6 +126,9 @@ void PD_GM_GameManager::UpdateState() {
 		
 
 	}
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Start) {
+
+	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
 
 	}
@@ -170,10 +173,7 @@ void PD_GM_GameManager::OnBeginState() {
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Start) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Start"));
-
-		//playersManager->MyPlayerInfo->turnOrders
-
-
+		playersManager->ResetAll();
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ConsumablePhase"));

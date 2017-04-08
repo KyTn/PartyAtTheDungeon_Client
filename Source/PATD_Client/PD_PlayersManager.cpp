@@ -203,6 +203,33 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 }
 
 
+bool PD_PlayersManager::ResetAll() {
+	bool b = true;
+
+	b= b && ResetConsumables();
+	b= b && ResetMovements();
+	b= b && ResetInteractuables();
+	b= b && ResetActions();
+
+	return b;
+}
+bool PD_PlayersManager::ResetConsumables() {
+	MyPlayerInfo->turnOrders->consumablesToConsume.Empty();
+	return MyPlayerInfo->turnOrders->consumablesToConsume.Num() == 0;
+}
+bool PD_PlayersManager::ResetMovements() {
+	MyPlayerInfo->turnOrders->positionsToMove.Empty();
+	return MyPlayerInfo->turnOrders->positionsToMove.Num() == 0;
+}
+bool PD_PlayersManager::ResetInteractuables() {
+	MyPlayerInfo->turnOrders->interactuablesToInteract.Empty();
+	return MyPlayerInfo->turnOrders->interactuablesToInteract.Num() == 0;
+}
+bool PD_PlayersManager::ResetActions() {
+	MyPlayerInfo->turnOrders->actions.Empty();
+	return MyPlayerInfo->turnOrders->actions.Num() == 0;
+}
+
 #pragma endregion
 
 
