@@ -64,8 +64,6 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 		// Si se recibe del servidor un Start_Match, ir a ese estado. 
 		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
 			UE_LOG(LogTemp, Log, TEXT(" PD_GM_GameManager::HandleEvent - Instiante"));
-
-		
 			ChangeState(EClientGameState::Start_Match);
 		}
 	}
@@ -166,7 +164,9 @@ void PD_GM_GameManager::OnBeginState() {
 
 
 	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: Instantiate_Map"));
 		mapManager->InstantiateMap();
+		Send_FStructClientMapAlreadyInstantiated();
 	}
 	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: Start_Match"));
@@ -248,3 +248,15 @@ void PD_GM_GameManager::OnBeginState() {
 }
 
 #pragma endregion
+
+
+#pragma region SEND TO SERVER FUNCTIONS
+
+bool PD_GM_GameManager::Send_FStructClientMapAlreadyInstantiated() {
+	FStructClientMapAlreadyInstantiated msg = FStructClientMapAlreadyInstantiated();
+	return networkManager->SendNow(&msg, 0);
+}
+
+
+#pragma endregion 
+

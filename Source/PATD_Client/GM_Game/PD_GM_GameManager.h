@@ -65,8 +65,11 @@ public:
 #pragma endregion
 
 
+#pragma region SEND TO SERVER FUNCTIONS
+
+	bool Send_FStructClientMapAlreadyInstantiated();
 
 
-
+#pragma endregion 
 
 };
