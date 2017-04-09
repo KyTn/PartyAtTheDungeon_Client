@@ -24,8 +24,6 @@ enum class EClientGameState { Instantiate_Map = 00, Start_Match = 10,
 	GenerateOrders_Start = 20, GenerateOrders_ConsumablePhase = 21, GenerateOrders_MovementPhase = 22, GenerateOrders_InteractionPhase = 23, GenerateOrders_ActionPhase = 24, GenerateOrders_Validate = 25, 
 	SendOrdersToServer = 30, WaitingServer = 40, UpdateInfo = 50, EndOfTurn = 60};
 
-UENUM(BlueprintType)
-enum class EClientGamePhase { ConsumablePhase = 0, MovementPhase = 1, InteractionPhase = 2, ActionPhase = 3, Out_GenerateOrder_Status = 99};
 
 
 //enum class EServerState { StartApp, WaitingMasterClient, WaitingGameConfiguration, Lobby_Tabern, Launch_Match, GameInProcess, Podium, OnExit };

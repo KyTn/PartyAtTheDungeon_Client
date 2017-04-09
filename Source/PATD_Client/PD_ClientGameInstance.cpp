@@ -699,11 +699,6 @@ uint8 UPD_ClientGameInstance::GetGameMngStatus()
 	return GameStatusInt;
 }
 
-EClientGamePhase UPD_ClientGameInstance::GetGamePhase()
-{
-	return gameManager->structGamePhase->enumGamePhase;
-}
-
 
 EClientGameState UPD_ClientGameInstance::GetGameState()
 {

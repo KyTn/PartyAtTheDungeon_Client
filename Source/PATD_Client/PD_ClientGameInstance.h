@@ -172,10 +172,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		EClientGameState GetGameState();
 
-	//Para saber la phase actual del GameManager
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		EClientGamePhase GetGamePhase();
-
 	//Para saber el numero del jugador -> Caracter Visual a nivel de Interfaz
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetPlayerNumber();

@@ -68,8 +68,3 @@ struct StructGameState {
 	FStructUpdateTurn update_turn;
 
 };
-
-//Usado por: GameManager - Para maquina de estados de las Fases del Juego
-struct StructGamePhase {
-	EClientGamePhase enumGamePhase;
-};
