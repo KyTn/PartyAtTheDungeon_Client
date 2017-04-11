@@ -23,16 +23,16 @@ int PD_PlayersManager::GetNumPlayers() {
 //Devuelve el numero de acciones de la lista mas larga
 /*
 int PD_PlayersManager::GetMaxLenghtActions(EActionPhase phase) {
-	int indexplayer = this->GetPlayerMaxLenghtActions(phase);
-	if (indexplayer != -1) {
-		if (phase == EActionPhase::Move) {
-			return this->GetDataStructPlayer(indexplayer)->turnOrders->listMove.Num();
-		}
-		else if (phase == EActionPhase::Attack) {
-			return this->GetDataStructPlayer(indexplayer)->turnOrders->listAttack.Num();
-		}
-	}
-	return 0;
+int indexplayer = this->GetPlayerMaxLenghtActions(phase);
+if (indexplayer != -1) {
+if (phase == EActionPhase::Move) {
+return this->GetDataStructPlayer(indexplayer)->turnOrders->listMove.Num();
+}
+else if (phase == EActionPhase::Attack) {
+return this->GetDataStructPlayer(indexplayer)->turnOrders->listAttack.Num();
+}
+}
+return 0;
 }
 */
 
@@ -41,42 +41,49 @@ int PD_PlayersManager::GetMaxLenghtActions(EActionPhase phase) {
 //Devuelve el index del jugador con la lista de acciones mas larga
 /*
 int PD_PlayersManager::GetPlayerMaxLenghtActions(EActionPhase phase) {
-	int numTicks = 0;
-	int indexPlayer = -1;
+int numTicks = 0;
+int indexPlayer = -1;
 
-	for (int i = 0; this->GetNumPlayers(); i++) {
-		TArray<FStructOrderAction> listActions;
-		if (phase == EActionPhase::Move) {
-			listActions = this->GetDataStructPlayer(i)->turnOrders->listMove;
-		}
-		else if (phase == EActionPhase::Attack) {
-			listActions = this->GetDataStructPlayer(i)->turnOrders->listAttack;
-		}
+for (int i = 0; this->GetNumPlayers(); i++) {
+TArray<FStructOrderAction> listActions;
+if (phase == EActionPhase::Move) {
+listActions = this->GetDataStructPlayer(i)->turnOrders->listMove;
+}
+else if (phase == EActionPhase::Attack) {
+listActions = this->GetDataStructPlayer(i)->turnOrders->listAttack;
+}
 
 
-		if (numTicks < (listActions.Num())) {
-			numTicks = listActions.Num();
-			indexPlayer = i;
-		};
-	}
-	return numTicks;
+if (numTicks < (listActions.Num())) {
+numTicks = listActions.Num();
+indexPlayer = i;
+};
+}
+return numTicks;
 }
 */
 
 
 void PD_PlayersManager::AddNewPlayer(FStructPlayerInfoAtClient conn) {
-	
-	PD_GM_LogicCharacter* ch = new PD_GM_LogicCharacter();
 
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding player at(%d,%d)"), conn.logicPosition.positionX, conn.logicPosition.positionY);
-	ch->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
-	ch->SetIDCharacter(conn.ID_character);
+	if (conn.ID_character.Compare(GetMyCharacter()->GetIDCharacter()) == 0) {
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding the client player (id:%s) character at(%d,%d)"), *conn.ID_character, conn.logicPosition.positionX, conn.logicPosition.positionY);
+		GetMyCharacter()->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
+		dataPlayers.Add(MyPlayerInfo);
+	}
+	else {
+		PD_GM_LogicCharacter* ch = new PD_GM_LogicCharacter();
 
-	StructPlayer* sp = new StructPlayer();
-	sp->ID_Player = conn.playerNum;
+		UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding player at(%d,%d)"), conn.logicPosition.positionX, conn.logicPosition.positionY);
+		ch->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
+		ch->SetIDCharacter(conn.ID_character);
 
-	sp->logic_Character = ch;
-	dataPlayers.Add(sp);
+		StructPlayer* sp = new StructPlayer();
+		sp->ID_Player = conn.playerNum;
+
+		sp->logic_Character = ch;
+		dataPlayers.Add(sp);
+	}
 }
 
 
@@ -108,7 +115,7 @@ PD_GM_LogicCharacter* PD_PlayersManager::GetCharacterByID(FString id) {
 			return dataPlayers[i]->logic_Character;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PlayerManager:: GetCharacterByID ERROR: No se ha encontrado character con id %s"),*id);
+	UE_LOG(LogTemp, Warning, TEXT("PlayerManager:: GetCharacterByID ERROR: No se ha encontrado character con id %s"), *id);
 	return nullptr;
 }
 
@@ -206,10 +213,10 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 bool PD_PlayersManager::ResetAll() {
 	bool b = true;
 
-	b= b && ResetConsumables();
-	b= b && ResetMovements();
-	b= b && ResetInteractuables();
-	b= b && ResetActions();
+	b = b && ResetConsumables();
+	b = b && ResetMovements();
+	b = b && ResetInteractuables();
+	b = b && ResetActions();
 
 	return b;
 }

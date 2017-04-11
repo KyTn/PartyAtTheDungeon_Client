@@ -55,9 +55,9 @@ void UPD_ClientGameInstance::Init()
 	//structClientState->enumClientState = EClientState::NoConnection;
 
 	playersManager->MyPlayerInfo = new StructPlayer(); //El constructor del StructPlayer inicializa sus variables
-									 /*
-									 Construimos el logicCharacter, para luego poder rellenarlo. Lo configuramos como Jugador.
-									 */
+													   /*
+													   Construimos el logicCharacter, para luego poder rellenarlo. Lo configuramos como Jugador.
+													   */
 	playersManager->MyPlayerInfo->logic_Character = new PD_GM_LogicCharacter();
 	playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
 	playersManager->MyPlayerInfo->logic_Character->SetIsPlayer(true);
@@ -101,10 +101,10 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 	if (structClientState->enumClientState == EClientState::StartApp) {
 
 	}
-	else if(structClientState->enumClientState == EClientState::Game_NoConnection) {
+	else if (structClientState->enumClientState == EClientState::Game_NoConnection) {
 		HandleEvent_Welcome(inDataStruct, inPlayer, inEventType);
-	}	 
-	else if(structClientState->enumClientState == EClientState::ConfigureMatch) {
+	}
+	else if (structClientState->enumClientState == EClientState::ConfigureMatch) {
 		if (inEventType == UStructType::FStructMatchConfig) {
 
 			// Cuando el server envía cambios del ConfigMatch 
@@ -123,10 +123,10 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			}
 			else
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: ConfigureMatch - NOT MATCHING "));
+				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: ConfigureMatch - NOT MATCHING "));
 		}
-	}	 
-	else if(structClientState->enumClientState == EClientState::WaitingMatchConfiguration) {
+	}
+	else if (structClientState->enumClientState == EClientState::WaitingMatchConfiguration) {
 		if (inEventType == UStructType::FStructMatchConfig) {
 
 			// Cuando el server envía cambios del ConfigMatch 
@@ -145,10 +145,10 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			}
 			else
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: WaitingMatchConfiguration - NOT MATCHING "));
+				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: WaitingMatchConfiguration - NOT MATCHING "));
 		}
-	}	 
-	else if(structClientState->enumClientState == EClientState::Lobby_Tabern) {
+	}
+	else if (structClientState->enumClientState == EClientState::Lobby_Tabern) {
 		if (inEventType == UStructType::FStructMap) {
 
 			// Cuando el server envia el mapa ... 
@@ -167,7 +167,7 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			}
 			else
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Lobby_Tabern - NOT MATCHING "));
+				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Lobby_Tabern - NOT MATCHING "));
 		}
 
 
@@ -175,12 +175,12 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 		/// Aqui no se envía la instanciacion de los personajes !!!!!!!!!!
 		/*
 		if (inEventType == UStructType::FStructInstatiatePlayers) {
-			FStructInstatiatePlayers* InstaPlayers = (FStructInstatiatePlayers*)inDataStruct;
-			for (int i = 0; i < InstaPlayers->listInfoPlayerAtClient.Num(); i++)
-			{
-				playersManager->AddNewPlayer(InstaPlayers->listInfoPlayerAtClient[i]);
-			}
-			//this->UpdateState();
+		FStructInstatiatePlayers* InstaPlayers = (FStructInstatiatePlayers*)inDataStruct;
+		for (int i = 0; i < InstaPlayers->listInfoPlayerAtClient.Num(); i++)
+		{
+		playersManager->AddNewPlayer(InstaPlayers->listInfoPlayerAtClient[i]);
+		}
+		//this->UpdateState();
 		}
 
 		*/
@@ -189,11 +189,12 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 		if (inEventType == UStructType::FStructInstatiatePlayers) {
 			HandleEvent_AllCharactersInfoIncoming(inDataStruct, inPlayer, inEventType);
-		}else if (inEventType == UStructType::FStructClientStartMatchOnGM) {
+		}
+		else if (inEventType == UStructType::FStructClientStartMatchOnGM) {
 			HandleEvent_StartMatch_GoGameMnager(inDataStruct, inPlayer, inEventType);
 		}
 
-		
+
 
 		else {
 			if (inEventType == UStructType::FStructOrderMenu) {
@@ -203,13 +204,13 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			}
 			else
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Launch_Match - NOT MATCHING "));
+				UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Launch_Match - NOT MATCHING "));
 		}
 	}
-	else if(structClientState->enumClientState == EClientState::GameInProcess) {
+	else if (structClientState->enumClientState == EClientState::GameInProcess) {
 
 	}
-	else { } 
+	else {}
 
 
 
@@ -239,7 +240,7 @@ void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, i
 
 void UPD_ClientGameInstance::HandleEvent_ConfigMatch(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_ConfigMatch"));
-	
+
 	FStructMatchConfig* StructMatchConfig = (FStructMatchConfig*)inDataStruct;
 
 	// Obtener la información y actualizar la configuración del match que manda el servidor:
@@ -277,8 +278,12 @@ void UPD_ClientGameInstance::HandleEvent_LaunchMatchFromServer(FStructGeneric* i
 
 
 void UPD_ClientGameInstance::HandleEvent_AllCharactersInfoIncoming(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
-	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_AllCharactersInfoIncoming"));
+
 	FStructInstatiatePlayers* InstaPlayers = (FStructInstatiatePlayers*)inDataStruct;
+	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_AllCharactersInfoIncoming: Num players:%d, %d"), InstaPlayers->listInfoPlayerAtClient.Num(), InstaPlayers->listInfoPlayerAtClient[0].logicPosition.positionX);
+	//Seteamos el id del propio character del cliente para luego poder diferenciarlo
+	playersManager->GetMyCharacter()->SetIDCharacter(InstaPlayers->idClientCharacter);
+
 	for (int i = 0; i < InstaPlayers->listInfoPlayerAtClient.Num(); i++)
 	{
 		playersManager->AddNewPlayer(InstaPlayers->listInfoPlayerAtClient[i]);
@@ -370,7 +375,7 @@ void UPD_ClientGameInstance::OnBeginState() {
 		mapManager->Init(staticMapRef, dynamicMapRef);
 	}
 	else if (structClientState->enumClientState == EClientState::GameInProcess) {
-		
+
 		this->LoadMap(levelsNameDictionary.GetMapName(4));//Mapa de juego
 	}
 	else {}
@@ -384,7 +389,7 @@ void UPD_ClientGameInstance::OnBeginState() {
 void UPD_ClientGameInstance::UpdateState() {
 
 	if (structClientState->enumClientState == EClientState::StartApp) {
-		
+
 
 
 	}
@@ -462,7 +467,7 @@ void UPD_ClientGameInstance::OnLoadedLevel() {
 
 		//Aqui cedemos el control al GameManager.
 		gameManager = new PD_GM_GameManager(this, mapManager, playersManager, networkManager);
-		
+
 
 	}
 }
@@ -491,7 +496,7 @@ void UPD_ClientGameInstance::Shutdown()
 
 
 /*********************************
-****** FUNCIONES BP / UTILIDAD 
+****** FUNCIONES BP / UTILIDAD
 *********************************/
 
 #pragma region BP FUNCTIONS
@@ -543,7 +548,7 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 		playersManager->MyPlayerInfo->readyMenu = !playersManager->MyPlayerInfo->readyMenu;
 		return playersManager->MyPlayerInfo->readyMenu;
 	}
-	else 
+	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, "ERROR!!  Tienes que ACEPTAR y ENVIAR tu personaje antes del READY !");
 
@@ -551,10 +556,10 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 	return false;
 }
 
-void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL) 
+void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL)
 {
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(nPOD, nAGI, nDES, nCON, nPER, nMAL);
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20,5); //HP - DMG
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5); //HP - DMG
 	playersManager->MyPlayerInfo->logic_Character->SetWapon();
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
@@ -571,10 +576,10 @@ void UPD_ClientGameInstance::GetCharacterBasicStats(int &nPOD, int &nAGI, int &n
 
 void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG)
 {
-	nAP =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
-	nCH =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->CH;
-	nSA =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->SA;
-	nHP =  playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal;
+	nAP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
+	nCH = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->CH;
+	nSA = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->SA;
+	nHP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal;
 	nRAN = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
 	nDMG = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->DMGTotal;
 }
@@ -584,16 +589,16 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	if (!playersManager->MyPlayerInfo->logic_Character) {
 		return false;
 	}
-	FStructCharacter structCharacterToSend =  FStructCharacter();
-	structCharacterToSend.totalStats =		*(playersManager->MyPlayerInfo->logic_Character->GetTotalStats());
-	structCharacterToSend.initBaseStats =	*(playersManager->MyPlayerInfo->logic_Character->GetInitBaseStats());
-	structCharacterToSend.skills =			*(playersManager->MyPlayerInfo->logic_Character->GetSkills());
-	structCharacterToSend.skin =			*(playersManager->MyPlayerInfo->logic_Character->GetSkin());
-	structCharacterToSend.weapon =			*(playersManager->MyPlayerInfo->logic_Character->GetWeapon());
+	FStructCharacter structCharacterToSend = FStructCharacter();
+	structCharacterToSend.totalStats = *(playersManager->MyPlayerInfo->logic_Character->GetTotalStats());
+	structCharacterToSend.initBaseStats = *(playersManager->MyPlayerInfo->logic_Character->GetInitBaseStats());
+	structCharacterToSend.skills = *(playersManager->MyPlayerInfo->logic_Character->GetSkills());
+	structCharacterToSend.skin = *(playersManager->MyPlayerInfo->logic_Character->GetSkin());
+	structCharacterToSend.weapon = *(playersManager->MyPlayerInfo->logic_Character->GetWeapon());
 
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
 	networkManager->SendNow(&structCharacterToSend, 0);
-	
+
 	playersManager->MyPlayerInfo->isSetPlayerCharacter = true;
 	return true;
 }
@@ -615,7 +620,7 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 		playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
 		gameManager->structGameState->enumGameState = EClientGameState::WaitingServer;
 	}
-	
+
 	return sentOk;
 }
 
@@ -639,66 +644,66 @@ uint8 UPD_ClientGameInstance::GetGameMngStatus()
 	uint8 GameStatusInt = 10;
 	switch (gameManager->structGameState->enumGameState)
 	{
-		case EClientGameState::Instantiate_Map:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::Instantiate_Map);
-			break;
-		}
-		case EClientGameState::Start_Match:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::Start_Match);
-			break;
-		}
-		case EClientGameState::GenerateOrders_Start:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_Start);
-			break; }
+	case EClientGameState::Instantiate_Map:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::Instantiate_Map);
+		break;
+	}
+	case EClientGameState::Start_Match:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::Start_Match);
+		break;
+	}
+	case EClientGameState::GenerateOrders_Start:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_Start);
+		break; }
 
-		case EClientGameState::GenerateOrders_ConsumablePhase:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_ConsumablePhase);
-			break; }
+	case EClientGameState::GenerateOrders_ConsumablePhase:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_ConsumablePhase);
+		break; }
 
-		case EClientGameState::GenerateOrders_MovementPhase:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_MovementPhase);
-			break; }
+	case EClientGameState::GenerateOrders_MovementPhase:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_MovementPhase);
+		break; }
 
-		case EClientGameState::GenerateOrders_InteractionPhase:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_InteractionPhase);
-			break; }
+	case EClientGameState::GenerateOrders_InteractionPhase:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_InteractionPhase);
+		break; }
 
-		case EClientGameState::GenerateOrders_ActionPhase:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_ActionPhase);
-			break; }
+	case EClientGameState::GenerateOrders_ActionPhase:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_ActionPhase);
+		break; }
 
-		case EClientGameState::GenerateOrders_Validate:
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_Validate);
-			break; }
+	case EClientGameState::GenerateOrders_Validate:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::GenerateOrders_Validate);
+		break; }
 
-		case EClientGameState::SendOrdersToServer: 
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::SendOrdersToServer);
-			break;
-		}
-		case EClientGameState::WaitingServer: 
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::WaitingServer);
-			break;
-		}
-		case EClientGameState::UpdateInfo: 
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::UpdateInfo);
-			break; 
-		}
-		case EClientGameState::EndOfTurn: 
-		{
-			GameStatusInt = static_cast<uint8>(EClientGameState::EndOfTurn);
-				break;
-		}
+	case EClientGameState::SendOrdersToServer:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::SendOrdersToServer);
+		break;
+	}
+	case EClientGameState::WaitingServer:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::WaitingServer);
+		break;
+	}
+	case EClientGameState::UpdateInfo:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::UpdateInfo);
+		break;
+	}
+	case EClientGameState::EndOfTurn:
+	{
+		GameStatusInt = static_cast<uint8>(EClientGameState::EndOfTurn);
+		break;
+	}
 	}
 
 	return GameStatusInt;
@@ -751,7 +756,7 @@ void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slot
 
 
 AMapManagerAccesor* UPD_ClientGameInstance::GetMapManagerAccessor(bool& existe) {
-	
+
 	if (MapManagerAccesor != nullptr) {
 		existe = true;
 		return MapManagerAccesor;
@@ -763,7 +768,7 @@ AMapManagerAccesor* UPD_ClientGameInstance::GetMapManagerAccessor(bool& existe) 
 
 }
 
-APlayerManagerAccesor* UPD_ClientGameInstance::GetPlayersManagerAccessor(bool& existe){
+APlayerManagerAccesor* UPD_ClientGameInstance::GetPlayersManagerAccessor(bool& existe) {
 
 	if (PlayersManagerAccesor != nullptr) {
 		existe = true;
@@ -785,7 +790,7 @@ APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector p
 			existe = true;
 			return playersManager->GetDataPlayers()[i]->logic_Character->GetCharacterBP();
 		}
-	}	
+	}
 	existe = false;
 	return nullptr;
 }

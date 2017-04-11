@@ -16,7 +16,7 @@ USTRUCT(BlueprintType)
 struct FStructLogicPosition {
 
 	GENERATED_BODY()
-		
+
 		UPROPERTY()
 		uint32 positionX;
 	UPROPERTY()
@@ -34,7 +34,7 @@ struct FStructTargetToAction {
 
 	GENERATED_BODY()
 
-	UPROPERTY()
+		UPROPERTY()
 		uint32 id_action; //puede ser ataque basico, habilidad, defensa
 	UPROPERTY()
 		TArray<FStructLogicPosition> positions;
@@ -360,6 +360,8 @@ struct FStructInstatiatePlayers : public FStructGeneric
 	GENERATED_BODY()
 
 		UPROPERTY()
+		FString idClientCharacter;
+	UPROPERTY()
 		TArray<FStructPlayerInfoAtClient> listInfoPlayerAtClient;
 
 
@@ -436,20 +438,20 @@ struct FStructOrderMenu : public FStructGeneric
 /*USTRUCT()
 struct FStructTurnOrders : public FStructGeneric
 {
-	GENERATED_BODY()
+GENERATED_BODY()
 
-		UPROPERTY()
-		TArray<FStructOrderAction> listMove;
+UPROPERTY()
+TArray<FStructOrderAction> listMove;
 
-	UPROPERTY()
-		TArray<FStructOrderAction> listAttack;
+UPROPERTY()
+TArray<FStructOrderAction> listAttack;
 
 
-	FStructTurnOrders() {
-		listMove = TArray<FStructOrderAction>();
-		listAttack = TArray<FStructOrderAction>();
-		structType = static_cast<uint8>(UStructType::FStructTurnOrders);
-	}
+FStructTurnOrders() {
+listMove = TArray<FStructOrderAction>();
+listAttack = TArray<FStructOrderAction>();
+structType = static_cast<uint8>(UStructType::FStructTurnOrders);
+}
 };
 */
 
@@ -458,7 +460,7 @@ struct FStructTurnOrders : public FStructGeneric
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+		UPROPERTY()
 		TArray<uint32> consumablesToConsume;
 
 	UPROPERTY()
