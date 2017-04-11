@@ -59,7 +59,9 @@ public:
 
 	//Funciones auxiliares
 	//Control directo del estado, llama a OnBeginState
+	
 	void ChangeState(EClientGameState newState);
+	void ChangePhase(bool next);
 	void InitState();
 
 #pragma endregion

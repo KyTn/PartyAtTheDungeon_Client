@@ -164,6 +164,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetTypeOfAction();
 
+	//Para cambiar de fase desde UI
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void ChangePhase(bool next);
+
 	//Para saber el estado del GameManager desde la UI (o el propio Juego)
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetGameMngStatus();

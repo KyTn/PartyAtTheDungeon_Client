@@ -57,6 +57,34 @@ void PD_GM_GameManager::ChangeState(EClientGameState newState) {
 	OnBeginState();
 }
 
+// Cambia el estado entre fases, teniendo en cuenta si se quiere avanzar o retroceder
+void PD_GM_GameManager::ChangePhase(bool next = true) {
+	if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
+		ChangeState(EClientGameState::GenerateOrders_MovementPhase);
+	}
+
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_MovementPhase) {
+		if (next)	//Siguiente estado
+			ChangeState(EClientGameState::GenerateOrders_InteractionPhase);
+		else	//Estado anterior
+			ChangeState(EClientGameState::GenerateOrders_ConsumablePhase);
+	}
+
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_InteractionPhase) {
+		if (next)
+			ChangeState(EClientGameState::GenerateOrders_ActionPhase);
+		else
+			ChangeState(EClientGameState::GenerateOrders_MovementPhase);
+	}
+
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ActionPhase) {
+		if (next)
+			ChangeState(EClientGameState::GenerateOrders_Validate);
+		else
+			ChangeState(EClientGameState::GenerateOrders_InteractionPhase);
+	}
+}
+
 // Dado un paquete de red, actualiza el estado correspondiente y realiza las acciones pertinentes. 
 void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	//Estos dos eventos van aqui?
@@ -76,7 +104,7 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 		 }
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Start) {
-
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
 
@@ -174,6 +202,7 @@ void PD_GM_GameManager::OnBeginState() {
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Start) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Start"));
 		playersManager->ResetAll();
+		ChangeState(EClientGameState::GenerateOrders_ConsumablePhase);
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_ConsumablePhase) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ConsumablePhase"));

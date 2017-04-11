@@ -629,6 +629,11 @@ uint8 UPD_ClientGameInstance::GetTypeOfAction()
 	return playersManager->MyPlayerInfo->typeOfAction;
 }
 
+void UPD_ClientGameInstance::ChangePhase(bool next)
+{
+	gameManager->ChangePhase(next);
+}
+
 uint8 UPD_ClientGameInstance::GetGameMngStatus()
 {
 	uint8 GameStatusInt = 10;
