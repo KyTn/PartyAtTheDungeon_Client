@@ -49,5 +49,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 	bool GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies);
+
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		bool GetIDCharFromEnemy(AActor* enemyToCheck , FString &id_char);
+
 };
  

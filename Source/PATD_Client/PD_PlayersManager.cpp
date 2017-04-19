@@ -213,14 +213,21 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 	FStructTargetToAction target = FStructTargetToAction();
 	target.id_action = id_action;
 
-	for (int i = 0; i < id_character.Num(); i++)
+	if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent > 0)
 	{
+		for (int i = 0; i < id_character.Num(); i++)
+		{
+			target.id_character.Add(id_character[i]);
+		}
+		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent--;
+		MyPlayerInfo->turnOrders->actions.Add(target);
 
-		target.id_character.Add(id_character[i]);
 	}
-
-
-	MyPlayerInfo->turnOrders->actions.Add(target);
+	else 
+	{
+		return false;
+	}
+	
 	return true;
 
 }
@@ -242,10 +249,7 @@ bool PD_PlayersManager::ResetConsumables() {
 }
 bool PD_PlayersManager::ResetMovements() {
 
-	
-
 	MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent += MyPlayerInfo->turnOrders->positionsToMove.Num();
-	
 
 	MyPlayerInfo->turnOrders->positionsToMove.Empty();
 	return MyPlayerInfo->turnOrders->positionsToMove.Num() == 0;
@@ -255,6 +259,9 @@ bool PD_PlayersManager::ResetInteractuables() {
 	return MyPlayerInfo->turnOrders->interactuablesToInteract.Num() == 0;
 }
 bool PD_PlayersManager::ResetActions() {
+
+	MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent += MyPlayerInfo->turnOrders->actions.Num();
+
 	MyPlayerInfo->turnOrders->actions.Empty();
 	return MyPlayerInfo->turnOrders->actions.Num() == 0;
 }

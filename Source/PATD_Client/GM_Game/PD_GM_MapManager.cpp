@@ -143,6 +143,9 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetController(Cast<APD_GenericController>(
 			_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCharacterBP()->GetController()));
 
+		Cast<APD_E_Character>(_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCharacterBP())->SetLogicCharacter(
+			_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character);
+
 		//Set de color of the Character --> Esto se deberia llevar a una fucnion del CharacterLogic para cambiar desde ahi la skin
 		FOutputDeviceNull ar;
 		const FString command = FString::Printf(TEXT("ChangeMaterial %d"), i);
@@ -177,6 +180,7 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 			//logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 
 			///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
+			charac->SetLogicCharacter(logicCha);
 
 			_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
 			break;
@@ -193,6 +197,7 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 			//logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 
 			///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
+			charac->SetLogicCharacter(logicCha);
 
 			_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
 			break;

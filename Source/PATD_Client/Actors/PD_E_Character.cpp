@@ -3,6 +3,7 @@
 #include "PATD_Client.h"
 #include "PD_E_Character.h"
 
+#include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
 
 // Sets default values
 APD_E_Character::APD_E_Character()
@@ -33,3 +34,12 @@ void APD_E_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
+void APD_E_Character::SetLogicCharacter(PD_GM_LogicCharacter* nlogic_character)
+{
+	logic_character = nlogic_character;
+}
+
+PD_GM_LogicCharacter* APD_E_Character::GetLogicCharacter()
+{
+	return logic_character;
+}

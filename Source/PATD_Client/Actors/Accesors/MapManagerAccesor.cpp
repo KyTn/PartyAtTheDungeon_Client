@@ -88,7 +88,7 @@ void AMapManagerAccesor::TransformFVectorToLogicPosition(FVector positionInWorld
 bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies)
 {
 
-	if (mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num() > 0)
+	/*if (mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num() > 0)
 	{
 		int playerRange = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
 
@@ -107,10 +107,14 @@ bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEne
 				}
 			}
 		}
-		
+		}
+		*/
+		for (int i = 0; i <  mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(); i++)
+		{
+			possibleEnemies.Add(mapManager->_GAMEMANAGER->enemyManager->GetEnemies()[i]->GetCharacterBP());
+		}
 		
 
-	}
 	UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - enemies %d added  %d"), mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(),
 		possibleEnemies.Num());
 
@@ -118,4 +122,26 @@ bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEne
 		return true;
 	else
 		return false;
+}
+
+bool AMapManagerAccesor::GetIDCharFromEnemy(AActor* enemyToCheck, FString &id_char)
+{
+	APD_E_Character* enemy = Cast<APD_E_Character>(enemyToCheck);
+
+	if (enemy)
+	{
+		id_char = enemy->GetLogicCharacter()->GetIDCharacter();
+
+		PD_GM_LogicCharacter* enemyLogic = nullptr;
+		enemyLogic = mapManager->_GAMEMANAGER->enemyManager->GetCharacterByID(id_char);
+		if (enemyLogic)
+		{
+			return true;
+		}
+		else {
+			id_char = "none";
+		}
+	}
+
+	return false;
 }
