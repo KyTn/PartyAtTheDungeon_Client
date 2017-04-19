@@ -136,7 +136,10 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 		 
 	}	 
 	else if(structGameState->enumGameState == EClientGameState::EndOfTurn) {
+		if (inEventType == UStructType::FStructClientCanGenerateOrders) {
 
+			ChangeState(EClientGameState::GenerateOrders_Start);
+		}
 	}
 
 
@@ -168,16 +171,16 @@ void PD_GM_GameManager::UpdateState() {
 
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
-
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
-		ChangeState(EClientGameState::WaitingServer);
+		;
 	}
 	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
 
 	}
 	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
-		ChangeState(EClientGameState::EndOfTurn);
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 		
@@ -218,12 +221,30 @@ void PD_GM_GameManager::OnBeginState() {
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Validate"));
+		ChangeState(EClientGameState::SendOrdersToServer);
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
-		// 
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: SendOrdersToServer"));
+			if (!playersManager->MyPlayerInfo->turnOrders) {
+				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: SendOrdersToServer: Error, no hay turn orders para enviar"));
+			}
+
+			FStructTurnOrders turnsOrdersToSend = FStructTurnOrders();
+			turnsOrdersToSend = *(playersManager->MyPlayerInfo->turnOrders);
+
+			bool sentOk = networkManager->SendNow(&turnsOrdersToSend, 0);
+
+			if (sentOk)  //Si se ha enviado bien el paquete - Vaciar el PlayersInfo->turnOrders y return true
+			{
+				playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
+				ChangeState(EClientGameState::WaitingServer);
+			}
+
+		
+		
 	}
 	else if (structGameState->enumGameState == EClientGameState::WaitingServer) {
-		
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: WaitingServer"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: UpdateInfo"));
@@ -264,16 +285,18 @@ void PD_GM_GameManager::OnBeginState() {
 				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de enemigo con id %s"), *updateCharacter.ID_character);
 			}
 		}
+		ChangeState(EClientGameState::EndOfTurn);
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
-
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: EndOfTurn"));
+		
 	}
 	else //Caso indeterminado
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: WARNING: estado sin inicializacion"));
 	}
 
-	UpdateState();
+	//UpdateState();
 }
 
 #pragma endregion

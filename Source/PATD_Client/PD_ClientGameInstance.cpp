@@ -603,7 +603,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	return true;
 }
 
-
+/*
 bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 {
 	if (!playersManager->MyPlayerInfo->turnOrders) {
@@ -622,7 +622,7 @@ bool UPD_ClientGameInstance::SendTurnOrderActionsToServer()
 	}
 
 	return sentOk;
-}
+}*/
 
 void UPD_ClientGameInstance::SetTypeOfAction(int ntypeAction)
 {

@@ -150,8 +150,8 @@ public:
 
 
 	//Function para enviar el paquete con la orden entera al servidor
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		bool SendTurnOrderActionsToServer();
+//	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+//		bool SendTurnOrderActionsToServer();
 
 	//Function para cambiar el tipo de accion sobre una tile
 	/*
