@@ -88,33 +88,55 @@ void AMapManagerAccesor::TransformFVectorToLogicPosition(FVector positionInWorld
 bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies)
 {
 
-	/*if (mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num() > 0)
+	if (mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num() > 0)
 	{
 		int playerRange = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
 
 		if (playerRange == 1) //melee
 		{
 			UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - player range %d"), playerRange);
+			TArray<PD_MG_LogicPosition> possibleNewPositionToMove = TArray<PD_MG_LogicPosition>();
+			if (mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0) 
+			{
+				UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - te has movido antes"));
 
-			TArray<PD_MG_LogicPosition> possibleNewPositionToMove = mapManager->Get_LogicPosition_Adyacents_To(
-				mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+				//si es mayor que 0, la posicion a comprobar para el rango es la ultima a la que se va a mover
+				int maxIndexPosToMove = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() - 1;
+				possibleNewPositionToMove = mapManager->Get_LogicPosition_Adyacents_To(PD_MG_LogicPosition(
+					mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove[maxIndexPosToMove].positionX,
+					mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove[maxIndexPosToMove].positionY));		
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - desde la posicion actual"));
+
+				possibleNewPositionToMove = mapManager->Get_LogicPosition_Adyacents_To(
+					mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+			}
+
+			UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - possible tiles to check - %d"), possibleNewPositionToMove.Num());
+
 			for (int j = 0; j < possibleNewPositionToMove.Num(); j++)
 			{
 				for (int i = 0; i < mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(); i++)
 				{
 					if (possibleNewPositionToMove[j] == mapManager->_GAMEMANAGER->enemyManager->GetEnemies()[i]->GetCurrentLogicalPosition())
+					{
 						possibleEnemies.Add(mapManager->_GAMEMANAGER->enemyManager->GetEnemies()[i]->GetCharacterBP());
+						UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - adding posible enemy to defenestreiting"));
+					}
+
 				}
 			}
 		}
 		}
-		*/
+	/*
 		for (int i = 0; i <  mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(); i++)
 		{
 			possibleEnemies.Add(mapManager->_GAMEMANAGER->enemyManager->GetEnemies()[i]->GetCharacterBP());
 		}
 		
-
+		*/
 	UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - enemies %d added  %d"), mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(),
 		possibleEnemies.Num());
 

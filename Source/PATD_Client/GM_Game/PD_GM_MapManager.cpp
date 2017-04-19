@@ -176,7 +176,7 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 			logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
 			logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
 			logicCha->SetCharacterBP(charac);
-
+			logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
 			//logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 
 			///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
@@ -193,7 +193,8 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 			logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
 			logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
 			logicCha->SetCharacterBP(charac);
-			
+			logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
+
 			//logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 
 			///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER

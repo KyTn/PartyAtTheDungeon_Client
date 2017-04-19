@@ -221,7 +221,7 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 		}
 		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent--;
 		MyPlayerInfo->turnOrders->actions.Add(target);
-
+		return true;
 	}
 	else 
 	{
