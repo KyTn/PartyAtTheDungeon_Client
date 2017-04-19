@@ -208,6 +208,8 @@ struct FStructTotalStats
 	UPROPERTY()
 		uint8 HPCurrent;
 	UPROPERTY()
+		uint8 APCurrent;
+	UPROPERTY()
 		uint8 RangeTotal;
 	UPROPERTY()
 		uint8 DMGTotal;

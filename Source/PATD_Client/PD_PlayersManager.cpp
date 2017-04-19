@@ -146,9 +146,25 @@ bool PD_PlayersManager::CreateMovementOrder(int positionX, int positionY)
 	tile.positionX = positionX;
 	tile.positionY = positionY;
 
-	MyPlayerInfo->turnOrders->positionsToMove.Add(tile);
+	if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent > 0) 
+	{
+	if ( (MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) ||   (MyPlayerInfo->turnOrders->positionsToMove.Last().positionX != tile.positionX)
+			|| (MyPlayerInfo->turnOrders->positionsToMove.Last().positionY != tile.positionY) )
+		{
+			MyPlayerInfo->turnOrders->positionsToMove.Add(tile);
+			MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent--;
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	else 
+	{
+		return false;
 
-	return true;
+	}
 
 }
 
@@ -225,6 +241,12 @@ bool PD_PlayersManager::ResetConsumables() {
 	return MyPlayerInfo->turnOrders->consumablesToConsume.Num() == 0;
 }
 bool PD_PlayersManager::ResetMovements() {
+
+	
+
+	MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent += MyPlayerInfo->turnOrders->positionsToMove.Num();
+	
+
 	MyPlayerInfo->turnOrders->positionsToMove.Empty();
 	return MyPlayerInfo->turnOrders->positionsToMove.Num() == 0;
 }

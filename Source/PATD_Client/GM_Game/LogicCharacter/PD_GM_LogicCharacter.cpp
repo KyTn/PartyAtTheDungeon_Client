@@ -310,6 +310,7 @@ void PD_GM_LogicCharacter::SetTotalStats()
 		totalStats->AP = ceil((basicStats->AGI + basicStats->DES) / 2) - 5;
 	}
 	totalStats->APTotal = initBaseStats->APBase + totalStats->AP;
+	totalStats->APCurrent = totalStats->APTotal;
 	//Choque
 	if ((basicStats->POD + basicStats->MAL) < 10)
 	{

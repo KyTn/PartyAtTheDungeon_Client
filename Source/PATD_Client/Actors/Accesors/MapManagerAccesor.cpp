@@ -72,3 +72,14 @@ int AMapManagerAccesor::GetIdOfCharacterAt(FVector position) {
 	}
 	return -999;
 }
+
+FVector AMapManagerAccesor::GetOwnPlayerPosition()
+{
+	return mapManager->LogicToWorldPosition(mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+}
+
+void AMapManagerAccesor::TransformFVectorToLogicPosition(FVector positionInWorld, int &logicX, int &logicY)
+{
+	logicX = mapManager->WorldToLogicPosition(positionInWorld).GetX();
+	logicY = mapManager->WorldToLogicPosition(positionInWorld).GetY();
+}

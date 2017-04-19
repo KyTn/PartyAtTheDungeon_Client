@@ -40,5 +40,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		int GetIdOfCharacterAt(FVector position);
+
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+	FVector GetOwnPlayerPosition();
+
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+	void TransformFVectorToLogicPosition(FVector positionInWorld, int &logicX, int &logicY);
 };
  
