@@ -38,6 +38,12 @@ enum class EClientState { StartApp, Game_NoConnection, ConfigureMatch, WaitingMa
 enum class ActiveSkills { Punch = 1, Fireball = 2, JustInTheEye = 3, ForTheKing = 4, LookingForCuenca = 5 };
 enum class PasiveSkills { NotInMyGuard = 1, TheGoodBier = 2, KingInTheNorth = 3, HelloWorld = 4, YouShallNotPass = 5 };
 
+//Lista que define TODOS las posibles acciones (ataques basicos, habilidades, etc) que puede hacer un character (enemigo o jugador)
+UENUM(BlueprintType)
+enum class ActionsByCharacter 
+{
+	BasicAttack = 1
+};
 
 enum class ECharacterType { NoCharacter, Player, Archer, Zombie };
 /*

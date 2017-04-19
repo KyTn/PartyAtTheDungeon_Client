@@ -46,5 +46,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 	void TransformFVectorToLogicPosition(FVector positionInWorld, int &logicX, int &logicY);
+
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+	bool GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies);
 };
  

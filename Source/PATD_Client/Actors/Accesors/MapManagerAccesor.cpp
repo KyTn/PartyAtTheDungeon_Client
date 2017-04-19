@@ -8,6 +8,7 @@
 #include "Actors/PD_E_Character.h"
 #include "GM_Game/PD_GM_MapManager.h"
 #include "GM_Game/PD_GM_GameManager.h"
+#include "GM_Game/PD_GM_EnemyManager.h"
 #include "PD_PlayersManager.h"
 #include "Structs/PD_ClientStructs.h"//Para todos los structs
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
@@ -82,4 +83,39 @@ void AMapManagerAccesor::TransformFVectorToLogicPosition(FVector positionInWorld
 {
 	logicX = mapManager->WorldToLogicPosition(positionInWorld).GetX();
 	logicY = mapManager->WorldToLogicPosition(positionInWorld).GetY();
+}
+
+bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies)
+{
+
+	if (mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num() > 0)
+	{
+		int playerRange = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
+
+		if (playerRange == 1) //melee
+		{
+			UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - player range %d"), playerRange);
+
+			TArray<PD_MG_LogicPosition> possibleNewPositionToMove = mapManager->Get_LogicPosition_Adyacents_To(
+				mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+			for (int j = 0; j < possibleNewPositionToMove.Num(); j++)
+			{
+				for (int i = 0; i < mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(); i++)
+				{
+					if (possibleNewPositionToMove[j] == mapManager->_GAMEMANAGER->enemyManager->GetEnemies()[i]->GetCurrentLogicalPosition())
+						possibleEnemies.Add(mapManager->_GAMEMANAGER->enemyManager->GetEnemies()[i]->GetCharacterBP());
+				}
+			}
+		}
+		
+		
+
+	}
+	UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - enemies %d added  %d"), mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num(),
+		possibleEnemies.Num());
+
+	if (possibleEnemies.Num() > 0)
+		return true;
+	else
+		return false;
 }
