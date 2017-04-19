@@ -178,7 +178,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 		dynamicMapRef->AddEnemyDictionary(fileReaded[i].GetCharArray()[0], enemyValue);*/
 		enemyLine = fileReaded[i].GetCharArray();
 		enemyLine.RemoveAt(enemyLine.Num() - 1);
-		enemyLine.RemoveAt(enemyLine.Num() - 1);
+		//enemyLine.RemoveAt(enemyLine.Num() - 1);
 
 		j = 0; num = 1; intType = 0; x = 0; y = 0;
 		while (enemyLine[j] != ':')
