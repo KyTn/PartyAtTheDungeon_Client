@@ -126,6 +126,7 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 	}	 
 	else if(structGameState->enumGameState == EClientGameState::WaitingServer) {
 		if (inEventType == UStructType::FStructUpdateTurn) {
+			UE_LOG(LogTemp, Log, TEXT("HandleEvent: FStructUpdateTurn"));
 			FStructUpdateTurn* updateTurn = (FStructUpdateTurn*)inDataStruct;
 			structGameState->update_turn = *updateTurn;
 

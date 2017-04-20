@@ -13,7 +13,8 @@
 #include "Structs/PD_ClientStructs.h" //Para todos los structs y enums
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "GM_Game/PD_GM_MapManager.h"
-#include "Actors/PD_GenericController.h"
+//#include "Actors/PD_GenericController.h"
+#include "Actors/PD_E_Character.h"
 
 PD_GM_LogicCharacter::PD_GM_LogicCharacter()
 {
@@ -70,13 +71,15 @@ bool PD_GM_LogicCharacter:: MoveAtUpdate(PD_MG_LogicPosition targetPosition)
 	this->SetCurrentLogicalPosition( targetPosition);
 	if (isPlayer) {
 		FVector realPosition = mapMng->LogicToWorldPosition(targetPosition);
-		APD_CharacterController* controllerCharacter = Cast<APD_CharacterController>(controller);
-		controllerCharacter->MoveTo(realPosition.X, realPosition.Y);
+		//APD_CharacterController* controllerCharacter = Cast<APD_CharacterController>(controller);
+		//controllerCharacter->MoveTo(realPosition.X, realPosition.Y);
+		character_Player_BP->SetActorLocation(realPosition);
 	}
 	else {
 		FVector realPosition = mapMng->LogicToWorldPosition(targetPosition);
-		APD_EnemyController* controllerCharacter = Cast<APD_EnemyController>(controller);
-		controllerCharacter->MoveTo(realPosition.X, realPosition.Y);
+		//APD_EnemyController* controllerCharacter = Cast<APD_EnemyController>(controller);
+		//controllerCharacter->MoveTo(realPosition.X, realPosition.Y);
+		character_Player_BP->SetActorLocation(realPosition);
 	}
 	
 	return true;

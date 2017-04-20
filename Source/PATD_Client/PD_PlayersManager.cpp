@@ -235,13 +235,16 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 
 bool PD_PlayersManager::ResetAll() {
 	bool b = true;
-
+	/*
 	b = b && ResetConsumables();
 	b = b && ResetMovements();
 	b = b && ResetInteractuables();
 	b = b && ResetActions();
-
-	return b;
+	*/
+	delete MyPlayerInfo->turnOrders;
+	MyPlayerInfo->turnOrders = new FStructTurnOrders();
+	MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
+	return true;
 }
 bool PD_PlayersManager::ResetConsumables() {
 	MyPlayerInfo->turnOrders->consumablesToConsume.Empty();
