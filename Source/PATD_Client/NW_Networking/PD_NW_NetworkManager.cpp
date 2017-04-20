@@ -54,7 +54,7 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 
 		TArray<uint8> dataaux = TArray<uint8>();
 
-		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Size SIN cabecera : %d"), size);
+		//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Size SIN cabecera : %d"), size);
 		dataaux.Init(0, size);
 		for (uint32 i = 5; i < 5 + size; i++) {
 
@@ -150,7 +150,7 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 	}
 	s.AppendChar(']');
 	*/
-	UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d - tamaño precabecera: %d"), player, structGeneric->structType, dataIn->Num());
+	//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Enviando data a player %d. Struct de tipo %d - tamaño precabecera: %d"), player, structGeneric->structType, dataIn->Num());
 
 
 	// size + dataIn 
@@ -202,7 +202,7 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 
 }
 
-/*/
+/*
 //Funciones publicas para enviar
 bool PD_NW_NetworkManager::SendNow(FStructGeneric* st,int player) {
 //Para hacer broadcast con -1?
@@ -212,7 +212,7 @@ socketManager->SendInfoTo(player, data);
 
 
 //Con compresor
-/*AddToSendList(st, player);
+AddToSendList(st, player);
 SendNow(player);
 
 */
