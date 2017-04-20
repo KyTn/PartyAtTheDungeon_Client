@@ -594,7 +594,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	if (playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal == 205) //Comprobacion sobre un valor para determinar si hay Status o no
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: rellenando datos"));
-		FillCharecterStats(5,5,5,5,6,6);
+		FillCharecterStats(100,100,100,100,100,100);
 	}
 
 	FStructCharacter structCharacterToSend = FStructCharacter();
