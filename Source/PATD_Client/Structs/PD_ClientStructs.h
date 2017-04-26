@@ -18,6 +18,7 @@ struct StructPlayer {
 	//Menu options and configuration
 	bool readyMenu;
 	int ID_Player;
+	FString ID_Client;
 	bool clientMaster;
 
 	bool isSetPlayerCharacter; //Para comprobar que se ha enviado al Server el Personaje o no (al menos una vez)

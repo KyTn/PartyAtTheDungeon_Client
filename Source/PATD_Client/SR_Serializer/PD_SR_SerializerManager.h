@@ -103,6 +103,27 @@ public:
 
 		}break;
 
+
+		case UStructType::FStructRequestIDClient: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructRequestIDClient"));
+			FStructRequestIDClient* structSpecialization = (FStructRequestIDClient*)structGeneric;
+			return SerializeDataTemplate<FStructRequestIDClient>(structSpecialization);
+
+		}break;
+
+		case UStructType::FStructClientID: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructClientID"));
+			FStructClientID* structSpecialization = (FStructClientID*)structGeneric;
+			return SerializeDataTemplate<FStructClientID>(structSpecialization);
+
+		}break;
+
+		case UStructType::FStructWelcome: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructWelcome"));
+			FStructWelcome* structSpecialization = (FStructWelcome*)structGeneric;
+			return SerializeDataTemplate<FStructWelcome>(structSpecialization);
+
+		}break;
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct no reconocido"));
 			return nullptr;
@@ -184,6 +205,23 @@ public:
 
 		}break;
 
+		case UStructType::FStructRequestIDClient: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructRequestIDClient"));
+			return DeserializeDataTemplate<FStructRequestIDClient>(data);
+
+		}break;
+
+		case UStructType::FStructClientID: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructClientID"));
+			return DeserializeDataTemplate<FStructClientID>(data);
+
+		}break;
+
+		case UStructType::FStructWelcome: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructWelcome"));
+			return DeserializeDataTemplate<FStructWelcome>(data);
+
+		}break;
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct no reconocido"));
 			return nullptr;

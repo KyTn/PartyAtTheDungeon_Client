@@ -62,10 +62,13 @@ void UPD_ClientGameInstance::Init()
 	playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
 	playersManager->MyPlayerInfo->logic_Character->SetIsPlayer(true);
 	playersManager->MyPlayerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
+	playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetUniqueDeviceId(); //IDENTIFICADOR UNICO POR CLIENTE
+
 
 	InitializeNetworking();
 
 	networkManager->RegisterObserver(this);
+
 
 }
 
@@ -83,8 +86,6 @@ void UPD_ClientGameInstance::InitializeNetworking()
 	//Como buscamos la ip para que no tengamos que ponerla a mano en la interfaz?
 	socketManager->Init(ClientActorSpawned, serverAddressToConnect, defaultServerPort);//Con esto empezaria el timer, quizas no lo queremos llamar aqui o queremos separarlo entre init y start
 
-
-
 }
 
 #pragma endregion
@@ -97,12 +98,23 @@ void UPD_ClientGameInstance::InitializeNetworking()
 void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Evento recibido%d. Estado: %d"), static_cast<uint8>(inEventType), static_cast<uint8>(structClientState->enumClientState));
 
+	if (inEventType == UStructType::FStructRequestIDClient) {
+		//Cuando el Servidor pide el ID Client 
+		HandleEvent_RequestIDClient(inDataStruct, inPlayer, inEventType);
+	}
 
+	if (inEventType == UStructType::FStructWelcome) {
+		//Cuando el Servidor pide el ID Client 
+		HandleEvent_Welcome(inDataStruct, inPlayer, inEventType);
+	}
+
+
+	/// IF DE ESTADOS DEL CLIENTE
 	if (structClientState->enumClientState == EClientState::StartApp) {
 
 	}
 	else if (structClientState->enumClientState == EClientState::Game_NoConnection) {
-		HandleEvent_Welcome(inDataStruct, inPlayer, inEventType);
+		//HandleEvent_Welcome(inDataStruct, inPlayer, inEventType);
 	}
 	else if (structClientState->enumClientState == EClientState::ConfigureMatch) {
 		if (inEventType == UStructType::FStructMatchConfig) {
@@ -218,9 +230,71 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 
 #pragma region HANDLERS
+void UPD_ClientGameInstance::HandleEvent_RequestIDClient(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType)
+{
+	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_RequestIDClient"));
+	if (inEventType == UStructType::FStructRequestIDClient)
+	{
+		FStructClientID myID_Client;
+		myID_Client.ID_Client = playersManager->MyPlayerInfo->ID_Client;
+		networkManager->SendNow(&myID_Client, 0);
+	}
+}
+
+
+
+
 
 void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_Welcome"));
+
+	FStructWelcome* structWelcome = (FStructWelcome*)inDataStruct;
+	structClientState->clientMaster = structWelcome->isClientMaster;
+	structClientState->numPlayer = structWelcome->playerIndex;
+
+	GameState clientGameState = GameState(structWelcome->GameState);
+	switch (clientGameState)
+	{
+		case GameState::ConfigureMatch:
+		{
+			ChangeState(EClientState::ConfigureMatch);
+			break;
+		}
+		case GameState::WaitingMatchConfiguration:
+		{
+			ChangeState(EClientState::WaitingMatchConfiguration);
+			break;
+		}
+		case GameState::Lobby_Tabern:
+		{
+			ChangeState(EClientState::Lobby_Tabern);
+			break;
+		}
+		case GameState::GameInProcess:
+		{
+			ChangeState(EClientState::GameInProcess);
+			break;
+		}
+		case GameState::ClientCanCreateOrders:
+		{
+			break;
+		}
+		case GameState::ClientWaitForServer:
+		{
+			break;
+		}
+		case GameState::NoConnectionAllowed:
+		{
+			//NO CONEXION PERMITIDA 
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("NO CONNECTION ALLOWED AT THIS TIME"));
+			break;
+		}
+		default:
+			break;
+	}
+
+
+
 
 	if (inEventType == UStructType::FStructOrderMenu) {
 		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_Welcome:esta entrando en el oren menu"));

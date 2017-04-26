@@ -311,13 +311,15 @@ Por claridad es mejor que el nombre del struct coincida con el del enumerado. (a
 
 
 /*Lista de structs especiales
-NoDefined=0, para detectar errores de instanciacion.
-AllStructs=1 para suscribirse a eventos para todos.
-FStructNewConnection=2 struct que crea el networkmanager (no necesita serializacion)
+- NoDefined=0, -> para detectar errores de instanciacion.
+- AllStructs=1 -> para suscribirse a eventos para todos.
+- FStructNewConnection=2 struct que crea el networkmanager (no necesita serializacion) -> para gestionar nuevas conexiones al servidor (NO SE ENVIA POR RED COMO TAL)
+- FStructServerToClientWellcome -> Mensaje desde el Server al Cliente para comunicarle que la comunicacion ha sido exitoso y pedirle que envie el Cliente ID
+- FStructClientID -> El cliente envia su identificador unico, sirve para la reconexion
 */
 
 enum class UStructType {
-	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructMap = 10, FStructOrderMenu = 20, FStructMatchConfig = 21, FStructMatchConfigDone = 22, FStructTurnOrders = 30,
+	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructRequestIDClient = 3, FStructClientID = 4, FStructWelcome = 5, FStructMap = 10, FStructOrderMenu = 20, FStructMatchConfig = 21, FStructMatchConfigDone = 22, FStructTurnOrders = 30,
 	FStructCharacter = 40, FStructUpdateTurn = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52,
 	FStructInstatiatePlayers = 60
 };
@@ -327,6 +329,66 @@ enum class UStructType {
 //=================================
 ///Structs SERIALIZABLES (heredan de FStructGeneric) (Se envian)
 //=================================
+USTRUCT()
+struct FStructRequestIDClient : public  FStructGeneric
+{
+	GENERATED_BODY()
+
+		//Constructor
+		FStructRequestIDClient()
+	{
+		structType = static_cast<uint8>(UStructType::FStructRequestIDClient);
+	}
+};
+
+USTRUCT()
+struct FStructClientID : public  FStructGeneric
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		FString ID_Client;
+
+	//Constructor
+	FStructClientID()
+	{
+		structType = static_cast<uint8>(UStructType::FStructClientID);
+	}
+};
+
+
+enum class GameState //Solo se envia al cliente
+{
+	ConfigureMatch = 0, //Menu Principal
+	WaitingMatchConfiguration = 1, //Menu principal para NO CLient Master
+	Lobby_Tabern = 2, //Seleccion de personajes
+	GameInProcess = 4,
+	ClientCanCreateOrders = 5,
+	ClientWaitForServer = 6,
+	NoConnectionAllowed = 7 //nuevo Cliente no se puede conectar - partida empezada
+};
+
+USTRUCT()
+struct FStructWelcome : public  FStructGeneric
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint8 GameState;
+
+	//Usadas por welcome
+	UPROPERTY()
+		uint8 playerIndex;
+	UPROPERTY()
+		bool isClientMaster = false;
+
+
+	//Constructor
+	FStructWelcome()
+	{
+		structType = static_cast<uint8>(UStructType::FStructWelcome);
+	}
+};
 
 USTRUCT()
 struct FStructCharacter : public  FStructGeneric
