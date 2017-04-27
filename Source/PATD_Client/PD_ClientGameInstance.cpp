@@ -62,8 +62,27 @@ void UPD_ClientGameInstance::Init()
 	playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
 	playersManager->MyPlayerInfo->logic_Character->SetIsPlayer(true);
 	playersManager->MyPlayerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
-	playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetUniqueDeviceId(); //IDENTIFICADOR UNICO POR CLIENTE
 
+	switch (GetWorld()->WorldType)
+	{		
+		case EWorldType::Game:
+		{
+			playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetMachineId().ToString(); //IDENTIFICADOR UNICO POR CLIENTE
+			break;
+		}
+		case EWorldType::PIE:
+		{
+			playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetMachineId().ToString().Append(FString::FromInt(GetWorldContext()->PIEInstance)); //IDENTIFICADOR UNICO POR CLIENTE
+			break;
+		}
+		default:
+		{
+			playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetMachineId().ToString(); //IDENTIFICADOR UNICO POR CLIENTE
+			break;
+		}
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FGenericPlatformMisc::GetUniqueDeviceId(): %s"), *playersManager->MyPlayerInfo->ID_Client));
 
 	InitializeNetworking();
 
