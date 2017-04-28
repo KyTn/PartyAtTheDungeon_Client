@@ -125,7 +125,7 @@ public:
 
 		}break;
 		default:
-			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct no reconocido"));
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct (%d) no reconocido"), static_cast<uint8>(type));
 			return nullptr;
 
 		}
@@ -223,7 +223,7 @@ public:
 
 		}break;
 		default:
-			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct no reconocido"));
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct (%d) no reconocido"), static_cast<uint8>(type));
 			return nullptr;
 		}
 
