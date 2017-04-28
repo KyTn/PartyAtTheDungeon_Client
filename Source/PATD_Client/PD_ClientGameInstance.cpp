@@ -364,9 +364,12 @@ void UPD_ClientGameInstance::HandleEvent_MapIncoming(FStructGeneric* inDataStruc
 
 void UPD_ClientGameInstance::HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_LaunchMatchFromServer"));
+	//Esto es lo necesario que tenga para hacer el launch
+	
 
 	structClientState->ConfigAllCharactersDone = true;
 	this->UpdateState();
+	
 }
 
 
@@ -514,7 +517,8 @@ void UPD_ClientGameInstance::UpdateState() {
 		}
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
-		if (structClientState->AllCharactersIncoming) {
+		//Agregada condicion de que el map este inicializado para pasar de estado
+		if (structClientState->AllCharactersIncoming && !structClientState->mapString.IsEmpty()) {
 			this->ChangeState(EClientState::GameInProcess);
 		}
 	}
