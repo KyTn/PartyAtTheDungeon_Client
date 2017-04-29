@@ -28,6 +28,11 @@ PD_NW_Socket::~PD_NW_Socket()
 
 }
 
+FSocket* PD_NW_Socket::GetFSocket()
+{
+	return socket;
+}
+
 
 bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 
@@ -75,8 +80,7 @@ bool PD_NW_Socket::SendData(TArray<uint8>* sendData) {
 
 
 	//Mirar si la el CountBytes funciona adecuadamente o esta metiendo bytes de mas para el array. (este serializando de mas)
-
-
+	
 	bool successful = socket->Send(sendData->GetData(), sendData->Num(), bytesReceived);
 	if (successful) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Nivel Socket: Se ha enviado un paquete!");

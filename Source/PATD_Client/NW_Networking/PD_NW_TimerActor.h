@@ -47,7 +47,7 @@ public:
 	bool isTimerActive();
 
 
-	//Declaraciones de prueba
-
-
+	//Comprobar al X tiempo que se ha recibido un pong desde el cliente
+	void SetTimerToCheckPong();
+	void CallFunctionCheckPongByNetworkManager();
 };

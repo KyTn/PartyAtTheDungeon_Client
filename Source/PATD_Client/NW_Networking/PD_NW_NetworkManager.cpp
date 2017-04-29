@@ -2,6 +2,10 @@
 
 #include "PATD_Client.h"
 #include "PD_NW_NetworkManager.h"
+#include "PD_ClientGameInstance.h"
+#include "Structs/PD_ClientStructs.h"
+#include "PD_NW_TimerActor.h"
+#include "PD_PlayersManager.h"
 
 //Includes of forward declaration
 #include "NW_NetWorking/Socket/PD_NW_SocketManager.h"
@@ -191,8 +195,9 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 
 		//TArray<uint8>* dataSend = serializerManager->SerializeDataTemplate<FStructData>(&dataStruct);
 		//Enviar dataStruct, en realidad deberiamos meter este dataStruct en el struct de lista y enviar ese.
+		bool sendInfoWasSuccesful = socketManager->SendInfoTo(player, dataIn);
 
-		return socketManager->SendInfoTo(player, dataIn);
+		return sendInfoWasSuccesful;
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: data recibida del serializador null"));
@@ -287,4 +292,63 @@ bool PD_NW_NetworkManager::RegisterObserver(PD_NW_iEventObserver* observer) {
 
 bool PD_NW_NetworkManager::UnregisterObserver(PD_NW_iEventObserver* observer) {
 	return eventManager->UnregisterObserver(observer);
+}
+
+void PD_NW_NetworkManager::SendPingToServer() //Manda un ping al servidor
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("D_NW_NetworkManager::SendPingToServer()")));
+	UE_LOG(LogTemp, Warning, TEXT("D_NW_NetworkManager::SendPingToServer()"));
+
+	UPD_ClientGameInstance* CGI = Cast<UPD_ClientGameInstance>(socketManager->GetTimerActor()->GetGameInstance());
+	if (CGI)
+	{
+		//Seteamos la variable pingPong del cliente a 1
+		CGI->playersManager->MyPlayerInfo->pingPong = 1;
+
+		//Enviamos el Ping al Server
+		FStructPing* ping = new FStructPing();
+		SendNow(ping, 0);
+
+
+
+		//Llamamos al Timer para que en 2 segundos compruebe que el server ha enviado un pong (tiempo configurable)
+		socketManager->GetTimerActor()->SetTimerToCheckPong();
+	}
+	
+}
+
+bool PD_NW_NetworkManager::CheckPongFromServer() //comprueba que el server ha enviado el pong
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("D_NW_NetworkManager::CheckPongFromServer()")));
+	UE_LOG(LogTemp, Warning, TEXT("D_NW_NetworkManager::CheckPongFromServer()"));
+
+	UPD_ClientGameInstance* CGI = Cast<UPD_ClientGameInstance>(socketManager->GetTimerActor()->GetGameInstance());
+	if (CGI)
+	{
+		//Seteamos las variables pingPong de cada cliente a 1
+			if (CGI->playersManager->MyPlayerInfo->pingPong == 1) //No ha recibido el pong que lo cambia a 2 --> mirar HandlePong_Event
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Has perdido la conexion con el Server")));
+				CGI->playersManager->MyPlayerInfo->isConnected = false;
+				
+				//Vamos a volver a conectarnos
+				int aux_numberPlayer = ConnectTo(CGI->serverAddressToConnect, CGI->defaultServerPort);
+				if (aux_numberPlayer > 0) {
+					socketManager->ReconnectSockets(0, aux_numberPlayer); //siempre el old sera 0, por que al ser el cliente, siempre queremos enganchar el primero
+				}
+				return false;
+			}
+
+			if (CGI->playersManager->MyPlayerInfo->pingPong == 2) // SI ha recibido el pong que lo cambia a 2 --> mirar HandlePong_Event
+			{
+				CGI->playersManager->MyPlayerInfo->isConnected = true;
+				return true;
+			}
+		
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fallo a la hora de conseguir el game instance")));
+
+	}
+	return false;
 }

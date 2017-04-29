@@ -191,7 +191,6 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 	//UE_LOG(LogTemp, Warning, TEXT("Timer Working "));
 
 	if (listenerSocket) {
-		//UE_LOG(LogTemp, Warning, TEXT(">>>> Hay Listener Socket y Funcionando ! "));
 		PD_NW_Socket* newSocket = listenerSocket->ReceiveNewConnection();
 		if (newSocket) {
 			HandleNewListenerConnection(newSocket);
@@ -199,6 +198,16 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 	}
 
 	for (int iSocket = 0; iSocket < socketArray.Num(); iSocket++) {
+		if (socketArray[iSocket]->GetFSocket()->GetConnectionState() != ESocketConnectionState::SCS_Connected)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket);
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket));
+
+		}
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("InitSocket sdocket %d "), iSocket));
+		}
+
 		//UE_LOG(LogTemp, Warning, TEXT(">>>> Comprobando sockets lista abiertos ! "));
 		//Preguntar si hay data y en caso de haberla llamar a la funcion void socketHasReceivedData(TArray<uint8> data, int socketIndex);
 		TArray<uint8>* package = socketArray[iSocket]->ReceiveData();
@@ -283,4 +292,14 @@ FString PD_NW_SocketManager::StateString() {
 		}
 	}
 	return out;
+}
+
+void PD_NW_SocketManager::ReconnectSockets(int oldSocket, int newSocket)
+{
+	delete socketArray[oldSocket];
+
+	socketArray[oldSocket] = socketArray[newSocket];
+
+	socketArray[newSocket] = nullptr;
+	socketArray.RemoveAt(newSocket);
 }

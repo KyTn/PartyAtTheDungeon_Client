@@ -37,8 +37,6 @@ private:
 	void InitTimer();
 	void DeleteTimer();
 
-
-
 	///Comunicacion con la capa superior 
 
 	//Recepcion
@@ -93,6 +91,11 @@ public:
 	void Init(APD_NW_TimerActor* InmyServerActor, FString ip, int port);
 	//Inicializa el ServerActor para ser llamado desde cualquier Mapa
 	void InitTimerActor(APD_NW_TimerActor* InmyServerActor);
+
+
+	//Sirve para realizar la reconexion de un cliente al server. Al desconectarse el cliente deja el socket abierto y crea uno nuevo.
+	//Hay que connectar el nuevo con el viejo (el nuevo ocupa la posicion en el array del viejo) y cerrar el nuevo
+	void ReconnectSockets(int oldSocket, int newSocket);
 
 	///* SERVIDOR */
 	//Inicializa el SocketManager como Server

@@ -96,6 +96,8 @@ public:
 	void HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 	void HandleEvent_AllCharactersInfoIncoming(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 	void HandleEvent_StartMatch_GoGameMnager(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
+	void HandleEvent_PongReceive(FStructGeneric* inDataStruct, int inPlayer);
+	void HandleEvent_PingReceive(FStructGeneric* inDataStruct, int inPlayer);
 
 #pragma endregion
 

@@ -2,6 +2,7 @@
 
 #include "PATD_Client.h"
 #include "PD_NW_TimerActor.h"
+#include "NW_Networking/PD_NW_NetworkManager.h"
 
 //Includes of forward declaration
 #include "NW_Networking/Socket/PD_NW_SocketManager.h"
@@ -57,6 +58,17 @@ bool APD_NW_TimerActor::isTimerActive() {
 	return GetWorldTimerManager().IsTimerActive(TimerHandleActor);
 }
 
+
+void APD_NW_TimerActor::SetTimerToCheckPong()
+{
+	FTimerHandle handleForPong;
+	GetWorldTimerManager().SetTimer(handleForPong, this, &APD_NW_TimerActor::CallFunctionCheckPongByNetworkManager, 1.00f, false);
+}
+
+void APD_NW_TimerActor::CallFunctionCheckPongByNetworkManager()
+{
+	SocketManager->GetNetworkManager()->CheckPongFromServer();
+}
 
 
 
