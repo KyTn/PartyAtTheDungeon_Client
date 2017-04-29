@@ -83,6 +83,13 @@ void PD_GM_GameManager::ChangePhase(bool next = true) {
 		else
 			ChangeState(EClientGameState::GenerateOrders_InteractionPhase);
 	}
+
+	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
+		if (next)
+			ChangeState(EClientGameState::SendOrdersToServer);
+		else
+			ChangeState(EClientGameState::GenerateOrders_ActionPhase);
+	}
 }
 
 // Dado un paquete de red, actualiza el estado correspondiente y realiza las acciones pertinentes. 
@@ -221,8 +228,8 @@ void PD_GM_GameManager::OnBeginState() {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ActionPhase"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
-		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Validate"));
-		ChangeState(EClientGameState::SendOrdersToServer);
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ValidateCACAFUTI"));
+		//ChangeState(EClientGameState::SendOrdersToServer); No hay que hacerlo aqui, ya que sino no da tiempo a lanzar el PopUp. El PopUp ya se encarga de cambiar de estado.
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: SendOrdersToServer"));
