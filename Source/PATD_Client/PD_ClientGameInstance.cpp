@@ -216,6 +216,20 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 		*/
 	}
+	else if (structClientState->enumClientState == EClientState::ReconnectingInGame) {
+		//Esto en principio es para simular los paquetes que se envian durante el lobby para la reconexion inGame
+		if (inEventType == UStructType::FStructMap) {
+
+			// Cuando el server envia el mapa ... 
+			HandleEvent_MapIncoming(inDataStruct, inPlayer, inEventType);
+		}
+
+		else if (inEventType == UStructType::FStructClientStartMatchOnGM) {
+
+			HandleEvent_LaunchMatchFromServer(inDataStruct, inPlayer, inEventType);
+		}
+
+	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
 
 		if (inEventType == UStructType::FStructInstatiatePlayers) {
@@ -291,7 +305,7 @@ void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, i
 		}
 		case GameState::GameInProcess:
 		{
-			ChangeState(EClientState::GameInProcess);
+			ChangeState(EClientState::ReconnectingInGame);
 			break;
 		}
 		case GameState::ClientCanCreateOrders:
@@ -364,7 +378,7 @@ void UPD_ClientGameInstance::HandleEvent_MapIncoming(FStructGeneric* inDataStruc
 
 void UPD_ClientGameInstance::HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_LaunchMatchFromServer"));
-	//Esto es lo necesario que tenga para hacer el launch
+	
 	
 
 	structClientState->ConfigAllCharactersDone = true;
@@ -412,26 +426,30 @@ void UPD_ClientGameInstance::ChangeState(EClientState newState) {
 	switch (newState)
 	{
 	case EClientState::StartApp:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to StartApp"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to StartApp"));
 		break;
 	case EClientState::Game_NoConnection:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to NoConnection"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to NoConnection"));
 		break;
 	case EClientState::ConfigureMatch:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to ConfigureMatch"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to ConfigureMatch"));
 		break;
 	case EClientState::WaitingMatchConfiguration:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to WaitingMatchConfiguration"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to WaitingMatchConfiguration"));
 		break;
 	case EClientState::Lobby_Tabern:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to Lobby_Tabern"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to Lobby_Tabern"));
+		break;
+	case EClientState::ReconnectingInGame:
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to ReconnectingInGame"));
 		break;
 	case EClientState::Launch_Match:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to Launch_Match"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to Launch_Match"));
 		break;
 	case EClientState::GameInProcess:
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::ChangeState to GameInProcess"));
+		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::ChangeState to GameInProcess"));
 		break;
+
 	default:
 		break;
 	}
@@ -458,6 +476,9 @@ void UPD_ClientGameInstance::OnBeginState() {
 	}
 	else if (structClientState->enumClientState == EClientState::Lobby_Tabern) {
 		this->LoadMap(levelsNameDictionary.GetMapName(3));
+	}
+	else if (structClientState->enumClientState == EClientState::ReconnectingInGame) {
+		structClientState->reconnected = true;
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
 		mapParser = new PD_MG_MapParser();
@@ -512,15 +533,31 @@ void UPD_ClientGameInstance::UpdateState() {
 		}
 	}
 	else if (structClientState->enumClientState == EClientState::Lobby_Tabern) {
-		if (structClientState->ConfigAllCharactersDone) {
+		//Agregada condicion de que el stringMap este inicializado para pasar de estado
+		if (structClientState->ConfigAllCharactersDone && !structClientState->mapString.IsEmpty()) {
 			this->ChangeState(EClientState::Launch_Match);
+		}
+		else if (structClientState->mapString.IsEmpty()) {
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::UpdateState: Intentando hacer LAUNCH MATCH - ERROR: No se encuentra el mapString"));
+
+		}
+	}
+	else if (structClientState->enumClientState == EClientState::ReconnectingInGame) {
+		//Agregada condicion de que el stringMap este inicializado para pasar de estado
+		if (structClientState->ConfigAllCharactersDone && !structClientState->mapString.IsEmpty()) {
+			this->ChangeState(EClientState::Launch_Match);
+		}
+		else if (structClientState->mapString.IsEmpty()) {
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::UpdateState: Intentando hacer LAUNCH MATCH - ERROR: No se encuentra el mapString"));
+
 		}
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
-		//Agregada condicion de que el map este inicializado para pasar de estado
-		if (structClientState->AllCharactersIncoming && !structClientState->mapString.IsEmpty()) {
+		
+		if (structClientState->AllCharactersIncoming ) {
 			this->ChangeState(EClientState::GameInProcess);
 		}
+		
 	}
 	else if (structClientState->enumClientState == EClientState::GameInProcess) {
 
@@ -563,7 +600,21 @@ void UPD_ClientGameInstance::OnLoadedLevel() {
 		PlayersManagerAccesor->playersManager = playersManager;
 
 		//Aqui cedemos el control al GameManager.
-		gameManager = new PD_GM_GameManager(this, mapManager, playersManager, networkManager);
+
+
+		if (structClientState->reconnected) {
+			UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::OnLoadedLevel: creando GameManager en modo de reconexion"));
+
+			//Esto hace que en caso de reconexion pasemos directamente a esperar un update
+			gameManager = new PD_GM_GameManager(this, mapManager, playersManager, networkManager, EClientGameState::WaitingServer);
+
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::OnLoadedLevel: creando GameManager en modo normal"));
+
+			gameManager = new PD_GM_GameManager(this, mapManager, playersManager, networkManager);
+
+		}
 
 
 	}

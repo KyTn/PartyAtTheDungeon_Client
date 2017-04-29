@@ -61,6 +61,9 @@ struct StructClientState {
 	bool ConfigAllCharactersDone;
 	bool AllCharactersIncoming;
 	FString mapString;
+
+	//Esta variable sirve para saber si el proceso de carga es el normal o por reconexion. 
+	bool reconnected=false;
 };
 
 //Usado por: GameManager
@@ -68,4 +71,6 @@ struct StructGameState {
 	EClientGameState enumGameState;
 	FStructUpdateTurn update_turn;
 
+	//Esta variable sirve para hacer un flujo de reconexion distinto al normal
+	EClientGameState stateAfterInstantiate_Map;
 };

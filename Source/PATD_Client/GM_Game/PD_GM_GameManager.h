@@ -19,7 +19,7 @@ struct StructGamePhase;
 class PATD_CLIENT_API PD_GM_GameManager : public PD_NW_iEventObserver
 {
 public:
-	PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager);
+	PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager, EClientGameState stateAfterInstantiate_Map);
 	~PD_GM_GameManager();
 
 	UPD_ClientGameInstance* _GAMEINSTANCE;

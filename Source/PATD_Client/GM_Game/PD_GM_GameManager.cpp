@@ -18,7 +18,7 @@
 #include "Actors/PD_GenericController.h"
 #include "Actors/Players/PD_CharacterController.h"
 
-PD_GM_GameManager::PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager)
+PD_GM_GameManager::PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager, EClientGameState stateAfterInstantiate_Map= EClientGameState::Start_Match)
 {
 	UE_LOG(LogTemp, Log, TEXT("Constructor Game Manager"));
 
@@ -29,7 +29,11 @@ PD_GM_GameManager::PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM
 	enemyManager = new PD_GM_EnemyManager();
 	this->networkManager = networkManager;
 	this->networkManager->RegisterObserver(this);
+	structGameState = new StructGameState();
+	structGameState->stateAfterInstantiate_Map = stateAfterInstantiate_Map;
 	InitState();
+	
+
 }
 
 PD_GM_GameManager::~PD_GM_GameManager()
@@ -45,7 +49,7 @@ bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 // Inicializa la maquina de estados.
 void PD_GM_GameManager::InitState() {
 	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
-	structGameState = new StructGameState();
+	
 	ChangeState(EClientGameState::Instantiate_Map);
 }
 
@@ -97,7 +101,10 @@ void PD_GM_GameManager::HandleEvent(FStructGeneric* inDataStruct, int inPlayer, 
 	//Estos dos eventos van aqui?
 	if (structGameState->enumGameState == EClientGameState::Instantiate_Map) {
 		// Si se recibe del servidor un Start_Match, ir a ese estado. 
-		if (inEventType == UStructType::FStructClientStartMatchOnGM) {
+		if (inEventType == UStructType::FStructClientStartMatchOnGM 
+			//Esta condicion se usa en la reconexion, para hacer un flujo en el que despues de Instantiate_Map no vaya a Start_Match
+			&& structGameState->stateAfterInstantiate_Map== EClientGameState::Start_Match) {
+
 			UE_LOG(LogTemp, Log, TEXT(" PD_GM_GameManager::HandleEvent - Instiante"));
 			ChangeState(EClientGameState::Start_Match);
 		}
@@ -206,6 +213,11 @@ void PD_GM_GameManager::OnBeginState() {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: Instantiate_Map"));
 		mapManager->InstantiateMap();
 		Send_FStructClientMapAlreadyInstantiated();
+
+		//Esta condicion se usa en la reconexion, para hacer un flujo en el que despues de Instantiate_Map no vaya a Start_Match
+		if (structGameState->stateAfterInstantiate_Map != EClientGameState::Start_Match) {
+			ChangeState(structGameState->stateAfterInstantiate_Map);
+		}
 	}
 	else if (structGameState->enumGameState == EClientGameState::Start_Match) {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: Start_Match"));
