@@ -319,7 +319,7 @@ Por claridad es mejor que el nombre del struct coincida con el del enumerado. (a
 */
 
 enum class UStructType {
-	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructRequestIDClient = 3, FStructClientID = 4, FStructWelcome = 5, FStructMap = 10, FStructOrderMenu = 20, FStructMatchConfig = 21, FStructMatchConfigDone = 22, FStructTurnOrders = 30,
+	NotDefined = 0, AllStructs = 1, FStructNewConnection = 2, FStructRequestIDClient = 3, FStructClientID = 4, FStructWelcome = 5, FStructPing = 6,FStructPong = 7,FStructMap = 10, FStructOrderMenu = 20, FStructMatchConfig = 21, FStructMatchConfigDone = 22, FStructTurnOrders = 30,
 	FStructCharacter = 40, FStructUpdateTurn = 41, FStructClientMapAlreadyInstantiated = 50, FStructClientStartMatchOnGM = 51, FStructClientCanGenerateOrders = 52,
 	FStructInstatiatePlayers = 60
 };
@@ -329,6 +329,34 @@ enum class UStructType {
 //=================================
 ///Structs SERIALIZABLES (heredan de FStructGeneric) (Se envian)
 //=================================
+
+//COMPROBACION DE RED
+USTRUCT()
+struct FStructPing : public  FStructGeneric
+{
+	GENERATED_BODY()
+
+		//Constructor
+		FStructPing()
+	{
+		structType = static_cast<uint8>(UStructType::FStructPing);
+	}
+};
+
+USTRUCT()
+struct FStructPong : public  FStructGeneric
+{
+	GENERATED_BODY()
+
+		//Constructor
+		FStructPong()
+	{
+		structType = static_cast<uint8>(UStructType::FStructPong);
+	}
+};
+
+
+
 USTRUCT()
 struct FStructRequestIDClient : public  FStructGeneric
 {

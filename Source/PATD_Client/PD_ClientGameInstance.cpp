@@ -127,6 +127,15 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 		HandleEvent_Welcome(inDataStruct, inPlayer, inEventType);
 	}
 
+	if (inEventType == UStructType::FStructPing) {
+		//Cuando el Servidor pide el ID Client 
+		HandleEvent_PingReceive(inDataStruct, inPlayer);
+	}
+
+	if (inEventType == UStructType::FStructPong) {
+		//Cuando el Servidor pide el ID Client 
+		HandleEvent_PongReceive(inDataStruct, inPlayer);
+	}
 
 	/// IF DE ESTADOS DEL CLIENTE
 	if (structClientState->enumClientState == EClientState::StartApp) {
@@ -270,11 +279,22 @@ void UPD_ClientGameInstance::HandleEvent_RequestIDClient(FStructGeneric* inDataS
 	{
 		FStructClientID myID_Client;
 		myID_Client.ID_Client = playersManager->MyPlayerInfo->ID_Client;
+		playersManager->MyPlayerInfo->isConnected = true;
 		networkManager->SendNow(&myID_Client, 0);
 	}
 }
 
+///Eventos para Ping y Pong structs -- Tema de la conexion
+void UPD_ClientGameInstance::HandleEvent_PingReceive(FStructGeneric* inDataStruct, int inPlayer) //Desde el server inPlayer le envian un ping 
+{
+	FStructPong* pong = new FStructPong();
+	networkManager->SendNow(pong, inPlayer);
+}
 
+void UPD_ClientGameInstance::HandleEvent_PongReceive(FStructGeneric* inDataStruct, int inPlayer) //Desde el server inPlayer le envian un pong (por envio del ping desde el cliente)
+{
+	playersManager->MyPlayerInfo->pingPong = 2;
+}
 
 
 
@@ -679,7 +699,12 @@ void UPD_ClientGameInstance::GoToLobby()
 	FStructMatchConfigDone configDone = FStructMatchConfigDone();
 	configDone.from = 1;
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GameConfigurationDone"));
-	networkManager->SendNow(&configDone, 0);
+	bool successSend = networkManager->SendNow(&configDone, 0);
+	if (!successSend) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
+			UE_LOG(LogTemp, Warning, TEXT("No se ha enviado bien la informacion al servidor o error de conexion"));
+			networkManager->SendPingToServer();
+	}
 }
 
 
@@ -692,7 +717,12 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 		FStructOrderMenu respuesta = FStructOrderMenu();
 		respuesta.orderType = respuesta.orderType = static_cast<uint8>(MenuOrderType::ClientReady);
 		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
-		networkManager->SendNow(&respuesta, 0);
+		bool successSend = networkManager->SendNow(&respuesta, 0);
+		if (!successSend) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
+			UE_LOG(LogTemp, Warning, TEXT("No se ha enviado bien la informacion al servidor o error de conexion"));
+			networkManager->SendPingToServer();
+		}
 		playersManager->MyPlayerInfo->readyMenu = !playersManager->MyPlayerInfo->readyMenu;
 		return playersManager->MyPlayerInfo->readyMenu;
 	}
@@ -753,8 +783,12 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	structCharacterToSend.weapon = *(playersManager->MyPlayerInfo->logic_Character->GetWeapon());
 
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
-	networkManager->SendNow(&structCharacterToSend, 0);
-
+	bool successSend = networkManager->SendNow(&structCharacterToSend, 0);
+	if (!successSend) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
+		UE_LOG(LogTemp, Warning, TEXT("No se ha enviado bien la informacion al servidor o error de conexion"));
+		networkManager->SendPingToServer();
+	}
 	playersManager->MyPlayerInfo->isSetPlayerCharacter = true;
 	return true;
 }

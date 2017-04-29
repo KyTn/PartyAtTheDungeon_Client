@@ -40,6 +40,15 @@ struct StructPlayer {
 	FStructUpdateCharacter* update_character;
 	PD_GM_LogicCharacter* logic_Character;
 
+	///NETWORK
+	bool isConnected; //Dice si el cliente se encuentra actualmente conectado con un servidor
+	int pingPong; //Para la comprobación de una conexion ping - pong con el servidor
+	/*
+	0 - Inicializacion
+	1 - Ping
+	2 - Pong
+	*/
+
 	StructPlayer() {
 		clientMaster = false;
 		readyMenu = false; //¿que es esto?
@@ -47,6 +56,8 @@ struct StructPlayer {
 		player_character = new FStructCharacter();
 		update_character = new FStructUpdateCharacter();
 		isSetPlayerCharacter = false;
+		isConnected = false;
+		pingPong = 0;
 	}
 };
 
