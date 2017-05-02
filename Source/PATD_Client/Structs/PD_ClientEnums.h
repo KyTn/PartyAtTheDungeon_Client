@@ -55,3 +55,29 @@ EnumParser<ECharacterType>::EnumParser()
 	enumMap["Zombie"] = Zombie;
 }
 */
+
+#pragma region MATCH CONFIG
+
+// Cuando se envía por un FStructMatchConfig, cada ID se correspone al comentario que hay encima de cada uno
+
+
+// ID 0
+UENUM(BlueprintType)        //"BlueprintType" is essential to include
+enum class MATCHCONFIG_MISSIONTYPE : uint8
+{
+	DefeatBoss     UMETA(DisplayName = "DefeatBoss"),
+	DefeatAll    UMETA(DisplayName = "DefeatAll"),
+	RecoverTreasure     UMETA(DisplayName = "RecoverTreasure")
+};
+
+// ID 1
+enum class MATCHCONFIG_MAPSIZE {
+	SMALL_SIZE, NORMAL_SIZE, LARGE_SIZE
+};
+
+// ID 1
+enum class MATCHCONFIG_DIFFICULTY {
+	EASY_DIFFICULTY, NORMAL_DIFFICULTY, DIFFICULT_DIFFICULTY
+};
+
+#pragma endregion
