@@ -21,6 +21,8 @@ class PD_GM_GameManager;
 class PD_PlayersManager; 
 class APD_E_Character;
 
+class PD_MatchConfigManager;
+
 class AMapManagerAccesor;
 class APlayerManagerAccesor;
 #include "LevelsNameDictionary.h"
@@ -51,7 +53,7 @@ public:
 	PD_GM_MapManager* mapManager;
 	PD_GM_GameManager* gameManager;
 	PD_PlayersManager* playersManager;
-
+	PD_MatchConfigManager* MatchConfigManager;
 
 
 #pragma region ACCESSORS
@@ -120,6 +122,9 @@ public:
 	//Struct con el estado del client
 	StructClientState* structClientState;
 
+
+	void SendToServerMatchConfigUpdate(int id, int intvalue, FString FStringvalue);
+
 	
 	
 #pragma region Blueprint Functions 
@@ -149,6 +154,15 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		bool SendCharacterToServer();
+
+
+#pragma region MATCH CONFIG 
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void SendToServerMatchConfigUpdateBP(int id, int intvalue, FString FStringvalue);
+
+
+#pragma region
 
 
 

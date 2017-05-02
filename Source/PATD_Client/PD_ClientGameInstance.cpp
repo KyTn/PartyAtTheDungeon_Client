@@ -20,6 +20,7 @@
 #include "GM_Game/PD_GM_GameManager.h"
 #include "GM_Game/PD_GM_EnemyManager.h"
 #include "PD_PlayersManager.h"
+#include "PD_MatchConfigManager.h"
 
 //Includes de prueba
 #include "MapInfo/PD_MM_MapInfo.h"
@@ -88,7 +89,7 @@ void UPD_ClientGameInstance::Init()
 
 	networkManager->RegisterObserver(this);
 
-
+	MatchConfigManager = new PD_MatchConfigManager(this);
 }
 
 void UPD_ClientGameInstance::InitializeNetworking()
@@ -374,6 +375,19 @@ void UPD_ClientGameInstance::HandleEvent_ConfigMatch(FStructGeneric* inDataStruc
 	// StructMatchConfig.id		: id del campo a cambiar
 	// StructMatchConfig.value	: nuevo valor del campo id
 
+
+	switch (StructMatchConfig->id) {
+	case 0:
+		MatchConfigManager->Set_MissionType(static_cast<MATCHCONFIG_MISSIONTYPE>(StructMatchConfig->intvalue));
+		break;
+	case 1:
+		MatchConfigManager->Set_MapSize(static_cast<MATCHCONFIG_MAPSIZE>(StructMatchConfig->intvalue));
+		break;
+	case 2:
+		MatchConfigManager->Set_Difficulty(static_cast<MATCHCONFIG_DIFFICULTY>(StructMatchConfig->intvalue));
+		break;
+	}
+
 }
 void UPD_ClientGameInstance::HandleEvent_ConfigMatchDone(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_ConfigMatchDone"));
@@ -640,6 +654,18 @@ void UPD_ClientGameInstance::OnLoadedLevel() {
 	}
 }
 
+void UPD_ClientGameInstance::SendToServerMatchConfigUpdate(int id, int intvalue, FString FStringvalue)
+{
+	FStructMatchConfig msg = FStructMatchConfig();
+
+	msg.id = id;
+	msg.intvalue = intvalue;
+	msg.FStringvalue = FStringvalue;
+
+	networkManager->SendNow(&msg, 0);
+
+}
+
 
 #pragma region ShutDown
 
@@ -791,6 +817,11 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	}
 	playersManager->MyPlayerInfo->isSetPlayerCharacter = true;
 	return true;
+}
+
+void UPD_ClientGameInstance::SendToServerMatchConfigUpdateBP(int id, int intvalue, FString FStringvalue)
+{
+	SendToServerMatchConfigUpdate(id, intvalue, FStringvalue);
 }
 
 /*
