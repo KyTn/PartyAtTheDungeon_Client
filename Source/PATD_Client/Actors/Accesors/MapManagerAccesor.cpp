@@ -12,6 +12,7 @@
 #include "PD_PlayersManager.h"
 #include "Structs/PD_ClientStructs.h"//Para todos los structs
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
+#include "MapInfo/PD_MM_MapInfo.h"
 
 // Sets default values
 AMapManagerAccesor::AMapManagerAccesor()
@@ -56,8 +57,14 @@ bool AMapManagerAccesor::IsMyCharacterPlayerAtPosition(FVector position) {
 	PD_MG_LogicPosition B = mapManager->WorldToLogicPosition(position);
 
 	UE_LOG(LogTemp, Warning, TEXT("Cheking if (%d,%d) == (%d,%d)"), A.GetX(), A.GetY(), B.GetX(), B.GetY());
-
-	return mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition() == mapManager->WorldToLogicPosition(position);
+	if (A == B) {
+		UE_LOG(LogTemp, Warning, TEXT("IsMyCharacterPlayerAtPosition true "));
+		return true;
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("IsMyCharacterPlayerAtPosition false "));
+		return false;
+	}
 }
 
 
@@ -166,4 +173,41 @@ bool AMapManagerAccesor::GetIDCharFromEnemy(AActor* enemyToCheck, FString &id_ch
 	}
 
 	return false;
+}
+
+void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
+{
+	UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile "));
+
+	PD_MG_LogicPosition  currentPositionLogic = mapManager->WorldToLogicPosition(currentPosition);
+
+	TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(currentPositionLogic);
+
+	for (int i = 0; i < tilesNear.Num(); i++)
+	{
+
+		PD_MM_Room* roomOfTile = nullptr;
+		if (mapManager->MapInfo->RoomOf(currentPositionLogic, roomOfTile))
+		{
+			UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 2"));
+
+			if (roomOfTile) //si ha pillado la room a partir de la posicion logica dada..
+			{
+				AActor* currentTile = roomOfTile->tiles[currentPositionLogic];
+				//Comprobar aqui se se puede añadir a las posible o no
+				FOutputDeviceNull ar;
+				const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 2);
+				if (currentTile->CallFunctionByNameWithArguments(*command, ar, NULL, true))
+				{
+					UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial ()"));
+				}
+				else {
+					UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ShowAdjenctsTile - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial()"));
+				}
+
+			}
+		}
+
+	}
+	
 }

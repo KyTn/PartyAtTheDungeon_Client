@@ -13,6 +13,7 @@ class PD_MG_LogicPosition;
 class APD_E_Character;
 class APD_E_WallActor;
 class APD_E_TileActor;
+class APD_E_ElementActor;
 //////////////////////////
 
 
@@ -39,8 +40,8 @@ public:
 #pragma region TSUBCLASSOF Static & Dynamic
 
 	//Static
-	TSubclassOf<class APD_E_TileActor> TileClass;
-	TSubclassOf<class APD_E_WallActor> WallClass;
+	TSubclassOf<class APD_E_ElementActor> TileClass;
+	TSubclassOf<class APD_E_ElementActor> WallClass;
 	//Enemies
 	/// seria la class generica
 	TSubclassOf<class APD_E_Character> ArcherClass;

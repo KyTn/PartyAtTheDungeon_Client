@@ -53,5 +53,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		bool GetIDCharFromEnemy(AActor* enemyToCheck , FString &id_char);
 
+	//Colorea y setea como actual la posicion dada y muestra y setea las tiles proximas que a las que se puede mover desde ahi
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor") 
+		void ShowAdjenctsTiles(FVector currentPosition);
+
 };
  
