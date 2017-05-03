@@ -669,6 +669,7 @@ void UPD_ClientGameInstance::SendToServerMatchConfigUpdate(int id, int intvalue,
 void UPD_ClientGameInstance::SendToServerEndMatchConfig()
 {
 	FStructMatchConfigDone msg = FStructMatchConfigDone();
+	msg.from = 1;
 	networkManager->SendNow(&msg, 0);
 }
 
@@ -716,7 +717,7 @@ bool UPD_ClientGameInstance::GetIsGameMaster()
 	return structClientState->clientMaster;
 }
 
-
+// Esta funcion YA NO SE USA, se usa el SendToServerEndMatchConfig() para enviar la info
 void UPD_ClientGameInstance::GoToLobby()
 {
 	/*
