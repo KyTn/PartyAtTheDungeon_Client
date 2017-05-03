@@ -53,7 +53,7 @@ public:
 #pragma region ORDER FUNCTIONS
 		bool CreateConsumableOrder(int id_consumable);
 		bool CreateMovementOrder(int positionX, int positionY);
-		bool DeleteLastMovementOrder(int positionX, int positionY);
+		bool DeleteLastMovementOrder();
 		bool CreateInteractableOrder(int id_interactable);
 		bool CreateActionToPosition(int id_action, TArray<FVector> positions);
 		bool CreateActionToCharacter(int id_action, TArray<FString> id_character);

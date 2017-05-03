@@ -29,7 +29,7 @@ void APlayerManagerAccesor::Tick( float DeltaTime )
 
 bool APlayerManagerAccesor::CreateConsumableOrder(int id_consumable) { return playersManager->CreateConsumableOrder(id_consumable); }
 bool APlayerManagerAccesor::CreateMovementOrder(int positionX, int positionY) { return playersManager->CreateMovementOrder(positionX, positionY); }
-bool APlayerManagerAccesor::DeleteLastMovementOrder(int positionX, int positionY) { return playersManager->DeleteLastMovementOrder(positionX, positionY); }
+bool APlayerManagerAccesor::DeleteLastMovementOrder() { return playersManager->DeleteLastMovementOrder(); }
 bool APlayerManagerAccesor::CreateInteractableOrder(int id_interactable) { return playersManager->CreateInteractableOrder(id_interactable); }
 bool APlayerManagerAccesor::CreateActionToPosition(int id_action, TArray<FVector> positions) { return playersManager->CreateActionToPosition(id_action, positions); }
 bool APlayerManagerAccesor::CreateActionToCharacter(int id_action, TArray<FString> id_character) { return playersManager->CreateActionToCharacter(id_action, id_character); }

@@ -32,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
 		bool CreateMovementOrder(int positionX, int positionY);
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
-		bool DeleteLastMovementOrder(int positionX, int positionY);
+		bool DeleteLastMovementOrder();
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
 		bool CreateInteractableOrder(int id_interactable);
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")

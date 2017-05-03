@@ -53,9 +53,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		bool GetIDCharFromEnemy(AActor* enemyToCheck , FString &id_char);
 
+	///FUNCIONES PUBLICADAS PARA EL SISTEMA DE INPUT DEL MOVIMIENTO
 	//Colorea y setea como actual la posicion dada y muestra y setea las tiles proximas que a las que se puede mover desde ahi
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor") 
 		void ShowAdjenctsTiles(FVector currentPosition);
 
+	//Añade una casilla al array del movmiento y visualiza los sigueintes movimientos - actualiza el camino recorrido
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		void SetCurrentPositionAsPathMovement(FVector currentPosition);
+
+	//elimina la ultima casilla del array de posiciones - visualiza los siguientes movimientos - actualiza el camino
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		void DeleteLastTileSelecteInPathMovenebt();
+
+	//actualiza el camino recorrido
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		void UpdatePathMovement();
+
+	//Limpia todas las tiles seleccionadas 
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		void ClearAllOverTilesInPathMovement();
 };
  
