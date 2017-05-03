@@ -25,11 +25,14 @@ public:
 
 	TArray<PD_MG_LogicPosition> LogicPosInRoom;
 
+	TArray<PD_MG_LogicPosition> LogicWallPosInRoom; //posiciones logicas para las paredes de la habitacion - diferenciarlas de las tiles
+
 	TMap<PD_MG_LogicPosition, AActor*> tiles;
 	TMap<PD_MG_LogicPosition, AActor*> walls;
 	TMap<PD_MG_LogicPosition, AActor*> interactuables;
 
 	bool AddLogicPos(PD_MG_LogicPosition logpos);
+	bool AddLogicWallPos(PD_MG_LogicPosition logpos);
 	int GetIDRoom() { return IDRoom; };
 
 	bool AddTile(PD_MG_LogicPosition logpos, AActor* tile);
@@ -49,16 +52,23 @@ public:
 	PD_GM_MapManager* mapManager;
 
 	PD_MM_Room* SpawnRoom;
+	int SpawnRoomIndex;
+
 	TArray<PD_MG_LogicPosition> allLogicPos;
 	TArray<PD_MM_Room> rooms;
 	TMap<PD_MG_LogicPosition, PD_MM_Room> roomByLogPos;
 
 
 	// Devuelve un puntero al Room que tenga ese logPos. True si existe. 
-	bool RoomOf(PD_MG_LogicPosition logpos, PD_MM_Room *room);
+	//bool RoomOf(PD_MG_LogicPosition logpos, PD_MM_Room *room);
+	PD_MM_Room* RoomOf(PD_MG_LogicPosition logpos);
 
 	// Inicializa el vector de rooms dado un staticMap
 	void CalculateRooms();
+
+	void CalculateRooms_v2();
+
+	void FindTilesOnRoomByFlowdingAt(PD_MG_LogicPosition initial, TArray<PD_MG_LogicPosition> PoblationSearch, TArray<PD_MG_LogicPosition>* tilesOnRoom, TArray<PD_MG_LogicPosition>* wallsOnRoom);
 
 
 
@@ -67,7 +77,6 @@ public:
 	bool AddTile(PD_MG_LogicPosition logpos, AActor* tile);
 
 	bool AddInteractuable(PD_MG_LogicPosition logpos, AActor* interactuable);
-
 
 };
 

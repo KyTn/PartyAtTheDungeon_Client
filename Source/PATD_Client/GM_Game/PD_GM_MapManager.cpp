@@ -35,7 +35,64 @@ void PD_GM_MapManager::Init(PD_MG_StaticMap* sm, PD_MG_DynamicMap* dm) {
 	// Ya tengo la info del mapa cargada por el Struct o por las refs del estatico y dinamico
 	MapInfo = new PD_MM_MapInfo(this);
 }
+#pragma region GET RAW INFO FROM STATIC
 
+
+bool PD_GM_MapManager::IsLogicPositionAWall(PD_MG_LogicPosition logpos)
+{
+
+	if (StaticMapRef->GetXYMap().Contains(logpos)) {
+
+		return StaticMapRef->GetXYMap()[logpos] == 'w' || StaticMapRef->GetXYMap()[logpos] == 'W';
+	}
+
+
+
+	return false;
+}
+
+
+bool PD_GM_MapManager::IsLogicPositionATile(PD_MG_LogicPosition logpos)
+{
+	if (StaticMapRef->GetXYMap().Contains(logpos)) {
+
+		return StaticMapRef->GetXYMap()[logpos] == '.' || StaticMapRef->GetXYMap()[logpos] == ',';
+		//|| StaticMapRef->GetXYMap()[logpos] == 's' || StaticMapRef->GetXYMap()[logpos] == 'S';
+	}
+	return false;
+}
+
+
+bool PD_GM_MapManager::IsLogicPositionAProp(PD_MG_LogicPosition logpos)
+{
+	if (StaticMapRef->GetXYMap().Contains(logpos)) {
+
+		return StaticMapRef->GetXYMap()[logpos] == 'C';
+		//|| StaticMapRef->GetXYMap()[logpos] == 'X' || StaticMapRef->GetXYMap()[logpos] == 's' || StaticMapRef->GetXYMap()[logpos] == 'S';
+	}
+	return false;
+}
+
+bool PD_GM_MapManager::IsLogicPositionADoor(PD_MG_LogicPosition logpos)
+{
+	if (StaticMapRef->GetXYMap().Contains(logpos)) {
+
+		return StaticMapRef->GetXYMap()[logpos] == 'd' || StaticMapRef->GetXYMap()[logpos] == 'D';
+		//|| StaticMapRef->GetXYMap()[logpos] == 'X' || StaticMapRef->GetXYMap()[logpos] == 's' || StaticMapRef->GetXYMap()[logpos] == 'S';
+	}
+	return false;
+}
+
+bool PD_GM_MapManager::IsLogicPositionASpawn(PD_MG_LogicPosition logpos)
+{
+	if (StaticMapRef->GetXYMap().Contains(logpos)) {
+
+		return StaticMapRef->GetXYMap()[logpos] == 's' || StaticMapRef->GetXYMap()[logpos] == 'S';
+	}
+	return false;
+}
+
+#pragma endregion
 
 
 #pragma region GET INFO OF THE MAP
@@ -77,7 +134,7 @@ PD_MG_LogicPosition PD_GM_MapManager::WorldToLogicPosition(FVector pos) {
 
 TArray<PD_MG_LogicPosition> PD_GM_MapManager::Get_LogicPosition_Adyacents_To(PD_MG_LogicPosition logPos) {
 
-	return logPos.GetAdjacents(StaticMapRef->GetLogicPositions());
+	return logPos.GetAdjacentsFromList(StaticMapRef->GetLogicPositions());
 }
 
 #pragma endregion

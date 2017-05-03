@@ -48,7 +48,6 @@ public:
 #pragma endregion
 
 
-
 #pragma region Machine State of GM
 
 	//Funciones de configuracion de la maquina

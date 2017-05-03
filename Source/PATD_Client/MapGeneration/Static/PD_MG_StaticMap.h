@@ -2,6 +2,7 @@
 
 #pragma once
 #include "MapGeneration/PD_MG_LogicPosition.h"
+#include "Structs/PD_ClientEnums.h"
 
 /**
  * 
@@ -24,7 +25,7 @@ class PATD_CLIENT_API PD_MG_StaticMap
 private:
 
 	uint32 _Height, _Width;
-	TypeOfMission _typeMission;
+	MATCHCONFIG_MISSIONTYPE _typeMission;
 
 	TMap<PD_MG_LogicPosition, TCHAR> _xymap;
 
@@ -40,8 +41,8 @@ public:
 
 #pragma region GET_SET
 
-	TypeOfMission GetTypeMission() { return _typeMission; }
-	void SetTypeMission(TypeOfMission val) { _typeMission = val; }
+	MATCHCONFIG_MISSIONTYPE GetTypeMission() { return _typeMission; }
+	void SetTypeMission(MATCHCONFIG_MISSIONTYPE val) { _typeMission = val; }
 
 	uint32 GetHeight() { return _Height; }
 	uint32 GetWidth() { return _Width; }

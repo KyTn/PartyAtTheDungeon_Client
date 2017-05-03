@@ -118,13 +118,13 @@ PD_MG_StaticMap* PD_MG_MapParser::Parsing_v_0_1(TArray<FString> fileReaded, PD_M
 	uint32 mapIndex = 0;
 	// Cual es el tipo de misión para este mapa?
 	if (fileReaded[1].Contains("defeatBoss")) {
-		staticMapRef->SetTypeMission(TypeOfMission::DefeatBoss);
+		staticMapRef->SetTypeMission(MATCHCONFIG_MISSIONTYPE::DefeatBoss);
 	}
 	else if (fileReaded[1].Contains("defeatAll")) {
-		staticMapRef->SetTypeMission(TypeOfMission::DefeatAll);
+		staticMapRef->SetTypeMission(MATCHCONFIG_MISSIONTYPE::DefeatAll);
 	}
 	else if (fileReaded[1].Contains("recoverTreasure")) {
-		staticMapRef->SetTypeMission(TypeOfMission::RecoverTreasure);
+		staticMapRef->SetTypeMission(MATCHCONFIG_MISSIONTYPE::RecoverTreasure);
 	}
 
 	// Tamaño de la matriz
