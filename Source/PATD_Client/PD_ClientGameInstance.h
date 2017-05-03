@@ -124,7 +124,7 @@ public:
 
 
 	void SendToServerMatchConfigUpdate(int id, int intvalue, FString FStringvalue);
-
+	void SendToServerEndMatchConfig();
 	
 	
 #pragma region Blueprint Functions 
@@ -161,6 +161,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void SendToServerMatchConfigUpdateBP(int id, int intvalue, FString FStringvalue);
 
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void SendToServerEndMatchConfigBP();
 
 #pragma region
 

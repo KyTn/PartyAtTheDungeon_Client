@@ -666,6 +666,12 @@ void UPD_ClientGameInstance::SendToServerMatchConfigUpdate(int id, int intvalue,
 
 }
 
+void UPD_ClientGameInstance::SendToServerEndMatchConfig()
+{
+	FStructMatchConfigDone msg = FStructMatchConfigDone();
+	networkManager->SendNow(&msg, 0);
+}
+
 
 #pragma region ShutDown
 
@@ -822,6 +828,11 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 void UPD_ClientGameInstance::SendToServerMatchConfigUpdateBP(int id, int intvalue, FString FStringvalue)
 {
 	SendToServerMatchConfigUpdate(id, intvalue, FStringvalue);
+}
+
+void UPD_ClientGameInstance::SendToServerEndMatchConfigBP()
+{
+	SendToServerEndMatchConfig();
 }
 
 /*
