@@ -98,7 +98,33 @@ bool PD_MM_MapInfo::AddWall(PD_MG_LogicPosition logpos, AActor *wall)
 
 bool PD_MM_MapInfo::AddTile(PD_MG_LogicPosition logpos, AActor* tile)
 {
-	if (roomByLogPos.Contains(logpos)) {
+	for (int i = 0; i < rooms.Num(); i++)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::AddWall %d numm: %d"), rooms[i].GetIDRoom(), rooms[i].LogicPosInRoom.Num());
+
+		for (int j = 0; j < rooms[i].LogicPosInRoom.Num(); j++)
+		{
+			if (rooms[i].LogicPosInRoom[j] == logpos)
+			{
+				//currentTileUE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::room %d numPos: %d numTile:%d"), i , rooms[i].LogicPosInRoom.Num(), rooms[i].tiles.Num());
+				FString s = "Tile (";
+				s.AppendInt(logpos.GetX());
+				s.Append(",");
+				s.AppendInt(logpos.GetY());
+				s.Append(")");
+				//wall->SetActorLabel(*s);
+				//roomByLogPos[logpos].walls.Add(logpos, wall);
+				rooms[i].tiles.Add(logpos, tile);
+				return true;
+			}
+		}
+	}
+	
+
+
+
+
+	/*if (roomByLogPos.Contains(logpos)) {
 		FString s = "Tile (";
 		s.AppendInt(logpos.GetX());
 		s.Append(",");
@@ -108,7 +134,7 @@ bool PD_MM_MapInfo::AddTile(PD_MG_LogicPosition logpos, AActor* tile)
 		roomByLogPos[logpos].tiles.Add(logpos, tile);
 		return true;
 	}
-
+	*/
 
 	return false;
 }

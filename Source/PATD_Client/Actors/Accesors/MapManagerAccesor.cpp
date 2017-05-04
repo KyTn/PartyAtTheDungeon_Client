@@ -188,20 +188,20 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 	{
 		PD_MM_Room* roomOfTile = nullptr;
 		roomOfTile = mapManager->MapInfo->RoomOf(tilesNear[i]);
-			UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 2"));
+			//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 2"));
 			if (roomOfTile) //si ha pillado la room a partir de la posicion logica dada..
 			{
-				UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 3"));
+				//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 3"));
 
 				APD_E_ElementActor* currentTile = nullptr;
 
-				UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4 %d"), roomOfTile->tiles.Num());
+				//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4 %d"), roomOfTile->tiles.Num());
 
-				//= Cast<APD_E_ElementActor>(roomOfTile->tiles[currentPositionLogic])
-
+				currentTile = Cast<APD_E_ElementActor>(roomOfTile->tiles[tilesNear[i]]);
+				//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::name of tile adjecten is  %s"), *currentTile->GetName());
 				if (currentTile) 
 				{
-					UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4"));
+					//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4"));
 
 					//Comprobar aqui se se puede añadir a las posible o no
 					FOutputDeviceNull ar;
@@ -223,6 +223,40 @@ void AMapManagerAccesor::SetCurrentPositionAsPathMovement(FVector currentPositio
 {
 	PD_MG_LogicPosition currentPositionLogic = mapManager->WorldToLogicPosition(currentPosition);
 
+	UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::SetCurrentPositionAsPathMovement 1"));
+
+	//limpiar las posibles tiles de la anterior tile seleccionada
+	if (mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+	{
+		PD_MG_LogicPosition lastPositionLogic = PD_MG_LogicPosition(mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+			mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
+
+		TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(lastPositionLogic);
+		PD_MM_Room* roomOfTileLast = nullptr;
+		for (int j = 0; j < tilesNear.Num(); j++)
+		{
+			roomOfTileLast = mapManager->MapInfo->RoomOf(tilesNear[j]);
+			if (roomOfTileLast)
+			{
+				AActor* tileAdjecntToUpdate = Cast<APD_E_ElementActor>(roomOfTileLast->tiles[tilesNear[j]]);
+				if (tileAdjecntToUpdate)
+				{
+					FOutputDeviceNull ar2;
+					const FString command2 = FString::Printf(TEXT("DrawMovementMaterial %d"), 0);
+					if (tileAdjecntToUpdate->CallFunctionByNameWithArguments(*command2, ar2, NULL, true))
+					{
+						UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::SetCurrentPositionAsPathMovement -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (0)"));
+					}
+					else {
+						UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::SetCurrentPositionAsPathMovement - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(0)"));
+					}
+				}
+				
+			}
+			
+		}
+	}
+	
 	//Añadimos la tile al camino del movimiento
 	mapManager->_GAMEMANAGER->playersManager->CreateMovementOrder(currentPositionLogic.GetX(), currentPositionLogic.GetY()); 
 
@@ -232,7 +266,7 @@ void AMapManagerAccesor::SetCurrentPositionAsPathMovement(FVector currentPositio
 	UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::SetCurrentPositionAsPathMovement 2"));
 	if (roomOfTile) //si ha pillado la room a partir de la posicion logica dada..
 	{
-		AActor* currentTile = roomOfTile->tiles[currentPositionLogic];
+		AActor* currentTile = Cast<APD_E_ElementActor>(roomOfTile->tiles[currentPositionLogic]);
 		FOutputDeviceNull ar;
 		const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 1);
 		if (currentTile->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -244,11 +278,12 @@ void AMapManagerAccesor::SetCurrentPositionAsPathMovement(FVector currentPositio
 		}
 	}
 
+	//Visualizar las siguientes posibles casillas
+	ShowAdjenctsTiles(currentPosition);
+
 	//LLamar a actualizar el camino de tiles seleccionado de momento
 	UpdatePathMovement();
 
-	//Visualizar las siguientes posibles casillas
-	ShowAdjenctsTiles(currentPosition);
 
 }
 
@@ -262,12 +297,44 @@ void AMapManagerAccesor::DeleteLastTileSelecteInPathMovenebt()
 
 	if (tilesSelected->Num() > 0)
 	{
+		//limpiar las posibles tiles de la anterior tile seleccionada
+		if (mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+		{
+			PD_MG_LogicPosition lastPositionLogic = PD_MG_LogicPosition(mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+				mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
+
+			TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(lastPositionLogic);
+			PD_MM_Room* roomOfTileLast = nullptr;
+			for (int j = 0; j < tilesNear.Num(); j++)
+			{
+				roomOfTileLast = mapManager->MapInfo->RoomOf(tilesNear[j]);
+				if (roomOfTileLast)
+				{
+					AActor* tileAdjecntToUpdate = Cast<APD_E_ElementActor>(roomOfTileLast->tiles[tilesNear[j]]);
+					if (tileAdjecntToUpdate)
+					{
+						FOutputDeviceNull ar2;
+						const FString command2 = FString::Printf(TEXT("DrawMovementMaterial %d"), 0);
+						if (tileAdjecntToUpdate->CallFunctionByNameWithArguments(*command2, ar2, NULL, true))
+						{
+							UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::SetCurrentPositionAsPathMovement -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (0)"));
+						}
+						else {
+							UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::SetCurrentPositionAsPathMovement - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(0)"));
+						}
+					}
+
+				}
+
+			}
+		}
+
 		// Borramos la ultima posicion del array de posiciones y actualizamos la tile para que solo se vea la textura de esta+
 		tileTodelete = PD_MG_LogicPosition(tilesSelected->Last().positionX, tilesSelected->Last().positionY);
 		roomOfTile = mapManager->MapInfo->RoomOf(tileTodelete);
 		if (roomOfTile) //si ha pillado la room a partir de la posicion logica dada..
 		{
-			AActor* tileToUpdate = roomOfTile->tiles[tileTodelete];
+			AActor* tileToUpdate = Cast<APD_E_ElementActor>(roomOfTile->tiles[tileTodelete]);
 			FOutputDeviceNull ar;
 			const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 0);
 			if (tileToUpdate->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -313,7 +380,7 @@ void AMapManagerAccesor::UpdatePathMovement()
 			{
 				if (i == tilesSelected.Num() - 1) //SI es la ultima tile - pintar de azul (estado a 1)
 				{
-					AActor* tileToUpdate = roomOfTile->tiles[tileToMove];
+					AActor* tileToUpdate = Cast<APD_E_ElementActor>(roomOfTile->tiles[tileToMove]);
 					FOutputDeviceNull ar;
 					const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 1);
 					if (tileToUpdate->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -326,7 +393,7 @@ void AMapManagerAccesor::UpdatePathMovement()
 				}
 				else if (i == tilesSelected.Num() - 2) //Es la penultima tile - pintar en rojo para borrar (estado a 3)
 				{
-					AActor* tileToUpdate = roomOfTile->tiles[tileToMove];
+					AActor* tileToUpdate = Cast<APD_E_ElementActor>(roomOfTile->tiles[tileToMove]);
 					FOutputDeviceNull ar;
 					const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 3);
 					if (tileToUpdate->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -339,7 +406,7 @@ void AMapManagerAccesor::UpdatePathMovement()
 				}
 				else  //Pintalas de verde
 				{
-					AActor* tileToUpdate = roomOfTile->tiles[tileToMove];
+					AActor* tileToUpdate = Cast<APD_E_ElementActor>(roomOfTile->tiles[tileToMove]);
 					FOutputDeviceNull ar;
 					const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 4);
 					if (tileToUpdate->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -375,7 +442,7 @@ void AMapManagerAccesor::ClearAllOverTilesInPathMovement()
 
 			if (roomOfTile) //si ha pillado la room a partir de la posicion logica dada..
 			{
-				AActor* tileToUpdate = roomOfTile->tiles[tileToMove];
+				AActor* tileToUpdate = Cast<APD_E_ElementActor>(roomOfTile->tiles[tileToMove]);
 				FOutputDeviceNull ar;
 				const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 0);
 				if (tileToUpdate->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -392,14 +459,15 @@ void AMapManagerAccesor::ClearAllOverTilesInPathMovement()
 					TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(tileToMove);
 					for (int j = 0; j < tilesNear.Num(); j++)
 					{
-						AActor* tileAdjecntToUpdate = roomOfTile->tiles[tilesNear[j]];
+						AActor* tileAdjecntToUpdate = Cast<APD_E_ElementActor>(roomOfTile->tiles[tilesNear[j]]);
 						FOutputDeviceNull ar2;
-						const FString command2 = FString::Printf(TEXT("DrawMovementMaterial %d"), 1);
+						const FString command2 = FString::Printf(TEXT("DrawMovementMaterial %d"), 0);
 						if (tileAdjecntToUpdate->CallFunctionByNameWithArguments(*command2, ar2, NULL, true))
 						{
 							UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::UpdatePathMovement -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (0)"));
 						}
-						else {
+						else 
+						{
 							UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::UpdatePathMovement - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(0)"));
 						}
 					}
