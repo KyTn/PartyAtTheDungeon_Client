@@ -42,7 +42,7 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 	//Variables - Stats del personaje , arma y habilidades
 	FStructBasicStats* basicStats;
 	FStructInitBaseStats* initBaseStats;
-	FStructSkills* skills;
+	FStructCharacterSkills* skills;
 	FStructWeapon* weapon;
 	FStructSkin* skin;
 	FStructTotalStats* totalStats;
@@ -154,7 +154,7 @@ public:
 	//Metodos GET para cada Struct
 	FStructBasicStats* GetBasicStats();
 	FStructInitBaseStats* GetInitBaseStats();
-	FStructSkills* GetSkills();
+	FStructCharacterSkills* GetSkills();
 	FStructWeapon* GetWeapon();
 	FStructSkin* GetSkin();
 	FStructTotalStats* GetTotalStats();
@@ -172,7 +172,7 @@ public:
 	//Métodos SET para cada Struct
 	void SetBasicStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL);
 	void SetInitBaseStats(int nHP, int nDMG, int nAP);
-	void SetSkills(TArray<uint8> nActSkills, TArray<uint8> nPasSkills);
+	void SetSkills(TArray<FStructSkill> nActSkills, TArray<FStructSkill> nPasSkills);
 	void SetWapon();
 	void SetSkin();
 	void SetTotalStats();
