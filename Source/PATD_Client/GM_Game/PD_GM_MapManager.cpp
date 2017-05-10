@@ -144,7 +144,7 @@ TArray<PD_MG_LogicPosition> PD_GM_MapManager::Get_LogicPosition_Adyacents_To(PD_
 
 void PD_GM_MapManager::InstantiateMap()
 {
-	UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
+	//UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
 
 	InstantiateStaticMap();
 	InstantiateDynamicMap();
@@ -185,16 +185,16 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 {
 	ECharacterType enemyType;
 
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Enemies Num %d"), _GAMEMANAGER->enemyManager->GetEnemies().Num());
+//	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Enemies Num %d"), _GAMEMANAGER->enemyManager->GetEnemies().Num());
 
 	//TArray<PD_MG_LogicPosition> spawn = GetSpawnPoints();
 	for (int i = 0; i < _GAMEMANAGER->playersManager->GetNumPlayers(); i++)
 	{
 		//_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCurrentLogicalPosition(PD_MG_LogicPosition(1, 1));
 
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - InstantiatePlayer %d at (%d,%d)"), i, 
-			_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition().GetX(),
-			_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition().GetY());
+	//	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - InstantiatePlayer %d at (%d,%d)"), i, 
+			//_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition().GetX(),
+			//_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition().GetY());
 
 		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetCharacterBP(instantiator->InstantiatePlayer(_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCurrentLogicalPosition()));
 		_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->SetController(Cast<APD_GenericController>(
@@ -208,10 +208,10 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 		const FString command = FString::Printf(TEXT("ChangeMaterial %d"), i);
 		if (_GAMEMANAGER->playersManager->GetDataPlayers()[i]->logic_Character->GetCharacterBP()->CallFunctionByNameWithArguments(*command, ar, NULL, true))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap -- EXITO EN LLAMAR A LA FUNCION"));
+			//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap -- EXITO EN LLAMAR A LA FUNCION"));
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateDynamicMap - EEROR EN LLAMATR A LA FUNCION"), _GAMEMANAGER->playersManager->GetNumPlayers());
+			//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateDynamicMap - EEROR EN LLAMATR A LA FUNCION"), _GAMEMANAGER->playersManager->GetNumPlayers());
 		}
 		///actualizamos la referencia del BP
 	}
@@ -263,7 +263,7 @@ void PD_GM_MapManager::InstantiateDynamicMap()
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Despues Enemies Num %d"), _GAMEMANAGER->enemyManager->GetEnemies().Num());
+	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Despues Enemies Num %d"), _GAMEMANAGER->enemyManager->GetEnemies().Num());
 
 }
 

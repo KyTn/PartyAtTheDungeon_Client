@@ -160,7 +160,7 @@ struct FStructSkill
 	UPROPERTY()
 		uint8 currentCD;
 	UPROPERTY()
-		uint8 range; //0 el propio personaje, -1 toda la sala
+		int8 range; //0 el propio personaje, -1 toda la sala
 	UPROPERTY()
 		uint8 target; //0 jugador, 1 aliado, 2 enemigos
 
@@ -168,6 +168,7 @@ struct FStructSkill
 
 	}
 };
+
 //Habilidades - Activas y Pasivas
 USTRUCT()
 struct FStructCharacterSkills
@@ -191,7 +192,7 @@ struct FStructCharacterSkills
 };
 
 
-//Weapons - Compuesto por Damage - Range - BP(skin)
+//Weapons 
 USTRUCT()
 struct FStructWeapon
 {
@@ -199,7 +200,9 @@ struct FStructWeapon
 		UPROPERTY()
 		uint8 ID_Weapon;
 	UPROPERTY()
-		uint8 TypeWeapon;
+		uint8 TypeWeapon; //espadon, dagas, ballesta ....
+	UPROPERTY()
+		uint8 ClassWeapon; //melee, rango , magia
 	UPROPERTY()
 		uint8 DMWeapon;
 	UPROPERTY()
@@ -213,19 +216,19 @@ struct FStructWeapon
 	}
 };
 
-//Weapons - Compuesto por Damage - Range - BP(skin)
 USTRUCT()
 struct FStructSkin
 {
 	GENERATED_BODY()
 
-		//UPROPERTY()
-		//enum indicando el cabezon
-		//UPROPERTY()
-		//enum indicando el cuerpo
+		UPROPERTY()
+		uint8 ID_SkinHead;
 
-		/* !!NOTA: Estos datos se tienen que pasar al GenericCharacter.h  para que elija en el Character_BP elija el mesh adecuado en base a estos datos.
-		*/
+		UPROPERTY()
+		uint8 weapon_type;
+
+		UPROPERTY()
+		uint8 weapon_class;
 		//Constructor
 		FStructSkin()
 	{
@@ -247,10 +250,6 @@ struct FStructTotalStats
 		uint8 HPCurrent;
 	UPROPERTY()
 		uint8 APCurrent;
-	UPROPERTY()
-		uint8 RangeTotal;
-	UPROPERTY()
-		uint8 DMGTotal;
 
 	//stats principales - siendo el valor de estas el BONUS que da cada stat (no los puntos dados - diferencia respecto al FStructBasicStats
 	UPROPERTY()
@@ -281,6 +280,23 @@ struct FStructTotalStats
 	}
 };
 
+USTRUCT()
+struct FStructCharacterState //Para estados secundarios y activas sobre el personaje
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		TMap<int, int> activeEffectsOnCharacter; //id_skill, duration
+
+		UPROPERTY()
+		TMap<int, int> alteredCharacterState; //id_alteredState , duration
+	//Constructor
+	FStructCharacterState()
+	{
+		activeEffectsOnCharacter = TMap<int, int>();
+		alteredCharacterState = TMap<int, int>();
+	}
+};
 
 USTRUCT()
 struct FStructPlayerInfoAtClient
@@ -496,11 +512,13 @@ struct FStructWelcome : public  FStructGeneric
 
 
 USTRUCT()
-struct FStructCharacter : public  FStructGeneric
+struct FStructCharacter : public  FStructGeneric //Struct para enviar al Servidor y para guardar el personaje creado
 {
 	GENERATED_BODY()
 
 		UPROPERTY()
+		FString nameOfCharacter;
+	UPROPERTY()
 		FStructTotalStats totalStats;
 	UPROPERTY()
 		FStructBasicStats basicStats;
@@ -512,6 +530,8 @@ struct FStructCharacter : public  FStructGeneric
 		FStructWeapon weapon;
 	UPROPERTY()
 		FStructSkin skin;
+	UPROPERTY()
+		FStructCharacterState charState;
 
 	//Constructor
 	FStructCharacter()
@@ -540,20 +560,6 @@ struct FStructInstatiatePlayers : public FStructGeneric
 		structType = static_cast<uint8>(UStructType::FStructInstatiatePlayers);
 	}
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

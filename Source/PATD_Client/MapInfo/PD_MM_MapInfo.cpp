@@ -175,7 +175,7 @@ Añadir la lista de posiciones p_a(p) adyacentes de p a r1
 void PD_MM_MapInfo::CalculateRooms()
 {
 	int tilesProcess = 0;
-	UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Calculating rooms ... "));
+	//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Calculating rooms ... "));
 	// Por cada posicion p(x,y) en el mapa
 	for (int i = 0; i < mapManager->StaticMapRef->GetLogicPositions().Num(); i++) {
 
@@ -223,7 +223,7 @@ void PD_MM_MapInfo::CalculateRooms()
 						rooms[j].IsSpawnRoom = true;
 						SpawnRoom = &rooms[j];
 						SpawnRoomIndex = j;
-						UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Spawn Room Found! Room %d"), rooms[j].GetIDRoom());
+						//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Spawn Room Found! Room %d"), rooms[j].GetIDRoom());
 					}
 					break;
 				}
@@ -263,25 +263,25 @@ void PD_MM_MapInfo::CalculateRooms()
 					r.IsSpawnRoom = true;
 					SpawnRoom = &rooms[rooms.Num() - 1];
 					SpawnRoomIndex = rooms.Num() - 1;
-					UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Spawn Room Found! (2) Room %d"), r.GetIDRoom());
+					//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Spawn Room Found! (2) Room %d"), r.GetIDRoom());
 				}
 			}
 
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - num Rooms calculated: %d"), rooms.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - num Rooms calculated: %d"), rooms.Num());
 	int TotalTilesOnRooms = 0;
 	for (int i = 0; i < rooms.Num(); i++) {
 		TotalTilesOnRooms += rooms[i].LogicPosInRoom.Num();
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Rooms %d: %d tiles "), i, rooms[i].LogicPosInRoom.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Rooms %d: %d tiles "), i, rooms[i].LogicPosInRoom.Num());
 		if (rooms[i].IsSpawnRoom) {
 
-			UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Rooms spawn id %d"), i);
+			//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Rooms spawn id %d"), i);
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Total Tiles on rooms: %d"), TotalTilesOnRooms);
-	UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Total Tiles process: %d"), tilesProcess); ;
+	//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Total Tiles on rooms: %d"), TotalTilesOnRooms);
+	//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms() - Total Tiles process: %d"), tilesProcess); ;
 
 }
 
@@ -297,7 +297,7 @@ void PD_MM_MapInfo::CalculateRooms_v2() {
 		TArray<PD_MG_LogicPosition> *tiles = new TArray<PD_MG_LogicPosition>(), *walls = new TArray<PD_MG_LogicPosition>();
 		//pos.RemoveAt(0);
 		while (!mapManager->IsLogicPositionATile(pos[0])) {
-			UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms_v2() - Removing NOT A TILE from pos at (%d, %d)"), pos[0].GetX(), pos[0].GetY());
+			//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms_v2() - Removing NOT A TILE from pos at (%d, %d)"), pos[0].GetX(), pos[0].GetY());
 			pos.RemoveAt(0);
 
 			if (pos.Num() == 0) break;
@@ -305,9 +305,9 @@ void PD_MM_MapInfo::CalculateRooms_v2() {
 
 		if (pos.Num() == 0) break;
 
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms_v2() - searching tiles by flowing at (%d, %d) on a poblation of %d elements"), pos[0].GetX(), pos[0].GetY(), pos.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms_v2() - searching tiles by flowing at (%d, %d) on a poblation of %d elements"), pos[0].GetX(), pos[0].GetY(), pos.Num());
 		FindTilesOnRoomByFlowdingAt(pos[0], mapManager->StaticMapRef->GetLogicPositions(), tiles, walls);
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms_v2() - %d tiles found, %d walls found"), tiles->Num(), walls->Num());
+		//UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::CalculateRooms_v2() - %d tiles found, %d walls found"), tiles->Num(), walls->Num());
 
 		PD_MM_Room r = PD_MM_Room(rooms.Num());
 

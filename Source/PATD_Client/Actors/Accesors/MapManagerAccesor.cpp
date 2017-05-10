@@ -98,7 +98,7 @@ bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEne
 
 	if (mapManager->_GAMEMANAGER->enemyManager->GetEnemies().Num() > 0)
 	{
-		int playerRange = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
+		int playerRange = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
 
 		if (playerRange == 1) //melee
 		{

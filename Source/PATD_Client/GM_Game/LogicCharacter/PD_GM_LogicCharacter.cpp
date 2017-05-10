@@ -236,6 +236,8 @@ FStructCharacterSkills* PD_GM_LogicCharacter::GetSkills() { return skills; }
 FStructWeapon* PD_GM_LogicCharacter::GetWeapon() { return weapon; }
 FStructSkin* PD_GM_LogicCharacter::GetSkin( ) { return skin; }
 FStructTotalStats* PD_GM_LogicCharacter::GetTotalStats( ) { return totalStats; }
+FStructCharacterState* PD_GM_LogicCharacter::GetCharacterState() { return characterState; }
+
 
 bool PD_GM_LogicCharacter::GetIsPlayer() { return isPlayer; }
 bool PD_GM_LogicCharacter::GetIsDead() { return isDead; }
@@ -338,15 +340,6 @@ void PD_GM_LogicCharacter::SetTotalStats()
 	totalStats->HPTotal = (initBaseStats->HPBase) * (1 + totalStats->CONBonus);
 	totalStats->HPCurrent = totalStats->HPTotal;
 
-
-	//Damage Total
-	//	totalStats->DMGTotal = (initBaseStats->DMGBase) * (1 + totalStats->PODBonus);
-	totalStats->DMGTotal = (initBaseStats->DMGBase) * (1 + totalStats->PODBonus);
-
-	/*
-	Para el bonus de Vida y Damage, hacer antes un IF para ver si entre la lista de pasivas, tienen algunas que le den bonus extra a eso
-	*/
-	totalStats->RangeTotal = weapon->RangeWeapon;
 }
 
 void PD_GM_LogicCharacter::SetIsPlayer(bool nIsPlayer){ isPlayer = nIsPlayer; }

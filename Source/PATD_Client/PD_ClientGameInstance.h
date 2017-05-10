@@ -148,7 +148,7 @@ public:
 		void GetCharacterBasicStats(int &nPOD, int &nAGI, int &nDES, int &nCON, int &nPER, int &nMAL);
 	
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		void GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG);
+		void GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP);
 	//Se pasa por referencia el parametro "&" para que Unreal Engine lo detecte como parametro de salida
 	//si pones const siempre lo va a detectar como parametro de entrada. Puedes entonces poner un mismo parametro como entrada y salida asi.
 

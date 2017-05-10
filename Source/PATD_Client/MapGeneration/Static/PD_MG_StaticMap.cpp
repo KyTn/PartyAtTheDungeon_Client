@@ -43,5 +43,5 @@ FString PD_MG_StaticMap::GetMapString() {
 }
 void PD_MG_StaticMap::SetMapString(FString mapStrinIn) {
 	mapString = mapStrinIn;
-	UE_LOG(LogTemp, Warning, TEXT("PD_MG_StaticMap::SetMapString Mapa:%s"), *mapString);
+	//UE_LOG(LogTemp, Warning, TEXT("PD_MG_StaticMap::SetMapString Mapa:%s"), *mapString);
 }

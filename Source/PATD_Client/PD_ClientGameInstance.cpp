@@ -785,14 +785,12 @@ void UPD_ClientGameInstance::GetCharacterBasicStats(int &nPOD, int &nAGI, int &n
 	nMAL = playersManager->MyPlayerInfo->logic_Character->GetBasicStats()->MAL;
 }
 
-void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP, int &nRAN, int &nDMG)
+void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA, int &nHP)
 {
 	nAP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
 	nCH = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->CH;
 	nSA = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->SA;
 	nHP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal;
-	nRAN = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->RangeTotal;
-	nDMG = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->DMGTotal;
 }
 
 bool UPD_ClientGameInstance::SendCharacterToServer()

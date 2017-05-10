@@ -9,6 +9,9 @@
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
 #include "GM_Game/PD_GM_EnemyManager.h"
 
+//For UE4 Profiler ~ Stat
+DECLARE_CYCLE_STAT(TEXT("MapParser ~ StartParsingFromChorizo"), STAT_StartParsingFromChorizo, STATGROUP_MapParser);
+
 PD_MG_MapParser::PD_MG_MapParser()
 {
 }
@@ -37,7 +40,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 	if (FFileHelper::LoadFileToString(FileData, *FilePath))
 	{
 		//Agregado para el hito2 MCG
-		UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromFile::  Llamando a SetMapString . Path :%s  Mapa: %s"), *FilePath, *FileData);
+		//UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromFile::  Llamando a SetMapString . Path :%s  Mapa: %s"), *FilePath, *FileData);
 		staticMapRef->SetMapString(FileData);
 
 		// Enviar a los clientes el mapa leido ... 
@@ -60,7 +63,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromFile::  Error loading map! Failed to load file!. Path :%s "), *FilePath);
+		//UE_LOG(LogTemp, Warning, TEXT("PD_MG_MapParser::StartParsingFromFile::  Error loading map! Failed to load file!. Path :%s "), *FilePath);
 
 	}
 
@@ -70,6 +73,8 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 
 
 PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_MG_StaticMap*  staticMapRef, PD_MG_DynamicMap* dynamicMapRef) {
+
+	SCOPE_CYCLE_COUNTER(STAT_StartParsingFromChorizo);
 
 	staticMapRef->Clear();
 	dynamicMapRef->Clear();

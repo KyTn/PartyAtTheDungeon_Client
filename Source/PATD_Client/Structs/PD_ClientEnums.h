@@ -35,15 +35,65 @@ enum class EActionPhase { Move = 0, Attack = 1, EndPhase = 2 };
 
 
 enum class EClientState { StartApp, Game_NoConnection, ConfigureMatch, WaitingMatchConfiguration, Lobby_Tabern, ReconnectingInGame, Launch_Match, GameInProcess };
-enum class ActiveSkills { Punch = 1, Fireball = 2, JustInTheEye = 3, ForTheKing = 4, LookingForCuenca = 5 };
-enum class PasiveSkills { NotInMyGuard = 1, TheGoodBier = 2, KingInTheNorth = 3, HelloWorld = 4, YouShallNotPass = 5 };
+
+
+//Cabezones
+UENUM(BlueprintType)
+enum class SkinHeads
+{
+	Legionary_SwordAndShield = 1,
+	Legionary_2HandSword = 2,
+	Legionary_Daggers = 3,
+	Assasin_CrossbowAndShield = 4,
+	Assasin_2Guns = 5,
+	Assasin_Bow = 6,
+	Wizard_WandAndShield = 7,
+	Wizard_ScepterAndArcaneBook = 8,
+	Wizard_Staff = 9
+
+};
+
+//clase de Arma // Rama del personaje
+UENUM(BlueprintType)
+enum class ClassWeapons
+{
+	Melee = 1,
+	Range = 2,
+	Magic = 3
+};
+
+//Tipo de Arma
+UENUM(BlueprintType)
+enum class TypeWeapons
+{
+	SwordAndShield = 1,
+	TwoHandSword = 2,
+	Daggers = 3,
+	CrossbowAndShield = 4,
+	TwoGuns = 5,
+	Bow = 6,
+	WandAndShield = 7,
+	ScepterAndArcaneBook = 8,
+	Staff = 9
+};
+
 
 //Lista que define TODOS las posibles acciones (ataques basicos, habilidades, etc) que puede hacer un character (enemigo o jugador)
 UENUM(BlueprintType)
-enum class ActionsByCharacter 
+enum class ActiveSkills
 {
-	BasicAttack = 1
+	BasicAttack = 1,
+	Defense = 2
 };
+
+//Lista que define TODOS las posibles habilidades pasivas
+UENUM(BlueprintType)
+enum class PasiveSkills
+{
+	IamTank = 1
+};
+
+
 
 enum class ECharacterType { NoCharacter, Player, Archer, Zombie };
 /*

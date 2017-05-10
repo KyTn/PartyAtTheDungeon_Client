@@ -46,6 +46,7 @@ class PATD_CLIENT_API PD_GM_LogicCharacter
 	FStructWeapon* weapon;
 	FStructSkin* skin;
 	FStructTotalStats* totalStats;
+	FStructCharacterState* characterState;
 
 	//Referencia al Mapa de la partida para que se pueda Mover-atacar-interactuar con los elementos del mismo
 	PD_GM_MapManager* mapMng;
@@ -158,6 +159,7 @@ public:
 	FStructWeapon* GetWeapon();
 	FStructSkin* GetSkin();
 	FStructTotalStats* GetTotalStats();
+	FStructCharacterState* GetCharacterState();
 
 	//Metodos GET para variables globales de la clase
 	bool GetIsPlayer();

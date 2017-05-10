@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 
+DECLARE_STATS_GROUP(TEXT("MapParser"), STATGROUP_MapParser, STATCAT_Advanced);
 
 #pragma region Class_References
 
