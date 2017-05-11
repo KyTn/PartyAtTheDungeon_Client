@@ -172,12 +172,6 @@ public:
 //	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 //		bool SendTurnOrderActionsToServer();
 
-	//Function para cambiar el tipo de accion sobre una tile
-	/*
-	0 - Nada
-	1 - Movimiento
-	2 - Ataque
-	*/
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void SetTypeOfAction(int ntypeAction);
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
@@ -200,12 +194,6 @@ public:
 		uint8 GetPlayerNumber();
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		void SaveCharacterLogicData();
-
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
-		void LoadCharacterLogicData();
-
-	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void DeleteCharacterLogicData(FString slotName, int slotNumber);
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
@@ -217,6 +205,39 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GetAccessors")
 		APlayerManagerAccesor* GetPlayersManagerAccessor(bool& existe);
 
+	
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+	void SaveCharacterLogicData();
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+	void LoadCharacterLogicData();
+
+	//Para Gestionar las Herramientas
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void SaveWeaponData(int id_weapon, int classWeapon, int typeWeapon, int damage, int range); //Se usa en la herramienta de weapons
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void LoadWeaponData(TArray<int> &indexWeapons);
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void LoadWeaponSpecificData(int indexWeapon, int &id_weapon, int &classWeapon, int &typeWeapon, int &damage, int &range);
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void DeleteWeaponWithID(int indexWeapon);
+
+	//Para Gestionar las Habilidades
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void SaveSkillData(int id_skill, int typeSkill, FString nameSkill, FString effectSkill, int weaponRequired, int AP, int CD, int target, int Range);
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void DeleteSkillWithID(int indexSkill, int typeSkill); //Dado el tipo, elimina el skill de ese tipo con id
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void LoadSkillData(int TypeSkill, TArray<int> &skills, TArray<FString> &nameSkills); 
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range );
 #pragma endregion
 
 

@@ -951,39 +951,7 @@ uint8 UPD_ClientGameInstance::GetPlayerNumber()
 	return structClientState->numPlayer;
 }
 
-void UPD_ClientGameInstance::SaveCharacterLogicData() {
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-	SaveGameInstance->basicStatsArray.Add(*playersManager->MyPlayerInfo->logic_Character->GetBasicStats());
-	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
-}
 
-void UPD_ClientGameInstance::LoadCharacterLogicData() {
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("MySlot", 0)) {
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
-		FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
-		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
-		UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
-	}
-
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
-}
-
-void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slotNumber) {
-	if (UGameplayStatics::DoesSaveGameExist(slotName, slotNumber)) {
-		UGameplayStatics::DeleteGameInSlot(slotName, slotNumber);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Slot Deleted."));
-	}
-
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
-}
 
 
 AMapManagerAccesor* UPD_ClientGameInstance::GetMapManagerAccessor(bool& existe) {
@@ -1026,5 +994,396 @@ APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector p
 	return nullptr;
 }
 
+
+void UPD_ClientGameInstance::SaveCharacterLogicData() {
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+	//SaveGameInstance->basicStatsArray.Add(*playersManager->MyPlayerInfo->logic_Character->GetBasicStats());
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
+}
+
+void UPD_ClientGameInstance::LoadCharacterLogicData() {
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("MySlot", 0)) {
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
+		//FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
+		//playersManager->MyPlayerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
+		//UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
+	}
+
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+}
+
+void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slotNumber) {
+	if (UGameplayStatics::DoesSaveGameExist(slotName, slotNumber)) {
+		UGameplayStatics::DeleteGameInSlot(slotName, slotNumber);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Slot Deleted."));
+	}
+
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
+}
+
+void UPD_ClientGameInstance::SaveWeaponData(int id_weapon, int classWeapon, int typeWeapon, int damage, int range)
+{
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+	bool addedWeaponAlready = false;
+	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
+	}
+	
+	FStructWeapon weapon = FStructWeapon();
+	weapon.ID_Weapon = id_weapon;
+	weapon.ClassWeapon = classWeapon;
+	weapon.TypeWeapon = typeWeapon;
+	weapon.DMWeapon = damage;
+	weapon.RangeWeapon = range;
+
+	if (SaveGameInstance->weapons.Num() > 0) //hay datos
+	{
+		for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+		{
+			if (id_weapon == SaveGameInstance->weapons[i].ID_Weapon)
+			{
+				SaveGameInstance->weapons[i] = weapon; //Si coinciden los ID, se sustituyen los valores
+				addedWeaponAlready = true;
+			}
+		}
+
+		if (!addedWeaponAlready) //si no se ha añadadio nada, no hay repe, añade uno
+			SaveGameInstance->weapons.Add(weapon);
+	}
+	else
+	{
+		SaveGameInstance->weapons.Add(weapon);
+	}
+
+	if( UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("WeaponsData"), 0) )
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Save Data weapon with id %d"), id_weapon));
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save Weapons."));
+
+}
+
+void UPD_ClientGameInstance::LoadWeaponData(TArray<int> &indexWeapons)
+{
+	indexWeapons = TArray<int>();
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
+		
+		if (SaveGameInstance->weapons.Num() > 0)
+		{
+			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			{
+				indexWeapons.Add(SaveGameInstance->weapons[i].ID_Weapon);
+				UE_LOG(LogTemp, Warning, TEXT("ID_weapon : %d"), SaveGameInstance->weapons[i].ID_Weapon);
+			}
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Weapons Loaded."));
+	}
+
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+}
+
+void UPD_ClientGameInstance::LoadWeaponSpecificData(int indexWeapon, int &id_weapon, int &classWeapon, int &typeWeapon, int &damage, int &range) //Para cargar TODOS los datos de un arma especifica
+{
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
+
+		if (SaveGameInstance->weapons.Num() > 0)
+		{
+			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			{
+				if (indexWeapon == SaveGameInstance->weapons[i].ID_Weapon)
+				{
+					id_weapon = indexWeapon;
+					classWeapon = SaveGameInstance->weapons[i].ClassWeapon;
+					typeWeapon = SaveGameInstance->weapons[i].TypeWeapon;
+					damage = SaveGameInstance->weapons[i].DMWeapon;
+					range = SaveGameInstance->weapons[i].RangeWeapon;
+				}
+			}
+		}
+
+	}
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+}
+
+
+void UPD_ClientGameInstance::DeleteWeaponWithID(int indexWeapon)
+{
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
+
+		if (SaveGameInstance->weapons.Num() > 0)
+		{
+			SaveGameInstance->weapons.RemoveAt(indexWeapon);
+		}
+		if (SaveGameInstance->weapons.Num() > 0) //si despues de borrar aun hay datos - se ajustan los ID
+		{
+			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			{
+				SaveGameInstance->weapons[i].ID_Weapon = i;
+			}
+		}
+
+		if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("WeaponsData"), 0))
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("delete succesfull Data weapon with id %d"), indexWeapon));
+		else
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save Weapons."));
+	}
+}
+
+
+//PARA HABILIDADES
+//Para Gestionar las Habilidades
+void UPD_ClientGameInstance::SaveSkillData(int id_skill, int typeSkill, FString nameSkill, FString effectSkill, int weaponRequired, int AP, int CD, int target, int Range)
+{
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+	bool addedSkillAlready = false;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("skill type %d"), typeSkill));
+
+
+	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
+	}
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+
+	FStructSkill skill = FStructSkill();
+	skill.ID_Skill = id_skill;
+	skill.typeSkill = typeSkill;
+	skill.name_Skill = nameSkill;
+	skill.description = effectSkill;
+	skill.weaponRequired = weaponRequired;
+	skill.AP = AP;
+	skill.CD = CD;
+	skill.currentCD = CD;
+	skill.target = target;
+	skill.range = Range;
+
+	if (typeSkill == 0)// Es Activa
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("skill type actuve ")));
+
+		if (SaveGameInstance->activeSkills.Num() > 0)
+		{
+			for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
+			{
+				if (id_skill == SaveGameInstance->activeSkills[i].ID_Skill)
+				{
+					SaveGameInstance->activeSkills[i] = skill; //Si coinciden los ID, se sustituyen los valores
+					addedSkillAlready = true;
+				}
+			}
+
+			if (!addedSkillAlready) //si no se ha añadadio nada, no hay repe, añade uno
+				SaveGameInstance->activeSkills.Add(skill);
+		}
+		else
+		{
+			SaveGameInstance->activeSkills.Add(skill);
+		}
+	}
+
+	else if(typeSkill == 1) //es pasiva
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("skill type pasive ")));
+
+		if (SaveGameInstance->pasiveSkills.Num() > 0)
+		{
+			for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
+			{
+				if (id_skill == SaveGameInstance->pasiveSkills[i].ID_Skill)
+				{
+					SaveGameInstance->pasiveSkills[i] = skill; //Si coinciden los ID, se sustituyen los valores
+					addedSkillAlready = true;
+				}
+			}
+
+			if (!addedSkillAlready) //si no se ha añadadio nada, no hay repe, añade uno
+				SaveGameInstance->pasiveSkills.Add(skill);
+		}
+		else
+		{
+			SaveGameInstance->pasiveSkills.Add(skill);
+		}
+	}
+
+	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("SkillsData"), 0))
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Save Data Skills with id %d"), id_skill));
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save SkillsData."));
+}
+
+//ELIMINAR HABILIDADES
+void UPD_ClientGameInstance::DeleteSkillWithID(int indexSkill, int typeSkill)
+{
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
+
+		if (typeSkill == 0) //ACTIVA
+		{
+			if (SaveGameInstance->activeSkills.Num() > 0)
+			{
+				SaveGameInstance->activeSkills.RemoveAt(indexSkill);
+			}
+			if (SaveGameInstance->activeSkills.Num() > 0) //si despues de borrar aun hay datos - se ajustan los ID
+			{
+				for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
+				{
+					SaveGameInstance->activeSkills[i].ID_Skill = i;
+				}
+			}
+		}
+		else if (typeSkill == 1) //PASIVA
+		{
+			if (SaveGameInstance->pasiveSkills.Num() > 0)
+			{
+				SaveGameInstance->pasiveSkills.RemoveAt(indexSkill);
+			}
+			if (SaveGameInstance->pasiveSkills.Num() > 0) //si despues de borrar aun hay datos - se ajustan los ID
+			{
+				for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
+				{
+					SaveGameInstance->pasiveSkills[i].ID_Skill = i;
+				}
+			}
+		}
+		
+		if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("SkillsData"), 0))
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("delete succesfull Data skill with id %d"), indexSkill));
+		else
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save Weapons."));
+	}
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+}
+
+void UPD_ClientGameInstance::LoadSkillData(int TypeSkill, TArray<int> &skills, TArray<FString> &nameSkills)
+{
+
+	skills = TArray<int>();
+	nameSkills = TArray<FString>();
+
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
+		if (TypeSkill == 0) //ACTIVA
+		{
+			if (SaveGameInstance->activeSkills.Num() > 0)
+			{
+				for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
+				{
+					skills.Add(SaveGameInstance->activeSkills[i].ID_Skill);
+					nameSkills.Add(SaveGameInstance->activeSkills[i].name_Skill);
+				}
+			}
+		}
+		else if (TypeSkill == 1)
+		{
+			if (SaveGameInstance->pasiveSkills.Num() > 0)
+			{
+				for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
+				{
+					skills.Add(SaveGameInstance->pasiveSkills[i].ID_Skill);
+					nameSkills.Add(SaveGameInstance->pasiveSkills[i].name_Skill);
+				}
+			}
+		}
+	}
+	else 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+	}
+}
+
+
+
+void UPD_ClientGameInstance::LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range)
+{
+	//Create an instance of our savegame class
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
+		if (TypeSkill == 0) //ACTIVA
+		{
+			if (SaveGameInstance->activeSkills.Num() > 0)
+			{
+				for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
+				{
+					if (id_skill == SaveGameInstance->activeSkills[i].ID_Skill)
+					{
+						nameSkill = SaveGameInstance->activeSkills[id_skill].name_Skill;
+						effectSkill = SaveGameInstance->activeSkills[id_skill].description;
+						weaponRequired = SaveGameInstance->activeSkills[id_skill].weaponRequired;
+						AP = SaveGameInstance->activeSkills[id_skill].AP;
+						CD = SaveGameInstance->activeSkills[id_skill].CD;
+						target = SaveGameInstance->activeSkills[id_skill].target;
+						range = SaveGameInstance->activeSkills[id_skill].range;
+					}
+				}
+			
+
+			}
+		}
+		else if (TypeSkill == 1)
+		{
+			if (SaveGameInstance->pasiveSkills.Num() > 0)
+			{
+				for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
+				{
+					if (id_skill == SaveGameInstance->pasiveSkills[i].ID_Skill)
+					{
+						nameSkill = SaveGameInstance->pasiveSkills[id_skill].name_Skill;
+						effectSkill = SaveGameInstance->pasiveSkills[id_skill].description;
+						weaponRequired = SaveGameInstance->pasiveSkills[id_skill].weaponRequired;
+						AP = SaveGameInstance->pasiveSkills[id_skill].AP;
+						CD = SaveGameInstance->pasiveSkills[id_skill].CD;
+						target = SaveGameInstance->pasiveSkills[id_skill].target;
+						range = SaveGameInstance->pasiveSkills[id_skill].range;
+					}
+				}
+				
+			}
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+	}
+}
 
 #pragma endregion

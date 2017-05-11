@@ -17,7 +17,16 @@ class PATD_CLIENT_API UPD_SaveCharacterData : public USaveGame
 public:
 
 	UPROPERTY(EditAnywhere, Category = "Basic")
-	TArray<FStructBasicStats> basicStatsArray;
+	TArray<FStructCharacter> charactersOfPlayer;
+
+	UPROPERTY(EditAnywhere, Category = "Basic")
+	TArray<FStructSkill> activeSkills;
+
+	UPROPERTY(EditAnywhere, Category = "Basic")
+	TArray<FStructSkill> pasiveSkills;
+
+	UPROPERTY(EditAnywhere, Category = "Basic")
+	TArray<FStructWeapon> weapons;
 
 	UPD_SaveCharacterData();
 	
