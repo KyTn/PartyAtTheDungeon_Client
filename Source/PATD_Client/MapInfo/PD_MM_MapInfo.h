@@ -23,24 +23,57 @@ public:
 	bool IsSpawnRoom;
 	int IDRoom;
 
-	TArray<PD_MG_LogicPosition> LogicPosInRoom;
-
+	TArray<PD_MG_LogicPosition> LogicPosInRoom; // todas la posiciones logicas que tienen que ver con la habitacion, ya sean tiles, paredes, puertas ... 
+	TArray<PD_MG_LogicPosition> LogicTilesPosInRoom; // posiciones logicas de los tiles de la habitacion 
 	TArray<PD_MG_LogicPosition> LogicWallPosInRoom; //posiciones logicas para las paredes de la habitacion - diferenciarlas de las tiles
+	TArray<PD_MG_LogicPosition> LogicDoorPosInRoom;
+
 
 	TMap<PD_MG_LogicPosition, AActor*> tiles;
 	TMap<PD_MG_LogicPosition, AActor*> walls;
 	TMap<PD_MG_LogicPosition, AActor*> interactuables;
 
 	bool AddLogicPos(PD_MG_LogicPosition logpos);
+	bool AddLogicTilePos(PD_MG_LogicPosition logpos);
 	bool AddLogicWallPos(PD_MG_LogicPosition logpos);
+	bool AddLogicDoorPos(PD_MG_LogicPosition logpos);
 	int GetIDRoom() { return IDRoom; };
 
 	bool AddTile(PD_MG_LogicPosition logpos, AActor* tile);
 	bool AddWall(PD_MG_LogicPosition logpos, AActor* wall);
 	bool AddInteractuable(PD_MG_LogicPosition logpos, AActor* interactuable);
 
+
+
+	// TEST PD_MM_ROOM
+
+	void Test() {
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test INIT TESTING OF ROOM"));
+
+		if (IsSpawnRoom)
+			UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test IsSpawnRoom!"));
+
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test LogicTilesPosInRoom num %d"), LogicTilesPosInRoom.Num());
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test LogicWallPosInRoom num %d"), LogicWallPosInRoom.Num());
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test tiles num %d"), tiles.Num());
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test walls num %d"), walls.Num());
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test interactuables num %d"), interactuables.Num());
+	}
+
+
 };
 
+/*
+
+struct FStruct_Map
+- TMap<LogPos, StaticMapElement> mapElements
+- TMap<LogPos, Room> mapRooms
+- int Total_Height, Total_Width;
+
+
+*/
 
 class PATD_CLIENT_API PD_MM_MapInfo
 {
@@ -55,8 +88,8 @@ public:
 	int SpawnRoomIndex;
 
 	TArray<PD_MG_LogicPosition> allLogicPos;
-	TArray<PD_MM_Room> rooms;
-	TMap<PD_MG_LogicPosition, PD_MM_Room> roomByLogPos;
+	TArray<PD_MM_Room*> rooms;
+	TMap<PD_MG_LogicPosition, PD_MM_Room*> roomByLogPos;
 
 
 	// Devuelve un puntero al Room que tenga ese logPos. True si existe. 
@@ -68,7 +101,8 @@ public:
 
 	void CalculateRooms_v2();
 
-	void FindTilesOnRoomByFlowdingAt(PD_MG_LogicPosition initial, TArray<PD_MG_LogicPosition> PoblationSearch, TArray<PD_MG_LogicPosition>* tilesOnRoom, TArray<PD_MG_LogicPosition>* wallsOnRoom);
+	void FindTilesOnRoomByFlowdingAt(PD_MG_LogicPosition initial, TArray<PD_MG_LogicPosition> PoblationSearch, TArray<PD_MG_LogicPosition>* tilesOnRoom);
+	void FindWallsAndDoorsOnRoomByFloodingAndAdyacentTiles(int IDRoom, PD_MG_LogicPosition initial, TArray<PD_MG_LogicPosition> PoblationSearch, TArray<PD_MG_LogicPosition>* WallsOnRoom, TArray<PD_MG_LogicPosition>* DoorsOnRoom);
 
 
 
@@ -78,6 +112,25 @@ public:
 
 	bool AddInteractuable(PD_MG_LogicPosition logpos, AActor* interactuable);
 
+	// TEST PD_MM_MapInfo
+
+	void Test() {
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test INIT TESTING OF MAPINFO"));
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test allLogicPos num %d"), allLogicPos.Num());
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test roomByLogPos num %d"), roomByLogPos.Num());
+
+
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test rooms num %d"), rooms.Num());
+
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test TEST ROOM NON INTENSIVE"));
+
+		for (int i = 0; i < rooms.Num(); i++) {
+			rooms[i]->Test();
+		}
+	}
 };
 
 
