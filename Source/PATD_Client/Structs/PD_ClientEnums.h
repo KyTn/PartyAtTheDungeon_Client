@@ -57,24 +57,24 @@ enum class SkinHeads
 UENUM(BlueprintType)
 enum class ClassWeapons
 {
-	Melee = 1,
-	Range = 2,
-	Magic = 3
+	Melee = 10,
+	Range = 20,
+	Magic = 30
 };
 
 //Tipo de Arma
 UENUM(BlueprintType)
 enum class TypeWeapons
 {
-	SwordAndShield = 1,
-	TwoHandSword = 2,
-	Daggers = 3,
-	CrossbowAndShield = 4,
-	TwoGuns = 5,
-	Bow = 6,
-	WandAndShield = 7,
-	ScepterAndArcaneBook = 8,
-	Staff = 9
+	SwordAndShield = 11,
+	TwoHandSword = 12,
+	Daggers = 13,
+	CrossbowAndShield = 21,
+	TwoGuns = 22,
+	Bow = 23,
+	WandAndShield = 31,
+	ScepterAndArcaneBook = 32,
+	Staff = 33
 };
 
 
@@ -82,15 +82,42 @@ enum class TypeWeapons
 UENUM(BlueprintType)
 enum class ActiveSkills
 {
-	BasicAttack = 1,
-	Defense = 2
+	BasicAttack = 0,
+	Defense = 1,
+	WhenFua = 2,
+	JumpFatTigger = 3,
+	Hostion = 4,
+	SomeHit = 5,
+	RightInTheAsshole = 6,
+	GiveMeTheFireBlast = 7,
+	Exclaimchas = 8,
+	BeInCrossroads = 9,
+	WhoHeal = 10,
+	ShotMana = 11
+
 };
 
 //Lista que define TODOS las posibles habilidades pasivas
 UENUM(BlueprintType)
 enum class PasiveSkills
 {
-	IamTank = 1
+	IamTank = 0,
+	KingMistery = 1,
+	BlindFury = 2,
+	IamTankInDistance = 3,
+	RedBullets = 4,
+	SquabEye = 5,
+	MagicShieldBro = 6,
+	WaitForNotes = 7, 
+	PowerfulStick = 8,
+	HotestBlod = 9,
+	Borderline = 10,
+	JokesWithSparkle = 11,
+	LaRemedios = 12,
+	TwoblackCandles = 13,
+	TheSmarty = 14,
+	AsBull = 15,
+	TheSweeper = 16
 };
 
 
