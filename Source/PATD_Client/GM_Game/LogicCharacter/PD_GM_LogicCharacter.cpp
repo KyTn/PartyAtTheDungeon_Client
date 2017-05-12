@@ -269,7 +269,7 @@ void PD_GM_LogicCharacter::SetSkills(TArray<FStructSkill> nActSkills, TArray<FSt
 	skills->listActiveSkills = nActSkills;
 	skills->listPasiveSkills = nPasSkills;
 }
-void PD_GM_LogicCharacter::SetWapon() 
+void PD_GM_LogicCharacter::SetWeapon() 
 {
 	weapon->DMWeapon = 20;
 	weapon->ID_Weapon = 0;

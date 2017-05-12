@@ -771,7 +771,7 @@ void UPD_ClientGameInstance::FillCharecterStats(int nPOD, int nAGI, int nDES, in
 {
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(nPOD, nAGI, nDES, nCON, nPER, nMAL);
 	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5); //HP - DMG
-	playersManager->MyPlayerInfo->logic_Character->SetWapon();
+	playersManager->MyPlayerInfo->logic_Character->SetWeapon();
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
 

@@ -175,7 +175,7 @@ public:
 	void SetBasicStats(int nPOD, int nAGI, int nDES, int nCON, int nPER, int nMAL);
 	void SetInitBaseStats(int nHP, int nDMG, int nAP);
 	void SetSkills(TArray<FStructSkill> nActSkills, TArray<FStructSkill> nPasSkills);
-	void SetWapon();
+	void SetWeapon();
 	void SetSkin();
 	void SetTotalStats();
 
