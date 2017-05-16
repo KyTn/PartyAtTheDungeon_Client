@@ -206,6 +206,10 @@ public:
 		APlayerManagerAccesor* GetPlayersManagerAccessor(bool& existe);
 
 	
+	//Creacion de personaje ALEATORIO
+	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
+		void GenerateRandomChar();
+
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 	void SaveCharacterLogicData();
@@ -213,7 +217,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 	void LoadCharacterLogicData();
 
-	//Para Gestionar las Herramientas
+	//Para Gestionar las Armas
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void SaveWeaponData(int id_weapon, int classWeapon, int typeWeapon, int damage, int range); //Se usa en la herramienta de weapons
 
@@ -222,6 +226,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void LoadWeaponSpecificData(int indexWeapon, int &id_weapon, int &classWeapon, int &typeWeapon, int &damage, int &range);
+
+	FStructWeapon LoadWeaponStructData(int indexWeapon);
+		
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void DeleteWeaponWithID(int indexWeapon);

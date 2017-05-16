@@ -812,6 +812,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	structCharacterToSend.skills = *(playersManager->MyPlayerInfo->logic_Character->GetSkills());
 	structCharacterToSend.skin = *(playersManager->MyPlayerInfo->logic_Character->GetSkin());
 	structCharacterToSend.weapon = *(playersManager->MyPlayerInfo->logic_Character->GetWeapon());
+	structCharacterToSend.charState = *(playersManager->MyPlayerInfo->logic_Character->GetCharacterState());
 
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
 	bool successSend = networkManager->SendNow(&structCharacterToSend, 0);
@@ -995,6 +996,162 @@ APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector p
 }
 
 
+///CREAR PERSONAJE ALEATORIO
+void UPD_ClientGameInstance::GenerateRandomChar()
+{
+	//Weapon - Clase y Tipo
+	TArray<int> weapons = TArray<int>();
+	LoadWeaponData(weapons);
+	int weaponSelected = FMath::RandRange(0, weapons.Num() - 1);
+	FStructWeapon weaponChar = LoadWeaponStructData(weaponSelected);
+	if (weaponChar.ID_Weapon >= 0)
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ID_Weapon = weaponChar.ID_Weapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon = weaponChar.ClassWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon = weaponChar.TypeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon = weaponChar.RangeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
+	}
+
+	//Skin
+	switch (playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon)
+	{
+	case 11:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
+		break;
+	case 12:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
+		break;
+	case 13:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 3;
+		break;
+	case 21:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 4;
+		break;
+	case 22:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 5;
+		break;
+	case 23:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 6;
+		break;
+	case 31:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 7;
+		break;
+	case 32:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 8;
+		break;
+	case 33:
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 9;
+		break;
+	default:
+		break;
+	}
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_class = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon;
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon;
+
+	//Habilidades
+	//PASIVAS
+	int max_pasiveSkills = 1;
+	int max_activeSkills = 2; 
+	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 2) //si es a distancia
+		max_pasiveSkills = 2;
+	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 3) //si es mago
+		max_activeSkills = 3;
+
+	TArray<int> indexPasSkills = TArray<int>();
+	TArray<FString> namePasSkills = TArray<FString>();
+	LoadSkillData(1, indexPasSkills, namePasSkills);
+
+	for (int i = 0; i < max_pasiveSkills; i++)
+	{
+		bool skillAdded = false;
+		while (!skillAdded)
+		{
+			int indexPas = FMath::RandRange(0, indexPasSkills.Num() - 1);
+			FStructSkill skillPasAdded = FStructSkill();
+			int weaponR,  APSkill,  CDSkill,  targetSkill,  Range;
+			LoadSkillSpecificData(1, indexPas, skillPasAdded.name_Skill, skillPasAdded.description, weaponR, APSkill, CDSkill, targetSkill, Range);
+			
+			if (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon || weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon)
+			{
+				bool skillfound = true;
+				for (int j = 0; j < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Num(); j++)
+				{
+					if (indexPas == playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills[j].ID_Skill) {
+						skillfound = false;
+						break;
+					}
+				}
+				if (skillfound) {
+					skillPasAdded.weaponRequired = weaponR;
+					skillPasAdded.AP = APSkill;
+					skillPasAdded.CD = CDSkill;
+					skillPasAdded.currentCD = CDSkill;
+					skillPasAdded.range = Range;
+					skillPasAdded.target = targetSkill;
+					playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(skillPasAdded);
+					skillAdded = true;
+
+					if (indexPas == (int)PasiveSkills::TheSmarty)
+						max_activeSkills++; //Si es habilidad de "El listillo" se añade 1 activa mas
+				}
+			}
+			
+		}
+	}
+
+	//ACTIVAS
+	TArray<int> indexActSkills = TArray<int>();
+	TArray<FString> nameActSkills = TArray<FString>();
+	LoadSkillData(0, indexActSkills, nameActSkills);
+
+	for (int i = 0; i < max_activeSkills; i++)
+	{
+		bool skillAdded = false;
+		while (!skillAdded)
+		{
+			int indexPas = FMath::RandRange(0, indexActSkills.Num() - 1);
+			bool skillfound = true;
+			FStructSkill skillActAdded = FStructSkill();
+			int weaponR,  APSkill,  CDSkill,  targetSkill,  Range;
+			LoadSkillSpecificData(0, indexPas, skillActAdded.name_Skill, skillActAdded.description, weaponR, APSkill, CDSkill, targetSkill, Range);
+			if (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon || weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon)
+			{
+				for (int j = 0; j < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
+				{
+					if (indexPas == playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill) {
+						skillfound = false;
+						break;
+					}
+				}
+				if (skillfound) {
+					skillActAdded.weaponRequired = weaponR;
+					skillActAdded.AP = APSkill;
+					skillActAdded.CD = CDSkill;
+					skillActAdded.currentCD = CDSkill;
+					skillActAdded.range = Range;
+					skillActAdded.target = targetSkill;
+					playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(skillActAdded);
+					skillAdded = true;
+				}
+			}
+		}
+	}
+
+	//STATS
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5);
+
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
+	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee
+		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(7, 5, 5, 7, 7, 6);
+
+	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
+}
+
+
+
+
+
 void UPD_ClientGameInstance::SaveCharacterLogicData() {
 	//Create an instance of our savegame class
 	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
@@ -1123,6 +1280,35 @@ void UPD_ClientGameInstance::LoadWeaponSpecificData(int indexWeapon, int &id_wea
 	}
 	else
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+}
+
+FStructWeapon UPD_ClientGameInstance::LoadWeaponStructData(int indexWeapon)
+{
+	FStructWeapon weaponSelected = FStructWeapon();
+
+	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+
+	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
+	{
+		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
+
+		if (SaveGameInstance->weapons.Num() > 0)
+		{
+			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			{
+				if (indexWeapon == SaveGameInstance->weapons[i].ID_Weapon)
+				{
+					weaponSelected = SaveGameInstance->weapons[i];
+				}
+			}
+		}
+
+	}
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+
+	return weaponSelected;
+
 }
 
 
