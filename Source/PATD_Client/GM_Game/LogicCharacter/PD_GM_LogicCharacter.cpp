@@ -25,6 +25,7 @@ PD_GM_LogicCharacter::PD_GM_LogicCharacter()
 	 weapon = new FStructWeapon();
 	 skin = new FStructSkin();
 	 totalStats = new FStructTotalStats();
+	 characterState = new FStructCharacterState();
 
 	 //inicializar las variables
 	 isDead = false;
@@ -257,6 +258,67 @@ void PD_GM_LogicCharacter::SetBasicStats(int nPOD, int nAGI, int nDES, int nCON,
 	basicStats->CON = nCON;
 	basicStats->PER = nPER;
 	basicStats->MAL = nMAL;
+
+	for (int i = 0; i < this->skills->listPasiveSkills.Num(); i++)
+	{
+		switch (PasiveSkills(this->skills->listPasiveSkills[i].ID_Skill))
+		{
+			case PasiveSkills::IamTank:
+			{
+				FMath::Clamp(basicStats->CON + 3, 1, 10);
+				FMath::Clamp(basicStats->AGI - 1, 1, 10);
+				FMath::Clamp(basicStats->DES - 1, 1, 10);
+				break;
+			}
+			case PasiveSkills::KingMistery:
+			{
+				FMath::Clamp(basicStats->POD - 1, 1, 10);
+				FMath::Clamp(basicStats->AGI + 3, 1, 10);
+				break;
+			}
+			case PasiveSkills::IamTankInDistance:
+			{
+				FMath::Clamp(basicStats->CON + 2, 1, 10);
+				FMath::Clamp(basicStats->POD + 1, 1, 10);
+				FMath::Clamp(basicStats->AGI - 2, 1, 10);
+				break;
+			}
+			case PasiveSkills::RedBullets:
+			{
+				FMath::Clamp(basicStats->MAL + 4, 1, 10);
+				FMath::Clamp(basicStats->DES + 1, 1, 10);
+				break;
+			}
+			case PasiveSkills::SquabEye:
+			{
+				FMath::Clamp(basicStats->DES + 3, 1, 10);
+				FMath::Clamp(basicStats->PER + 1, 1, 10);
+				FMath::Clamp(basicStats->CON - 1, 1, 10);
+				FMath::Clamp(basicStats->MAL - 1, 1, 10);
+				break;
+			}
+			case PasiveSkills::TwoblackCandles:
+			{
+				FMath::Clamp(basicStats->MAL + 2, 1, 10);
+				break;
+			}
+			case PasiveSkills::AsBull:
+			{
+				FMath::Clamp(basicStats->CON + 2, 1, 10);
+				FMath::Clamp(basicStats->POD + 2, 1, 10);
+				FMath::Clamp(basicStats->AGI - 3, 1, 10);
+				break;
+			}
+			case PasiveSkills::TheSweeper:
+			{
+				FMath::Clamp(basicStats->DES - 1, 1, 10);
+				FMath::Clamp(basicStats->PER + 3, 1, 10);
+				break;
+			}
+			default:
+				break;
+		}
+	}
 }
 void PD_GM_LogicCharacter::SetInitBaseStats(int nHP, int nDMG, int nAP)
 {
