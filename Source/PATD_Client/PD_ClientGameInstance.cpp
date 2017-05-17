@@ -803,7 +803,8 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	if (playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal == 205) //Comprobacion sobre un valor para determinar si hay Status o no
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: rellenando datos"));
-		FillCharecterStats(100,100,100,100,100,100);
+		//FillCharecterStats(100,100,100,100,100,100);
+		GenerateRandomChar();
 	}
 
 	FStructCharacter structCharacterToSend = FStructCharacter();
@@ -999,6 +1000,8 @@ APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector p
 ///CREAR PERSONAJE ALEATORIO
 void UPD_ClientGameInstance::GenerateRandomChar()
 {
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar"));
+
 	//Weapon - Clase y Tipo
 	TArray<int> weapons = TArray<int>();
 	LoadWeaponData(weapons);
@@ -1013,41 +1016,45 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), weaponChar.TypeWeapon);
+
 	//Skin
 	switch (playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon)
 	{
 	case 11:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 0;
 		break;
 	case 12:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 0;
 		break;
 	case 13:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 3;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 0;
 		break;
 	case 21:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 4;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
 		break;
 	case 22:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 5;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
 		break;
 	case 23:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 6;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
 		break;
 	case 31:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 7;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
 		break;
 	case 32:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 8;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
 		break;
 	case 33:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 9;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
 		break;
 	default:
 		break;
 	}
 	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_class = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon;
 	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon;
+
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar skin selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead);
 
 	//Habilidades
 	//PASIVAS
@@ -1058,9 +1065,11 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 3) //si es mago
 		max_activeSkills = 3;
 
-	TArray<int> indexPasSkills = TArray<int>();
+	/*TArray<int> indexPasSkills = TArray<int>();
 	TArray<FString> namePasSkills = TArray<FString>();
 	LoadSkillData(1, indexPasSkills, namePasSkills);
+
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar numer pas skill  - %d "), indexPasSkills.Num());
 
 	for (int i = 0; i < max_pasiveSkills; i++)
 	{
@@ -1071,8 +1080,9 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 			FStructSkill skillPasAdded = FStructSkill();
 			int weaponR,  APSkill,  CDSkill,  targetSkill,  Range;
 			LoadSkillSpecificData(1, indexPas, skillPasAdded.name_Skill, skillPasAdded.description, weaponR, APSkill, CDSkill, targetSkill, Range);
-			
-			if (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon || weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon)
+			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar id pas skill  - %d "), indexPas);
+
+			if ((weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon) || (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon))
 			{
 				bool skillfound = true;
 				for (int j = 0; j < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Num(); j++)
@@ -1115,7 +1125,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 			FStructSkill skillActAdded = FStructSkill();
 			int weaponR,  APSkill,  CDSkill,  targetSkill,  Range;
 			LoadSkillSpecificData(0, indexPas, skillActAdded.name_Skill, skillActAdded.description, weaponR, APSkill, CDSkill, targetSkill, Range);
-			if (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon || weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon)
+			if ((weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon) || (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon))
 			{
 				for (int j = 0; j < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
 				{
@@ -1137,13 +1147,13 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 			}
 		}
 	}
-
+	*/
 	//STATS
 	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5);
 
-	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(105,105 ,105, 105, 106 ,106 );
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee
-		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(7, 5, 5, 7, 7, 6);
+		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(70, 50, 50, 70, 70, 60);
 
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
