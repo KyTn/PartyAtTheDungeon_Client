@@ -88,7 +88,7 @@ public:
 
 #pragma region INSTANTIATE MAP
 
-	void PD_GM_MapManager::InstantiateMap();
+	void InstantiateMap();
 	void InstantiateStaticMap();
 	void InstantiateDynamicMap();
 

@@ -46,6 +46,11 @@ void UPD_ClientGameInstance::Init()
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
 
+	//Inicializar Arrays de Skills and Weapons
+	LoadSkillActiveDatafromFile();
+	LoadSkillPasiveDatafromFile();
+	LoadWeaponDataFromFile();
+
 	levelsNameDictionary = LevelsNameDictionary();
 
 	playersManager = new PD_PlayersManager();
@@ -1016,7 +1021,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), weaponChar.TypeWeapon);
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon);
 
 	//Skin
 	switch (playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon)
@@ -1037,117 +1042,112 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
 		break;
 	case 23:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
 		break;
 	case 31:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 3;
 		break;
 	case 32:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 3;
 		break;
 	case 33:
-		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2;
+		playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 3;
 		break;
 	default:
 		break;
 	}
+
+	//playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 0;
+
 	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_class = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon;
 	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon;
 
 	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar skin selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead);
 
-	//Habilidades
-	//PASIVAS
-	int max_pasiveSkills = 1;
-	int max_activeSkills = 2; 
-	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 2) //si es a distancia
-		max_pasiveSkills = 2;
-	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 3) //si es mago
-		max_activeSkills = 3;
-
-	/*TArray<int> indexPasSkills = TArray<int>();
-	TArray<FString> namePasSkills = TArray<FString>();
-	LoadSkillData(1, indexPasSkills, namePasSkills);
-
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar numer pas skill  - %d "), indexPasSkills.Num());
-
-	for (int i = 0; i < max_pasiveSkills; i++)
+	//HABILIDADES
+	switch (playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon)
 	{
-		bool skillAdded = false;
-		while (!skillAdded)
-		{
-			int indexPas = FMath::RandRange(0, indexPasSkills.Num() - 1);
-			FStructSkill skillPasAdded = FStructSkill();
-			int weaponR,  APSkill,  CDSkill,  targetSkill,  Range;
-			LoadSkillSpecificData(1, indexPas, skillPasAdded.name_Skill, skillPasAdded.description, weaponR, APSkill, CDSkill, targetSkill, Range);
-			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar id pas skill  - %d "), indexPas);
-
-			if ((weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon) || (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon))
-			{
-				bool skillfound = true;
-				for (int j = 0; j < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Num(); j++)
-				{
-					if (indexPas == playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills[j].ID_Skill) {
-						skillfound = false;
-						break;
-					}
-				}
-				if (skillfound) {
-					skillPasAdded.weaponRequired = weaponR;
-					skillPasAdded.AP = APSkill;
-					skillPasAdded.CD = CDSkill;
-					skillPasAdded.currentCD = CDSkill;
-					skillPasAdded.range = Range;
-					skillPasAdded.target = targetSkill;
-					playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(skillPasAdded);
-					skillAdded = true;
-
-					if (indexPas == (int)PasiveSkills::TheSmarty)
-						max_activeSkills++; //Si es habilidad de "El listillo" se añade 1 activa mas
-				}
-			}
-			
-		}
-	}
-
-	//ACTIVAS
-	TArray<int> indexActSkills = TArray<int>();
-	TArray<FString> nameActSkills = TArray<FString>();
-	LoadSkillData(0, indexActSkills, nameActSkills);
-
-	for (int i = 0; i < max_activeSkills; i++)
+	case  11: //espada y escudo
 	{
-		bool skillAdded = false;
-		while (!skillAdded)
-		{
-			int indexPas = FMath::RandRange(0, indexActSkills.Num() - 1);
-			bool skillfound = true;
-			FStructSkill skillActAdded = FStructSkill();
-			int weaponR,  APSkill,  CDSkill,  targetSkill,  Range;
-			LoadSkillSpecificData(0, indexPas, skillActAdded.name_Skill, skillActAdded.description, weaponR, APSkill, CDSkill, targetSkill, Range);
-			if ((weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon) || (weaponR == playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon))
-			{
-				for (int j = 0; j < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
-				{
-					if (indexPas == playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill) {
-						skillfound = false;
-						break;
-					}
-				}
-				if (skillfound) {
-					skillActAdded.weaponRequired = weaponR;
-					skillActAdded.AP = APSkill;
-					skillActAdded.CD = CDSkill;
-					skillActAdded.currentCD = CDSkill;
-					skillActAdded.range = Range;
-					skillActAdded.target = targetSkill;
-					playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(skillActAdded);
-					skillAdded = true;
-				}
-			}
-		}
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1,0));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 4));
+		break;
 	}
-	*/
+	case  12: //dagas
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 1));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 2));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 4));
+		break;
+	}
+	case  13: //mandoble
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 2));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 3));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 4));
+		break;
+	}
+	case  21: //ballesta y escudo
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 3));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 5));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 6));
+		break;
+	}
+	case  22: //pistolas
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 4));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 5));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 6));
+		break;
+	}
+	case  23: //arco
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 5));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 5));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 6));
+		break;
+	}
+	case  31: //varita y escudo
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 6));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 12));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		break;
+	}
+	case  32: //cetro y tomo arcano
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 7));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 10));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		break;
+	}
+	case  33: //baston
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 8));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 9));
+
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		break;
+	}
+	default:
+		break;
+	}
+	
 	//STATS
 	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5);
 
@@ -1158,6 +1158,40 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
 
+
+FStructSkill UPD_ClientGameInstance::LoadSkillStructData(int type, int indexSkill)
+{
+	FStructSkill skillSelected = FStructSkill();
+
+	if (type == 0) //Activas
+	{
+		if (activeSkills.Num() > 0)
+		{
+			for (int i = 0; i < activeSkills.Num(); i++)
+			{
+				if (indexSkill == activeSkills[i].ID_Skill)
+				{
+					skillSelected = activeSkills[i];
+				}
+			}
+		}
+	}
+	else if (type == 1) //Pasivas
+	{
+		if (pasiveSkills.Num() > 0)
+		{
+			for (int i = 0; i < pasiveSkills.Num(); i++)
+			{
+				if (indexSkill == pasiveSkills[i].ID_Skill)
+				{
+					skillSelected = pasiveSkills[i];
+				}
+			}
+		}
+	}
+
+	return skillSelected;
+}
 
 
 
@@ -1196,359 +1230,115 @@ void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slot
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
 }
 
-void UPD_ClientGameInstance::SaveWeaponData(int id_weapon, int classWeapon, int typeWeapon, int damage, int range)
-{
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-	bool addedWeaponAlready = false;
-	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
-	}
-	
-	FStructWeapon weapon = FStructWeapon();
-	weapon.ID_Weapon = id_weapon;
-	weapon.ClassWeapon = classWeapon;
-	weapon.TypeWeapon = typeWeapon;
-	weapon.DMWeapon = damage;
-	weapon.RangeWeapon = range;
 
-	if (SaveGameInstance->weapons.Num() > 0) //hay datos
-	{
-		for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
-		{
-			if (id_weapon == SaveGameInstance->weapons[i].ID_Weapon)
-			{
-				SaveGameInstance->weapons[i] = weapon; //Si coinciden los ID, se sustituyen los valores
-				addedWeaponAlready = true;
-			}
-		}
 
-		if (!addedWeaponAlready) //si no se ha añadadio nada, no hay repe, añade uno
-			SaveGameInstance->weapons.Add(weapon);
-	}
-	else
-	{
-		SaveGameInstance->weapons.Add(weapon);
-	}
-
-	if( UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("WeaponsData"), 0) )
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Save Data weapon with id %d"), id_weapon));
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save Weapons."));
-
-}
 
 void UPD_ClientGameInstance::LoadWeaponData(TArray<int> &indexWeapons)
 {
 	indexWeapons = TArray<int>();
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
 
-	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
-		
-		if (SaveGameInstance->weapons.Num() > 0)
+		if (weapons.Num() > 0)
 		{
-			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			for (int i = 0; i < weapons.Num(); i++)
 			{
-				indexWeapons.Add(SaveGameInstance->weapons[i].ID_Weapon);
-				UE_LOG(LogTemp, Warning, TEXT("ID_weapon : %d"), SaveGameInstance->weapons[i].ID_Weapon);
+				indexWeapons.Add(weapons[i].ID_Weapon);
+				UE_LOG(LogTemp, Warning, TEXT("ID_weapon : %d"), weapons[i].ID_Weapon);
 			}
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Weapons Loaded."));
-	}
-
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+	
 }
 
 void UPD_ClientGameInstance::LoadWeaponSpecificData(int indexWeapon, int &id_weapon, int &classWeapon, int &typeWeapon, int &damage, int &range) //Para cargar TODOS los datos de un arma especifica
 {
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
-
-		if (SaveGameInstance->weapons.Num() > 0)
+	if (weapons.Num() > 0)
 		{
-			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			for (int i = 0; i < weapons.Num(); i++)
 			{
-				if (indexWeapon == SaveGameInstance->weapons[i].ID_Weapon)
+				if (indexWeapon == weapons[i].ID_Weapon)
 				{
 					id_weapon = indexWeapon;
-					classWeapon = SaveGameInstance->weapons[i].ClassWeapon;
-					typeWeapon = SaveGameInstance->weapons[i].TypeWeapon;
-					damage = SaveGameInstance->weapons[i].DMWeapon;
-					range = SaveGameInstance->weapons[i].RangeWeapon;
+					classWeapon = weapons[i].ClassWeapon;
+					typeWeapon = weapons[i].TypeWeapon;
+					damage = weapons[i].DMWeapon;
+					range = weapons[i].RangeWeapon;
 				}
 			}
 		}
-
-	}
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
 }
 
 FStructWeapon UPD_ClientGameInstance::LoadWeaponStructData(int indexWeapon)
 {
 	FStructWeapon weaponSelected = FStructWeapon();
 
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
-
-		if (SaveGameInstance->weapons.Num() > 0)
+		if (weapons.Num() > 0)
 		{
-			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
+			for (int i = 0; i < weapons.Num(); i++)
 			{
-				if (indexWeapon == SaveGameInstance->weapons[i].ID_Weapon)
+				if (indexWeapon == weapons[i].ID_Weapon)
 				{
-					weaponSelected = SaveGameInstance->weapons[i];
+					weaponSelected = weapons[i];
 				}
 			}
 		}
 
-	}
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
-
+	
 	return weaponSelected;
 
 }
 
 
-void UPD_ClientGameInstance::DeleteWeaponWithID(int indexWeapon)
-{
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("WeaponsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("WeaponsData", 0));
-
-		if (SaveGameInstance->weapons.Num() > 0)
-		{
-			SaveGameInstance->weapons.RemoveAt(indexWeapon);
-		}
-		if (SaveGameInstance->weapons.Num() > 0) //si despues de borrar aun hay datos - se ajustan los ID
-		{
-			for (int i = 0; i < SaveGameInstance->weapons.Num(); i++)
-			{
-				SaveGameInstance->weapons[i].ID_Weapon = i;
-			}
-		}
-
-		if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("WeaponsData"), 0))
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("delete succesfull Data weapon with id %d"), indexWeapon));
-		else
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save Weapons."));
-	}
-}
-
-
 //PARA HABILIDADES
 //Para Gestionar las Habilidades
-void UPD_ClientGameInstance::SaveSkillData(int id_skill, int typeSkill, FString nameSkill, FString effectSkill, int weaponRequired, int AP, int CD, int target, int Range)
-{
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-	bool addedSkillAlready = false;
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("skill type %d"), typeSkill));
-
-
-	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
-	}
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
-
-	FStructSkill skill = FStructSkill();
-	skill.ID_Skill = id_skill;
-	skill.typeSkill = typeSkill;
-	skill.name_Skill = nameSkill;
-	skill.description = effectSkill;
-	skill.weaponRequired = weaponRequired;
-	skill.AP = AP;
-	skill.CD = CD;
-	skill.currentCD = CD;
-	skill.target = target;
-	skill.range = Range;
-
-	if (typeSkill == 0)// Es Activa
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("skill type actuve ")));
-
-		if (SaveGameInstance->activeSkills.Num() > 0)
-		{
-			for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
-			{
-				if (id_skill == SaveGameInstance->activeSkills[i].ID_Skill)
-				{
-					SaveGameInstance->activeSkills[i] = skill; //Si coinciden los ID, se sustituyen los valores
-					addedSkillAlready = true;
-				}
-			}
-
-			if (!addedSkillAlready) //si no se ha añadadio nada, no hay repe, añade uno
-				SaveGameInstance->activeSkills.Add(skill);
-		}
-		else
-		{
-			SaveGameInstance->activeSkills.Add(skill);
-		}
-	}
-
-	else if(typeSkill == 1) //es pasiva
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("skill type pasive ")));
-
-		if (SaveGameInstance->pasiveSkills.Num() > 0)
-		{
-			for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
-			{
-				if (id_skill == SaveGameInstance->pasiveSkills[i].ID_Skill)
-				{
-					SaveGameInstance->pasiveSkills[i] = skill; //Si coinciden los ID, se sustituyen los valores
-					addedSkillAlready = true;
-				}
-			}
-
-			if (!addedSkillAlready) //si no se ha añadadio nada, no hay repe, añade uno
-				SaveGameInstance->pasiveSkills.Add(skill);
-		}
-		else
-		{
-			SaveGameInstance->pasiveSkills.Add(skill);
-		}
-	}
-
-	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("SkillsData"), 0))
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Save Data Skills with id %d"), id_skill));
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save SkillsData."));
-}
-
-//ELIMINAR HABILIDADES
-void UPD_ClientGameInstance::DeleteSkillWithID(int indexSkill, int typeSkill)
-{
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
-
-		if (typeSkill == 0) //ACTIVA
-		{
-			if (SaveGameInstance->activeSkills.Num() > 0)
-			{
-				SaveGameInstance->activeSkills.RemoveAt(indexSkill);
-			}
-			if (SaveGameInstance->activeSkills.Num() > 0) //si despues de borrar aun hay datos - se ajustan los ID
-			{
-				for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
-				{
-					SaveGameInstance->activeSkills[i].ID_Skill = i;
-				}
-			}
-		}
-		else if (typeSkill == 1) //PASIVA
-		{
-			if (SaveGameInstance->pasiveSkills.Num() > 0)
-			{
-				SaveGameInstance->pasiveSkills.RemoveAt(indexSkill);
-			}
-			if (SaveGameInstance->pasiveSkills.Num() > 0) //si despues de borrar aun hay datos - se ajustan los ID
-			{
-				for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
-				{
-					SaveGameInstance->pasiveSkills[i].ID_Skill = i;
-				}
-			}
-		}
-		
-		if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("SkillsData"), 0))
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("delete succesfull Data skill with id %d"), indexSkill));
-		else
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error to save Weapons."));
-	}
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
-}
-
 void UPD_ClientGameInstance::LoadSkillData(int TypeSkill, TArray<int> &skills, TArray<FString> &nameSkills)
 {
 
 	skills = TArray<int>();
 	nameSkills = TArray<FString>();
 
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
 		if (TypeSkill == 0) //ACTIVA
 		{
-			if (SaveGameInstance->activeSkills.Num() > 0)
+			if (activeSkills.Num() > 0)
 			{
-				for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
+				for (int i = 0; i < activeSkills.Num(); i++)
 				{
-					skills.Add(SaveGameInstance->activeSkills[i].ID_Skill);
-					nameSkills.Add(SaveGameInstance->activeSkills[i].name_Skill);
+					skills.Add(activeSkills[i].ID_Skill);
+					nameSkills.Add(activeSkills[i].name_Skill);
 				}
 			}
 		}
 		else if (TypeSkill == 1)
 		{
-			if (SaveGameInstance->pasiveSkills.Num() > 0)
+			if (pasiveSkills.Num() > 0)
 			{
-				for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
+				for (int i = 0; i < pasiveSkills.Num(); i++)
 				{
-					skills.Add(SaveGameInstance->pasiveSkills[i].ID_Skill);
-					nameSkills.Add(SaveGameInstance->pasiveSkills[i].name_Skill);
+					skills.Add(pasiveSkills[i].ID_Skill);
+					nameSkills.Add(pasiveSkills[i].name_Skill);
 				}
 			}
 		}
-	}
-	else 
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
-	}
+	
 }
-
 
 
 void UPD_ClientGameInstance::LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range)
 {
-	//Create an instance of our savegame class
-	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
-
-	if (UGameplayStatics::DoesSaveGameExist("SkillsData", 0))
-	{
-		SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("SkillsData", 0));
 		if (TypeSkill == 0) //ACTIVA
 		{
-			if (SaveGameInstance->activeSkills.Num() > 0)
+			if (activeSkills.Num() > 0)
 			{
-				for (int i = 0; i < SaveGameInstance->activeSkills.Num(); i++)
+				for (int i = 0; i < activeSkills.Num(); i++)
 				{
-					if (id_skill == SaveGameInstance->activeSkills[i].ID_Skill)
+					if (id_skill == activeSkills[i].ID_Skill)
 					{
-						nameSkill = SaveGameInstance->activeSkills[id_skill].name_Skill;
-						effectSkill = SaveGameInstance->activeSkills[id_skill].description;
-						weaponRequired = SaveGameInstance->activeSkills[id_skill].weaponRequired;
-						AP = SaveGameInstance->activeSkills[id_skill].AP;
-						CD = SaveGameInstance->activeSkills[id_skill].CD;
-						target = SaveGameInstance->activeSkills[id_skill].target;
-						range = SaveGameInstance->activeSkills[id_skill].range;
+						nameSkill = activeSkills[id_skill].name_Skill;
+						effectSkill = activeSkills[id_skill].description;
+						weaponRequired = activeSkills[id_skill].weaponRequired;
+						AP = activeSkills[id_skill].AP;
+						CD = activeSkills[id_skill].CD;
+						target = activeSkills[id_skill].target;
+						range = activeSkills[id_skill].range;
 					}
 				}
 			
@@ -1557,29 +1347,203 @@ void UPD_ClientGameInstance::LoadSkillSpecificData(int TypeSkill, int id_skill, 
 		}
 		else if (TypeSkill == 1)
 		{
-			if (SaveGameInstance->pasiveSkills.Num() > 0)
+			if (pasiveSkills.Num() > 0)
 			{
-				for (int i = 0; i < SaveGameInstance->pasiveSkills.Num(); i++)
+				for (int i = 0; i < pasiveSkills.Num(); i++)
 				{
-					if (id_skill == SaveGameInstance->pasiveSkills[i].ID_Skill)
+					if (id_skill == pasiveSkills[i].ID_Skill)
 					{
-						nameSkill = SaveGameInstance->pasiveSkills[id_skill].name_Skill;
-						effectSkill = SaveGameInstance->pasiveSkills[id_skill].description;
-						weaponRequired = SaveGameInstance->pasiveSkills[id_skill].weaponRequired;
-						AP = SaveGameInstance->pasiveSkills[id_skill].AP;
-						CD = SaveGameInstance->pasiveSkills[id_skill].CD;
-						target = SaveGameInstance->pasiveSkills[id_skill].target;
-						range = SaveGameInstance->pasiveSkills[id_skill].range;
+						nameSkill = pasiveSkills[id_skill].name_Skill;
+						effectSkill = pasiveSkills[id_skill].description;
+						weaponRequired = pasiveSkills[id_skill].weaponRequired;
+						AP = pasiveSkills[id_skill].AP;
+						CD = pasiveSkills[id_skill].CD;
+						target = pasiveSkills[id_skill].target;
+						range = pasiveSkills[id_skill].range;
 					}
 				}
 				
 			}
 		}
+}
+
+#pragma endregion
+
+#pragma region LoadDataFromFile
+
+void UPD_ClientGameInstance::LoadSkillActiveDatafromFile()
+{
+	FString filepath = "Content/Data/ActiveSkills.csv";
+	FString FilePath = FPaths::GameDir() + *filepath;
+	FString FileData = "";
+
+	if (FFileHelper::LoadFileToString(FileData, *FilePath))
+	{
+		TArray<FString> raws;
+		FileData.ParseIntoArray(raws, TEXT("\n"), true); //Consigo cada linea del CSV (1 habilidad)
+
+		for (int i = 0; i < raws.Num(); i++)
+		{
+			TArray<FString> columns;
+			raws[i].ParseIntoArray(columns, TEXT(";"), true); //Consigo los campos de cada linea
+
+			//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Fields of Skill :%d "), columns.Num());
+			FStructSkill newActiveSkill = FStructSkill();
+			for (int j = 0; j < columns.Num(); j++)
+			{
+				/*
+				0 - ID
+				1 - Name_ID
+				2 - Skill name
+				3 - Effect
+				4 - Type 
+				5 - AP
+				6 - CD
+				7 - Range
+				8 - Target
+				9 - Weapon Required
+				*/
+				if (j == 0) 
+					newActiveSkill.ID_Skill = FCString::Atoi(*columns[j]);
+				if (j == 2)
+					newActiveSkill.name_Skill = columns[j];
+				if (j == 3)
+					newActiveSkill.description = columns[j];
+				if (j == 4)
+					newActiveSkill.typeSkill = FCString::Atoi(*columns[j]);
+				if (j == 5)
+					newActiveSkill.AP = FCString::Atoi(*columns[j]);
+				if (j == 6)
+					newActiveSkill.CD = FCString::Atoi(*columns[j]);
+				if (j == 7)
+					newActiveSkill.range = FCString::Atoi(*columns[j]);
+				if (j == 8)
+					newActiveSkill.target = FCString::Atoi(*columns[j]);
+				if (j == 9)
+					newActiveSkill.weaponRequired = FCString::Atoi(*columns[j]);
+			}
+
+			newActiveSkill.currentCD = 0;
+			activeSkills.Add(newActiveSkill);
+		}
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
+	}
+
+}
+
+void UPD_ClientGameInstance::LoadSkillPasiveDatafromFile()
+{
+	FString filepath = "Content/Data/PasiveSkills.csv";
+	FString FilePath = FPaths::GameDir() + *filepath;
+	FString FileData = "";
+
+	if (FFileHelper::LoadFileToString(FileData, *FilePath))
+	{
+		TArray<FString> raws;
+		FileData.ParseIntoArray(raws, TEXT("\n"), true); //Consigo cada linea del CSV (1 habilidad)
+
+		for (int i = 0; i < raws.Num(); i++)
+		{
+			TArray<FString> columns;
+			raws[i].ParseIntoArray(columns, TEXT(";"), true); //Consigo los campos de cada linea
+
+															  //UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Fields of Skill :%d "), columns.Num());
+			FStructSkill newPasiveSkill = FStructSkill();
+			for (int j = 0; j < columns.Num(); j++)
+			{
+				/*
+				0 - ID
+				1 - Name_ID
+				2 - Skill name
+				3 - Effect
+				4 - Type
+				5 - AP
+				6 - CD
+				7 - Range
+				8 - Target
+				9 - Weapon Required
+				*/
+				if (j == 0)
+					newPasiveSkill.ID_Skill = FCString::Atoi(*columns[j]);
+				if (j == 2)
+					newPasiveSkill.name_Skill = columns[j];
+				if (j == 3)
+					newPasiveSkill.description = columns[j];
+				if (j == 4)
+					newPasiveSkill.typeSkill = FCString::Atoi(*columns[j]);
+				if (j == 5)
+					newPasiveSkill.AP = FCString::Atoi(*columns[j]);
+				if (j == 6)
+					newPasiveSkill.CD = FCString::Atoi(*columns[j]);
+				if (j == 7)
+					newPasiveSkill.range = FCString::Atoi(*columns[j]);
+				if (j == 8)
+					newPasiveSkill.target = FCString::Atoi(*columns[j]);
+				if (j == 9)
+					newPasiveSkill.weaponRequired = FCString::Atoi(*columns[j]);
+			}
+
+			newPasiveSkill.currentCD = 0;
+			pasiveSkills.Add(newPasiveSkill);
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillPasiveDatafromFile::  Error loading Pasive Skills! Failed to load file!. Path :%s"), *FilePath));
 	}
 }
+
+void UPD_ClientGameInstance::LoadWeaponDataFromFile()
+{
+	FString filepath = "Content/Data/Weapons.csv";
+	FString FilePath = FPaths::GameDir() + *filepath;
+	FString FileData = "";
+
+	if (FFileHelper::LoadFileToString(FileData, *FilePath))
+	{
+		TArray<FString> raws;
+		FileData.ParseIntoArray(raws, TEXT("\n"), true); //Consigo cada linea del CSV (1 arma)
+
+		for (int i = 0; i < raws.Num(); i++)
+		{
+			TArray<FString> columns;
+			raws[i].ParseIntoArray(columns, TEXT(";"), true); //Consigo los campos de cada linea
+
+			//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::LoadWeaponDataFromFile::  Fields of weapon :%d "), columns.Num());
+			FStructWeapon newWeapon = FStructWeapon();
+			for (int j = 0; j < columns.Num(); j++)
+			{
+				/*
+				0 - ID
+				1 - Name_ID
+				2 - Type
+				3 - Class
+				4 - DM
+				5 - Rango
+				*/
+				if (j == 0)
+					newWeapon.ID_Weapon = FCString::Atoi(*columns[j]);
+				if (j == 2)
+					newWeapon.TypeWeapon = FCString::Atoi(*columns[j]);
+				if (j == 3)
+					newWeapon.ClassWeapon = FCString::Atoi(*columns[j]);
+				if (j == 4)
+					newWeapon.DMWeapon = FCString::Atoi(*columns[j]);
+				if (j == 5)
+					newWeapon.RangeWeapon = FCString::Atoi(*columns[j]);
+			}
+
+			weapons.Add(newWeapon);
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
+	}
+}
+
 
 #pragma endregion
