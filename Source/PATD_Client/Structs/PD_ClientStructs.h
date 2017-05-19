@@ -72,6 +72,7 @@ struct StructClientState {
 	bool ConfigAllCharactersDone;
 	bool AllCharactersIncoming;
 	FString mapString;
+	FStructMapData* NETMAPDATA;
 
 	//Esta variable sirve para saber si el proceso de carga es el normal o por reconexion. 
 	bool reconnected=false;

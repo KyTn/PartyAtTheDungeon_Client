@@ -20,7 +20,7 @@ public:
 	//Hay posibilidad de mejorar eso?
 
 	TArray<uint8>* SerializeData(FStructGeneric* structGeneric, UStructType type) {
-		//UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: intentando serializar algo de tipo %d"), );
+		UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: "));
 
 		switch (type) {
 		case UStructType::FStructMap: {
@@ -103,7 +103,6 @@ public:
 
 		}break;
 
-
 		case UStructType::FStructRequestIDClient: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructRequestIDClient"));
 			FStructRequestIDClient* structSpecialization = (FStructRequestIDClient*)structGeneric;
@@ -137,9 +136,22 @@ public:
 			return SerializeDataTemplate<FStructPong>(structSpecialization);
 
 		}break;
+		case UStructType::FStructLostConnection: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructLostConnection"));
+			FStructLostConnection* structSpecialization = (FStructLostConnection*)structGeneric;
+			return SerializeDataTemplate<FStructLostConnection>(structSpecialization);
+
+		}break;
+		case UStructType::FStructMapData: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructMapData"));
+			FStructMapData* structSpecialization = (FStructMapData*)structGeneric;
+			return SerializeDataTemplate<FStructMapData>(structSpecialization);
+
+		}break;
 
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Tipo de ustruct (%d) no reconocido"), static_cast<uint8>(type));
+
 			return nullptr;
 
 		}
@@ -148,7 +160,6 @@ public:
 
 	FStructGeneric*  DeserializeData(TArray<uint8>* data, UStructType type) {
 		switch (type) {
-
 
 		case UStructType::FStructMap: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructMap"));
@@ -167,22 +178,24 @@ public:
 			return DeserializeDataTemplate<FStructTurnOrders>(data);
 
 		}break;
+
 		case UStructType::FStructCharacter: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructCharacter"));
 			return DeserializeDataTemplate<FStructCharacter>(data);
 
 		}break;
+
 		case UStructType::FStructUpdateTurn: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructUpdateTurn"));
 			return DeserializeDataTemplate<FStructUpdateTurn>(data);
 
 		}break;
+
 		case UStructType::FStructInstatiatePlayers: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructInstatiatePlayers"));
 			return DeserializeDataTemplate<FStructInstatiatePlayers>(data);
 
 		}break;
-
 
 		case UStructType::FStructMatchConfig: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructMatchConfig"));
@@ -248,12 +261,23 @@ public:
 			return DeserializeDataTemplate<FStructPong>(data);
 
 		}break;
+		case UStructType::FStructLostConnection: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructLostConnection"));
+			return DeserializeDataTemplate<FStructLostConnection>(data);
+
+		}break;
+		case UStructType::FStructMapData: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructMapData"));
+			return DeserializeDataTemplate<FStructMapData>(data);
+
+		}break;
+
 		default:
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Tipo de ustruct (%d) no reconocido"), static_cast<uint8>(type));
-			return nullptr;
+			break;
 		}
 
-
+		return nullptr;
 
 	}
 

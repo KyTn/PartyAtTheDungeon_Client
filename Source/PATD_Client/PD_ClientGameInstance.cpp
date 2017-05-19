@@ -195,6 +195,10 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 			// Cuando el server envia el mapa ... 
 			HandleEvent_MapIncoming(inDataStruct, inPlayer, inEventType);
 		}
+		else if (inEventType == UStructType::FStructMapData) {
+
+			HandleEvent_FStructMapDataIncoming(inDataStruct, inPlayer, inEventType);
+		}
 
 		else if (inEventType == UStructType::FStructClientStartMatchOnGM) {
 
@@ -238,7 +242,10 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			HandleEvent_LaunchMatchFromServer(inDataStruct, inPlayer, inEventType);
 		}
+		else if(inEventType == UStructType::FStructMapData) {
 
+			HandleEvent_FStructMapDataIncoming(inDataStruct, inPlayer, inEventType);
+		}
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
 
@@ -410,6 +417,12 @@ void UPD_ClientGameInstance::HandleEvent_MapIncoming(FStructGeneric* inDataStruc
 	//this->UpdateState();
 }
 
+void UPD_ClientGameInstance::HandleEvent_FStructMapDataIncoming(FStructGeneric * inDataStruct, int inPlayer, UStructType inEventType)
+{
+	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming"));
+	structClientState->NETMAPDATA = (FStructMapData*)inDataStruct;
+}
+
 void UPD_ClientGameInstance::HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_LaunchMatchFromServer"));
 	
@@ -515,15 +528,32 @@ void UPD_ClientGameInstance::OnBeginState() {
 		structClientState->reconnected = true;
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
+		//mapParser = new PD_MG_MapParser();
+
+		//PD_MG_StaticMap* staticMapRef = new PD_MG_StaticMap();
+		//PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
+
+		//// Parsea el chorizo
+		//mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef);
+		//mapManager = new PD_GM_MapManager();
+		//mapManager->Init(staticMapRef, dynamicMapRef);
+
+
 		mapParser = new PD_MG_MapParser();
 
 		PD_MG_StaticMap* staticMapRef = new PD_MG_StaticMap();
 		PD_MG_DynamicMap* dynamicMapRef = new PD_MG_DynamicMap();
 
 		// Parsea el chorizo
-		mapParser->StartParsingFromChorizo(&structClientState->mapString, staticMapRef, dynamicMapRef);
+		//mapParser->StartParsingFromFile(&mapPath, staticMapRef, dynamicMapRef);
+		//mapParser->StartParsingFromChorizo(&mapPath, staticMapRef, dynamicMapRef);
+
 		mapManager = new PD_GM_MapManager();
-		mapManager->Init(staticMapRef, dynamicMapRef);
+		mapManager->Init();
+		mapManager->MapInfo->NETMAPDATA = structClientState->NETMAPDATA;
+		mapManager->MapInfo->ShowMapData();
+		mapParser->StartParsingFromFStructMapData(structClientState->NETMAPDATA, mapManager->MapInfo, mapManager->DynamicMapRef);
+
 	}
 	else if (structClientState->enumClientState == EClientState::GameInProcess) {
 
@@ -568,23 +598,21 @@ void UPD_ClientGameInstance::UpdateState() {
 	}
 	else if (structClientState->enumClientState == EClientState::Lobby_Tabern) {
 		//Agregada condicion de que el stringMap este inicializado para pasar de estado
-		if (structClientState->ConfigAllCharactersDone && !structClientState->mapString.IsEmpty()) {
+		if (structClientState->ConfigAllCharactersDone /*&& !structClientState->mapString.IsEmpty()*/) {
 			this->ChangeState(EClientState::Launch_Match);
 		}
-		else if (structClientState->mapString.IsEmpty()) {
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::UpdateState: Intentando hacer LAUNCH MATCH - ERROR: No se encuentra el mapString"));
-
-		}
+//		else if (structClientState->mapString.IsEmpty()) {
+//			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::UpdateState: Intentando hacer LAUNCH MATCH - ERROR: No se encuentra el mapString"));
+//		}
 	}
 	else if (structClientState->enumClientState == EClientState::ReconnectingInGame) {
 		//Agregada condicion de que el stringMap este inicializado para pasar de estado
-		if (structClientState->ConfigAllCharactersDone && !structClientState->mapString.IsEmpty()) {
+		if (structClientState->ConfigAllCharactersDone /*&& !structClientState->mapString.IsEmpty()*/) {
 			this->ChangeState(EClientState::Launch_Match);
 		}
-		else if (structClientState->mapString.IsEmpty()) {
-			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::UpdateState: Intentando hacer LAUNCH MATCH - ERROR: No se encuentra el mapString"));
-
-		}
+//		else if (structClientState->mapString.IsEmpty()) {
+//			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::UpdateState: Intentando hacer LAUNCH MATCH - ERROR: No se encuentra el mapString"))
+//		}
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
 		

@@ -14,7 +14,8 @@ private:
 public:
 
 	PD_MG_LogicPosition();
-	PD_MG_LogicPosition(int32 x, int32 y);
+	PD_MG_LogicPosition(uint32 x, uint32 y);
+	PD_MG_LogicPosition(uint16 pos);
 	~PD_MG_LogicPosition();
 
 	int32 GetX() { return _x; }
@@ -42,6 +43,23 @@ public:
 		return (logpos._x << 16) + logpos._y;
 	}
 
+
+	uint16 GetIn16bits(const PD_MG_LogicPosition& logpos)
+	{
+		return ((uint16)(logpos._x) << 8) + (uint16)(logpos._y);
+	}
+
+	uint16 GetIn16bits()
+	{
+		return ((uint16)(this->_x) << 8) + (uint16)(this->_y);
+	}
+
+
+	void SetIn16bits(uint16 num) {
+		this->SetX((uint32)(num & 0x00FF));
+		this->SetY((uint32)((num >> 8) & 0x00FF));
+	}
+
 	/*
 	static FVector* LogicToWorldPosition(PD_MG_LogicPosition pos) {
 	return new FVector(-1.0f * pos.GetX()*100.0f, pos.GetY() * 100.0f, 0.f);
@@ -51,14 +69,14 @@ public:
 	Se pone el bool isCharacter para determina si hay que subir su Z en 100 unidades, y que asi no caiga cuando empiece el mapa
 	en tiempo de ejecucion.
 	*/
-	const FVector ToWorldPosition(bool isCharacter) {
+	FVector ToWorldPosition(bool isCharacter) {
 		if (isCharacter)
 			return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 40.f);
 		else
 			return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 0.f);
 	}
 
-	const FVector ToWorldPosition() {
+	FVector ToWorldPosition() {
 		return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 0.f);
 	}
 
