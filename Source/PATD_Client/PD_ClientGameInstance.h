@@ -56,6 +56,18 @@ public:
 	PD_MatchConfigManager* MatchConfigManager;
 
 
+#pragma region LoadDataFromFile
+	TArray<FStructSkill> activeSkills;
+	TArray<FStructSkill> pasiveSkills;
+	TArray<FStructWeapon> weapons;
+
+	void LoadSkillActiveDatafromFile();
+	void LoadSkillPasiveDatafromFile();
+	void LoadWeaponDataFromFile();
+
+#pragma endregion
+
+
 #pragma region ACCESSORS
 
 	AMapManagerAccesor * MapManagerAccesor;
@@ -211,6 +223,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
 		void GenerateRandomChar();
 
+	FStructSkill LoadSkillStructData(int type, int indexSkill);
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 	void SaveCharacterLogicData();
@@ -220,9 +233,6 @@ public:
 
 	//Para Gestionar las Armas
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
-		void SaveWeaponData(int id_weapon, int classWeapon, int typeWeapon, int damage, int range); //Se usa en la herramienta de weapons
-
-	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void LoadWeaponData(TArray<int> &indexWeapons);
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
@@ -230,22 +240,13 @@ public:
 
 	FStructWeapon LoadWeaponStructData(int indexWeapon);
 		
-
-	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
-		void DeleteWeaponWithID(int indexWeapon);
-
 	//Para Gestionar las Habilidades
-	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
-		void SaveSkillData(int id_skill, int typeSkill, FString nameSkill, FString effectSkill, int weaponRequired, int AP, int CD, int target, int Range);
-
-	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
-		void DeleteSkillWithID(int indexSkill, int typeSkill); //Dado el tipo, elimina el skill de ese tipo con id
-
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void LoadSkillData(int TypeSkill, TArray<int> &skills, TArray<FString> &nameSkills); 
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range );
+
 #pragma endregion
 
 

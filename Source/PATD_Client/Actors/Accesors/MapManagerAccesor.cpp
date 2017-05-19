@@ -100,7 +100,7 @@ bool AMapManagerAccesor::GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEne
 	{
 		int playerRange = mapManager->_GAMEMANAGER->playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
 
-		if (playerRange == 1) //melee
+		if (playerRange >= 1) //melee
 		{
 			UE_LOG(LogTemp, Warning, TEXT("apManagerAccesor::GetPossibleEnemiesToAttack - player range %d"), playerRange);
 			TArray<PD_MG_LogicPosition> possibleNewPositionToMove = TArray<PD_MG_LogicPosition>();

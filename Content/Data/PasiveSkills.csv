@@ -1,0 +1,17 @@
+0;IamTank;FOLLOW ME! I AM THE TANK !!;3 CON / -1 AGI / -1 DEX;1;0;0;0;0;11
+1;KingMistery;The King Mystery;3AGI / -1 POW;1;0;0;0;0;12
+2;BlindFury;BLIND FURY;The attacks cost 1 AP less;1;0;0;0;0;13
+3;IamTankInDistance;I AM TANK! In a Distance...;2CON / +1 POW / -2 AGI;1;0;0;0;0;21
+4;RedBullets;Red Bullets;4MAL / +1DEX / Only allow to attack once per turn;1;0;0;0;0;22
+5;SquabEye;Squab Eye;3DEX / +1PRO / -1 CON / -1 MAL;1;0;0;0;0;23
+6;MagicShieldBro;My Bro is the Magic Shield !;Reduce in 2 (minimun 1 point) of the damage made by bassic attack from melee and range class;1;0;0;0;0;31
+7;WaitForNotes;Wait ! I had it in my notes!;The CD of the Magic Skills is reduce by one;1;0;0;0;0;32
+8;PowerfulStick;The Stick Is So Powerfull;The Magic Skills make 2 points more of damage;1;0;0;0;0;33
+9;HotestBlod;Hot Blod;Fire Skills will increase their damage by 3;1;0;0;0;0;30
+10;Borderline;Borderline;Ice Skills will increase their damage by 3;1;0;0;0;0;30
+11;JokesWithSparkle;Bad Jokes but with sparkle;Electri Skills will increase their damage by 3 ( the TELEPORT SKILL will cost 1 AP less);1;0;0;0;0;30
+12;LaRemedios;La Remedios;Heal Skills will cost 1 AP less;1;0;0;0;0;30
+13;TwoblackCandles;Two black Candles;2 MAL;1;0;0;0;0;30
+14;TheSmarty;The Smarty;You have 1 more Active Skill;1;0;0;0;0;30
+15;AsBull;As a Bull;2 POW / 2 CON / -3 AGI;1;0;0;0;0;30
+16;TheSweeper;The Sweeper;3 PRO / -1 DEX;1;0;0;0;0;30

@@ -41,15 +41,15 @@ enum class EClientState { StartApp, Game_NoConnection, ConfigureMatch, WaitingMa
 UENUM(BlueprintType)
 enum class SkinHeads
 {
-	Legionary_SwordAndShield = 1,
-	Legionary_2HandSword = 2,
-	Legionary_Daggers = 3,
-	Assasin_CrossbowAndShield = 4,
-	Assasin_2Guns = 5,
-	Assasin_Bow = 6,
-	Wizard_WandAndShield = 7,
-	Wizard_ScepterAndArcaneBook = 8,
-	Wizard_Staff = 9
+	Legionary_SwordAndShield = 0,
+	Legionary_2HandSword = 1,
+	Legionary_Daggers = 2,
+	Assasin_CrossbowAndShield = 3,
+	Assasin_2Guns = 4,
+	Assasin_Bow = 5,
+	Wizard_WandAndShield = 6,
+	Wizard_ScepterAndArcaneBook = 7,
+	Wizard_Staff = 8
 
 };
 
