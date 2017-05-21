@@ -218,142 +218,151 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMapElement element, PD_MG_LogicPosition lp) {
 	APD_E_ElementActor* actorElement;
 	switch (mapSkin) {
-	case MapSkinType::DUNGEON_NORMAL: {
-		switch (element) {
-		case StaticMapElement::NORMAL_TILE: {
-			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
-			MapInfo->AddTile(lp, actorElement);
+		case MapSkinType::DUNGEON_NORMAL: {
+			switch (element) {
+				case StaticMapElement::NORMAL_TILE: {
+					actorElement = instantiator->InstantiateTile(lp);
+					actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+					MapInfo->AddTile(lp, actorElement);
+					break;
+				}
+				case StaticMapElement::SPECIAL_TILE: {
+					break;
+				}
+				case StaticMapElement::EMPTY: {
+					break;
+				}
+				case StaticMapElement::SMALL_CHEST: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_00: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_01: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_02: {
+					break;
+				}
+			}
+			break;
 		}
-		case StaticMapElement::SPECIAL_TILE: {
-
+		case MapSkinType::GARDEN: {
+			switch (element) {
+				case StaticMapElement::NORMAL_TILE: {
+					actorElement = instantiator->InstantiateTile(lp);
+					actorElement->SetMaterialSkin(MapSkinType::GARDEN);
+					MapInfo->AddTile(lp, actorElement);
+					break;
+				}
+				case StaticMapElement::SPECIAL_TILE: {
+					break;
+				}
+				case StaticMapElement::EMPTY: {
+					break;
+				}
+				case StaticMapElement::SMALL_CHEST: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_00: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_01: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_02: {
+					break;
+				}
+			}
+			break;
 		}
-		case StaticMapElement::EMPTY: {
-
+		case MapSkinType::SACRIFICE: {
+			switch (element) {
+				case StaticMapElement::NORMAL_TILE: {
+					actorElement = instantiator->InstantiateTile(lp);
+					actorElement->SetMaterialSkin(MapSkinType::SACRIFICE);
+					MapInfo->AddTile(lp, actorElement);
+					break;
+				}
+				case StaticMapElement::SPECIAL_TILE: {
+					break;
+				}
+				case StaticMapElement::EMPTY: {
+					break;
+				}
+				case StaticMapElement::SMALL_CHEST: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_00: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_01: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_02: {
+					break;
+				}
+			}
+			break;
 		}
-		case StaticMapElement::SMALL_CHEST: {
-
+		case MapSkinType::BOSS: {
+			switch (element) {
+				case StaticMapElement::NORMAL_TILE: {
+					actorElement = instantiator->InstantiateTile(lp);
+					actorElement->SetMaterialSkin(MapSkinType::BOSS);
+					MapInfo->AddTile(lp, actorElement);
+					break;
+				}
+				case StaticMapElement::SPECIAL_TILE: {
+					break;
+				}
+				case StaticMapElement::EMPTY: {
+					break;
+				}
+				case StaticMapElement::SMALL_CHEST: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_00: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_01: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_02: {
+					break;
+				}
+			}
+			break;
 		}
-		case StaticMapElement::TREE_OR_COLUMN_00: {
-
+		case MapSkinType::LIBRARY: {
+			switch (element) {
+				case StaticMapElement::NORMAL_TILE: {
+					actorElement = instantiator->InstantiateTile(lp);
+					actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+					MapInfo->AddTile(lp, actorElement);
+					break;
+				}
+				case StaticMapElement::SPECIAL_TILE: {
+					break;
+				}
+				case StaticMapElement::EMPTY: {
+					break;
+				}
+				case StaticMapElement::SMALL_CHEST: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_00: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_01: {
+					break;
+				}
+				case StaticMapElement::TREE_OR_COLUMN_02: {
+					break;
+				}
+			}
+			break;
 		}
-		case StaticMapElement::TREE_OR_COLUMN_01: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_02: {
-
-		}
-
-		}
-	}
-	case MapSkinType::GARDEN: {
-		switch (element) {
-		case StaticMapElement::NORMAL_TILE: {
-			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::GARDEN);
-			MapInfo->AddTile(lp, actorElement);
-		}
-		case StaticMapElement::SPECIAL_TILE: {
-
-		}
-		case StaticMapElement::EMPTY: {
-
-		}
-		case StaticMapElement::SMALL_CHEST: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_00: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_01: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_02: {
-
-		}
-		}
-	}
-	case MapSkinType::SACRIFICE: {
-		switch (element) {
-		case StaticMapElement::NORMAL_TILE: {
-			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::SACRIFICE);
-			MapInfo->AddTile(lp, actorElement);
-		}
-		case StaticMapElement::SPECIAL_TILE: {
-
-		}
-		case StaticMapElement::EMPTY: {
-
-		}
-		case StaticMapElement::SMALL_CHEST: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_00: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_01: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_02: {
-
-		}
-		}
-	}
-	case MapSkinType::BOSS: {
-		switch (element) {
-		case StaticMapElement::NORMAL_TILE: {
-			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::BOSS);
-			MapInfo->AddTile(lp, actorElement);
-		}
-		case StaticMapElement::SPECIAL_TILE: {
-
-		}
-		case StaticMapElement::EMPTY: {
-
-		}
-		case StaticMapElement::SMALL_CHEST: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_00: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_01: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_02: {
-
-		}
-		}
-	}
-	case MapSkinType::LIBRARY: {
-		switch (element) {
-		case StaticMapElement::NORMAL_TILE: {
-			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-			MapInfo->AddTile(lp, actorElement);
-		}
-		case StaticMapElement::SPECIAL_TILE: {
-
-		}
-		case StaticMapElement::EMPTY: {
-
-		}
-		case StaticMapElement::SMALL_CHEST: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_00: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_01: {
-
-		}
-		case StaticMapElement::TREE_OR_COLUMN_02: {
-
-		}
-		}
-	}
 	}
 }
 
