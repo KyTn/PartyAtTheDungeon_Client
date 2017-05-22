@@ -436,8 +436,7 @@ break;
 
 
 void PD_GM_MapManager::InstantiateDynamicMap() {
-	ECharacterType enemyType;
-
+	
 	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Players Num %d"), _GAMEMANAGER->playersManager->GetNumPlayers());
 
 	for (int i = 0; i < _GAMEMANAGER->playersManager->GetNumPlayers(); i++)
@@ -470,49 +469,73 @@ void PD_GM_MapManager::InstantiateDynamicMap() {
 		///actualizamos la referencia del BP
 
 	}
+	
+	InstantiateEnemies();
+}
+
+void PD_GM_MapManager::InstantiateEnemies() {
+	ECharacterType enemyType;
+	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Numero de enemigos enemigos %d"), DynamicMapRef->GetLogicPositions().Num());
 	for (int i = 0; i < DynamicMapRef->GetLogicPositions().Num(); i++) {
+		if (MapInfo->roomByLogPos[DynamicMapRef->GetLogicPositions()[i]]->IsInstantiated && !DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].isInstantiated) {
+			UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemigos %d"), i);
+			DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].isInstantiated = true;
+			enemyType = DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character; ///Cogemos el tipo
 
-		enemyType = DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character; ///Cogemos el tipo
+			switch (enemyType)
+			{
+				case ECharacterType::OrcBow:
+				{
+					APD_E_Character* charac = instantiator->InstantiateOrcBow(DynamicMapRef->GetLogicPositions()[i]);
+					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
+					logicCha->SetIsPlayer(false);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					logicCha->SetCharacterBP(charac);
+					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
+					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
+					///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
+					charac->SetLogicCharacter(logicCha);
+					_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
+					break;
+				}
+				case ECharacterType::OrcGuns:
+				{
+					APD_E_Character* charac = instantiator->InstantiateOrcGuns(DynamicMapRef->GetLogicPositions()[i]);
+					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
+					logicCha->SetIsPlayer(false);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					logicCha->SetCharacterBP(charac);
+					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
+					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
+					///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
+					charac->SetLogicCharacter(logicCha);
+					_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
+					break;
+				}
+				case ECharacterType::OrcMelee:
+				{
+					APD_E_Character* charac = instantiator->InstantiateOrcMelee(DynamicMapRef->GetLogicPositions()[i]);
+					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
+					logicCha->SetIsPlayer(false);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					logicCha->SetCharacterBP(charac);
+					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
+					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
 
-		switch (enemyType)
-		{
-		case ECharacterType::Archer:
-		{
-			APD_E_Character* charac = instantiator->InstantiateArcher(DynamicMapRef->GetLogicPositions()[i]);
-			PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
-			logicCha->SetIsPlayer(false);
-			logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
-			logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
-			UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
-			logicCha->SetCharacterBP(charac);
-			logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
-			logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
-			///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
-			charac->SetLogicCharacter(logicCha);
-			_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
-			break;
-		}
-		case ECharacterType::Zombie:
-		{
-			APD_E_Character* charac = instantiator->InstantiateZombie(DynamicMapRef->GetLogicPositions()[i]);
-			PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
-			logicCha->SetIsPlayer(false);
-			logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
-			logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
-			UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
-			logicCha->SetCharacterBP(charac);
-			logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
-			logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
+					///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
+					charac->SetLogicCharacter(logicCha);
 
-			///SETEAR AQUI TODOS LOS STATS- WEAPONS- SKILLS DE CADA TIOPO DE ENEMIGO ENE SU LOGIC CHARACTER
-			charac->SetLogicCharacter(logicCha);
-
-			_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
-			break;
-		}
+					_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
+					break;
+				}
+			}
 		}
 	}
 }
-
-
 #pragma endregion

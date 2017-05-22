@@ -351,9 +351,10 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 
 	for (int i = 0; i < NETMAPDATA->enemyComposition.Num(); i++) {
 		// Desempaquetamos el paquete
-		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->enemyComposition[i] >> 16) && 0x0000FFFF);
-		ECharacterType TypeEnemy = ECharacterType(NETMAPDATA->enemyComposition[i] & 0x000000FF);
-		int IDEnemy = (NETMAPDATA->enemyComposition[i] >> 8) & 0x000000FF;
+		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->enemyComposition[i] >> 16));
+		uint8 type = NETMAPDATA->enemyComposition[i] & 0x000000FF;
+		ECharacterType TypeEnemy = ECharacterType(type);
+		uint8 IDEnemy = (NETMAPDATA->enemyComposition[i] >> 8);
 
 		FString id = "Enemy_";
 		id.AppendInt(IDEnemy);
@@ -426,7 +427,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 		PD_MG_LogicPosition lp = PD_MG_LogicPosition(x, y);
 		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap: %d"), static_cast<uint8>(type));
 
-		switch (type) {///En este switch metemos la IA lógica de cada uno
+		/*switch (type) {///En este switch metemos la IA lógica de cada uno
 		case ECharacterType::Archer: {
 
 			FString id = "Arch" + FString::FromInt(i - firstIndex);
@@ -443,7 +444,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 			//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap:Zombie %s in pos (%d,%d)"), *id, lp.GetX(), lp.GetY());
 			break;
 		}
-		}
+		}*/
 	}
 	return firstIndex + Enemynum + 1;
 }
