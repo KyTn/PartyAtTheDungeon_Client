@@ -195,10 +195,10 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 
 				APD_E_ElementActor* currentTile = nullptr;
 
-				//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4 %d"), roomOfTile->tiles.Num());
+				UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4 %d"), roomOfTile->tiles.Num());
 
 				currentTile = Cast<APD_E_ElementActor>(roomOfTile->tiles[tilesNear[i]]);
-				//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::name of tile adjecten is  %s"), *currentTile->GetName());
+				UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::name of tile adjecten is  %s"), *currentTile->GetName());
 				if (currentTile) 
 				{
 					//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 4"));

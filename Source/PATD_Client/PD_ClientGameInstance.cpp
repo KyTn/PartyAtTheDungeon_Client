@@ -425,6 +425,8 @@ void UPD_ClientGameInstance::HandleEvent_MapIncoming(FStructGeneric* inDataStruc
 void UPD_ClientGameInstance::HandleEvent_FStructMapDataIncoming(FStructGeneric * inDataStruct, int inPlayer, UStructType inEventType)
 {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming"));
+	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming %s"), *((FStructMapData*)inDataStruct)->PARSER_VERSION);
+
 	structClientState->NETMAPDATA = (FStructMapData*)inDataStruct;
 }
 
@@ -556,6 +558,8 @@ void UPD_ClientGameInstance::OnBeginState() {
 		mapManager = new PD_GM_MapManager();
 		mapManager->Init();
 		mapManager->MapInfo->NETMAPDATA = structClientState->NETMAPDATA;
+		//UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - MISSION_TYPE %d "), structClientState->NETMAPDATA->enemyComposition.Num());
+
 		mapManager->MapInfo->ShowMapData();
 		mapParser->StartParsingFromFStructMapData(structClientState->NETMAPDATA, mapManager->MapInfo, mapManager->DynamicMapRef);
 
