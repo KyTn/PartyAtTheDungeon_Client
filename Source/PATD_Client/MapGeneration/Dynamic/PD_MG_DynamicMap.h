@@ -20,16 +20,20 @@ struct StructEnemy {
 
 	PD_MG_LogicPosition currentPosition;
 
+	bool isInstantiated;
+
 	StructEnemy() {
 		ID_Character = "NoCharacter";
 		type_Character = ECharacterType::NoCharacter;
 		currentPosition = PD_MG_LogicPosition(0, 0);
+		isInstantiated = false;
 	}
 
-	StructEnemy(FString id, ECharacterType type, PD_MG_LogicPosition cupos) {
+	StructEnemy(FString id, ECharacterType type, PD_MG_LogicPosition cupos, bool insta) {
 		ID_Character = id;
 		type_Character = type;
 		currentPosition = cupos;
+		isInstantiated = insta;
 	}
 
 };
