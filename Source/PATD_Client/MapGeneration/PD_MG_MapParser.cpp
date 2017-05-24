@@ -304,7 +304,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num doorComposition %d"), NETMAPDATA->doorComposition.Num());
 	for (int i = 0; i < NETMAPDATA->doorComposition.Num(); i++) {
 		// Desempaquetamos el paquete
-		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[i] >> 16) && 0x0000FFFF);
+		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[i] >> 16) & 0x0000FFFF);
 		int IDRoomA = NETMAPDATA->doorComposition[i] & 0x000000FF;
 		int IDRoomB = (NETMAPDATA->doorComposition[i] >> 8) & 0x000000FF;
 
@@ -458,7 +458,7 @@ uint32 intType, x, y;
 int32 num, j;
 firstIndex++;
 for (uint32 i = firstIndex; i < intObjNum + firstIndex; i++) {
-/*enemyValue = fileReaded[i].RightChop(2);
+enemyValue = fileReaded[i].RightChop(2);
 enemyValue.RemoveAt(enemyValue.Len()-1);//Hay que hacer esto, dado que guardaba basura, un "\n", o un "\0" que se comportaba al hacer el cout como "\n"
 dynamicMapRef->AddEnemyDictionary(fileReaded[i].GetCharArray()[0], enemyValue);
 intObjLine = fileReaded[i].GetCharArray();

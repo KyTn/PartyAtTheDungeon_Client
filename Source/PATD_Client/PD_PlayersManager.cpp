@@ -212,19 +212,77 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 {
 	FStructTargetToAction target = FStructTargetToAction();
 	target.id_action = id_action;
+	target.id_character = id_character;
 
+	//Calcular los AP restantes que le quedan despues de realizar la accion
 	if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent > 0)
 	{
 		for (int i = 0; i < id_character.Num(); i++)
 		{
 			target.id_character.Add(id_character[i]);
 		}
-		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent--;
+
+		int APleft = 0;
+		switch (ActiveSkills(id_action))
+		{
+			case ActiveSkills::BasicAttack:
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Basic Attack to Actions"));
+
+				APleft = 1;
+				break;
+			}
+			case ActiveSkills::Defense:
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
+
+				APleft += MyPlayerInfo->turnOrders->positionsToMove.Num();
+
+				if (MyPlayerInfo->turnOrders->actions.Num() > 0)
+				{
+					for (int i = 0; i < MyPlayerInfo->turnOrders->actions.Num(); i++)
+					{
+						for (int j = 0; j < MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
+						{
+							if (MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill == MyPlayerInfo->turnOrders->actions[i].id_action)
+							{
+								APleft += MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].AP;
+							}
+							else if (MyPlayerInfo->turnOrders->actions[i].id_action == 0) //basic attack
+								APleft++;
+						}
+					}
+				}
+				else {
+					APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
+				}
+				break;
+			}
+		default:
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add others to Actions"));
+
+			for (int j = 0; j < MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
+			{
+				if (MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill == id_action)
+				{
+					APleft += MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].AP;
+				}
+			}
+			break;
+		}
+		}
+		
+
+		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent -= APleft;
+
 		MyPlayerInfo->turnOrders->actions.Add(target);
 		return true;
 	}
 	else 
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("YOUR ACTION POINTS (AP) ARE EMPTY !."));
+
 		return false;
 	}
 	

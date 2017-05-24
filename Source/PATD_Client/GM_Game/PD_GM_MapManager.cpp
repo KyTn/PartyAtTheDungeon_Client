@@ -156,6 +156,12 @@ TArray<PD_MG_LogicPosition> PD_GM_MapManager::Get_LogicPosition_Diagonals_And_Ad
 	return logPos.GetDiagonalsAndAdjacentsFromList(MapInfo->allLogicPos);
 }
 
+TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetAllTilesInRange(float range, PD_MG_LogicPosition logPos)
+{
+	return logPos.GetAllTilesInRange(range,MapInfo->allLogicPos);
+
+}
+
 #pragma endregion
 
 
@@ -410,7 +416,7 @@ void PD_GM_MapManager::InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPos
 
 /*	for (int i = 0; i < StaticMapRef->GetLogicPositions().Num(); i++) {
 
-/*
+
 switch (StaticMapRef->GetXYMap()[StaticMapRef->GetLogicPositions()[i]]) {
 case 'w':
 case 'W':
@@ -425,7 +431,7 @@ case 's':
 MapInfo->AddTile(StaticMapRef->GetLogicPositions()[i], instantiator->InstantiateTile(StaticMapRef->GetLogicPositions()[i]));
 break;
 
-/*default:
+default:
 
 parserActor->InstantiateTile(staticMap->GetLogicPositions()[i]);
 break;

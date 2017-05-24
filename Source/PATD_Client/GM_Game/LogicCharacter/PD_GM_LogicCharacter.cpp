@@ -8,6 +8,13 @@
 #include "Actors/Enemies/PD_EnemyController.h"
 
 #include <math.h>       /* ceil */
+#include "GM_Game/PD_GM_GameManager.h"
+#include "../../PD_ClientGameInstance.h"
+#include "GM_Game/PD_GM_EnemyManager.h"
+#include "../../PD_PlayersManager.h"
+#include"Actors/PD_E_Character.h"
+#include "GM_Game/PD_GM_MapManager.h"
+#include "MapInfo/PD_MM_MapInfo.h"
 
 //Includes of forward declaration
 #include "Structs/PD_ClientStructs.h" //Para todos los structs y enums
@@ -226,6 +233,8 @@ int8 PD_GM_LogicCharacter::GetEvasionCharacter()
 	return EvasionTotal;
 
 }
+
+
 
 /* ===============
 METODOS GET Y SET PARA STRUCTS DE STATS y DATOS
