@@ -39,6 +39,9 @@ public:
 		bool CreateActionToPosition(int id_action, TArray<FVector> positions);
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
 		bool CreateActionToCharacter(int id_action, TArray<FString> id_character);
+
+	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")
+		bool DeleteActionTurn(int index_action);
 	
 
 	UFUNCTION(BlueprintCallable, Category = "OrderFunctions")

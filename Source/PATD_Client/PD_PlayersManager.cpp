@@ -5,7 +5,8 @@
 
 #include "Structs/PD_ClientStructs.h"//Para todos los structs
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
-
+#include "PD_ClientGameInstance.h"
+#include "Actors/PD_E_Character.h"
 PD_PlayersManager::PD_PlayersManager()
 {
 }
@@ -235,46 +236,29 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 			case ActiveSkills::Defense:
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
+				APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
+				break;
+			}
+			default:
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add others to Actions"));
 
-				APleft += MyPlayerInfo->turnOrders->positionsToMove.Num();
-
-				if (MyPlayerInfo->turnOrders->actions.Num() > 0)
+				for (int j = 0; j < MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
 				{
-					for (int i = 0; i < MyPlayerInfo->turnOrders->actions.Num(); i++)
+					if (MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill == id_action)
 					{
-						for (int j = 0; j < MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
-						{
-							if (MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill == MyPlayerInfo->turnOrders->actions[i].id_action)
-							{
-								APleft += MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].AP;
-							}
-							else if (MyPlayerInfo->turnOrders->actions[i].id_action == 0) //basic attack
-								APleft++;
-						}
+						APleft = APleft + MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].AP;
 					}
-				}
-				else {
-					APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APTotal;
 				}
 				break;
 			}
-		default:
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add others to Actions"));
-
-			for (int j = 0; j < MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
-			{
-				if (MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].ID_Skill == id_action)
-				{
-					APleft += MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[j].AP;
-				}
-			}
-			break;
-		}
 		}
 		
+		UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent BEFORE action:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 
-		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent -= APleft;
+		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent - APleft;
+
+		UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent AFTER action :%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 
 		MyPlayerInfo->turnOrders->actions.Add(target);
 		return true;
@@ -325,6 +309,67 @@ bool PD_PlayersManager::ResetActions() {
 
 	MyPlayerInfo->turnOrders->actions.Empty();
 	return MyPlayerInfo->turnOrders->actions.Num() == 0;
+}
+
+
+
+bool PD_PlayersManager::DeleteActionTurn(int index_action)
+{
+	//Borra una accion de la lista de habilidades escogidas por el player
+	//devuelve los AP de la habilidad borrada
+
+	UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn:"));
+
+	int id_skill = 0;
+	id_skill = MyPlayerInfo->turnOrders->actions[index_action].id_action;
+	bool actionDelete = false;
+	TArray<FStructSkill> skillsInGI = Cast<UPD_ClientGameInstance>(MyPlayerInfo->logic_Character->GetCharacterBP()->GetGameInstance())->activeSkills;
+	for (int i = 0; i < skillsInGI.Num(); i++)
+	{
+		if (skillsInGI[i].ID_Skill == id_skill)
+		{
+			UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill para eliminar %d"), id_skill);
+
+			if ( (ActiveSkills(skillsInGI[i].ID_Skill) == ActiveSkills::Defense)  || (ActiveSkills(skillsInGI[i].ID_Skill) == ActiveSkills::Hostion))
+			{
+				UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill - ES DEFENSA O GASTO TODO AP %d"), id_skill);
+
+					//Para calcular el AP gastado, veo todo lo que se ha hecho y la resta de eso menos el AP total, sera el gastado en esta accion
+					int APSpentInOneAction = 0;
+					APSpentInOneAction = MyPlayerInfo->turnOrders->positionsToMove.Num();
+					for (int j = 0; j < MyPlayerInfo->turnOrders->actions.Num(); j++)
+					{
+						for (int k = 0; k < skillsInGI.Num(); k++)
+						{
+							if (MyPlayerInfo->turnOrders->actions[j].id_action == skillsInGI[k].ID_Skill)
+							{
+								APSpentInOneAction = APSpentInOneAction + skillsInGI[k].AP;
+							}
+						}
+					}
+					int ApSpent = MyPlayerInfo->logic_Character->GetTotalStats()->APTotal - APSpentInOneAction;
+					MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent + ApSpent;
+
+					UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill gasto tocho - recuperando AP - %d"), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+					actionDelete = true;
+			}
+			else 
+			{
+					MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent + skillsInGI[i].AP;
+
+					UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill - recuperando AP - %d"), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+					actionDelete = true;
+			}
+		}
+	}
+
+	if (actionDelete)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PD_PlayersManager: DeleteActionTurn: Elimiando accion"));
+		MyPlayerInfo->turnOrders->actions.RemoveAt(index_action);
+	}
+
+	return actionDelete;
 }
 
 #pragma endregion

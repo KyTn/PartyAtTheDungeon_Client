@@ -41,6 +41,7 @@ bool APlayerManagerAccesor::ResetMovements() { return playersManager->ResetMovem
 bool APlayerManagerAccesor::ResetInteractuables() { return playersManager->ResetInteractuables(); }
 bool APlayerManagerAccesor::ResetActions() { return playersManager->ResetActions(); }
 
+bool APlayerManagerAccesor::DeleteActionTurn(int index_action) { return playersManager->DeleteActionTurn(index_action); };
 
 
 

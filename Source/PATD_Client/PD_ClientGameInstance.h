@@ -222,6 +222,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
 		void GivePlayerStatToHUD(float &HP, int &Score, int &AP);
 
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		void GiveAPForTurnPlayer(int &APfinal);
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		void GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills);
+
 	//Creacion de personaje ALEATORIO
 	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
 		void GenerateRandomChar();

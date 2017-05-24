@@ -304,7 +304,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num doorComposition %d"), NETMAPDATA->doorComposition.Num());
 	for (int i = 0; i < NETMAPDATA->doorComposition.Num(); i++) {
 		// Desempaquetamos el paquete
-		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[i] >> 16) & 0x0000FFFF);
+		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[i] >> 16) & 0x0000FFFF); //aqui con && dos?
 		int IDRoomA = NETMAPDATA->doorComposition[i] & 0x000000FF;
 		int IDRoomB = (NETMAPDATA->doorComposition[i] >> 8) & 0x000000FF;
 
