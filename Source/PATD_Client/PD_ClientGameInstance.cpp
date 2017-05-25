@@ -1181,7 +1181,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	}
 	
 	//STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5);
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 50); //volver a cambiar a 5 AP base
 
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee
