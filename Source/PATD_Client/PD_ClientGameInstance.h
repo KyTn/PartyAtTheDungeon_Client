@@ -65,6 +65,7 @@ public:
 	void LoadSkillPasiveDatafromFile();
 	void LoadWeaponDataFromFile();
 
+
 #pragma endregion
 
 
@@ -218,7 +219,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GetAccessors")
 		APlayerManagerAccesor* GetPlayersManagerAccessor(bool& existe);
 
-	
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		void GivePlayerStatToHUD(float &HP, int &Score, int &AP);
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		void GiveAPForTurnPlayer(int &APfinal);
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		void GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills);
+
 	//Creacion de personaje ALEATORIO
 	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
 		void GenerateRandomChar();
@@ -246,6 +255,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
 		void LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range );
+	
+	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
+		void LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills);
+
+	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
+		void FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy);
+
+	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
+		void FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer);
+
 
 #pragma endregion
 

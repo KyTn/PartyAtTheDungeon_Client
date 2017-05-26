@@ -149,6 +149,7 @@ public:
 	*/
 	int8 GetEvasionCharacter();
 
+
 	/* ===================
 	METODOS AUXILIARES GET Y SET
 	========================= */

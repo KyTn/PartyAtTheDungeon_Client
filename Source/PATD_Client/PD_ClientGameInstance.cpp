@@ -1044,6 +1044,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	LoadWeaponData(weapons);
 	int weaponSelected = FMath::RandRange(0, weapons.Num() - 1);
 	FStructWeapon weaponChar = LoadWeaponStructData(weaponSelected);
+	//FStructWeapon weaponChar = LoadWeaponStructData(8);
 	if (weaponChar.ID_Weapon >= 0)
 	{
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ID_Weapon = weaponChar.ID_Weapon;
@@ -1152,8 +1153,8 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 12));
 
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
 		break;
 	}
 	case  32: //cetro y tomo arcano
@@ -1161,9 +1162,9 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 7));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 10));
 
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
 		break;
 	}
 	case  33: //baston
@@ -1171,9 +1172,9 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 8));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 9));
 
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
 		break;
 	}
 	default:
@@ -1181,13 +1182,174 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	}
 	
 	//STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5);
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 50); //volver a cambiar a 5 AP base
 
-	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(105,105 ,105, 105, 106 ,106 );
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee
-		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(70, 50, 50, 70, 70, 60);
+		playersManager->MyPlayerInfo->logic_Character->SetBasicStats(7, 5, 5, 7, 7, 6);
 
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
+}
+
+
+void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP)
+{
+	//EL HP se tiene que dar en forma de porcentaje de 1 a 0
+	HP = ((playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal - playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent) / 100);
+	HP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent;
+	AP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
+	Score = 0; /// ¿Donde esta el score del jugfador?
+
+}
+
+void UPD_ClientGameInstance::GiveAPForTurnPlayer(int &APfinal)
+{
+	APfinal = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal - playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
+}
+
+
+void UPD_ClientGameInstance::GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills)
+{
+	for (int i = 0; i < playersManager->MyPlayerInfo->turnOrders->actions.Num(); i++)
+	{
+		for (int j = 0; j < activeSkills.Num(); j++)
+		{
+			if (activeSkills[j].ID_Skill == playersManager->MyPlayerInfo->turnOrders->actions[i].id_action)
+			{
+				id_skills.Add(activeSkills[j].ID_Skill);
+				name_skills.Add(activeSkills[j].name_Skill);
+			}
+		}
+	}
+}
+
+void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy)
+{
+	int skillRange = 0;
+
+	switch (ActiveSkills(ID_Skill))
+	{
+	case ActiveSkills::BasicAttack:
+	{
+		skillRange = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
+		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
+		break;
+	}
+	default:
+		break;
+	}
+
+	for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+	{
+		if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
+		{
+			skillRange = playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].range;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
+		}
+	}
+
+	if (skillRange > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
+
+		//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
+		TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
+		if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+		{
+			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+				playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY));
+		}
+		else {
+			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+		}
+
+		if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
+
+			//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
+			for (int j = 0; j < gameManager->enemyManager->GetEnemies().Num(); j++)
+			{
+				if (tilesInRangeOfSkill.Contains(gameManager->enemyManager->GetEnemies()[j]->GetCurrentLogicalPosition()))
+				{
+					ID_Enemy.Add(gameManager->enemyManager->GetEnemies()[j]->GetIDCharacter());
+					switch (ECharacterType(gameManager->enemyManager->GetEnemies()[j]->GetTypeCharacter()))
+					{
+					case ECharacterType::OrcBow:
+					{
+						TypeEnemy.Add("Archer Orc");
+						break;
+					}
+					case ECharacterType::OrcGuns:
+					{
+						TypeEnemy.Add("Guns Orc");
+						break;
+					}
+					case ECharacterType::OrcMelee :
+					{
+						TypeEnemy.Add("Melee Orc");
+						break;
+					}
+					default:
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer)
+{
+	int skillRange = 0;
+
+	for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+	{
+		if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
+		{
+			skillRange = playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].range;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
+		}
+	}
+
+	if (skillRange > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
+
+		//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
+		TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
+		if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+		{
+			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+				playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY));
+		}
+		else {
+			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+		}
+
+		if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
+
+			//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
+			for (int j = 0; j < playersManager->GetNumPlayers(); j++)
+			{
+				if (tilesInRangeOfSkill.Contains(playersManager->GetDataStructPlayer(j)->logic_Character->GetCurrentLogicalPosition()))
+				{
+					ID_Player.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter());
+					
+						TypePlayer.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetWeapon()->TypeWeapon);
+				}
+			}
+		}
+	}
 }
 
 
@@ -1575,6 +1737,30 @@ void UPD_ClientGameInstance::LoadWeaponDataFromFile()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
 	}
+}
+
+void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills)
+{
+	// añadir Ataque basico a la lista --  lo tienen todos
+	ID_Skills.Add(LoadSkillStructData(0, 0).ID_Skill); 
+	name_skills.Add(LoadSkillStructData(0,0).name_Skill);
+	effect_skills.Add(LoadSkillStructData(0,0).description);
+
+	// añadir defensa a la lista --  lo tienen todos
+	ID_Skills.Add(LoadSkillStructData(0, 1).ID_Skill);
+	name_skills.Add(LoadSkillStructData(0, 1).name_Skill);
+	effect_skills.Add(LoadSkillStructData(0, 1).description);
+
+	if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num() > 0)
+	{
+		for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+		{
+			ID_Skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill);
+			name_skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].name_Skill);
+			effect_skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].description);
+		}
+	}
+	
 }
 
 

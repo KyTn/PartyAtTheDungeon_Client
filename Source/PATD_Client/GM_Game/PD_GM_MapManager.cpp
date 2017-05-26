@@ -32,8 +32,6 @@ PD_GM_MapManager::~PD_GM_MapManager()
 
 
 void PD_GM_MapManager::Init() {
-
-
 	DynamicMapRef = new PD_MG_DynamicMap();
 
 	// Ya tengo la info del mapa cargada por el Struct o por las refs del estatico y dinamico
@@ -109,19 +107,6 @@ bool PD_GM_MapManager::IsTherePlayer(uint32 x, uint32 y) {
 
 TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetSpawnPoints() {
 	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() - Num Rooms: %d"), MapInfo->rooms.Num());
-	/*
-	for (int i = 0; i < MapInfo->rooms.Num(); i++) {
-	if (MapInfo->rooms[i].IsSpawnRoom) {
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() - Hay una habitacion marcada como spawn"));
-	return MapInfo->rooms[i].LogicPosInRoom;
-	}
-	}
-	*/
-	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() -  Room %d num spawnpoints: %d"), MapInfo->SpawnRoom->GetIDRoom(), MapInfo->rooms[MapInfo->SpawnRoom->GetIDRoom()].LogicPosInRoom.Num());
-	//return MapInfo->rooms[MapInfo->SpawnRoom->GetIDRoom()].LogicPosInRoom;
-
-	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() -  IDSPAN   %d"), MapInfo->SpawnRoomIndex);
-
 	return MapInfo->SpawnRoom->LogicPosInRoom;
 
 }
@@ -153,6 +138,12 @@ TArray<PD_MG_LogicPosition> PD_GM_MapManager::Get_LogicPosition_Adyacents_To(PD_
 TArray<PD_MG_LogicPosition> PD_GM_MapManager::Get_LogicPosition_Diagonals_And_Adyacents_To(PD_MG_LogicPosition logPos) {
 
 	return logPos.GetDiagonalsAndAdjacentsFromList(MapInfo->allLogicPos);
+}
+
+TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetAllTilesInRange(float range, PD_MG_LogicPosition logPos)
+{
+	return logPos.GetAllTilesInRange(range,MapInfo->allLogicPos);
+
 }
 
 #pragma endregion
@@ -386,41 +377,9 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 
 void PD_GM_MapManager::InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPosition lp) {
 	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateWallBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
-	APD_E_WallActor* actorElement;
-	switch (mapSkin) {
-	case MapSkinType::DUNGEON_NORMAL: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(lp);
-		MapInfo->AddWall(lp, actorElement);
-		break;
-	}
-	case MapSkinType::GARDEN: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(lp);
-		MapInfo->AddWall(lp, actorElement);
-		break;
-	}
-	case MapSkinType::LIBRARY: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(lp);
-		MapInfo->AddWall(lp, actorElement);
-		break;
-	}
-	case MapSkinType::SACRIFICE: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(lp);
-		MapInfo->AddWall(lp, actorElement);
-		break;
-	}
-	case MapSkinType::BOSS: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(lp);
-		MapInfo->AddWall(lp, actorElement);
-		break;
-	}
-	}
-
-
+	APD_E_WallActor* actorElement = instantiator->InstantiateWall(lp);
+	actorElement->SetMaterialSkin(lp);
+	MapInfo->AddWall(lp, actorElement);
 }
 
 
@@ -431,11 +390,6 @@ void PD_GM_MapManager::InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* d
 	doorElement->ID_Interactuable = doorInfo->IDInteractuable;
 	MapInfo->AddDoor_WithoutLink(lp, doorElement);
 	doorElement->ChangeRotationToReal(lp);
-	/*
-	doorElement->ID_Interactuable = doorInfo->IDInteractuable;
-
-	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::adding door to map info ..."));
-	*/
 }
 
 
