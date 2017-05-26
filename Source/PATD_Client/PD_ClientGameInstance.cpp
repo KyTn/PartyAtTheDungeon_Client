@@ -1044,6 +1044,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	LoadWeaponData(weapons);
 	int weaponSelected = FMath::RandRange(0, weapons.Num() - 1);
 	FStructWeapon weaponChar = LoadWeaponStructData(weaponSelected);
+	//FStructWeapon weaponChar = LoadWeaponStructData(8);
 	if (weaponChar.ID_Weapon >= 0)
 	{
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ID_Weapon = weaponChar.ID_Weapon;
@@ -1152,8 +1153,8 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 12));
 
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
 		break;
 	}
 	case  32: //cetro y tomo arcano
@@ -1161,9 +1162,9 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 7));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 10));
 
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
 		break;
 	}
 	case  33: //baston
@@ -1171,9 +1172,9 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 8));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 9));
 
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 8));
 		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
-		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 11));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
+		playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
 		break;
 	}
 	default:

@@ -239,6 +239,12 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 				APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
 				break;
 			}
+			case ActiveSkills::Hostion:
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
+				APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
+				break;
+			}
 			default:
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add others to Actions"));
