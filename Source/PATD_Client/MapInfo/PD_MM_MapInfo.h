@@ -2,21 +2,78 @@
 
 #pragma once
 
+#include "Structs/PD_NetStructs.h"
 #include "MapGeneration/PD_MG_LogicPosition.h"
-#include "GameFramework/Actor.h"
 
 // FORWARD DECLARATIONS
 class PD_MG_LogicPosition;
 class PD_MG_StaticMap;
-class PD_MM_Room;
 class PD_GM_MapManager;
 class APD_E_ElementActor;
+class APD_E_Interactuable;
+class APD_E_Door;
 
+class PD_MM_Room;
+
+
+// guarda la info logica de un interactuable
+class PATD_CLIENT_API PD_MM_InteractuableInfo
+{
+public:
+
+	// VARS
+
+	PD_MG_LogicPosition logpos;
+	int IDInteractuable;
+	StaticMapElement type;
+
+	TArray<int> reactuables;
+
+
+	// CONSTR
+	PD_MM_InteractuableInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t);
+	~PD_MM_InteractuableInfo();
+
+
+	//FUNCT
+
+	void AddReactuableID(int id);
+};
+
+// guarda la info logica de una puerta 
+class PATD_CLIENT_API PD_MM_DoorInfo
+{
+public:
+
+	//VARS
+	PD_MG_LogicPosition logpos;
+	int IDInteractuable;
+	StaticMapElement type;
+
+	PD_MG_LogicPosition connA, connB;
+
+	PD_MM_Room *room_ConnA, *room_ConnB;
+
+	TArray<int> reactuables;
+
+
+
+	//CONSTR
+
+	PD_MM_DoorInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t, PD_MM_Room* roomA, PD_MM_Room* roomB);
+	~PD_MM_DoorInfo();
+
+
+	//FUNCT
+
+	void CalculateConnectors();
+	void AddReactuableID(int id);
+
+};
 
 
 class PATD_CLIENT_API PD_MM_Room
 {
-public:
 public:
 	PD_MM_Room();
 	PD_MM_Room(int idRoom);
@@ -31,19 +88,25 @@ public:
 
 	TArray<PD_MG_LogicPosition> LogicPosInRoom; // todas la posiciones logicas que tienen que ver con la habitacion, ya sean tiles, paredes, puertas ... 
 	TArray<PD_MG_LogicPosition> LogicWallPosInRoom; //posiciones logicas para las paredes de la habitacion - diferenciarlas de las tiles
-	TArray<PD_MG_LogicPosition> LogicDoorPosInRoom;
-	TArray<PD_MG_LogicPosition> LogicInteractuablesPosInRoom;
-	TMap<PD_MG_LogicPosition, StaticMapElement> PropsAndTilesInRoomByLogicPosition;
 
+	TArray<PD_MG_LogicPosition> LogicDoorPosInRoom; // posiciones logicas de las puertas de la habitacion
+	TArray<PD_MG_LogicPosition> LogicInteractuablesPosInRoom; // posiciones logicas de los interactuables de la habitacion
+
+	TMap<PD_MG_LogicPosition, StaticMapElement> PropsAndTilesInRoomByLogicPosition; // mapa de props y tiles de la habitacion, accesibles desde su posicion logica
+	TMap<PD_MG_LogicPosition, PD_MM_InteractuableInfo*> InteractuableInfoInRoomByLogicPosition; // mapa de interactuableInfo de la habitacion, accesibles desde su posicion logica
+	TMap<PD_MG_LogicPosition, PD_MM_DoorInfo*> DoorInfoInRoomByLogicPosition; // mapa de doorInfo de la habitacion, accesibles desde su posicion logica
+
+
+																			  // elementos instanciados
 	TMap<PD_MG_LogicPosition, APD_E_ElementActor*> tiles;
 	TMap<PD_MG_LogicPosition, APD_E_ElementActor*> walls;
-	TMap<PD_MG_LogicPosition, APD_E_ElementActor*> interactuables;
+	TMap<PD_MG_LogicPosition, APD_E_Interactuable*> interactuables;
 
 	int GetIDRoom() { return IDRoom; };
 
 	bool AddTile(PD_MG_LogicPosition logpos, APD_E_ElementActor* tile);
 	bool AddWall(PD_MG_LogicPosition logpos, APD_E_ElementActor* wall);
-	bool AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementActor* interactuable);
+	bool AddInteractuable(PD_MG_LogicPosition logpos, APD_E_Interactuable* interactuable);
 
 
 
@@ -67,15 +130,6 @@ public:
 
 };
 
-/*
-
-struct FStruct_Map
-- TMap<LogPos, StaticMapElement> mapElements
-- TMap<LogPos, Room> mapRooms
-- int Total_Height, Total_Width;
-
-
-*/
 
 class PATD_CLIENT_API PD_MM_MapInfo
 {
@@ -86,17 +140,41 @@ public:
 
 	PD_GM_MapManager* mapManager;
 
-	PD_MM_Room* SpawnRoom;
-	//int SpawnRoomIndex;
+	PD_MM_Room* SpawnRoom; // habitacion marcada como spawn
 
-	PD_MG_LogicPosition MAP_SIZE_IN_LOGIC_POSITIONS;
+	PD_MG_LogicPosition MAP_SIZE_IN_LOGIC_POSITIONS; // tamaño del mapa ya trimeado
 
-	TMap<uint8, TArray<uint8>> mapAdj;
+													 // Rooms
+	TMap<uint8, TArray<uint8>> mapAdj; // dado un IDRoom, cuales son los IDRoom de las rooms adyacentes
+	TArray<PD_MG_LogicPosition> allLogicPos; // todas las posiciones logicas usadas del mapa
+	TArray<PD_MM_Room*> rooms; // todas las habitaciones del mapa 
+	TMap<int, PD_MM_Room*> roomByIDRoom; // dado un IDRoom, cual es su IDRoom asociado
+	TMap<PD_MG_LogicPosition, PD_MM_Room*> roomByLogPos; // dada una posicion logica, a que room pertenece
 
-	TArray<PD_MG_LogicPosition> allLogicPos;
-	TArray<PD_MM_Room*> rooms;
-	TMap<int, PD_MM_Room*> roomByIDRoom;
-	TMap<PD_MG_LogicPosition, PD_MM_Room*> roomByLogPos;
+
+														 // DOORS E INTERACTUABLES
+
+	TArray<PD_MM_DoorInfo*> doorInfoInMap; // una lista con la info logica de las puertas del mapa
+	TArray<PD_MM_InteractuableInfo*>interactuableInfoInMap; // una lista con la info logica de los interactuables del mapa
+
+															// door localisation & id
+	TMap<PD_MG_LogicPosition, APD_E_Door*> doorActorByLogPos; // dada una posicion logica, que DoorActor es  (SOLO CUANDO YA LO HAS INSTACIADO!)
+	TMap<int, APD_E_Door*> doorActorByID; // dado un idInteractuable, que puerta es (SOLO CUANDO YA LO HAS INSTACIADO!)
+
+										  //door logic info
+	TMap<PD_MG_LogicPosition, PD_MM_DoorInfo*> doorInfoByLogPos; // dada una posicion logica, la info logica de la puerta asociada
+	TMap<int, PD_MM_DoorInfo*> doorInfoByID; // dado un idInteractuable, la info logica asociada de la puerta asociada
+
+
+
+											 // interactuable localisation & id
+	TMap<int, APD_E_Interactuable*> interactuableActorByID; // dado un idInteractuable, que InteractuableActor es (SOLO CUANDO YA LO HAS INSTACIADO!)
+	TMap<PD_MG_LogicPosition, APD_E_Interactuable*> interactuableActorByLogicPosition; // dado uan posicion logica, que idInteractuable es
+
+																					   //interactuable logic info
+	TMap<PD_MG_LogicPosition, PD_MM_InteractuableInfo*> interactuableInfoByLogPos; // dada una posicion logica, la info logica del interactuable asociado
+	TMap<int, PD_MM_InteractuableInfo*> interactuableInfoByID; // dado un idInteractuable, la info logica asociada del interactuable asociado
+
 
 	FStructMapData * NETMAPDATA;
 
@@ -139,11 +217,12 @@ public:
 	//void FindTilesOnRoomByFlowdingAt(PD_MG_LogicPosition initial, TArray<PD_MG_LogicPosition> PoblationSearch, TArray<PD_MG_LogicPosition>* tilesOnRoom);
 	//void FindWallsAndDoorsOnRoomByFloodingAndAdyacentTiles(int IDRoom, PD_MG_LogicPosition initial, TArray<PD_MG_LogicPosition> PoblationSearch, TArray<PD_MG_LogicPosition>* WallsOnRoom, TArray<PD_MG_LogicPosition>* DoorsOnRoom);
 
-
+	bool IsDoorInstantiatedAt(PD_MG_LogicPosition lp);
 
 	bool AddWall(PD_MG_LogicPosition logpos, APD_E_ElementActor* wall);
 	bool AddTile(PD_MG_LogicPosition logpos, APD_E_ElementActor* tile);
 	bool AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementActor* interactuable);
+	bool AddDoor_WithoutLink(PD_MG_LogicPosition logpos, APD_E_Door* interactuable);
 
 	// TEST PD_MM_MapInfo
 
@@ -165,5 +244,6 @@ public:
 		}
 	}
 };
+
 
 

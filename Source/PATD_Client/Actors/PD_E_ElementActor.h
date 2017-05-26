@@ -7,6 +7,8 @@
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "PD_E_ElementActor.generated.h"
 
+class UPD_ClientGameInstance;
+
 UCLASS()
 class PATD_CLIENT_API APD_E_ElementActor : public AActor
 {
@@ -17,6 +19,11 @@ public:
 	APD_E_ElementActor();
 
 	PD_MG_LogicPosition ActualLogicPosition;
+	UPD_ClientGameInstance* SGI;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Material Type")
+		MapSkinType mapSkin;
+
 
 
 	// Called when the game starts or when spawned
@@ -25,12 +32,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	//UPROPERTY(EditAnywhere, Category = "Material Type")
-	MapSkinType materialSkin;
 
 	UFUNCTION(BlueprintCallable, Category = "Element Actor")
-		MapSkinType GetMaterialSkin() { return materialSkin; };
+		MapSkinType GetMaterialSkin() { return mapSkin; };
 
 	UFUNCTION(BlueprintCallable, Category = "Element Actor")
-		void SetMaterialSkin(MapSkinType inMaterialSkin) { materialSkin = inMaterialSkin; };
+		void SetMaterialSkin(MapSkinType inMaterialSkin);
+
+private:
+	void ChangeMaterialProperties_MapSkin();
 };

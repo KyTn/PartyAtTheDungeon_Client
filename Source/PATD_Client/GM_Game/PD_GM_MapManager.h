@@ -5,18 +5,15 @@
 #include "MapInfo/MapInstantiation/MapInstantiatorActor.h"
 
 // FORWARD DECLARATIONS
-
-class PD_MM_MapInfo;
-
 class PD_MG_LogicPosition;
+class PD_MM_MapInfo;
 class PD_MG_StaticMap;
 class PD_MG_DynamicMap;
-
 class PD_GM_GameManager;
 class PD_GM_EnemyManager;
-
+//class PD_PlayersManager;
 class APD_GenericController;
-
+class PD_MM_DoorInfo;
 
 /**
  * 
@@ -89,6 +86,7 @@ public:
 	void InstantiateRoomAndAdj(uint8 id);
 	void InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMapElement element, PD_MG_LogicPosition lp);
 	void InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPosition lp);
+	void InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* doorInfo);
 	void InstantiateDynamicMap();
 	void InstantiateEnemies();
 
