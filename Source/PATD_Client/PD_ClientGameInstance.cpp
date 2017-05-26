@@ -450,6 +450,8 @@ void UPD_ClientGameInstance::HandleEvent_AllCharactersInfoIncoming(FStructGeneri
 
 	for (int i = 0; i < InstaPlayers->listInfoPlayerAtClient.Num(); i++)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_AllCharactersInfoIncoming: Num player:%s "), *InstaPlayers->listInfoPlayerAtClient[i].ID_character);
+
 		playersManager->AddNewPlayer(InstaPlayers->listInfoPlayerAtClient[i]);
 	}
 	structClientState->AllCharactersIncoming = true;
@@ -1182,7 +1184,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	}
 	
 	//STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 50); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5); //volver a cambiar a 5 AP base
 
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee

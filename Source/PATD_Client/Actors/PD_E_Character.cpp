@@ -43,3 +43,8 @@ PD_GM_LogicCharacter* APD_E_Character::GetLogicCharacter()
 {
 	return logic_character;
 }
+
+void APD_E_Character::GetCharacterID(FString &ID_Char)
+{
+	ID_Char =  logic_character->GetIDCharacter();
+}

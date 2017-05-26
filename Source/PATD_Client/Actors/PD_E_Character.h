@@ -31,4 +31,10 @@ public:
 
 	void SetLogicCharacter(PD_GM_LogicCharacter* nlogic_character);
 	PD_GM_LogicCharacter* GetLogicCharacter();
+
+
+
+	UFUNCTION(BlueprintCallable, Category = "DataCharacter")
+		void GetCharacterID(FString &ID_Char);
+
 };

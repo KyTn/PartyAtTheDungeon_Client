@@ -500,7 +500,7 @@ void AMapManagerAccesor::ClearAllOverTilesInPathMovement()
 
 				if (i == tilesSelected.Num() - 1) //SI es la ultima tile - quitar pintura tambien de adyacentes
 				{
-					TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(tileToMove);
+					/*TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(tileToMove);
 					for (int j = 0; j < tilesNear.Num(); j++)
 					{
 						PD_MM_Room* roomOfTileAdjencts = mapManager->MapInfo->RoomOf(tilesNear[j]);
@@ -514,17 +514,17 @@ void AMapManagerAccesor::ClearAllOverTilesInPathMovement()
 								const FString command2 = FString::Printf(TEXT("DrawMovementMaterial %d"), 0);
 								if (tileAdjecntToUpdate->CallFunctionByNameWithArguments(*command2, ar2, NULL, true))
 								{
-									UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::UpdatePathMovement -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (0)"));
+									UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ClearAllOverTilesInPathMovement -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (0)"));
 								}
 								else
 								{
-									UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::UpdatePathMovement - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(0)"));
+									UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ClearAllOverTilesInPathMovement - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(0)"));
 								}
 							}
 							
 						}
 						
-					}
+					} */
 				}
 			}
 		}
