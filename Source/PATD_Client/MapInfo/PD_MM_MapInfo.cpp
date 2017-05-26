@@ -5,8 +5,66 @@
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "MapGeneration/Static/PD_MG_StaticMap.h"
 #include "GM_Game/PD_GM_MapManager.h"
+#include "Actors/Interactuables/PD_E_Interactuable.h"
+#include "Actors/Interactuables/PD_E_Door.h"
 
 
+#pragma region INTERACTUABLE INFO
+
+PD_MM_InteractuableInfo::PD_MM_InteractuableInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t) {
+	logpos = lp;
+	IDInteractuable = id;
+	type = t;
+	reactuables = TArray<int>();
+}
+
+PD_MM_InteractuableInfo::~PD_MM_InteractuableInfo() {}
+
+
+void PD_MM_InteractuableInfo::AddReactuableID(int id) {
+	reactuables.Add(id);
+}
+
+
+
+#pragma endregion
+
+#pragma region DOOR INFO
+
+
+PD_MM_DoorInfo::PD_MM_DoorInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t, PD_MM_Room* roomA, PD_MM_Room* roomB) {
+	logpos = lp;
+	IDInteractuable = id;
+	reactuables = TArray<int>();
+	type = t;
+	room_ConnA = roomA;
+	room_ConnB = roomB;
+	CalculateConnectors();
+}
+
+
+
+PD_MM_DoorInfo::~PD_MM_DoorInfo() {}
+
+
+void PD_MM_DoorInfo::CalculateConnectors() {
+
+	TArray<PD_MG_LogicPosition>lps = logpos.GenerateAdjacents();
+	for (int i = 0; i < lps.Num(); i++) {
+		if (room_ConnA->PropsAndTilesInRoomByLogicPosition.Contains(lps[i])) {
+			connA = lps[i];
+		}
+		if (room_ConnB->PropsAndTilesInRoomByLogicPosition.Contains(lps[i])) {
+			connB = lps[i];
+		}
+	}
+}
+
+void PD_MM_DoorInfo::AddReactuableID(int id) {
+	reactuables.Add(id);
+}
+
+#pragma endregion
 
 
 #pragma region MAP INFO
@@ -16,13 +74,34 @@ PD_MM_MapInfo::PD_MM_MapInfo(PD_GM_MapManager* mM)
 {
 	mapManager = mM;
 
+	// Rooms
+	mapAdj = TMap<uint8, TArray<uint8>>();
 	allLogicPos = TArray<PD_MG_LogicPosition>();
 	rooms = TArray<PD_MM_Room*>();
 	roomByLogPos = TMap<PD_MG_LogicPosition, PD_MM_Room*>();
 	roomByIDRoom = TMap<int, PD_MM_Room*>();
 
+	// Doors e interactaubles
 
-	mapAdj = TMap<uint8, TArray<uint8>>();
+	doorInfoInMap = TArray<PD_MM_DoorInfo*>();
+	interactuableInfoInMap = TArray<PD_MM_InteractuableInfo*>();
+
+	// door localisation & id
+	doorActorByLogPos = TMap<PD_MG_LogicPosition, APD_E_Door*>();
+	doorActorByID = TMap<int, APD_E_Door*>();
+
+	//door logic info
+	doorInfoByLogPos = TMap<PD_MG_LogicPosition, PD_MM_DoorInfo*>();
+	doorInfoByID = TMap<int, PD_MM_DoorInfo*>();
+
+	// interactuable localisation & id
+	interactuableActorByID = TMap<int, APD_E_Interactuable*>();
+	interactuableActorByLogicPosition = TMap<PD_MG_LogicPosition, APD_E_Interactuable*>();
+
+	//door logic info
+	interactuableInfoByLogPos = TMap<PD_MG_LogicPosition, PD_MM_InteractuableInfo*>();
+	interactuableInfoByID = TMap<int, PD_MM_InteractuableInfo*>();
+
 }
 
 PD_MM_MapInfo::~PD_MM_MapInfo()
@@ -64,6 +143,15 @@ PD_MM_Room* PD_MM_MapInfo::RoomOf(PD_MG_LogicPosition logpos) {
 	}
 	return nullptr;
 }
+
+
+bool PD_MM_MapInfo::IsDoorInstantiatedAt(PD_MG_LogicPosition lp) {
+
+	return doorActorByLogPos.Contains(lp);
+}
+
+
+
 
 bool PD_MM_MapInfo::AddWall(PD_MG_LogicPosition logpos, APD_E_ElementActor *wall)
 {
@@ -162,6 +250,17 @@ bool PD_MM_MapInfo::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementAc
 
 	return false;
 }
+
+
+
+bool PD_MM_MapInfo::AddDoor_WithoutLink(PD_MG_LogicPosition logpos, APD_E_Door* door) {
+	doorActorByLogPos.Add(logpos, door);
+	doorActorByID.Add(door->ID_Interactuable, door);
+
+	return true;
+}
+
+
 
 /*
 
@@ -584,11 +683,15 @@ PD_MM_Room::PD_MM_Room()
 	LogicWallPosInRoom = TArray<PD_MG_LogicPosition>();
 	LogicDoorPosInRoom = TArray<PD_MG_LogicPosition>();
 	LogicInteractuablesPosInRoom = TArray<PD_MG_LogicPosition>();
+
 	PropsAndTilesInRoomByLogicPosition = TMap<PD_MG_LogicPosition, StaticMapElement>();
+	InteractuableInfoInRoomByLogicPosition = TMap<PD_MG_LogicPosition, PD_MM_InteractuableInfo*>();
+	DoorInfoInRoomByLogicPosition = TMap<PD_MG_LogicPosition, PD_MM_DoorInfo*>();
+
 
 	tiles = TMap<PD_MG_LogicPosition, APD_E_ElementActor*>();
 	walls = TMap<PD_MG_LogicPosition, APD_E_ElementActor*>();
-	interactuables = TMap<PD_MG_LogicPosition, APD_E_ElementActor*>();
+	interactuables = TMap<PD_MG_LogicPosition, APD_E_Interactuable*>();
 
 	IDRoom = rand() + 100;
 }
@@ -602,11 +705,15 @@ PD_MM_Room::PD_MM_Room(int idRoom)
 	LogicWallPosInRoom = TArray<PD_MG_LogicPosition>();
 	LogicDoorPosInRoom = TArray<PD_MG_LogicPosition>();
 	LogicInteractuablesPosInRoom = TArray<PD_MG_LogicPosition>();
+
 	PropsAndTilesInRoomByLogicPosition = TMap<PD_MG_LogicPosition, StaticMapElement>();
+	InteractuableInfoInRoomByLogicPosition = TMap<PD_MG_LogicPosition, PD_MM_InteractuableInfo*>();
+	DoorInfoInRoomByLogicPosition = TMap<PD_MG_LogicPosition, PD_MM_DoorInfo*>();
+
 
 	tiles = TMap<PD_MG_LogicPosition, APD_E_ElementActor*>();
 	walls = TMap<PD_MG_LogicPosition, APD_E_ElementActor*>();
-	interactuables = TMap<PD_MG_LogicPosition, APD_E_ElementActor*>();
+	interactuables = TMap<PD_MG_LogicPosition, APD_E_Interactuable*>();
 
 	IDRoom = idRoom;
 
@@ -619,5 +726,5 @@ PD_MM_Room::~PD_MM_Room()
 
 bool PD_MM_Room::AddTile(PD_MG_LogicPosition logpos, APD_E_ElementActor* tile) { return tiles.Add(logpos, tile) != nullptr; }
 bool PD_MM_Room::AddWall(PD_MG_LogicPosition logpos, APD_E_ElementActor* wall) { return walls.Add(logpos, wall) != nullptr; }
-bool PD_MM_Room::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementActor* interactuable) { return interactuables.Add(logpos, interactuable) != nullptr; }
+bool PD_MM_Room::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_Interactuable* interactuable) { return interactuables.Add(logpos, interactuable) != nullptr; }
 #pragma endregion

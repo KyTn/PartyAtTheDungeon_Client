@@ -14,7 +14,6 @@
 #include "GM_Game/LogicCharacter/PD_GM_LogicCharacter.h"
 #include "MapInfo/PD_MM_MapInfo.h"
 #include "Actors/PD_E_ElementActor.h"
-#include "ElementActors/PD_E_TileActor.h"
 
 // Sets default values
 AMapManagerAccesor::AMapManagerAccesor()

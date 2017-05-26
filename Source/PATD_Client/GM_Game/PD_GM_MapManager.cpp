@@ -18,6 +18,8 @@
 #include "Actors/PD_GenericController.h"
 #include "MapInfo/PD_MM_MapInfo.h"
 #include "Actors/PD_E_ElementActor.h"
+#include "Actors/Interactuables/PD_E_Door.h"
+#include "Actors/MapElements/PD_E_WallActor.h"
 
 PD_GM_MapManager::PD_GM_MapManager()
 {
@@ -30,8 +32,6 @@ PD_GM_MapManager::~PD_GM_MapManager()
 
 
 void PD_GM_MapManager::Init() {
-
-
 	DynamicMapRef = new PD_MG_DynamicMap();
 
 	// Ya tengo la info del mapa cargada por el Struct o por las refs del estatico y dinamico
@@ -43,10 +43,14 @@ void PD_GM_MapManager::Init() {
 
 bool PD_GM_MapManager::IsLogicPositionAWall(PD_MG_LogicPosition logpos)
 {
-	if (MapInfo->roomByLogPos.Contains(logpos)) {
-		PD_MM_Room *r = MapInfo->roomByLogPos[logpos];
-		if (r->LogicWallPosInRoom.Contains(logpos))
-			return true;
+
+	if (MapInfo->allLogicPos.Contains(logpos)) {
+		for (int i = 0; i < MapInfo->rooms.Num(); i++) {
+			if (MapInfo->rooms[i]->LogicWallPosInRoom.Contains(logpos)) {
+				return true;
+			}
+		}
+
 	}
 	return false;
 }
@@ -61,7 +65,6 @@ bool PD_GM_MapManager::IsLogicPositionATile(PD_MG_LogicPosition logpos)
 	return false;
 }
 
-
 bool PD_GM_MapManager::IsLogicPositionAProp(PD_MG_LogicPosition logpos)
 {
 	if (MapInfo->roomByLogPos.Contains(logpos)) {
@@ -74,22 +77,16 @@ bool PD_GM_MapManager::IsLogicPositionAProp(PD_MG_LogicPosition logpos)
 
 bool PD_GM_MapManager::IsLogicPositionADoor(PD_MG_LogicPosition logpos)
 {
-	if (MapInfo->roomByLogPos.Contains(logpos)) {
-		PD_MM_Room *r = MapInfo->roomByLogPos[logpos];
-		if (r->LogicDoorPosInRoom.Contains(logpos))
-			return true;
+	if (MapInfo->allLogicPos.Contains(logpos)) {
+		for (int i = 0; i < MapInfo->rooms.Num(); i++) {
+			if (MapInfo->rooms[i]->LogicDoorPosInRoom.Contains(logpos)) {
+				return true;
+			}
+		}
+
 	}
 	return false;
 }
-
-/*bool PD_GM_MapManager::IsLogicPositionASpawn(PD_MG_LogicPosition logpos)
-{
-if (StaticMapRef->GetXYMap().Contains(logpos)) {
-
-return StaticMapRef->GetXYMap()[logpos] == 's' || StaticMapRef->GetXYMap()[logpos] == 'S';
-}
-return false;
-}*/
 
 #pragma endregion
 
@@ -110,19 +107,6 @@ bool PD_GM_MapManager::IsTherePlayer(uint32 x, uint32 y) {
 
 TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetSpawnPoints() {
 	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() - Num Rooms: %d"), MapInfo->rooms.Num());
-	/*
-	for (int i = 0; i < MapInfo->rooms.Num(); i++) {
-	if (MapInfo->rooms[i].IsSpawnRoom) {
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() - Hay una habitacion marcada como spawn"));
-	return MapInfo->rooms[i].LogicPosInRoom;
-	}
-	}
-	*/
-	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() -  Room %d num spawnpoints: %d"), MapInfo->SpawnRoom->GetIDRoom(), MapInfo->rooms[MapInfo->SpawnRoom->GetIDRoom()].LogicPosInRoom.Num());
-	//return MapInfo->rooms[MapInfo->SpawnRoom->GetIDRoom()].LogicPosInRoom;
-
-	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() -  IDSPAN   %d"), MapInfo->SpawnRoomIndex);
-
 	return MapInfo->SpawnRoom->LogicPosInRoom;
 
 }
@@ -170,6 +154,7 @@ TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetAllTilesInRange(float range, PD
 #pragma region INSTANTIATE MAP
 
 
+
 void PD_GM_MapManager::InstantiateMap()
 {
 	UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
@@ -210,9 +195,18 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 			{
 				InstantiateMapElementBySkin(MapInfo->rooms[adj[i]]->mapSkin, MapInfo->rooms[adj[i]]->PropsAndTilesInRoomByLogicPosition[lp[j]], lp[j]);
 			}
-			for (int j = 0; j < MapInfo->rooms[adj[i]]->LogicWallPosInRoom.Num(); j++)///Instanciamos los tiles de una habitacion.
+			for (int j = 0; j < MapInfo->rooms[adj[i]]->LogicWallPosInRoom.Num(); j++)///Instanciamos los muros de una habitacion.
 			{
 				InstantiateWallBySkin(MapInfo->rooms[adj[i]]->mapSkin, MapInfo->rooms[adj[i]]->LogicWallPosInRoom[j]);
+			}
+			UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - door in room %d -> %d"), MapInfo->rooms[adj[i]]->IDRoom, MapInfo->rooms[adj[i]]->LogicDoorPosInRoom.Num());
+
+			for (int j = 0; j < MapInfo->rooms[adj[i]]->LogicDoorPosInRoom.Num(); j++)///Instanciamos las puertas de una habitacion.
+			{
+				if (!MapInfo->IsDoorInstantiatedAt(MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j])) {
+					UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - InstantiateDoor at (%d,%d)"), MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j].GetX(), MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j].GetY());
+					InstantiateDoor(MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j], MapInfo->rooms[adj[i]]->DoorInfoInRoomByLogicPosition[MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j]]);
+				}
 			}
 			MapInfo->rooms[adj[i]]->IsInstantiated = true;
 		}
@@ -222,223 +216,182 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 
 
 void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMapElement element, PD_MG_LogicPosition lp) {
+
+	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateMapElementBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
 	APD_E_ElementActor* actorElement;
 	switch (mapSkin) {
-		case MapSkinType::DUNGEON_NORMAL: {
-			switch (element) {
-				case StaticMapElement::NORMAL_TILE: {
-					actorElement = instantiator->InstantiateTile(lp);
-					actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
-					MapInfo->AddTile(lp, actorElement);
-					break;
-				}
-				case StaticMapElement::SPECIAL_TILE: {
-					break;
-				}
-				case StaticMapElement::EMPTY: {
-					break;
-				}
-				case StaticMapElement::SMALL_CHEST: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_00: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_01: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_02: {
-					break;
-				}
-			}
+	case MapSkinType::DUNGEON_NORMAL: {
+		switch (element) {
+		case StaticMapElement::NORMAL_TILE: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
-		case MapSkinType::GARDEN: {
-			switch (element) {
-				case StaticMapElement::NORMAL_TILE: {
-					actorElement = instantiator->InstantiateTile(lp);
-					actorElement->SetMaterialSkin(MapSkinType::GARDEN);
-					MapInfo->AddTile(lp, actorElement);
-					break;
-				}
-				case StaticMapElement::SPECIAL_TILE: {
-					break;
-				}
-				case StaticMapElement::EMPTY: {
-					break;
-				}
-				case StaticMapElement::SMALL_CHEST: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_00: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_01: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_02: {
-					break;
-				}
-			}
+		case StaticMapElement::SPECIAL_TILE: {
+			actorElement = instantiator->Instantiate_Dungeon_SpecialTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
 			break;
 		}
-		case MapSkinType::SACRIFICE: {
-			switch (element) {
-				case StaticMapElement::NORMAL_TILE: {
-					actorElement = instantiator->InstantiateTile(lp);
-					actorElement->SetMaterialSkin(MapSkinType::SACRIFICE);
-					MapInfo->AddTile(lp, actorElement);
-					break;
-				}
-				case StaticMapElement::SPECIAL_TILE: {
-					break;
-				}
-				case StaticMapElement::EMPTY: {
-					break;
-				}
-				case StaticMapElement::SMALL_CHEST: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_00: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_01: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_02: {
-					break;
-				}
-			}
+		case StaticMapElement::EMPTY: {
 			break;
 		}
-		case MapSkinType::BOSS: {
-			switch (element) {
-				case StaticMapElement::NORMAL_TILE: {
-					actorElement = instantiator->InstantiateTile(lp);
-					actorElement->SetMaterialSkin(MapSkinType::BOSS);
-					MapInfo->AddTile(lp, actorElement);
-					break;
-				}
-				case StaticMapElement::SPECIAL_TILE: {
-					break;
-				}
-				case StaticMapElement::EMPTY: {
-					break;
-				}
-				case StaticMapElement::SMALL_CHEST: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_00: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_01: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_02: {
-					break;
-				}
-			}
+		case StaticMapElement::PROP_CHEST: {
+			instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
 			break;
 		}
-		case MapSkinType::LIBRARY: {
-			switch (element) {
-				case StaticMapElement::NORMAL_TILE: {
-					actorElement = instantiator->InstantiateTile(lp);
-					actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-					MapInfo->AddTile(lp, actorElement);
-					break;
-				}
-				case StaticMapElement::SPECIAL_TILE: {
-					break;
-				}
-				case StaticMapElement::EMPTY: {
-					break;
-				}
-				case StaticMapElement::SMALL_CHEST: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_00: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_01: {
-					break;
-				}
-				case StaticMapElement::TREE_OR_COLUMN_02: {
-					break;
-				}
-			}
+		case StaticMapElement::TREE_OR_COLUMN_00: {
+			instantiator->Instantiate_Dungeon_Prop_Column_01(lp);
 			break;
 		}
+		case StaticMapElement::TREE_OR_COLUMN_01: {
+			instantiator->Instantiate_Dungeon_Prop_Column_02_1(lp);
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_02: {
+			instantiator->Instantiate_Dungeon_Prop_Column_03(lp);
+			break;
+		}
+		}
+		break;
+	}
+	case MapSkinType::GARDEN: {
+		switch (element) {
+		case StaticMapElement::NORMAL_TILE: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::GARDEN);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::SPECIAL_TILE: {
+			break;
+		}
+		case StaticMapElement::EMPTY: {
+			break;
+		}
+		case StaticMapElement::SMALL_CHEST: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_00: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_01: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		}
+		break;
+	}
+	case MapSkinType::SACRIFICE: {
+		switch (element) {
+		case StaticMapElement::NORMAL_TILE: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::SACRIFICE);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::SPECIAL_TILE: {
+			break;
+		}
+		case StaticMapElement::EMPTY: {
+			break;
+		}
+		case StaticMapElement::SMALL_CHEST: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_00: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_01: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		}
+		break;
+	}
+	case MapSkinType::BOSS: {
+		switch (element) {
+		case StaticMapElement::NORMAL_TILE: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::BOSS);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::SPECIAL_TILE: {
+			break;
+		}
+		case StaticMapElement::EMPTY: {
+			break;
+		}
+		case StaticMapElement::SMALL_CHEST: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_00: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_01: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		}
+		break;
+	}
+	case MapSkinType::LIBRARY: {
+		switch (element) {
+		case StaticMapElement::NORMAL_TILE: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::SPECIAL_TILE: {
+			break;
+		}
+		case StaticMapElement::EMPTY: {
+			break;
+		}
+		case StaticMapElement::SMALL_CHEST: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_00: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_01: {
+			break;
+		}
+		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		}
+		break;
+	}
 	}
 }
 
 
 void PD_GM_MapManager::InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPosition lp) {
-	APD_E_ElementActor* actorElement;
-	switch (mapSkin) {
-	case MapSkinType::DUNGEON_NORMAL: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-		MapInfo->AddTile(lp, actorElement);
-		break;
-	}
-	case MapSkinType::GARDEN: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-		MapInfo->AddTile(lp, actorElement);
-		break;
-	}
-	case MapSkinType::LIBRARY: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-		MapInfo->AddTile(lp, actorElement);
-		break;
-	}
-	case MapSkinType::SACRIFICE: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-		MapInfo->AddTile(lp, actorElement);
-		break;
-	}
-	case MapSkinType::BOSS: {
-		actorElement = instantiator->InstantiateWall(lp);
-		actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
-		MapInfo->AddTile(lp, actorElement);
-		break;
-	}
-	}
-
-
+	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateWallBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
+	APD_E_WallActor* actorElement = instantiator->InstantiateWall(lp);
+	actorElement->SetMaterialSkin(lp);
+	MapInfo->AddWall(lp, actorElement);
 }
 
 
-
-
-/*	for (int i = 0; i < StaticMapRef->GetLogicPositions().Num(); i++) {
-
-
-switch (StaticMapRef->GetXYMap()[StaticMapRef->GetLogicPositions()[i]]) {
-case 'w':
-case 'W':
-MapInfo->AddWall(StaticMapRef->GetLogicPositions()[i], instantiator->InstantiateWall(StaticMapRef->GetLogicPositions()[i]));
-break;
-
-case '.':
-case ',':
-case 'd':
-case 's':
-
-MapInfo->AddTile(StaticMapRef->GetLogicPositions()[i], instantiator->InstantiateTile(StaticMapRef->GetLogicPositions()[i]));
-break;
-
-default:
-
-parserActor->InstantiateTile(staticMap->GetLogicPositions()[i]);
-break;
-
+void PD_GM_MapManager::InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* doorInfo) {
+	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateDoor at (%d,%d)"), lp.GetX(), lp.GetY());
+	APD_E_Door* doorElement = instantiator->InstantiateDoor(lp);
+	doorElement->doorInfo = doorInfo;
+	doorElement->ID_Interactuable = doorInfo->IDInteractuable;
+	MapInfo->AddDoor_WithoutLink(lp, doorElement);
+	doorElement->ChangeRotationToReal(lp);
 }
-}
-}*/
+
 
 
 void PD_GM_MapManager::InstantiateDynamicMap() {

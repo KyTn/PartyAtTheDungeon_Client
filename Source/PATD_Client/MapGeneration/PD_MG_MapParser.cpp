@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.'
 
-
 #include "PATD_Client.h"
 #include "MapGeneration/PD_MG_MapParser.h"
 #include "MapGeneration/Static/PD_MG_StaticMap.h"
@@ -165,11 +164,11 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 	int spawnIDRoom = NETMAPDATA->IDRoomSpawn;
 	//MapInfoRef->SpawnRoomIndex = spawnIDRoom;
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - NETMAPDATA->IDRoomSpawn %d"), spawnIDRoom);
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - NETMAPDATA->IDRoomSpawn %d"), spawnIDRoom);
 
 
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num skinByRoom %d"), NETMAPDATA->skinByRoom.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num skinByRoom %d"), NETMAPDATA->skinByRoom.Num());
 	for (int i = 0; i < NETMAPDATA->skinByRoom.Num(); i++) {
 		uint16 data = NETMAPDATA->skinByRoom[i];
 
@@ -186,13 +185,13 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 			//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Room Spawn founded: r->IsSpawnRoom %d"), r->IsSpawnRoom);
 		}
 	}
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->rooms %d"), MapInfoRef->rooms.Num());
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->SpawnRoom %d"), MapInfoRef->SpawnRoom->IDRoom);
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->rooms %d"), MapInfoRef->rooms.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->SpawnRoom %d"), MapInfoRef->SpawnRoom->IDRoom);
 
 
 	// sacamos las habitaciones adyacentes 
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomsAdj %d"), NETMAPDATA->roomsAdj.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomsAdj %d"), NETMAPDATA->roomsAdj.Num());
 	for (int i = 0; i < NETMAPDATA->roomsAdj.Num(); i++) {
 		uint8 IDRoom = (NETMAPDATA->roomsAdj[i] & 0xFF00) >> 8;
 		uint8 IDRoomAdj = (NETMAPDATA->roomsAdj[i] & 0x00FF);
@@ -208,19 +207,19 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 		}
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->mapAdj %d"), MapInfoRef->mapAdj.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->mapAdj %d"), MapInfoRef->mapAdj.Num());
 
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomComposition %d"), NETMAPDATA->roomComposition.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomComposition %d"), NETMAPDATA->roomComposition.Num());
 	for (int i = 0; i < NETMAPDATA->roomComposition.Num(); i++) {
 		// Desempaquetamos el paquete
 		PD_MG_LogicPosition pos = PD_MG_LogicPosition(NETMAPDATA->roomComposition[i] >> 16);
 		int IDRoom = NETMAPDATA->roomComposition[i] & 0x000000FF;
 		StaticMapElement mapElement = StaticMapElement((NETMAPDATA->roomComposition[i] >> 8) & 0x000000FF);
 
-		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomComposition PARSING pos uint16 (%u) idroom (%u) mapElement (%u)"), (NETMAPDATA->roomComposition[i] >> 16), NETMAPDATA->roomComposition[i] & 0x000000FF, (NETMAPDATA->roomComposition[i] >> 8) & 0x000000FF);
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomComposition PARSING pos uint16 (%u) idroom (%u) mapElement (%u)"), (NETMAPDATA->roomComposition[i] >> 16), NETMAPDATA->roomComposition[i] & 0x000000FF, (NETMAPDATA->roomComposition[i] >> 8) & 0x000000FF);
 
-		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomComposition PARSING (%u) -> (%d, %d) - %d - %d"), NETMAPDATA->roomComposition[i], pos.GetX(), pos.GetY(), IDRoom, (int)mapElement);
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num roomComposition PARSING (%u) -> (%d, %d) - %d - %d"), NETMAPDATA->roomComposition[i], pos.GetX(), pos.GetY(), IDRoom, (int)mapElement);
 
 		/*if (i == 0) {
 		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->roomComposition[0] (%d, %d) - %d - %d"), pos.GetX(), pos.GetY(), IDRoom, (int)mapElement);
@@ -246,39 +245,44 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 		room->LogicPosInRoom.AddUnique(pos);
 
 
-		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->allLogicPos %d"), MapInfoRef->allLogicPos.Num());
-		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - room->PropsAndTilesInRoomByLogicPosition NUM %d"), room->PropsAndTilesInRoomByLogicPosition.Num());
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->allLogicPos %d"), MapInfoRef->allLogicPos.Num());
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - room->PropsAndTilesInRoomByLogicPosition NUM %d"), room->PropsAndTilesInRoomByLogicPosition.Num());
 
 		// Añadimos la posicion 
 		if (room->PropsAndTilesInRoomByLogicPosition.Contains(pos)) {
-			UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - room->PropsAndTilesInRoomByLogicPosition (%d, %d)"), pos.GetX(), pos.GetY());
+			//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - room->PropsAndTilesInRoomByLogicPosition (%d, %d)"), pos.GetX(), pos.GetY());
 		}
 		else {
 			room->PropsAndTilesInRoomByLogicPosition.Add(pos, mapElement);
-			UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - ADDING room->PropsAndTilesInRoomByLogicPosition (%d, %d) - %d"), pos.GetX(), pos.GetY(), (int)mapElement);
+			//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - ADDING room->PropsAndTilesInRoomByLogicPosition (%d, %d) - %d"), pos.GetX(), pos.GetY(), (int)mapElement);
 		}
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->allLogicPos %d"), MapInfoRef->allLogicPos.Num());
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->roomByLogPos %d"), MapInfoRef->roomByLogPos.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->allLogicPos %d"), MapInfoRef->allLogicPos.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->roomByLogPos %d"), MapInfoRef->roomByLogPos.Num());
 
 	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num MapInfoRef->roomComposition[-1] (%d, %d) - %d - %d"), MapInfoRef->allLogicPos[0].GetX(), MapInfoRef->allLogicPos[0].GetY());
 
 
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num wallComposition %d"), NETMAPDATA->wallComposition.Num());
+	//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num wallComposition %d"), NETMAPDATA->wallComposition.Num());
 	for (int i = 0; i < NETMAPDATA->wallComposition.Num(); i++) {
 		// Desempaquetamos el paquete
 		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->wallComposition[i] >> 16));
-		int IDRoomA = NETMAPDATA->wallComposition[i] & 0x000000FF;
-		int IDRoomB = (NETMAPDATA->wallComposition[i] >> 8) & 0x000000FF;
+		int IDRoomB = NETMAPDATA->wallComposition[i] & 0x000000FF;
+		int IDRoomA = (NETMAPDATA->wallComposition[i] >> 8) & 0x000000FF;
 
 		// buscamos la habitacion A a la que pertenece
 		PD_MM_Room* room = nullptr;
 
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - wallComposition: searching IDRoomA %d"), IDRoomA);
+
+
 		for (int j = 0; j < MapInfoRef->rooms.Num(); j++) {
 			if (IDRoomA == MapInfoRef->rooms[j]->IDRoom) {
 				room = MapInfoRef->rooms[j];
+
+				//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - wallComposition: RoomA Founded!"));
 				break;
 			}
 		}
@@ -286,62 +290,136 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 		room->LogicWallPosInRoom.Add(pos);
 
 		// Si hay habitacion B, la buscamos 
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - wallComposition: searching IDRoomB %d"), IDRoomB);
+
 		if (IDRoomB != 0xFF) {
 			room = nullptr;
 
 			for (int j = 0; j < MapInfoRef->rooms.Num(); j++) {
 				if (IDRoomB == MapInfoRef->rooms[j]->IDRoom) {
 					room = MapInfoRef->rooms[j];
+					//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - wallComposition: RoomB Founded!"));
 					break;
 				}
 			}
 
 			room->LogicWallPosInRoom.Add(pos);
 		}
+
+
+
+		MapInfoRef->allLogicPos.AddUnique(pos);
 	}
 
 
-	UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Num doorComposition %d"), NETMAPDATA->doorComposition.Num());
-	for (int i = 0; i < NETMAPDATA->doorComposition.Num(); i++) {
-		// Desempaquetamos el paquete
-		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[i] >> 16) & 0x0000FFFF); //aqui con && dos?
-		int IDRoomA = NETMAPDATA->doorComposition[i] & 0x000000FF;
-		int IDRoomB = (NETMAPDATA->doorComposition[i] >> 8) & 0x000000FF;
+	UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids num %d"), NETMAPDATA->interactuableId.Num());
+	for (int i = 0; i < NETMAPDATA->interactuableId.Num(); i++) {
 
-		// buscamos la habitacion A a la que pertenece
-		PD_MM_Room* room = nullptr;
+		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids %d"), NETMAPDATA->interactuableId[i]);
 
-		for (int j = 0; j < MapInfoRef->rooms.Num(); j++) {
-			if (IDRoomA == MapInfoRef->rooms[j]->IDRoom) {
-				room = MapInfoRef->rooms[j];
-				break;
+		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->interactuableId[i] >> 16) & 0x0000FFFF);
+		int idInter = (NETMAPDATA->interactuableId[i] >> 8) & 0x000000FF;
+		StaticMapElement typeInter = StaticMapElement(NETMAPDATA->interactuableId[i] & 0x000000FF);
+
+		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids (%d,%d) - %d - %d"), pos.GetX(), pos.GetY(), idInter, (int)typeInter);
+
+
+		// Si el interactuable es una puerta, tiene un tratamiento adicional ... 
+		if (typeInter == StaticMapElement::DOOR) {
+			int IDRoomA = -1, IDRoomB = -1;
+
+			// aqui buscamos a que puerta se refiere, y nos quedamos sus ids
+			for (int idoor = 0; idoor < NETMAPDATA->doorComposition.Num(); idoor++) {
+				// Desempaquetamos el paquete
+				PD_MG_LogicPosition pos_door = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[idoor] >> 16) & 0x0000FFFF);
+
+				UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids pos (%d,%d) - interactuableids pos (%d,%d)"), pos.GetX(), pos.GetY(), pos_door.GetX(), pos_door.GetY());
+
+
+
+				if (pos_door == pos) {
+					IDRoomB = NETMAPDATA->doorComposition[idoor] & 0x000000FF;
+					IDRoomA = (NETMAPDATA->doorComposition[idoor] >> 8) & 0x000000FF;
+
+
+					UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids: room founded. value: %d -> (%d,%d) - %d - %d"), NETMAPDATA->doorComposition[idoor], pos.GetX(), pos.GetY(), IDRoomA, IDRoomB);
+					break;
+				}
 			}
+			UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids IDRoomA - %d - IDRoomB %d"), IDRoomA, IDRoomB);
+
+			PD_MM_Room *roomA = MapInfoRef->roomByIDRoom[IDRoomA], *roomB = MapInfoRef->roomByIDRoom[IDRoomB];
+			PD_MM_DoorInfo* doorInfo = new PD_MM_DoorInfo(pos, idInter, typeInter, roomA, roomB);
+
+
+			MapInfoRef->allLogicPos.AddUnique(pos);
+
+			MapInfoRef->doorInfoInMap.Add(doorInfo);
+			MapInfoRef->doorInfoByLogPos.Add(pos, doorInfo);
+			MapInfoRef->doorInfoByID.Add(doorInfo->IDInteractuable, doorInfo);
+
+			MapInfoRef->roomByLogPos.Add(pos, roomA);
+
+			roomA->DoorInfoInRoomByLogicPosition.Add(pos, doorInfo);
+			roomA->LogicDoorPosInRoom.Add(pos);
+			roomB->DoorInfoInRoomByLogicPosition.Add(pos, doorInfo);
+			roomB->LogicDoorPosInRoom.Add(pos);
+
+			PD_MM_InteractuableInfo* interactuableInfo = new PD_MM_InteractuableInfo(pos, idInter, typeInter);
+
+			MapInfoRef->interactuableInfoInMap.Add(interactuableInfo);
+			MapInfoRef->interactuableInfoByLogPos.Add(pos, interactuableInfo);
+			MapInfoRef->interactuableInfoByID.Add(interactuableInfo->IDInteractuable, interactuableInfo);
+
+			roomA->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
+			roomB->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
+
+			UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - door added!"));
+			continue;
 		}
+		else {
 
-		room->LogicDoorPosInRoom.Add(pos);
+			// añadamos el interactuable al mapa 
+			PD_MM_InteractuableInfo* interactuableInfo = new PD_MM_InteractuableInfo(pos, idInter, typeInter);
 
+			MapInfoRef->interactuableInfoInMap.Add(interactuableInfo);
+			MapInfoRef->interactuableInfoByLogPos.Add(pos, interactuableInfo);
+			MapInfoRef->interactuableInfoByID.Add(interactuableInfo->IDInteractuable, interactuableInfo);
 
-		// buscamos la habitacion B a la que pertenece
-		for (int j = 0; j < MapInfoRef->rooms.Num(); j++) {
-			if (IDRoomB == MapInfoRef->rooms[j]->IDRoom) {
-				room = MapInfoRef->rooms[j];
-				break;
+			if (MapInfoRef->roomByLogPos.Contains(pos)) {
+				MapInfoRef->roomByLogPos[pos]->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
 			}
-		}
+			else {
+				UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Error al añadir interactuable con id %d: No hay room con logpos (%d,%d)"),
+					interactuableInfo->IDInteractuable, pos.GetX(), pos.GetY());
+			}
 
-		room->LogicDoorPosInRoom.Add(pos);
+		}
 
 	}
 
-	/////////////////////////////////////////////////////////////////////
+	// terminamos de configurar los interactuables con sus reactuables
+	for (int i = 0; i < NETMAPDATA->interactuableComposition.Num(); i++) {
+		int idInteractuable = (NETMAPDATA->interactuableComposition[i] >> 8) & 0x00FF;
+		int idReactuable = NETMAPDATA->interactuableId[i] & 0x00FF;
+
+		// si el interactuable es una puerta ...
+		if (MapInfoRef->doorInfoByID.Contains(idInteractuable)) {
+			MapInfoRef->doorInfoByID[idInteractuable]->AddReactuableID(idReactuable);
+		}
 
 
-
-	//FALTAN LOS INTERACTUABLES
-
-
-
-	///////////////////////////////////////////////////////////////////
+		// tiene que existir un interactuable con ese id
+		if (MapInfoRef->interactuableInfoByID.Contains(idInteractuable)) {
+			MapInfoRef->interactuableInfoByID[idInteractuable]->AddReactuableID(idReactuable);
+		}
+		else
+		{
+			// si no existe, ES UN PROBLEMON
+			UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Error al añadir reactuable con id %d: No hay interactuable con id %d"),
+				idReactuable, idInteractuable);
+		}
+	}
 
 
 
@@ -430,19 +508,19 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 		/*switch (type) {///En este switch metemos la IA lógica de cada uno
 		case ECharacterType::Archer: {
 
-			FString id = "Arch" + FString::FromInt(i - firstIndex);
-			//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap:Archer %s in pos (%d,%d)"), *id, lp.GetX(),lp.GetY());
-			//enemyMan->AddEnemie(ch);
-			dynamicMapRef->AddNewEnemy(lp, type, id);
-			break;
+		FString id = "Arch" + FString::FromInt(i - firstIndex);
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap:Archer %s in pos (%d,%d)"), *id, lp.GetX(),lp.GetY());
+		//enemyMan->AddEnemie(ch);
+		dynamicMapRef->AddNewEnemy(lp, type,id);
+		break;
 		}
 		case ECharacterType::Zombie: {
 
-			FString id = "Zomb" + FString::FromInt(i - firstIndex);
-			//enemyMan->AddEnemie(ch);
-			dynamicMapRef->AddNewEnemy(lp, type, id);
-			//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap:Zombie %s in pos (%d,%d)"), *id, lp.GetX(), lp.GetY());
-			break;
+		FString id = "Zomb" + FString::FromInt(i - firstIndex);
+		//enemyMan->AddEnemie(ch);
+		dynamicMapRef->AddNewEnemy(lp, type,id);
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap:Zombie %s in pos (%d,%d)"), *id, lp.GetX(), lp.GetY());
+		break;
 		}
 		}*/
 	}
