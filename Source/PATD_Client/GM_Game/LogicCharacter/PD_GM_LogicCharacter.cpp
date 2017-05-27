@@ -42,6 +42,7 @@ PD_GM_LogicCharacter::PD_GM_LogicCharacter()
 
 PD_GM_LogicCharacter::~PD_GM_LogicCharacter()
 {
+	character_Player_BP->Destroy();
 }
 
 /* ==============

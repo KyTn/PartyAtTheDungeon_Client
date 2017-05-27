@@ -287,7 +287,20 @@ void PD_GM_GameManager::OnBeginState() {
 			}
 		}
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Enemigos"));
-		
+		for (int i = 0; i < enemyManager->GetEnemies().Num(); i++)
+		{
+			bool found = false;
+			for (int j = 0; j < structGameState->update_turn.listEnemyCharacters.Num() && !found; j++)
+			{
+				if (structGameState->update_turn.listEnemyCharacters[i].ID_character.Equals(enemyManager->GetEnemies()[i]->GetIDCharacter()))
+					found = true;
+			}
+			if (!found)
+				enemyManager->DeleteEnemy(enemyManager->GetEnemies()[i]);
+
+		}
+
+
 		for (int iEnemies = 0; iEnemies < structGameState->update_turn.listEnemyCharacters.Num(); iEnemies++) {
 	
 			FStructUpdateCharacter updateCharacter = structGameState->update_turn.listEnemyCharacters[iEnemies];

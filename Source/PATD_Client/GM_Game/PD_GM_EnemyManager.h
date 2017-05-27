@@ -22,6 +22,7 @@ public:
 	~PD_GM_EnemyManager();
 
 	void AddEnemy(PD_GM_LogicCharacter* enemy);
+	void DeleteEnemy(PD_GM_LogicCharacter* enemy);
 	TArray<PD_GM_LogicCharacter*> GetEnemies();
 	FStructTurnOrders* GetTurnOrders(int indexEnemy);
 	int GetEnemyMaxLenghtActions(EActionPhase phase);
