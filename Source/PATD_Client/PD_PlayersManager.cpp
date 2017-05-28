@@ -146,6 +146,9 @@ bool PD_PlayersManager::CreateMovementOrder(int positionX, int positionY)
 	FStructLogicPosition tile = FStructLogicPosition();
 	tile.positionX = positionX;
 	tile.positionY = positionY;
+
+
+
 	UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateMovementOrder: APCurrent:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 	if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent > 0) 
 	{

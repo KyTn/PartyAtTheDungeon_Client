@@ -3,6 +3,7 @@
 #include "PATD_Client.h"
 #include "PD_E_Interactuable.h"
 #include "Actors/PD_E_ElementActor.h"
+#include "MapInfo/PD_MM_MapInfo.h"
 
 
 // Sets default values
@@ -25,6 +26,22 @@ void APD_E_Interactuable::BeginPlay()
 void APD_E_Interactuable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void APD_E_Interactuable::Set_InteractuableInfo(TArray<APD_E_Interactuable*> otherInteractuables, PD_MM_InteractuableInfo * interInfo)
+{
+	interactuableInfo = interInfo;
+	Name = interactuableInfo->Name_Interactuable;
+	for (int i = 0; i < interactuableInfo->reactuables.Num(); i++) {
+		for (APD_E_Interactuable* other : otherInteractuables) {
+			if (other->ID_Interactuable == interactuableInfo->reactuables[i]) {
+				ActivateThisReactorsWhenActive.Add(other);
+				break;
+			}
+		}
+	}
+
 
 }
 
