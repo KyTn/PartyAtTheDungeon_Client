@@ -7,7 +7,6 @@
 #include "MapGeneration/PD_MG_LogicPosition.h"
 #include "GM_Game/PD_GM_MapManager.h"
 #include "MapInfo/PD_MM_MapInfo.h"
-
 #include "Actors/Interactuables/PD_E_Interactuable.h"
 
 
@@ -33,6 +32,28 @@ void APD_E_Door::BeginPlay()
 void APD_E_Door::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+
+void APD_E_Door::Set_DoorInfo(TArray<APD_E_Interactuable*> otherInteractuables, PD_MM_DoorInfo* dInfo)
+{
+
+	UE_LOG(LogTemp, Log, TEXT("APD_E_Door::Set_DoorInfo"));
+
+	this->doorInfo = dInfo;
+	this->ID_Interactuable = dInfo->IDInteractuable;
+
+	for (int i = 0; i < this->doorInfo->reactuables.Num(); i++) {
+		for (APD_E_Interactuable* other : otherInteractuables) {
+			if (other->ID_Interactuable == this->doorInfo->reactuables[i]) {
+				ActivateThisReactorsWhenActive.Add(other);
+				break;
+			}
+		}
+	}
+
+	InteractFromThisLogicPositions = this->doorInfo->logpos.GenerateAdjacents();
 
 }
 

@@ -29,7 +29,7 @@
 
 #include "Actors/Accesors/MapManagerAccesor.h"
 #include "Actors/Accesors/PlayerManagerAccesor.h"
-
+#include "Actors/Interactuables/PD_E_Interactuable.h"
 
 
 bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) {
@@ -1353,6 +1353,54 @@ void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FSt
 		}
 	}
 }
+
+void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_Interactuable*>& interactuable)
+{
+	interactuable = TArray<APD_E_Interactuable*>();
+	UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom"));
+
+	for (PD_MM_InteractuableInfo* interInfo : mapManager->MapInfo->interactuableInfoInMap) {
+
+		if (mapManager->MapInfo->interactuableActorByLogicPosition.Contains(interInfo->logpos)) {
+
+			UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - interInfo pos(%d,%d), InteractFromThisLogicPositions Num %d"), interInfo->logpos.GetX(), interInfo->logpos.GetY(),
+				mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions.Num());
+			for (PD_MG_LogicPosition lp : mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions) {
+				
+
+				if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) {
+
+					UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
+						playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetX(),
+						playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetY());
+
+					if (lp == playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition()) {
+						UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
+						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
+					}
+				}
+				else {
+
+					UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
+						playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+						playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
+
+					if (lp.GetX() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX &&
+						lp.GetY() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY) {
+						UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
+						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
+					}
+				}
+
+
+				
+			}
+		}
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom ENDED %d"), interactuable.Num());
+}
+
 
 
 FStructSkill UPD_ClientGameInstance::LoadSkillStructData(int type, int indexSkill)

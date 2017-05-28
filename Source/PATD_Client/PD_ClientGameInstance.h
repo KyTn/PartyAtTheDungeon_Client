@@ -25,12 +25,14 @@ class PD_MatchConfigManager;
 
 class AMapManagerAccesor;
 class APlayerManagerAccesor;
+
+class APD_E_Interactuable;
+#include "Actors/Interactuables/PD_E_Interactuable.h"
 #include "LevelsNameDictionary.h"
 
 //Include de unreal
 #include "Engine/GameInstance.h"
 #include "PD_ClientGameInstance.generated.h"
-
 
 /**
  * 
@@ -264,6 +266,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
 		void FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer);
+
+
+	//Para gestionar los interactuables 
+
+
+	UFUNCTION(BlueprintCallable, Category = "Interactuables ")
+		void InteractuablesThatYouCanInteractFrom(TArray<APD_E_Interactuable*> &interactuable);
 
 
 #pragma endregion

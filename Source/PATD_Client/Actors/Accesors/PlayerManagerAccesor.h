@@ -3,10 +3,12 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "PD_ClientGameInstance.h"
 #include "PlayerManagerAccesor.generated.h"
 
 
 class PD_PlayersManager;
+class UPD_ClientGameInstance;
 
 UCLASS()
 class PATD_CLIENT_API APlayerManagerAccesor : public AActor
@@ -16,6 +18,7 @@ class PATD_CLIENT_API APlayerManagerAccesor : public AActor
 public:	
 
 	PD_PlayersManager *playersManager;
+	UPD_ClientGameInstance* CGI;
 
 	// Sets default values for this actor's properties
 	APlayerManagerAccesor();

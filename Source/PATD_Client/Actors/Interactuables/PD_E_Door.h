@@ -30,6 +30,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	// Guarda una referencia a su interInfo e inicializa las variables con su info 
+	virtual void Set_DoorInfo(TArray<APD_E_Interactuable*> otherInteractuables, PD_MM_DoorInfo* doorInfo);
+
 	// Se llamará a esta funcion para activar el interactuable
 	virtual void InteractToActivate(AActor* interactor, bool overwriteState = false);
 

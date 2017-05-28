@@ -23,6 +23,7 @@ public:
 
 	// VARS
 
+	FString Name_Interactuable;
 	PD_MG_LogicPosition logpos;
 	int IDInteractuable;
 	StaticMapElement type;
@@ -31,7 +32,7 @@ public:
 
 
 	// CONSTR
-	PD_MM_InteractuableInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t);
+	PD_MM_InteractuableInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t, FString name);
 	~PD_MM_InteractuableInfo();
 
 
@@ -56,7 +57,7 @@ public:
 
 	TArray<int> reactuables;
 
-
+	PD_MM_InteractuableInfo* interactuableInfo;
 
 	//CONSTR
 

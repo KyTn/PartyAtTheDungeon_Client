@@ -11,7 +11,8 @@
 
 #pragma region INTERACTUABLE INFO
 
-PD_MM_InteractuableInfo::PD_MM_InteractuableInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t) {
+PD_MM_InteractuableInfo::PD_MM_InteractuableInfo(PD_MG_LogicPosition lp, int id, StaticMapElement t, FString name) {
+	Name_Interactuable = name;
 	logpos = lp;
 	IDInteractuable = id;
 	type = t;
@@ -256,6 +257,8 @@ bool PD_MM_MapInfo::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementAc
 bool PD_MM_MapInfo::AddDoor_WithoutLink(PD_MG_LogicPosition logpos, APD_E_Door* door) {
 	doorActorByLogPos.Add(logpos, door);
 	doorActorByID.Add(door->ID_Interactuable, door);
+	interactuableActorByID.Add(door->ID_Interactuable, door);
+	interactuableActorByLogicPosition.Add(logpos, door);
 
 	return true;
 }

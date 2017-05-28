@@ -386,8 +386,11 @@ void PD_GM_MapManager::InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPos
 void PD_GM_MapManager::InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* doorInfo) {
 	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateDoor at (%d,%d)"), lp.GetX(), lp.GetY());
 	APD_E_Door* doorElement = instantiator->InstantiateDoor(lp);
-	doorElement->doorInfo = doorInfo;
-	doorElement->ID_Interactuable = doorInfo->IDInteractuable;
+
+	TArray<APD_E_Interactuable*> interact;
+	MapInfo->interactuableActorByID.GenerateValueArray(interact);
+	doorElement->Set_DoorInfo(interact, doorInfo);
+
 	MapInfo->AddDoor_WithoutLink(lp, doorElement);
 	doorElement->ChangeRotationToReal(lp);
 }
