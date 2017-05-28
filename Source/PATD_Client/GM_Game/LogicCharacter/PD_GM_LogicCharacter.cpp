@@ -252,6 +252,8 @@ FStructCharacterState* PD_GM_LogicCharacter::GetCharacterState() { return charac
 
 bool PD_GM_LogicCharacter::GetIsPlayer() { return isPlayer; }
 bool PD_GM_LogicCharacter::GetIsDead() { return isDead; }
+int PD_GM_LogicCharacter::GetPoints() { return points; }
+
 FString PD_GM_LogicCharacter::GetIDCharacter() { return ID_character; }
 ECharacterType PD_GM_LogicCharacter::GetTypeCharacter() { return type_character; }
 APD_GenericController* PD_GM_LogicCharacter::GetController() { return controller; }
@@ -416,6 +418,7 @@ void PD_GM_LogicCharacter::SetTotalStats()
 
 void PD_GM_LogicCharacter::SetIsPlayer(bool nIsPlayer){ isPlayer = nIsPlayer; }
 void PD_GM_LogicCharacter::SetIsDead(bool nIsDead){ isDead = nIsDead; }
+void  PD_GM_LogicCharacter::SetPoints(int npoints) { npoints = points; }
 void PD_GM_LogicCharacter::SetIDCharacter(FString nID_character){ ID_character = nID_character; }
 void PD_GM_LogicCharacter::SetTypeCharacter(ECharacterType nID_character) { type_character = nID_character; }
 void PD_GM_LogicCharacter::SetController(APD_GenericController* ncontroller){ controller = ncontroller; }

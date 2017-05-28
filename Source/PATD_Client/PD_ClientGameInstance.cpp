@@ -1194,13 +1194,14 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 }
 
 
-void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP)
+void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id)
 {
 	//EL HP se tiene que dar en forma de porcentaje de 1 a 0
 	HP = ((playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal - playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent) / 100);
 	HP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent;
 	AP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
-	Score = 0; /// ¿Donde esta el score del jugfador?
+	player_id = playersManager->MyPlayerInfo->logic_Character->GetIDCharacter();
+	Score = playersManager->MyPlayerInfo->logic_Character->GetPoints(); /// ¿Donde esta el score del jugfador?
 
 }
 
