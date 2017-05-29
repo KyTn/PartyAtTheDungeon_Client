@@ -447,11 +447,24 @@ void PD_GM_MapManager::InstantiateEnemies() {
 			//DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->isInstantiated = true;
 			enemyType = DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character; ///Cogemos el tipo
 
+			UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemikkokoko"));
+
 			switch (enemyType)
 			{
 				case ECharacterType::OrcBow:
 				{
-					APD_E_Character* charac = instantiator->InstantiateOrcBow(DynamicMapRef->GetLogicPositions()[i]);
+					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBow"));
+
+					APD_E_Character* charac = nullptr;
+					if (instantiator)
+					{
+						if (DynamicMapRef)
+						{
+							charac = instantiator->InstantiateOrcBow(DynamicMapRef->GetLogicPositions()[i]);
+
+						}
+					}
+
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
@@ -467,7 +480,16 @@ void PD_GM_MapManager::InstantiateEnemies() {
 				}
 				case ECharacterType::OrcGuns:
 				{
-					APD_E_Character* charac = instantiator->InstantiateOrcGuns(DynamicMapRef->GetLogicPositions()[i]);
+					APD_E_Character* charac = nullptr;
+					if (instantiator)
+					{
+						if (DynamicMapRef)
+						{
+							charac = instantiator->InstantiateOrcGuns(DynamicMapRef->GetLogicPositions()[i]);
+
+						}
+					}
+
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
@@ -483,7 +505,16 @@ void PD_GM_MapManager::InstantiateEnemies() {
 				}
 				case ECharacterType::OrcMelee:
 				{
-					APD_E_Character* charac = instantiator->InstantiateOrcMelee(DynamicMapRef->GetLogicPositions()[i]);
+					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcMelee"));
+					APD_E_Character* charac = nullptr;
+					if (instantiator)
+					{
+						if (DynamicMapRef)
+						{
+							charac = instantiator->InstantiateOrcMelee(DynamicMapRef->GetLogicPositions()[i]);
+						}
+					}
+
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
@@ -501,7 +532,11 @@ void PD_GM_MapManager::InstantiateEnemies() {
 				}
 				case ECharacterType::OrcBoss:
 				{
+					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBoss"));
+
 					APD_E_Character* charac = instantiator->InstantiateOrcBoss(DynamicMapRef->GetLogicPositions()[i]);
+					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBoss - desoues de instanciacion"));
+
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
