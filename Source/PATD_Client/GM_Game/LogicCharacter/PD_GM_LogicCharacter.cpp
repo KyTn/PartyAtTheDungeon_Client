@@ -414,6 +414,8 @@ void PD_GM_LogicCharacter::SetTotalStats()
 	totalStats->HPTotal = (initBaseStats->HPBase) * (1 + totalStats->CONBonus);
 	totalStats->HPCurrent = totalStats->HPTotal;
 
+
+	totalStats->PointsCurrent = 0;
 }
 
 void PD_GM_LogicCharacter::SetIsPlayer(bool nIsPlayer){ isPlayer = nIsPlayer; }

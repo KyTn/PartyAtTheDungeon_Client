@@ -281,6 +281,9 @@ void PD_GM_GameManager::OnBeginState() {
 			
 			if (logicCharacter) {
 				logicCharacter->MoveAtUpdate(logicPosition);
+				logicCharacter->GetTotalStats()->HPCurrent = updateCharacter.HPCurrent;
+				logicCharacter->GetTotalStats()->PointsCurrent = updateCharacter.PointsCurrent;
+				logicCharacter->GetTotalStats()->APCurrent = logicCharacter->GetTotalStats()->APTotal;
 			}
 			else {
 				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de player con id %s"), *updateCharacter.ID_character);
@@ -292,7 +295,7 @@ void PD_GM_GameManager::OnBeginState() {
 			bool found = false;
 			for (int j = 0; j < structGameState->update_turn.listEnemyCharacters.Num() && !found; j++)
 			{
-				if (structGameState->update_turn.listEnemyCharacters[i].ID_character.Equals(enemyManager->GetEnemies()[i]->GetIDCharacter()))
+				if (structGameState->update_turn.listEnemyCharacters[j].ID_character.Equals(enemyManager->GetEnemies()[i]->GetIDCharacter()))
 					found = true;
 			}
 			if (!found)

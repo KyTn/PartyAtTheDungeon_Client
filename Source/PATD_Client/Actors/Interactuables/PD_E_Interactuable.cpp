@@ -52,3 +52,18 @@ void APD_E_Interactuable::InteractToActivate(AActor* interactor, bool overwriteS
 // Se llamará a esta función para desactivar el interactuable
 void APD_E_Interactuable::InteractToDeactivate(AActor* interactor, bool overwriteState) {}
 
+
+void APD_E_Interactuable::GetInteractuableInfo(int &id_interactable, FString &name_interactable)
+{
+	if (interactuableInfo)
+	{
+		id_interactable = interactuableInfo->IDInteractuable;
+		name_interactable = interactuableInfo->Name_Interactuable;
+	}
+	else
+	{
+		id_interactable = -1;
+		name_interactable = "";
+	}
+
+}

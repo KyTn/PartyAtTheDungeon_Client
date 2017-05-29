@@ -1184,7 +1184,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	}
 	
 	//STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(2000, 20, 50); //volver a cambiar a 5 AP base
 
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee
@@ -1198,10 +1198,12 @@ void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP,
 {
 	//EL HP se tiene que dar en forma de porcentaje de 1 a 0
 	HP = ((playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal - playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent) / 100);
-	HP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent;
+	//HP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent;
 	AP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
 	player_id = playersManager->MyPlayerInfo->logic_Character->GetIDCharacter();
-	Score = playersManager->MyPlayerInfo->logic_Character->GetPoints(); /// ¿Donde esta el score del jugfador?
+	Score = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->PointsCurrent;
+		//playersManager->MyPlayerInfo->logic_Character->GetPoints(); /// ¿Donde esta el score del jugfador?
+
 
 }
 
