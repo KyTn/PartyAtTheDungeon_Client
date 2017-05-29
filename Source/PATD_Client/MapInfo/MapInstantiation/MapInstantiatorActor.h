@@ -56,6 +56,13 @@ public:
 	TSubclassOf<class APD_E_ElementActor> Default_Prop_Column_03_Class;
 	TSubclassOf<class APD_E_ElementActor> Default_Prop_Column_04_1_Class;
 	TSubclassOf<class APD_E_ElementActor> Default_Prop_Column_04_2_Class;
+
+
+	TSubclassOf<class APD_E_ElementActor> Default_Prop_Obstruction_02_Class;
+	TSubclassOf<class APD_E_ElementActor> Default_Prop_Obstruction_03_Class;
+	TSubclassOf<class APD_E_ElementActor> Default_Prop_Obstruction_04_Class;
+	TSubclassOf<class APD_E_ElementActor> Default_Prop_Obstruction_12_1_Class;
+	TSubclassOf<class APD_E_ElementActor> Default_Prop_Obstruction_12_2_Class;
 #pragma endregion
 
 
@@ -68,7 +75,30 @@ public:
 	TSubclassOf<class APD_E_ElementActor> Dungeon_Prop_Treasure_01_Class;
 
 #pragma endregion 
+#pragma region MAPSKIN GARDEN
 
+
+	//Props
+	TSubclassOf<class APD_E_ElementActor> Garden_Prop_Treasure_01_Class;
+	TSubclassOf<class APD_E_ElementActor> Garden_Prop_Tree_01_Class;
+	TSubclassOf<class APD_E_ElementActor> Garden_Prop_Bush_01_Class;
+#pragma endregion
+#pragma region MAPSKIN LIBRARY
+	TSubclassOf<class APD_E_ElementActor> Library_Prop_Treasure_01_Class;
+
+#pragma endregion
+
+#pragma region MAPSKIN SACRIFICE
+
+
+	//Props
+	TSubclassOf<class APD_E_ElementActor> Sacrifice_Prop_Treasure_01_Class;
+	TSubclassOf<class APD_E_ElementActor> Sacrifice_Prop_Jail_01_Class;
+#pragma endregion
+#pragma region MAPSKIN BOSS
+
+
+#pragma endregion
 
 #pragma region ENEMIES
 
@@ -99,8 +129,27 @@ public:
 	APD_E_ElementActor* Instantiate_Dungeon_Prop_Column_01(PD_MG_LogicPosition logpos);
 	APD_E_ElementActor* Instantiate_Dungeon_Prop_Column_02_1(PD_MG_LogicPosition logpos);
 	APD_E_ElementActor* Instantiate_Dungeon_Prop_Column_03(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor* Instantiate_Dungeon_Prop_Column_04_1(PD_MG_LogicPosition logpos);
 
+	APD_E_ElementActor* Instantiate_Dungeon_Prop_Obstruction_02(PD_MG_LogicPosition logpos);
+#pragma region Instantiate Garden MapElements 
+	APD_E_ElementActor* Instantiate_Garden_Prop_Treasure_01(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor* Instantiate_Garden_Prop_Tree_01(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor* Instantiate_Garden_Prop_Bush_01(PD_MG_LogicPosition logpos);
+#pragma endregion
 
+#pragma region Instantiate Library MapElements 
+	APD_E_ElementActor* Instantiate_Library_Prop_Treasure_01(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor * Instantiate_Library_Prop_Column_04_2(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor* Instantiate_Library_Prop_Obstruction_12_1(PD_MG_LogicPosition logpos);
+#pragma endregion
+#pragma region Instantiate Sacrifice MapElements 
+	APD_E_ElementActor* Instantiate_Sacrifice_Prop_Treasure_01(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor* Instantiate_Sacrifice_Prop_Jail_01(PD_MG_LogicPosition logpos);
+	APD_E_ElementActor* Instantiate_Sacrifice_Prop_Obstruction_12_2(PD_MG_LogicPosition logpos);
+#pragma region Instantiate Boss MapElements 
+
+#pragma endregion
 
 #pragma endregion 
 
