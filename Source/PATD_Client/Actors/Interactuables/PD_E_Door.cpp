@@ -114,3 +114,8 @@ void APD_E_Door::GetInteractuableDoorInfo(int &id_interactable, FString &name_in
 	}
 
 }
+
+bool APD_E_Door::GetIsOpen()
+{
+	return IsDoorOpen;
+}

@@ -47,5 +47,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GetInteractuableInfo")
 		void GetInteractuableDoorInfo(int &id_interactable, FString &name_interactable);
 
+	UFUNCTION(BlueprintCallable, Category = "GetInteractuableInfo")
+		bool GetIsOpen();
+
 #pragma endregion
 };

@@ -11,6 +11,8 @@
 #include "NW_Networking/PD_NW_NetworkManager.h"
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
+#include "Actors/Interactuables/PD_E_Interactuable.h"
+#include "Actors/Interactuables/PD_E_Door.h"
 
 //Includes de uso de objetos
 #include "MapGeneration/PD_MG_LogicPosition.h"
@@ -274,6 +276,16 @@ void PD_GM_GameManager::OnBeginState() {
 		for (int id_salas = 0; id_salas < structGameState->update_turn.listOfRoomsInstiantate.Num(); id_salas++)
 		{
 			mapManager->InstantiateRoomAndAdj(structGameState->update_turn.listOfRoomsInstiantate[id_salas]);
+		}
+
+		for (int id_door = 0; id_door < structGameState->update_turn.listOfDoorOpend.Num(); id_door++)
+		{
+			APD_E_Door* doorOpend = nullptr;
+			doorOpend = mapManager->MapInfo->doorActorByID[structGameState->update_turn.listOfDoorOpend[id_door]];
+			if (doorOpend)
+			{
+				doorOpend->IsDoorOpen = true;
+			}
 		}
 
 		mapManager->InstantiateEnemies();

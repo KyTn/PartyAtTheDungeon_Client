@@ -189,6 +189,10 @@ public:
 //		bool SendTurnOrderActionsToServer();
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		bool LogicPositionIsValidToMove(int positionX, int positionY);
+
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		void SetTypeOfAction(int ntypeAction);
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		uint8 GetTypeOfAction();
