@@ -41,4 +41,14 @@ public:
 
 
 	void ChangeRotationToReal(PD_MG_LogicPosition lp);
+
+#pragma region GET INFO INTERACTUABLE
+
+	UFUNCTION(BlueprintCallable, Category = "GetInteractuableInfo")
+		void GetInteractuableDoorInfo(int &id_interactable, FString &name_interactable);
+
+	UFUNCTION(BlueprintCallable, Category = "GetInteractuableInfo")
+		bool GetIsOpen();
+
+#pragma endregion
 };

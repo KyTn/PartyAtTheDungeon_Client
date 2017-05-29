@@ -11,6 +11,8 @@
 #include "NW_Networking/PD_NW_NetworkManager.h"
 #include "Structs/PD_ClientStructs.h" 
 #include "Structs/PD_ClientEnums.h" 
+#include "Actors/Interactuables/PD_E_Interactuable.h"
+#include "Actors/Interactuables/PD_E_Door.h"
 
 //Includes de uso de objetos
 #include "MapGeneration/PD_MG_LogicPosition.h"
@@ -269,6 +271,25 @@ void PD_GM_GameManager::OnBeginState() {
 	else if (structGameState->enumGameState == EClientGameState::UpdateInfo) {
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: UpdateInfo"));
 
+		//Update el Mapa - Instanciar las salas
+
+		for (int id_salas = 0; id_salas < structGameState->update_turn.listOfRoomsInstiantate.Num(); id_salas++)
+		{
+			mapManager->InstantiateRoomAndAdj(structGameState->update_turn.listOfRoomsInstiantate[id_salas]);
+		}
+
+		for (int id_door = 0; id_door < structGameState->update_turn.listOfDoorOpend.Num(); id_door++)
+		{
+			APD_E_Door* doorOpend = nullptr;
+			doorOpend = mapManager->MapInfo->doorActorByID[structGameState->update_turn.listOfDoorOpend[id_door]];
+			if (doorOpend)
+			{
+				doorOpend->IsDoorOpen = true;
+			}
+		}
+
+		mapManager->InstantiateEnemies();
+
 		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Players"));
 		for (int iPlayers = 0; iPlayers < structGameState->update_turn.listPlayerCharacters.Num(); iPlayers++) {
 			UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: PlayerFor %d"), iPlayers);
@@ -281,6 +302,9 @@ void PD_GM_GameManager::OnBeginState() {
 			
 			if (logicCharacter) {
 				logicCharacter->MoveAtUpdate(logicPosition);
+				logicCharacter->GetTotalStats()->HPCurrent = updateCharacter.HPCurrent;
+				logicCharacter->GetTotalStats()->PointsCurrent = updateCharacter.PointsCurrent;
+				logicCharacter->GetTotalStats()->APCurrent = logicCharacter->GetTotalStats()->APTotal;
 			}
 			else {
 				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de player con id %s"), *updateCharacter.ID_character);
@@ -290,9 +314,9 @@ void PD_GM_GameManager::OnBeginState() {
 		for (int i = 0; i < enemyManager->GetEnemies().Num(); i++)
 		{
 			bool found = false;
-			for (int j = 0; j < structGameState->update_turn.listEnemyCharacters.Num() && !found; j++)
+			for (int j = 0; j < structGameState->update_turn.listEnemyCharacters.Num(); j++)
 			{
-				if (structGameState->update_turn.listEnemyCharacters[i].ID_character.Equals(enemyManager->GetEnemies()[i]->GetIDCharacter()))
+				if (structGameState->update_turn.listEnemyCharacters[j].ID_character.Equals(enemyManager->GetEnemies()[i]->GetIDCharacter()))
 					found = true;
 			}
 			if (!found)
@@ -318,6 +342,7 @@ void PD_GM_GameManager::OnBeginState() {
 				UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de enemigo con id %s"), *updateCharacter.ID_character);
 			}
 		}
+
 		ChangeState(EClientGameState::EndOfTurn);
 	}
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {

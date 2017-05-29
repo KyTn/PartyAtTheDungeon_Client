@@ -67,4 +67,11 @@ public:
 
 	// Se llamará a esta función para desactivar el interactuable
 	virtual void InteractToDeactivate(AActor* interactor, bool overwriteState = false);
+
+#pragma region GET INFO INTERACTUABLE
+
+	UFUNCTION(BlueprintCallable, Category = "GetInteractuableInfo")
+		void GetInteractuableInfo(int &id_interactable, FString &name_interactable);
+
+#pragma endregion
 };

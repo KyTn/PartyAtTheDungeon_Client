@@ -99,3 +99,23 @@ void APD_E_Door::ChangeRotationToReal(PD_MG_LogicPosition lp) {
 }
 
 
+void APD_E_Door::GetInteractuableDoorInfo(int &id_interactable, FString &name_interactable)
+{
+	if (doorInfo)
+	{
+		id_interactable = doorInfo->IDInteractuable;
+		name_interactable = "door_";
+		name_interactable.Append(FString::FromInt(id_interactable));
+	}
+	else
+	{
+		id_interactable = -1;
+		name_interactable = "none_info";
+	}
+
+}
+
+bool APD_E_Door::GetIsOpen()
+{
+	return IsDoorOpen;
+}

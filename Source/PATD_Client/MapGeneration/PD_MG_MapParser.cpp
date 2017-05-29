@@ -401,8 +401,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 				MapInfoRef->roomByLogPos[pos]->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
 			}
 			else {
-				UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Error al añadir interactuable con id %d: No hay room con logpos (%d,%d)"),
-					interactuableInfo->IDInteractuable, pos.GetX(), pos.GetY());
+				//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Error al añadir interactuable con id %d: No hay room con logpos (%d,%d)"),interactuableInfo->IDInteractuable, pos.GetX(), pos.GetY());
 			}
 
 		}
@@ -427,8 +426,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 		else
 		{
 			// si no existe, ES UN PROBLEMON
-			UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Error al añadir reactuable con id %d: No hay interactuable con id %d"),
-				idReactuable, idInteractuable);
+		//	UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - Error al añadir reactuable con id %d: No hay interactuable con id %d"),idReactuable, idInteractuable);
 		}
 	}
 

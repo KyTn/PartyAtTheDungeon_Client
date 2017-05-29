@@ -185,7 +185,7 @@ bool PD_PlayersManager::CreateInteractableOrder(int id_interactable)
 {
 	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
 
-	MyPlayerInfo->turnOrders->consumablesToConsume.Add(id_interactable);
+	MyPlayerInfo->turnOrders->interactuablesToInteract.Add(id_interactable);
 
 	return true;
 }

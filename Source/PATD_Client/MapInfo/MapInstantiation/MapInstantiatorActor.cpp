@@ -66,7 +66,26 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 	}
 
 
-
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_02_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_02.BP_Obstruction_02'"));
+	if (Default_Prop_Obstruction_02_Blueprint.Object) {
+		Default_Prop_Obstruction_02_Class = (UClass*)Default_Prop_Obstruction_02_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_03_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_03.BP_Obstruction_03'"));
+	if (Default_Prop_Obstruction_03_Blueprint.Object) {
+		Default_Prop_Obstruction_03_Class = (UClass*)Default_Prop_Obstruction_03_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_04_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_04.BP_Obstruction_04'"));
+	if (Default_Prop_Obstruction_04_Blueprint.Object) {
+		Default_Prop_Obstruction_04_Class = (UClass*)Default_Prop_Obstruction_04_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_12_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_12_1.BP_Obstruction_12_1'"));
+	if (Default_Prop_Obstruction_12_1_Blueprint.Object) {
+		Default_Prop_Obstruction_12_1_Class = (UClass*)Default_Prop_Obstruction_12_1_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_12_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_12_2.BP_Obstruction_12_2'"));
+	if (Default_Prop_Obstruction_12_2_Blueprint.Object) {
+		Default_Prop_Obstruction_12_2_Class = (UClass*)Default_Prop_Obstruction_12_2_Blueprint.Object->GeneratedClass;
+	}
 #pragma endregion
 
 
@@ -85,8 +104,48 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 
 
 
-#pragma endregion 
 
+
+#pragma region MAPSKIN GARDEN
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_GARDEN/BP_Garden_Prop_Treasure_01.BP_Garden_Prop_Treasure_01'"));
+	if (Garden_Prop_Treasure_01_Blueprint.Object) {
+		Garden_Prop_Treasure_01_Class = (UClass*)Garden_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Tree_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_GARDEN/BP_Garden_Tree_01.BP_Garden_Tree_01'"));
+	if (Garden_Prop_Tree_01_Blueprint.Object) {
+		Garden_Prop_Tree_01_Class = (UClass*)Garden_Prop_Tree_01_Blueprint.Object->GeneratedClass;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Bush_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_GARDEN/BP_Garden_bush_01.BP_Garden_Bush_01'"));
+	if (Garden_Prop_Bush_01_Blueprint.Object) {
+		Garden_Prop_Bush_01_Class = (UClass*)Garden_Prop_Bush_01_Blueprint.Object->GeneratedClass;
+	}
+
+
+
+#pragma endregion 
+#pragma region MAPSKIN LIBRARY
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_LIBRARY/BP_Library_Prop_Treasure_01.BP_Library_Prop_Treasure_01'"));
+	if (Library_Prop_Treasure_01_Blueprint.Object) {
+		Library_Prop_Treasure_01_Class = (UClass*)Library_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
+	}
+#pragma endregion 
+#pragma region MAPSKIN SACRIFICE
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_SACRIFICE/BP_Sacrifice_Prop_Treasure_01.BP_Sacrifice_Prop_Treasure_01'"));
+	if (Sacrifice_Prop_Treasure_01_Blueprint.Object) {
+		Sacrifice_Prop_Treasure_01_Class = (UClass*)Sacrifice_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Jail_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_SACRIFICE/BP_Sacrifice_Prop_Jail_01.BP_Sacrifice_Prop_Jail_01'"));
+	if (Sacrifice_Prop_Jail_01_Blueprint.Object) {
+		Sacrifice_Prop_Jail_01_Class = (UClass*)Sacrifice_Prop_Jail_01_Blueprint.Object->GeneratedClass;
+	}
+
+
+
+#pragma endregion 
 #pragma region CHARACTERS
 
 	static ConstructorHelpers::FObjectFinder<UBlueprint> OrcBowBlueprint(TEXT("Blueprint'/Game/Blueprints/Enemies/Orco_Arco.Orco_Arco'"));
@@ -102,6 +161,11 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 	static ConstructorHelpers::FObjectFinder<UBlueprint> OrcMeleeBlueprint(TEXT("Blueprint'/Game/Blueprints/Enemies/Orco_Melee.Orco_Melee'"));
 	if (OrcMeleeBlueprint.Object) {
 		OrcMeleeClass = (UClass*)OrcMeleeBlueprint.Object->GeneratedClass;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> OrcBossBlueprint(TEXT("Blueprint'/Game/Blueprints/Enemies/Orco_Boss.Orco_Boss'"));
+	if (OrcBossBlueprint.Object) {
+		OrcBossClass = (UClass*)OrcBossBlueprint.Object->GeneratedClass;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UBlueprint> PlayerBlueprint(TEXT("Blueprint'/Game/Blueprints/Players/Player.Player'"));
@@ -182,6 +246,70 @@ APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_Column_03(P
 }
 
 
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_Column_04_1(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_04_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Dungeon_Prop_Obstruction_02(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_02_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+#pragma endregion 
+
+
+
+#pragma region MAPSKIN GARDEN
+
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Garden_Prop_Tree_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Garden_Prop_Tree_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Garden_Prop_Treasure_01(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Garden_Prop_Treasure_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Garden_Prop_Bush_01(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Garden_Prop_Bush_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+#pragma endregion 
+
+#pragma region MAPSKIN LIBRARY
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Library_Prop_Column_04_2(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_04_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Library_Prop_Treasure_01(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Library_Prop_Treasure_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Library_Prop_Obstruction_12_1(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_12_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+
+#pragma endregion 
+
+#pragma region MAPSKIN SACRIFICE
+
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Treasure_01(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Sacrifice_Prop_Treasure_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Jail_01(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Sacrifice_Prop_Jail_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+
+APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Obstruction_12_2(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_12_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
 #pragma endregion 
 
 
@@ -200,6 +328,10 @@ APD_E_Character* AMapInstantiatorActor::InstantiateOrcGuns(PD_MG_LogicPosition l
 
 APD_E_Character* AMapInstantiatorActor::InstantiateOrcMelee(PD_MG_LogicPosition logpos) {
 	return GetWorld()->SpawnActor<APD_E_Character>(OrcMeleeClass, logpos.ToWorldPosition(true), FRotator(0.0f, 0.f, 0.f));
+}
+
+APD_E_Character* AMapInstantiatorActor::InstantiateOrcBoss(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_Character>(OrcBossClass, logpos.ToWorldPosition(true), FRotator(0.0f, 0.f, 0.f));
 }
 
 APD_E_Character* AMapInstantiatorActor::InstantiatePlayer(PD_MG_LogicPosition logpos) {

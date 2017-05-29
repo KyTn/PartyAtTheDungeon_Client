@@ -1184,7 +1184,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	}
 	
 	//STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(100, 20, 5); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
 
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5,5 ,5, 5, 6 ,6 );
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type / 10 == 1 ) //si es a melee
@@ -1197,12 +1197,15 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id)
 {
 	//EL HP se tiene que dar en forma de porcentaje de 1 a 0
-	HP = ((playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal - playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent) / 100);
-	HP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent;
+	float life = 0.0f;
+
+	life = (playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent) / (double)playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal;
+	HP = life;
+	//HP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent;
 	AP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
 	player_id = playersManager->MyPlayerInfo->logic_Character->GetIDCharacter();
-	Score = playersManager->MyPlayerInfo->logic_Character->GetPoints(); /// ¿Donde esta el score del jugfador?
-
+	Score = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->PointsCurrent;
+	//playersManager->MyPlayerInfo->logic_Character->GetPoints(); /// ¿Donde esta el score del jugfador?
 }
 
 void UPD_ClientGameInstance::GiveAPForTurnPlayer(int &APfinal)
@@ -1816,3 +1819,27 @@ void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skil
 
 
 #pragma endregion
+
+bool UPD_ClientGameInstance::LogicPositionIsValidToMove(int positionX, int positionY)
+{
+	bool positionIsValid = false;
+	PD_MG_LogicPosition positionToCheck = PD_MG_LogicPosition(positionX, positionY);
+
+	if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+	{
+		PD_MG_LogicPosition lastPositionOnMovement = PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove[playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() - 1].positionX,
+			playersManager->MyPlayerInfo->turnOrders->positionsToMove[playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() - 1].positionY);
+
+		TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(lastPositionOnMovement);
+		for (int i = 0; i < tilesNear.Num(); i++)
+		{
+			if (tilesNear[i] == positionToCheck)
+				positionIsValid = true;
+		}
+	}
+	else {
+		positionIsValid = true;
+	}
+	return positionIsValid;
+
+}
