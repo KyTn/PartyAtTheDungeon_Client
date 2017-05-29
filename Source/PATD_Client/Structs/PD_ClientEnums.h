@@ -148,7 +148,8 @@ enum class MapSkinType : uint8 {
 };
 
 // elementos que puedes encontrar en el fichero de roomtemplates 
-enum class StaticMapElementInRoomTemplate { EMPTY = 'O', NORMAL_TILE = '.', SPECIAL_TILE = ',', WALL_ONLY = 'W', WALL_OR_DOOR = 'w', DOOR = 'd', /*SPAWN_POINT = 's',*/ COLUMN = 'c', PROP_CHEST = 't' };
+enum class StaticMapElementInRoomTemplate { EMPTY = 'O', NORMAL_TILE = '.', SPECIAL_TILE = ',', WALL_ONLY = 'W', WALL_OR_DOOR = 'w', DOOR = 'd', /*SPAWN_POINT = 's',*/ COLUMN = 'c', PROP_CHEST = 't',  OBSTRUCTION = 'b'
+};
 
 // id de cada tipo diferente de prop (dependiente del mapskintype)
 
@@ -160,7 +161,7 @@ enum class StaticMapElement : uint8 {
 	NORMAL_TILE = 10, SPECIAL_TILE = 11,
 
 	// del 20 al 149, props
-	TREE_OR_COLUMN_00 = 20, TREE_OR_COLUMN_01 = 21, TREE_OR_COLUMN_02 = 22, PROP_CHEST = 23,
+	TREE_OR_COLUMN_00 = 20, TREE_OR_COLUMN_01 = 21, TREE_OR_COLUMN_02 = 22, PROP_CHEST = 23, OBSTRUCTION_00=24,
 
 	// a partir del 150, interactuables 
 	DOOR = 150, LEVEL = 151, PRESURE_PLATE = 152, LARGE_CHEST = 153, SMALL_CHEST = 154,

@@ -269,16 +269,25 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		case StaticMapElement::EMPTY: {
 			break;
 		}
+		case StaticMapElement::PROP_CHEST: {
+			instantiator->Instantiate_Garden_Prop_Treasure_01(lp);
+			break;
+		}
 		case StaticMapElement::SMALL_CHEST: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_00: {
+			instantiator->Instantiate_Garden_Prop_Tree_01(lp);
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_01: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		case StaticMapElement::OBSTRUCTION_00: {
+			instantiator->Instantiate_Garden_Prop_Bush_01(lp);
 			break;
 		}
 		}
@@ -298,16 +307,25 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		case StaticMapElement::EMPTY: {
 			break;
 		}
+		case StaticMapElement::PROP_CHEST: {
+			instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			break;
+		}
 		case StaticMapElement::SMALL_CHEST: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_00: {
+			instantiator->Instantiate_Sacrifice_Prop_Jail_01(lp);
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_01: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		case StaticMapElement::OBSTRUCTION_00: {
+			instantiator->Instantiate_Sacrifice_Prop_Obstruction_12_2(lp);
 			break;
 		}
 		}
@@ -327,16 +345,25 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		case StaticMapElement::EMPTY: {
 			break;
 		}
+		case StaticMapElement::PROP_CHEST: {
+			instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			break;
+		}
 		case StaticMapElement::SMALL_CHEST: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_00: {
+			instantiator->Instantiate_Dungeon_Prop_Column_04_1(lp);
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_01: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		case StaticMapElement::OBSTRUCTION_00: {
+			instantiator->Instantiate_Dungeon_Prop_Obstruction_02(lp);
 			break;
 		}
 		}
@@ -356,16 +383,25 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		case StaticMapElement::EMPTY: {
 			break;
 		}
+		case StaticMapElement::PROP_CHEST: {
+			instantiator->Instantiate_Library_Prop_Treasure_01(lp);
+			break;
+		}
 		case StaticMapElement::SMALL_CHEST: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_00: {
+			instantiator->Instantiate_Library_Prop_Column_04_2(lp);
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_01: {
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_02: {
+			break;
+		}
+		case StaticMapElement::OBSTRUCTION_00: {
+			instantiator->Instantiate_Library_Prop_Obstruction_12_1(lp);
 			break;
 		}
 		}
