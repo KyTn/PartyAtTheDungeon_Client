@@ -104,6 +104,11 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 		OrcMeleeClass = (UClass*)OrcMeleeBlueprint.Object->GeneratedClass;
 	}
 
+	/*static ConstructorHelpers::FObjectFinder<UBlueprint> OrcBossBlueprint(TEXT("Blueprint'/Game/Blueprints/Enemies/Orco_Boss.Orco_Boss'"));
+	if (OrcBossBlueprint.Object) {
+		OrcBossClass = (UClass*)OrcBossBlueprint.Object->GeneratedClass;
+	}*/
+
 	static ConstructorHelpers::FObjectFinder<UBlueprint> PlayerBlueprint(TEXT("Blueprint'/Game/Blueprints/Players/Player.Player'"));
 	if (PlayerBlueprint.Object) {
 		PlayerClass = (UClass*)PlayerBlueprint.Object->GeneratedClass;
@@ -201,6 +206,10 @@ APD_E_Character* AMapInstantiatorActor::InstantiateOrcGuns(PD_MG_LogicPosition l
 APD_E_Character* AMapInstantiatorActor::InstantiateOrcMelee(PD_MG_LogicPosition logpos) {
 	return GetWorld()->SpawnActor<APD_E_Character>(OrcMeleeClass, logpos.ToWorldPosition(true), FRotator(0.0f, 0.f, 0.f));
 }
+
+/*APD_E_Character* AMapInstantiatorActor::InstantiateOrcBoss(PD_MG_LogicPosition logpos) {
+	return GetWorld()->SpawnActor<APD_E_Character>(OrcBossClass, logpos.ToWorldPosition(true), FRotator(0.0f, 0.f, 0.f));
+}*/
 
 APD_E_Character* AMapInstantiatorActor::InstantiatePlayer(PD_MG_LogicPosition logpos) {
 	return GetWorld()->SpawnActor<APD_E_Character>(PlayerClass, logpos.ToWorldPosition(true), FRotator(0.0f, 0.f, 0.f));

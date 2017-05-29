@@ -122,7 +122,7 @@ enum class PasiveSkills
 
 
 
-enum class ECharacterType { NoCharacter, Player, OrcMelee, OrcBow, OrcGuns };
+enum class ECharacterType { NoCharacter, Player, OrcMelee, OrcBow, OrcGuns, OrcBoss };
 /*
 EnumParser<ECharacterType>::EnumParser()
 {
