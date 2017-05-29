@@ -77,7 +77,7 @@ public:
 	TSubclassOf<class APD_E_Character> OrcBowClass;
 	TSubclassOf<class APD_E_Character> OrcGunsClass;
 	TSubclassOf<class APD_E_Character> OrcMeleeClass;
-	//TSubclassOf<class APD_E_Character> OrcBossClass;
+	TSubclassOf<class APD_E_Character> OrcBossClass;
 #pragma endregion 
 
 
@@ -107,6 +107,6 @@ public:
 	APD_E_Character* InstantiateOrcBow(PD_MG_LogicPosition logpos);
 	APD_E_Character* InstantiateOrcGuns(PD_MG_LogicPosition logpos);
 	APD_E_Character* InstantiateOrcMelee(PD_MG_LogicPosition logpos);
-	//APD_E_Character* InstantiateOrcBoss(PD_MG_LogicPosition logpos);
+	APD_E_Character* InstantiateOrcBoss(PD_MG_LogicPosition logpos);
 	APD_E_Character* InstantiatePlayer(PD_MG_LogicPosition logpos);
 };

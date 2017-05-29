@@ -499,13 +499,13 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
 					break;
 				}
-				/*case ECharacterType::OrcBoss:
+				case ECharacterType::OrcBoss:
 				{
 					APD_E_Character* charac = instantiator->InstantiateOrcBoss(DynamicMapRef->GetLogicPositions()[i]);
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
-					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
-					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
 					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
@@ -516,7 +516,7 @@ void PD_GM_MapManager::InstantiateEnemies() {
 
 					_GAMEMANAGER->enemyManager->AddEnemy(logicCha);
 					break;
-				}*/
+				}
 			}
 		}
 	}
