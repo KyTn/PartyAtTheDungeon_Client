@@ -265,12 +265,23 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 		
 		UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent BEFORE action:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 
-		MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent - APleft;
+		if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent - APleft >= 0)
+		{
+			MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent - APleft;
 
-		UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent AFTER action :%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+			UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent AFTER action :%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 
-		MyPlayerInfo->turnOrders->actions.Add(target);
-		return true;
+			MyPlayerInfo->turnOrders->actions.Add(target);
+			return true;
+		}
+		else  //si es un numero negativo, nos pasamos del AP, no se puede realizar la accion,
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("YOU DO NOT HAVE ENOUGH AP FOR THAT ACTION!"));
+
+			return false;
+		
+		}
+		
 	}
 	else 
 	{
