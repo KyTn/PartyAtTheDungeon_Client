@@ -222,7 +222,7 @@ public:
 		APlayerManagerAccesor* GetPlayersManagerAccessor(bool& existe);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
-		void GivePlayerStatToHUD(float &HP, int &Score, int &AP);
+		void GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
 		void GiveAPForTurnPlayer(int &APfinal);

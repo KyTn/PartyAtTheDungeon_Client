@@ -100,7 +100,7 @@ bool PD_GM_MapManager::IsTherePlayer(uint32 x, uint32 y) {
 	logpos.SetX(x);
 	logpos.SetY(y);
 	if (DynamicMapRef->getEnemies().Contains(logpos))
-		if (DynamicMapRef->getEnemies()[logpos].type_Character == ECharacterType::Player)
+		if (DynamicMapRef->getEnemies()[logpos]->type_Character == ECharacterType::Player)
 			return true;
 	return false;
 }
@@ -439,10 +439,13 @@ void PD_GM_MapManager::InstantiateEnemies() {
 	ECharacterType enemyType;
 	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Numero de enemigos enemigos %d"), DynamicMapRef->GetLogicPositions().Num());
 	for (int i = 0; i < DynamicMapRef->GetLogicPositions().Num(); i++) {
-		if (MapInfo->roomByLogPos[DynamicMapRef->GetLogicPositions()[i]]->IsInstantiated && !DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].isInstantiated) {
+		if (MapInfo->roomByLogPos[DynamicMapRef->GetLogicPositions()[i]]->IsInstantiated && !DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->isInstantiated) {
 			UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemigos %d"), i);
-			DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].isInstantiated = true;
-			enemyType = DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character; ///Cogemos el tipo
+
+			DynamicMapRef->UpdateIsInstantiatedEnemy(DynamicMapRef->GetLogicPositions()[i], true);
+
+			//DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->isInstantiated = true;
+			enemyType = DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character; ///Cogemos el tipo
 
 			switch (enemyType)
 			{
@@ -451,8 +454,8 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					APD_E_Character* charac = instantiator->InstantiateOrcBow(DynamicMapRef->GetLogicPositions()[i]);
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
-					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
-					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
 					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
@@ -467,8 +470,8 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					APD_E_Character* charac = instantiator->InstantiateOrcGuns(DynamicMapRef->GetLogicPositions()[i]);
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
-					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
-					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
 					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
@@ -483,8 +486,8 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					APD_E_Character* charac = instantiator->InstantiateOrcMelee(DynamicMapRef->GetLogicPositions()[i]);
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
-					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].type_Character);
-					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]].ID_Character);
+					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
+					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
 					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
