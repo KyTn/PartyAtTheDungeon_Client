@@ -1042,10 +1042,19 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar"));
 
 	//Weapon - Clase y Tipo
-	TArray<int> weapons = TArray<int>();
-	LoadWeaponData(weapons);
-	int weaponSelected = FMath::RandRange(0, weapons.Num() - 1);
+	
+	int64 DateInSeconds = FDateTime::Now().ToUnixTimestamp();
+	FRandomStream SRand = FRandomStream();
+	SRand.Initialize(DateInSeconds);
+	int weaponSelected = SRand.RandRange(0, weapons.Num() - 1);
+	//int weaponSelected = FMath::RandRange(0, weapons.Num() -1);
+
+	//int weaponSelected = rand() % 9;//weapons.Num();
+
 	FStructWeapon weaponChar = LoadWeaponStructData(weaponSelected);
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon totales - %d "), weapons.Num());
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), weaponSelected);
+
 	//FStructWeapon weaponChar = LoadWeaponStructData(8);
 	if (weaponChar.ID_Weapon >= 0)
 	{
