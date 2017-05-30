@@ -45,6 +45,7 @@ public:
 
 	virtual void HandleEvent(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType);
 
+	void UpdateTurn();
 #pragma endregion
 
 

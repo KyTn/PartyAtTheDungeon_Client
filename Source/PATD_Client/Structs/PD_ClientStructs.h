@@ -76,6 +76,10 @@ struct StructClientState {
 
 	//Esta variable sirve para saber si el proceso de carga es el normal o por reconexion. 
 	bool reconnected=false;
+	bool updateTurnReceived = false;
+	FStructUpdateTurn update_turn_Reconnect;
+	//Esta variable sirve para indicar en caso de reconnect si debe ir a generar ordenes o a esperar turno
+	//bool goToGenerateOrders = false;
 };
 
 //Usado por: GameManager

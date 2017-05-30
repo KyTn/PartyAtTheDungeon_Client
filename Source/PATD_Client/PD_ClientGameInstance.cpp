@@ -251,6 +251,24 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			HandleEvent_FStructMapDataIncoming(inDataStruct, inPlayer, inEventType);
 		}
+		else if (inEventType == UStructType::FStructCharacter) {
+
+			FStructCharacter* structCharacter = (FStructCharacter*)inDataStruct;
+			*(playersManager->GetMyCharacter()->GetTotalStats()) = structCharacter->totalStats;
+			*(playersManager->GetMyCharacter()->GetBasicStats()) = structCharacter->basicStats;
+			*(playersManager->GetMyCharacter()->GetInitBaseStats()) = structCharacter->initBaseStats;
+			*(playersManager->GetMyCharacter()->GetSkills()) = structCharacter->skills;
+			*(playersManager->GetMyCharacter()->GetWeapon()) = structCharacter->weapon;
+			*(playersManager->GetMyCharacter()->GetSkin()) = structCharacter->skin;
+			*(playersManager->GetMyCharacter()->GetCharacterState()) = structCharacter->charState;
+			
+
+		}
+		else if (inEventType == UStructType::FStructUpdateTurn) {
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: RECONNECTING_IN_GAME - Update RECONNECT"));
+			structClientState->update_turn_Reconnect = *(FStructUpdateTurn*)inDataStruct;
+			structClientState->updateTurnReceived = true;
+		}
 	}
 	else if (structClientState->enumClientState == EClientState::Launch_Match) {
 
@@ -261,7 +279,11 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 			HandleEvent_StartMatch_GoGameMnager(inDataStruct, inPlayer, inEventType);
 		}
 
-
+		else if (inEventType == UStructType::FStructUpdateTurn) {
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: LAUNCH_MATCH - Update RECONNECT"));
+			structClientState->update_turn_Reconnect = *(FStructUpdateTurn*)inDataStruct;
+			structClientState->updateTurnReceived = true;
+		}
 
 		else {
 			if (inEventType == UStructType::FStructOrderMenu) {
