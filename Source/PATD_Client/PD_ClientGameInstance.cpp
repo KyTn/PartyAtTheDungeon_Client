@@ -56,6 +56,7 @@ void UPD_ClientGameInstance::Init()
 	playersManager = new PD_PlayersManager();
 
 	structClientState = new StructClientState();
+	structClientState->NETMAPDATA = new FStructMapData();
 
 	ChangeState(EClientState::StartApp);
 	//structClientState->enumClientState = EClientState::NoConnection;
@@ -449,7 +450,7 @@ void UPD_ClientGameInstance::HandleEvent_FStructMapDataIncoming(FStructGeneric *
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming"));
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming %s"), *((FStructMapData*)inDataStruct)->PARSER_VERSION);
 
-	structClientState->NETMAPDATA = (FStructMapData*)inDataStruct;
+	*structClientState->NETMAPDATA = *(FStructMapData*)inDataStruct;
 }
 
 void UPD_ClientGameInstance::HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {

@@ -94,9 +94,6 @@ bool PD_NW_Socket::SendData(TArray<uint8>* sendData) {
 }
 
 TArray<uint8>* PD_NW_Socket::ReceiveData() {
-
-
-
 	//Ahora mismo, al no tener datos para recibir y el que haya un error se devuelve lo mismo, null.
 	// ERROR!
 	if (!socket)
@@ -109,39 +106,72 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 	TArray<uint8>* receivedDataTotal = new TArray<uint8>();
 
 	uint32 Size;
+
+	uint32 packageSize = 0;
+	uint32 contByte = 0;
+
 	//el while hace append de todo lo que reciba hasta agotar el buffer de entrada (cuando no haya hasPendingData)
-	int i = 0;
-	while (socket->HasPendingData(Size))
+
+	if (socket->HasPendingData(Size)) //pasamos una primera vez para conseguir el tamaño total de los datos que se estan recibiendo
 	{
 
-
 		//Estamos creando los datos nuevos en el HEAP
-		receivedData = new TArray<uint8>(); //Aqui creamos reserva de memoria en heap para el array.
-		receivedData->Init(0, FMath::Min(Size, 65507u));
+		receivedDataTotal->Init(0, FMath::Min(Size, 65507u));
+
 
 		int32 Read = 0;
-		socket->Recv(receivedData->GetData(), receivedData->Num(), Read);
-
-		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> ReceiveData : bucle while numero %d:, size: %d, read: %d"), i, Size, Read);
+		socket->Recv(receivedDataTotal->GetData(), receivedDataTotal->Num(), Read);
 
 
+		packageSize = ((uint32)((*receivedDataTotal)[0]) << 24) + ((uint32)((*receivedDataTotal)[1]) << 16) + ((uint32)((*receivedDataTotal)[2]) << 8) + ((uint32)(*receivedDataTotal)[3]);
+		packageSize += 5;
 
-		// ERROR!
-		if (receivedData == nullptr || receivedData->Num() <= 0)
+		contByte = receivedDataTotal->Num();
+
+		int i = 0;
+
+		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- packageSize size Total - %d :"), packageSize);
+		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- contByte First Package %d"), contByte);
+
+		while (contByte < packageSize)
 		{
-			//	UE_LOG(LogTemp, Error, TEXT(">>>> No se han enviado datos ! "));
-			return receivedDataTotal; //No Data Received
-		}
-		else {
-			//	UE_LOG(LogTemp, Warning, TEXT(">>>> Se van a enviar DATOS :) ! "));
+			if (socket->HasPendingData(Size)) //pasamos una primera vez para conseguir el tamaño total de los datos que se estan recibiendo
+			{
+				//Estamos creando los datos nuevos en el HEAP
+				receivedData = new TArray<uint8>(); //Aqui creamos reserva de memoria en heap para el array.
+				receivedData->Init(0, FMath::Min(Size, 65507u));
+
+				int Read = 0;
+				socket->Recv(receivedData->GetData(), receivedData->Num(), Read);
+
+				UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> ReceiveData : bucle while numero %d:, size: %d, read: %d"), i, Size, Read);
+
+
+
+				// ERROR!
+				if (receivedData == nullptr || receivedData->Num() <= 0)
+				{
+					//	UE_LOG(LogTemp, Error, TEXT(">>>> No se han enviado datos ! "));
+					return receivedDataTotal; //No Data Received
+				}
+				else {
+					//	UE_LOG(LogTemp, Warning, TEXT(">>>> Se van a enviar DATOS :) ! "));
+				}
+
+				receivedDataTotal->Append(*receivedData);
+
+
+				contByte = receivedDataTotal->Num();
+
+				i++; //solo para debug
+			}
+
 		}
 
-		receivedDataTotal->Append(*receivedData);
-
-		i++; //solo para debug
 	}
 
 	return receivedDataTotal;
+
 }
 
 
