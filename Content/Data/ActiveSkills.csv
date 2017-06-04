@@ -1,4 +1,4 @@
-0;BasicAttack;Basic Attack;All of player have it;0;0;0;0;2;0
+0;BasicAttack;Basic Attack;All of player have it;0;1;0;0;2;0
 1;Defense;Defense;Spend all your current AP, for each AP you decrease the next attacks in 1%;0;0;0;0;2;0
 2;WhenFu;When you do the FUA;The next attack is increased by 4 ;0;3;3;1;2;12
 3;JumpFatTigger;The Jump of the Fatty Tigger;Jump in a range of 2 tiles and fall doing a main damage to everything around in the adjacent tiles;0;4;3;2;2;13
