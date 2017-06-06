@@ -180,7 +180,7 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 		}
 		for (int j = 0; j < room->LogicWallPosInRoom.Num(); j++)///Instanciamos los tiles de una habitacion.
 		{
-			InstantiateWallBySkin(room->mapSkin, room->LogicWallPosInRoom[j]);
+			//InstantiateWallBySkin(room->mapSkin, room->LogicWallPosInRoom[j]);
 		}
 		room->IsInstantiated = true;
 	}
@@ -197,7 +197,7 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 			}
 			for (int j = 0; j < MapInfo->rooms[adj[i]]->LogicWallPosInRoom.Num(); j++)///Instanciamos los muros de una habitacion.
 			{
-				InstantiateWallBySkin(MapInfo->rooms[adj[i]]->mapSkin, MapInfo->rooms[adj[i]]->LogicWallPosInRoom[j]);
+				//InstantiateWallBySkin(MapInfo->rooms[adj[i]]->mapSkin, MapInfo->rooms[adj[i]]->LogicWallPosInRoom[j]);
 			}
 			UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - door in room %d -> %d"), MapInfo->rooms[adj[i]]->IDRoom, MapInfo->rooms[adj[i]]->LogicDoorPosInRoom.Num());
 
