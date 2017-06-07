@@ -1230,6 +1230,102 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
 
+///MELEE CHARACTER
+void UPD_ClientGameInstance::GenerateMeleeChar()
+{
+	///WEAPON
+	FStructWeapon weaponChar = LoadWeaponStructData(0);
+
+	if (weaponChar.ID_Weapon >= 0)
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ID_Weapon = weaponChar.ID_Weapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon = weaponChar.ClassWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon = weaponChar.TypeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon = weaponChar.RangeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
+	}
+	///SKIN
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1; //ballesta (y escudo) ?
+
+	///SKILLS
+	//PAS
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 0));
+
+	//ACT
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 2));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 4));
+	
+	///STATS
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(7, 5, 5, 7, 7, 6);
+	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
+}
+
+///RANGO CHARACTER
+void UPD_ClientGameInstance::GenerateRangedChar()
+{
+	///WEAPON
+	FStructWeapon weaponChar = LoadWeaponStructData(3);
+
+	if (weaponChar.ID_Weapon >= 0)
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ID_Weapon = weaponChar.ID_Weapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon = weaponChar.ClassWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon = weaponChar.TypeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon = weaponChar.RangeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
+	}
+	///SKIN
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2; //escudo y espada
+
+	///SKILLS
+	//PAS
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 4));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 5));
+
+	//ACT
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 5));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 6));
+
+	///STATS
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5, 5, 5, 5, 6, 6);
+	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
+}
+
+void UPD_ClientGameInstance::GeneratedMagicChar()
+{
+	///WEAPON
+	FStructWeapon weaponChar = LoadWeaponStructData(8);
+
+	if (weaponChar.ID_Weapon >= 0)
+	{
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ID_Weapon = weaponChar.ID_Weapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon = weaponChar.ClassWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon = weaponChar.TypeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon = weaponChar.RangeWeapon;
+		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
+	}
+	///SKIN
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 3; //Mago - Baston
+
+	///SKILLS
+    //PAS
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 9));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 10));
+
+	//ACT
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 9));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
+
+	///STATS
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5, 5, 5, 5, 6, 6);
+	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
+}
+
+
 
 void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id)
 {

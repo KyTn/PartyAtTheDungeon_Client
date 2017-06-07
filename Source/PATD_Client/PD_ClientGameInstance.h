@@ -238,6 +238,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
 		void GenerateRandomChar();
 
+	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
+		void GenerateMeleeChar();
+
+	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
+		void GenerateRangedChar();
+
+	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
+		void GeneratedMagicChar();
+
+
+
 	FStructSkill LoadSkillStructData(int type, int indexSkill);
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
