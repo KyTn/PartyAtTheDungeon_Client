@@ -45,7 +45,7 @@ void UPD_ClientGameInstance::Init()
 	Super::Init();
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
-
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
 	//Inicializar Arrays de Skills and Weapons
 	LoadSkillActiveDatafromFile();
 	LoadSkillPasiveDatafromFile();
@@ -200,10 +200,12 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 
 			// Cuando el server envia el mapa ... 
 			HandleEvent_MapIncoming(inDataStruct, inPlayer, inEventType);
+
 		}
 		else if (inEventType == UStructType::FStructMapData) {
 
 			HandleEvent_FStructMapDataIncoming(inDataStruct, inPlayer, inEventType);
+			UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> Tras el MAPINCOMING"));
 		}
 
 		else if (inEventType == UStructType::FStructClientStartMatchOnGM) {
@@ -441,6 +443,7 @@ void UPD_ClientGameInstance::HandleEvent_MapIncoming(FStructGeneric* inDataStruc
 	FStructMap* mapStruct = (FStructMap*)inDataStruct;
 	structClientState->mapString = mapStruct->stringMap;
 
+
 	//UE_LOG(LogTemp, Log, TEXT("map=%s"), (mapStruct->stringMap));
 	//this->UpdateState();
 }
@@ -451,6 +454,8 @@ void UPD_ClientGameInstance::HandleEvent_FStructMapDataIncoming(FStructGeneric *
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming %s"), *((FStructMapData*)inDataStruct)->PARSER_VERSION);
 
 	*structClientState->NETMAPDATA = *(FStructMapData*)inDataStruct;
+	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming : Final"));
+
 }
 
 void UPD_ClientGameInstance::HandleEvent_LaunchMatchFromServer(FStructGeneric* inDataStruct, int inPlayer, UStructType inEventType) {
@@ -1295,14 +1300,17 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 
 		//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
 		TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
+		PD_MG_LogicPosition futurePosition;
 		if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
 		{
-			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
-				playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY));
+			futurePosition = PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+				playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
 		}
 		else {
-			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+			futurePosition = playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition();
 		}
+
+		tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, futurePosition);
 
 		if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
 		{
@@ -1313,27 +1321,41 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 			{
 				if (tilesInRangeOfSkill.Contains(gameManager->enemyManager->GetEnemies()[j]->GetCurrentLogicalPosition()))
 				{
-					ID_Enemy.Add(gameManager->enemyManager->GetEnemies()[j]->GetIDCharacter());
-					switch (ECharacterType(gameManager->enemyManager->GetEnemies()[j]->GetTypeCharacter()))
-					{
-					case ECharacterType::OrcBow:
-					{
-						TypeEnemy.Add("Archer Orc");
-						break;
+
+					FHitResult hit;
+					FVector iniPos = mapManager->LogicToWorldPosition(futurePosition);
+					iniPos.Z = 50;
+					FVector endPos = mapManager->LogicToWorldPosition(gameManager->enemyManager->GetEnemies()[j]->GetCurrentLogicalPosition());
+					endPos.Z = 50;
+
+					FCollisionQueryParams paramsRay = FCollisionQueryParams();
+					paramsRay.AddIgnoredActor(playersManager->MyPlayerInfo->logic_Character->GetCharacterBP());
+					GetWorld()->LineTraceSingleByChannel(hit, iniPos, endPos, ECollisionChannel::ECC_Camera, paramsRay);
+
+					if (hit.GetActor() == gameManager->enemyManager->GetEnemies()[j]->GetCharacterBP()) {
+						ID_Enemy.Add(gameManager->enemyManager->GetEnemies()[j]->GetIDCharacter());
+						switch (ECharacterType(gameManager->enemyManager->GetEnemies()[j]->GetTypeCharacter()))
+						{
+						case ECharacterType::OrcBow:
+						{
+							TypeEnemy.Add("Archer Orc");
+							break;
+						}
+						case ECharacterType::OrcGuns:
+						{
+							TypeEnemy.Add("Guns Orc");
+							break;
+						}
+						case ECharacterType::OrcMelee:
+						{
+							TypeEnemy.Add("Melee Orc");
+							break;
+						}
+						default:
+							break;
+						}
 					}
-					case ECharacterType::OrcGuns:
-					{
-						TypeEnemy.Add("Guns Orc");
-						break;
-					}
-					case ECharacterType::OrcMelee :
-					{
-						TypeEnemy.Add("Melee Orc");
-						break;
-					}
-					default:
-						break;
-					}
+
 				}
 			}
 		}

@@ -133,15 +133,25 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- packageSize size Total - %d :"), packageSize);
 		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- contByte First Package %d"), contByte);
 
-		while (contByte < packageSize)
+
+		uint32 despl = packageSize;
+		while (contByte > despl) { //En este caso hemos recibido parte de otro mensaje
+			UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- while por grande: despl %d"), despl);
+			packageSize = ((uint32)((*receivedDataTotal)[0 + despl]) << 24) + ((uint32)((*receivedDataTotal)[1 + despl]) << 16) + ((uint32)((*receivedDataTotal)[2 + despl]) << 8) + ((uint32)(*receivedDataTotal)[3 + despl]);
+			packageSize += 5;
+			despl += packageSize;
+		}
+
+		while (contByte < despl)
 		{
+
 			if (socket->HasPendingData(Size)) //pasamos una primera vez para conseguir el tamaño total de los datos que se estan recibiendo
 			{
 				//Estamos creando los datos nuevos en el HEAP
 				receivedData = new TArray<uint8>(); //Aqui creamos reserva de memoria en heap para el array.
 				receivedData->Init(0, FMath::Min(Size, 65507u));
 
-				int Read = 0;
+				Read = 0;
 				socket->Recv(receivedData->GetData(), receivedData->Num(), Read);
 
 				UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> ReceiveData : bucle while numero %d:, size: %d, read: %d"), i, Size, Read);
