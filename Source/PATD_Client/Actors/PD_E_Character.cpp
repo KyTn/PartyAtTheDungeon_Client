@@ -46,5 +46,11 @@ PD_GM_LogicCharacter* APD_E_Character::GetLogicCharacter()
 
 void APD_E_Character::GetCharacterID(FString &ID_Char)
 {
+	FString positionLogic = "PoX: ";
+	positionLogic.Append(FString::FromInt(logic_character->GetCurrentLogicalPosition().GetX()));
+	positionLogic.Append(" PosY: ");
+	positionLogic.Append(FString::FromInt(logic_character->GetCurrentLogicalPosition().GetY()));
+	
 	ID_Char =  logic_character->GetIDCharacter();
+	//ID_Char.Append(positionLogic);
 }

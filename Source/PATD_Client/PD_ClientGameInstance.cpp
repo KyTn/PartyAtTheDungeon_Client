@@ -1245,7 +1245,7 @@ void UPD_ClientGameInstance::GenerateMeleeChar()
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
 	}
 	///SKIN
-	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 1; //ballesta (y escudo) ?
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 0; //espada (y escudo) ?
 
 	///SKILLS
 	//PAS
@@ -1276,7 +1276,7 @@ void UPD_ClientGameInstance::GenerateRangedChar()
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
 	}
 	///SKIN
-	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2; //escudo y espada
+	playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead = 2; //ballesta
 
 	///SKILLS
 	//PAS
@@ -1311,8 +1311,7 @@ void UPD_ClientGameInstance::GeneratedMagicChar()
 
 	///SKILLS
     //PAS
-	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 9));
-	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 10));
+	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listPasiveSkills.Add(LoadSkillStructData(1, 8));
 
 	//ACT
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 7));
