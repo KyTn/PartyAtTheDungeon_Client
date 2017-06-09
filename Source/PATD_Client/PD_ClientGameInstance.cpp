@@ -1460,6 +1460,8 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 
 void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill::  ID SKILL:%d"), ID_Skill));
+
 	int skillRange = 0;
 
 	for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
@@ -1470,7 +1472,7 @@ void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FSt
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
+			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
 		}
 	}
 
@@ -1496,7 +1498,17 @@ void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FSt
 			//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
 			for (int j = 0; j < playersManager->GetNumPlayers(); j++)
 			{
-				if (tilesInRangeOfSkill.Contains(playersManager->GetDataStructPlayer(j)->logic_Character->GetCurrentLogicalPosition()))
+				PD_MG_LogicPosition posOtherPlayer;
+
+				if (playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Num() > 0)
+				{
+					posOtherPlayer = PD_MG_LogicPosition(playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Last().positionX,
+						playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Last().positionY);
+				}
+				else {
+					posOtherPlayer = playersManager->GetDataStructPlayer(j)->logic_Character->GetCurrentLogicalPosition();
+				}
+				if ( tilesInRangeOfSkill.Contains(posOtherPlayer))
 				{
 					ID_Player.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter());
 					
