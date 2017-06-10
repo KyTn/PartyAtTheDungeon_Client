@@ -11,17 +11,17 @@
 
 class PD_GM_MapManager;
 class APD_E_Character;
-
+class PD_MG_LogicPosition;
 UCLASS()
 class PATD_CLIENT_API AMapManagerAccesor : public AActor
 {
 	GENERATED_BODY()
-	
 
 public:	
-
+	TArray<PD_MG_LogicPosition>  tilesNear;
+	TArray<PD_MG_LogicPosition>  positionMoves;
 	PD_GM_MapManager* mapManager;
-
+	bool lastMoveWasClean;
 	// Sets default values for this actor's properties
 	AMapManagerAccesor();
 
@@ -42,21 +42,25 @@ public:
 		int GetIdOfCharacterAt(FVector position);
 
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
-	FVector GetOwnPlayerPosition();
+		FVector GetOwnPlayerPosition();
 
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
-	void TransformFVectorToLogicPosition(FVector positionInWorld, int &logicX, int &logicY);
+		void TransformFVectorToLogicPosition(FVector positionInWorld, int &logicX, int &logicY);
 
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
-	bool GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies);
+		bool GetPossibleEnemiesToAttack(TArray<AActor*> &possibleEnemies);
 
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		bool GetIDCharFromEnemy(AActor* enemyToCheck , FString &id_char);
 
 	///FUNCIONES PUBLICADAS PARA EL SISTEMA DE INPUT DEL MOVIMIENTO
-	//Colorea y setea como actual la posicion dada y muestra y setea las tiles proximas que a las que se puede mover desde ahi
+	//Colorea y setea como actual la posicion dada y muestra y setea las tiles proximas a las que se puede mover desde ahi
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor") 
 		void ShowAdjenctsTiles(FVector currentPosition);
+
+	//Borra las tiles proximas a las que se puede mover desde la antigua posicion
+	/*UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		void DeleteAdjenctsTiles(FVector currentPosition);*/
 
 	//Añade una casilla al array del movmiento y visualiza los sigueintes movimientos - actualiza el camino recorrido
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")

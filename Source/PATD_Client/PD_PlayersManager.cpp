@@ -175,7 +175,7 @@ bool PD_PlayersManager::CreateMovementOrder(int positionX, int positionY)
 bool PD_PlayersManager::DeleteLastMovementOrder()
 {
 	MyPlayerInfo->turnOrders->positionsToMove.Pop();
-
+	MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent++;
 	return true;
 
 }
