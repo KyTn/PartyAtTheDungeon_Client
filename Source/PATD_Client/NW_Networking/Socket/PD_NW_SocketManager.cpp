@@ -133,6 +133,7 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 	}
 	else {
 		//Error!
+
 		delete pdSocket;
 		out = -1;
 	}
@@ -198,14 +199,19 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 	}
 
 	for (int iSocket = 0; iSocket < socketArray.Num(); iSocket++) {
-		if (socketArray[iSocket]->GetFSocket()->GetConnectionState() != ESocketConnectionState::SCS_Connected)
+		if (socketArray[iSocket]->GetFSocket()->GetConnectionState() == ESocketConnectionState::SCS_Connected)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket);
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- connection"), iSocket));
 
 		}
-		else {
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("InitSocket sdocket %d "), iSocket));
+		else if (socketArray[iSocket]->GetFSocket()->GetConnectionState() == ESocketConnectionState::SCS_ConnectionError) {
+			UE_LOG(LogTemp, Warning, TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket);
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket));
+		}
+		else if (socketArray[iSocket]->GetFSocket()->GetConnectionState() == ESocketConnectionState::SCS_ConnectionError)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- SCS_ConnectionError"), iSocket));
+
 		}
 
 		//UE_LOG(LogTemp, Warning, TEXT(">>>> Comprobando sockets lista abiertos ! "));

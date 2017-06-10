@@ -50,8 +50,15 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 	addr->SetIp(instanceFIPv4Addres.Value);
 	addr->SetPort(port);
 
+	//socket->SetNonBlocking();
 
 	bool connected = socket->Connect(*addr);
+
+	if (socket->GetConnectionState() == ESocketConnectionState::SCS_Connected)
+		connected = true;
+	else
+		connected = false;
+
 
 	if (connected) {
 		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket: Se ha conectado guay con el server "));
