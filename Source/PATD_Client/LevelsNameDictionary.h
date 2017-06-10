@@ -16,6 +16,7 @@ class PATD_CLIENT_API LevelsNameDictionary
 
 	FString name_LVL_4 = "LVL_4_GameMap";
 
+	FString name_LVL_5 = "LVL_5_Podium";
 
 public:
 	LevelsNameDictionary();

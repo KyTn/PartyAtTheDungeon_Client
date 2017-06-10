@@ -95,6 +95,12 @@ public:
 
 		}break;
 
+		case UStructType::FStructEndOfMatch: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructEndOfMatch"));
+			FStructEndOfMatch* structSpecialization = (FStructEndOfMatch*)structGeneric;
+			return SerializeDataTemplate<FStructEndOfMatch>(structSpecialization);
+
+		}break;
 
 		case UStructType::FStructClientCanGenerateOrders: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::SerializeData:: Serializando FStructClientCanGenerateOrders"));
@@ -225,6 +231,11 @@ public:
 
 		}break;
 
+		case UStructType::FStructEndOfMatch: {
+			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructEndOfMatch"));
+			return DeserializeDataTemplate<FStructEndOfMatch>(data);
+
+		}break;
 
 		case UStructType::FStructClientCanGenerateOrders: {
 			UE_LOG(LogTemp, Warning, TEXT("SerializerManager::DeserializeData:: Deserializando FStructClientCanGenerateOrders"));

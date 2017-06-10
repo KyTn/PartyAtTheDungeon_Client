@@ -28,13 +28,13 @@ enum class EClientGameState { Instantiate_Map = 00, Start_Match = 10,
 
 //enum class EServerState { StartApp, WaitingMasterClient, WaitingGameConfiguration, Lobby_Tabern, Launch_Match, GameInProcess, Podium, OnExit };
 
-enum class EServerState { WaitingClientMaster, WaitingGameConfiguration, WaitingReady, GameInProcess };
+enum class EServerState { WaitingClientMaster, WaitingGameConfiguration, WaitingReady, GameInProcess, Podium, OnExit };
 enum class InteractionStates { Ready, Working, Finish };
 enum class EActionPhase { Move = 0, Attack = 1, EndPhase = 2 };
 
 
 
-enum class EClientState { StartApp, Game_NoConnection, ConfigureMatch, WaitingMatchConfiguration, Lobby_Tabern, ReconnectingInGame, Launch_Match, GameInProcess };
+enum class EClientState { StartApp, Game_NoConnection, ConfigureMatch, WaitingMatchConfiguration, Lobby_Tabern, ReconnectingInGame, Launch_Match, GameInProcess, Podium, OnExit};
 
 
 //Cabezones

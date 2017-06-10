@@ -19,22 +19,22 @@ FString LevelsNameDictionary::GetMapName(int lvl)
 	case 1:
 
 		mapName = name_LVL_1;
-
 		break;
 	case 2:
 
 		mapName = name_LVL_2;
-
 		break;
 	case 3:
 
 		mapName = name_LVL_3;
-
 		break;
 	case 4:
 
 		mapName = name_LVL_4;
+		break;
+	case 5:
 
+		mapName = name_LVL_5;
 		break;
 	}
 	return mapName;

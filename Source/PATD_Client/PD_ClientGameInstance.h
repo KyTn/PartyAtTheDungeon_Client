@@ -146,6 +146,9 @@ public:
 #pragma region Blueprint Functions 
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		void ResetApplication();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 	void SetServerAddressToConnect(FString ip);
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
@@ -233,6 +236,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
 		void GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills);
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		int GiveSkinOfPlayer();
 
 	//Creacion de personaje ALEATORIO
 	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")

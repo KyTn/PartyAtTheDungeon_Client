@@ -300,7 +300,12 @@ void UPD_ClientGameInstance::HandleEvent(FStructGeneric* inDataStruct, int inPla
 		}
 	}
 	else if (structClientState->enumClientState == EClientState::GameInProcess) {
+		if (inEventType == UStructType::FStructEndOfMatch) {
+			FStructEndOfMatch* in = (FStructEndOfMatch*)inDataStruct;
+			this->ChangeState(EClientState::Podium);
+			UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance::HandleEvent:: Go to Podium"));
 
+		}
 	}
 	else {}
 
@@ -598,6 +603,13 @@ void UPD_ClientGameInstance::OnBeginState() {
 
 		this->LoadMap(levelsNameDictionary.GetMapName(4));//Mapa de juego
 	}
+	else if (structClientState->enumClientState == EClientState::Podium) {
+
+		this->LoadMap(levelsNameDictionary.GetMapName(5));//Mapa de Podium
+	}
+	else if (structClientState->enumClientState == EClientState::OnExit) {
+
+	}
 	else {}
 
 
@@ -768,6 +780,61 @@ void UPD_ClientGameInstance::Shutdown()
 *********************************/
 
 #pragma region BP FUNCTIONS
+
+void UPD_ClientGameInstance::ResetApplication()
+{
+	///delete network - delete Sockets
+	if (networkManager) {
+		delete networkManager;
+	}
+
+	///Inizaliza the same as UPD_ClientGameInstance::Init()
+	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
+	//InitializeNetworking();
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
+	//Inicializar Arrays de Skills and Weapons
+	LoadSkillActiveDatafromFile();
+	LoadSkillPasiveDatafromFile();
+	LoadWeaponDataFromFile();
+	levelsNameDictionary = LevelsNameDictionary();
+	playersManager = new PD_PlayersManager();
+	structClientState = new StructClientState();
+	structClientState->NETMAPDATA = new FStructMapData();
+	ChangeState(EClientState::StartApp);
+	//structClientState->enumClientState = EClientState::NoConnection;
+	playersManager->MyPlayerInfo = new StructPlayer(); //El constructor del StructPlayer inicializa sus variables
+	playersManager->MyPlayerInfo->logic_Character = new PD_GM_LogicCharacter();
+	playersManager->MyPlayerInfo->turnOrders = new FStructTurnOrders();
+	playersManager->MyPlayerInfo->logic_Character->SetIsPlayer(true);
+	playersManager->MyPlayerInfo->logic_Character->SetTypeCharacter(ECharacterType(0)); //Al ser player. 0 vuelve a indicar que es Jugador.
+
+	switch (GetWorld()->WorldType)
+	{
+		case EWorldType::Game:
+		{
+			playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetMachineId().ToString(); //IDENTIFICADOR UNICO POR CLIENTE
+			break;
+		}
+		case EWorldType::PIE:
+		{
+			playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetMachineId().ToString().Append(FString::FromInt(GetWorldContext()->PIEInstance)); //IDENTIFICADOR UNICO POR CLIENTE
+			break;
+		}
+		default:
+		{
+			playersManager->MyPlayerInfo->ID_Client = FGenericPlatformMisc::GetMachineId().ToString(); //IDENTIFICADOR UNICO POR CLIENTE
+			break;
+		}
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FGenericPlatformMisc::GetUniqueDeviceId(): %s"), *playersManager->MyPlayerInfo->ID_Client));
+	InitializeNetworking();
+	networkManager->RegisterObserver(this);
+	MatchConfigManager = new PD_MatchConfigManager(this);
+
+	///Pasar al primer nivel
+	LoadMap(levelsNameDictionary.GetMapName(1));
+}
 
 void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	if (ip == "")
@@ -1361,6 +1428,11 @@ void UPD_ClientGameInstance::GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray
 	}
 }
 
+int UPD_ClientGameInstance::GiveSkinOfPlayer()
+{
+	return playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead;
+
+}
 void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy)
 {
 	int skillRange = 0;
