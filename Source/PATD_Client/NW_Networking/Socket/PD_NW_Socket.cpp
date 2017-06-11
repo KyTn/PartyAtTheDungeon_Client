@@ -50,7 +50,7 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 	addr->SetIp(instanceFIPv4Addres.Value);
 	addr->SetPort(port);
 
-	//socket->SetNonBlocking();
+	socket->SetNonBlocking();
 
 	bool connected = socket->Connect(*addr);
 
@@ -69,6 +69,7 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket: >>> No se ha podido conectar con el servidor "));
 
 	}
+	return true;
 	return connected;
 
 	/*TSharedRef<FInternetAddr> addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
