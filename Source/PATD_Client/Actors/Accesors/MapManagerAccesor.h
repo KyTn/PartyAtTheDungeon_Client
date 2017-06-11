@@ -32,6 +32,8 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 
 
+	
+
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
 		APD_E_Character*  GetCharacterPlayerAtPosition(FVector position, bool& existe);
 
@@ -57,6 +59,9 @@ public:
 	//Colorea y setea como actual la posicion dada y muestra y setea las tiles proximas a las que se puede mover desde ahi
 	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor") 
 		void ShowAdjenctsTiles(FVector currentPosition);
+	
+	UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")
+		void ResetAdj();
 
 	//Borra las tiles proximas a las que se puede mover desde la antigua posicion
 	/*UFUNCTION(BlueprintCallable, Category = "MapManagerAccesor")

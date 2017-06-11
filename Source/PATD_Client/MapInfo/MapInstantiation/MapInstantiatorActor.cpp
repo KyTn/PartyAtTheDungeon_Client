@@ -33,7 +33,7 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 		WallClass = (UClass*)WallBlueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> DoorBlueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/BP_SimpleDoor.BP_SimpleDoor'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> DoorBlueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/PD_E_Door.PD_E_Door'"));
 	if (DoorBlueprint.Object) {
 		DoorClass = (UClass*)DoorBlueprint.Object->GeneratedClass;
 	}
