@@ -180,7 +180,7 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 		}
 		for (int j = 0; j < room->LogicWallPosInRoom.Num(); j++)///Instanciamos los tiles de una habitacion.
 		{
-			//InstantiateWallBySkin(room->mapSkin, room->LogicWallPosInRoom[j]);
+			InstantiateWallBySkin(room->mapSkin, room->LogicWallPosInRoom[j]);
 		}
 		room->IsInstantiated = true;
 	}

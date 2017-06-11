@@ -127,6 +127,10 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 	PD_NW_Socket* pdSocket = new PD_NW_Socket();
 	pdSocket->InitAsDataSocket();
 	bool connected = pdSocket->ConnectTo(ip, port);
+	if (socketArray.Num() > 0) {
+		socketArray.Empty();
+	}
+
 	int out;
 	if (connected) {
 		out = socketArray.Add(pdSocket);
@@ -202,10 +206,19 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 		if (socketArray[iSocket]->GetFSocket()->GetConnectionState() == ESocketConnectionState::SCS_Connected)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- connection"), iSocket));
+			//UE_LOG(LogTemp, Warning, TEXT("USocketObject::InitSocket sdocket %d --- OK   connection"), iSocket);
 
+			//UE_LOG(LogTemp, Warning, TEXT(">>>> Comprobando sockets lista abiertos ! "));
+			//Preguntar si hay data y en caso de haberla llamar a la funcion void socketHasReceivedData(TArray<uint8> data, int socketIndex);
+			TArray<uint8>* package = socketArray[iSocket]->ReceiveData();
+			//for (int iPackages = 0; iPackages < listPackages.Num(); iPackages++) {
+			if (package && package->Num() > 0) {
+				HandleNewSocketData(package, iSocket);
+			}
+			//}
 		}
 		else if (socketArray[iSocket]->GetFSocket()->GetConnectionState() == ESocketConnectionState::SCS_ConnectionError) {
-			UE_LOG(LogTemp, Warning, TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket);
+			//UE_LOG(LogTemp, Warning, TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("USocketObject::InitSocket sdocket %d --- No connection"), iSocket));
 		}
 		else if (socketArray[iSocket]->GetFSocket()->GetConnectionState() == ESocketConnectionState::SCS_ConnectionError)
@@ -214,14 +227,8 @@ void PD_NW_SocketManager::TimerRefreshFunction() {
 
 		}
 
-		//UE_LOG(LogTemp, Warning, TEXT(">>>> Comprobando sockets lista abiertos ! "));
-		//Preguntar si hay data y en caso de haberla llamar a la funcion void socketHasReceivedData(TArray<uint8> data, int socketIndex);
-		TArray<uint8>* package = socketArray[iSocket]->ReceiveData();
-		//for (int iPackages = 0; iPackages < listPackages.Num(); iPackages++) {
-		if (package && package->Num() > 0) {
-			HandleNewSocketData(package, iSocket);
-		}
-		//}
+		
+
 
 	}
 }
