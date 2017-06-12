@@ -23,66 +23,66 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 
 
 #pragma region DEFAULT - COMMON
-	static ConstructorHelpers::FObjectFinder<UBlueprint> TileBlueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/BP_ME_TileActor.BP_ME_TileActor'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> TileBlueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/BP_ME_TileActor.BP_ME_TileActor'"));
 	if (TileBlueprint.Object) {
 		TileClass = (UClass*)TileBlueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> WallBlueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/BP_ME_WallActor.BP_ME_WallActor'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> WallBlueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/BP_ME_WallActor.BP_ME_WallActor'"));
 	if (WallBlueprint.Object) {
 		WallClass = (UClass*)WallBlueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> DoorBlueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/PD_E_Door.PD_E_Door'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> DoorBlueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/PD_E_Door.PD_E_Door'"));
 	if (DoorBlueprint.Object) {
 		DoorClass = (UClass*)DoorBlueprint.Object->GeneratedClass;
 	}
 
 
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/COLUMN/BP_Column_01.BP_Column_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/COLUMN/BP_Column_01.BP_Column_01'"));
 	if (Default_Prop_Column_01_Blueprint.Object) {
 		Default_Prop_Column_01_Class = (UClass*)Default_Prop_Column_01_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_02_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/COLUMN/BP_Column_02_1.BP_Column_02_1'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_02_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/COLUMN/BP_Column_02_1.BP_Column_02_1'"));
 	if (Default_Prop_Column_02_1_Blueprint.Object) {
 		Default_Prop_Column_02_1_Class = (UClass*)Default_Prop_Column_02_1_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_02_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/COLUMN/BP_Column_02_2.BP_Column_02_2'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_02_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/COLUMN/BP_Column_02_2.BP_Column_02_2'"));
 	if (Default_Prop_Column_02_2_Blueprint.Object) {
 		Default_Prop_Column_02_2_Class = (UClass*)Default_Prop_Column_02_2_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_03_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/COLUMN/BP_Column_03.BP_Column_03'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_03_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/COLUMN/BP_Column_03.BP_Column_03'"));
 	if (Default_Prop_Column_03_Blueprint.Object) {
 		Default_Prop_Column_03_Class = (UClass*)Default_Prop_Column_03_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_04_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/COLUMN/BP_Column_04_1.BP_Column_04_1'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_04_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/COLUMN/BP_Column_04_1.BP_Column_04_1'"));
 	if (Default_Prop_Column_04_1_Blueprint.Object) {
 		Default_Prop_Column_04_1_Class = (UClass*)Default_Prop_Column_04_1_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_04_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/COLUMN/BP_Column_04_2.BP_Column_04_2'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Column_04_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/COLUMN/BP_Column_04_2.BP_Column_04_2'"));
 	if (Default_Prop_Column_04_2_Blueprint.Object) {
 		Default_Prop_Column_04_2_Class = (UClass*)Default_Prop_Column_04_2_Blueprint.Object->GeneratedClass;
 	}
 
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_02_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_02.BP_Obstruction_02'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_02_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/OBSTRUCTION/BP_Obstruction_02.BP_Obstruction_02'"));
 	if (Default_Prop_Obstruction_02_Blueprint.Object) {
 		Default_Prop_Obstruction_02_Class = (UClass*)Default_Prop_Obstruction_02_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_03_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_03.BP_Obstruction_03'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_03_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/OBSTRUCTION/BP_Obstruction_03.BP_Obstruction_03'"));
 	if (Default_Prop_Obstruction_03_Blueprint.Object) {
 		Default_Prop_Obstruction_03_Class = (UClass*)Default_Prop_Obstruction_03_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_04_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_04.BP_Obstruction_04'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_04_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/OBSTRUCTION/BP_Obstruction_04.BP_Obstruction_04'"));
 	if (Default_Prop_Obstruction_04_Blueprint.Object) {
 		Default_Prop_Obstruction_04_Class = (UClass*)Default_Prop_Obstruction_04_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_12_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_12_1.BP_Obstruction_12_1'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_12_1_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/OBSTRUCTION/BP_Obstruction_12_1.BP_Obstruction_12_1'"));
 	if (Default_Prop_Obstruction_12_1_Blueprint.Object) {
 		Default_Prop_Obstruction_12_1_Class = (UClass*)Default_Prop_Obstruction_12_1_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_12_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/DEFAULT_COMMON/OBSTRUCTION/BP_Obstruction_12_2.BP_Obstruction_12_2'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Prop_Obstruction_12_2_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/OBSTRUCTION/BP_Obstruction_12_2.BP_Obstruction_12_2'"));
 	if (Default_Prop_Obstruction_12_2_Blueprint.Object) {
 		Default_Prop_Obstruction_12_2_Class = (UClass*)Default_Prop_Obstruction_12_2_Blueprint.Object->GeneratedClass;
 	}
@@ -91,12 +91,12 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 
 #pragma region MAPSKIN DUNGEON
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Dungeon_SpecialTile_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_DUNGEON/BP_Dungeon_SpecialTile_01.BP_Dungeon_SpecialTile_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Dungeon_SpecialTile_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_DUNG/BP_Dungeon_SpecialTile_01.BP_Dungeon_SpecialTile_01'"));
 	if (Dungeon_SpecialTile_Blueprint.Object) {
 		Dungeon_SpecialTile_Class = (UClass*)Dungeon_SpecialTile_Blueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Dungeon_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_DUNGEON/BP_Dungeon_Prop_Treasure_01.BP_Dungeon_Prop_Treasure_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Dungeon_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_DUNG/BP_Dungeon_Prop_Treasure_01.BP_Dungeon_Prop_Treasure_01'"));
 	if (Dungeon_Prop_Treasure_01_Blueprint.Object) {
 		Dungeon_Prop_Treasure_01_Class = (UClass*)Dungeon_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
@@ -108,17 +108,17 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 
 #pragma region MAPSKIN GARDEN
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_GARDEN/BP_Garden_Prop_Treasure_01.BP_Garden_Prop_Treasure_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_Prop_Treasure_01.BP_Garden_Prop_Treasure_01'"));
 	if (Garden_Prop_Treasure_01_Blueprint.Object) {
 		Garden_Prop_Treasure_01_Class = (UClass*)Garden_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Tree_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_GARDEN/BP_Garden_Tree_01.BP_Garden_Tree_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Tree_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_Tree_01.BP_Garden_Tree_01'"));
 	if (Garden_Prop_Tree_01_Blueprint.Object) {
 		Garden_Prop_Tree_01_Class = (UClass*)Garden_Prop_Tree_01_Blueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Bush_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_GARDEN/BP_Garden_bush_01.BP_Garden_Bush_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Bush_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_bush_01.BP_Garden_Bush_01'"));
 	if (Garden_Prop_Bush_01_Blueprint.Object) {
 		Garden_Prop_Bush_01_Class = (UClass*)Garden_Prop_Bush_01_Blueprint.Object->GeneratedClass;
 	}
@@ -127,18 +127,18 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 
 #pragma endregion 
 #pragma region MAPSKIN LIBRARY
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_LIBRARY/BP_Library_Prop_Treasure_01.BP_Library_Prop_Treasure_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Library_Prop_Treasure_01.BP_Library_Prop_Treasure_01'"));
 	if (Library_Prop_Treasure_01_Blueprint.Object) {
 		Library_Prop_Treasure_01_Class = (UClass*)Library_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
 #pragma endregion 
 #pragma region MAPSKIN SACRIFICE
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_SACRIFICE/BP_Sacrifice_Prop_Treasure_01.BP_Sacrifice_Prop_Treasure_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Sacrifice_Prop_Treasure_01.BP_Sacrifice_Prop_Treasure_01'"));
 	if (Sacrifice_Prop_Treasure_01_Blueprint.Object) {
 		Sacrifice_Prop_Treasure_01_Class = (UClass*)Sacrifice_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Jail_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/MapElements/ESCENARIOS/SKIN_SACRIFICE/BP_Sacrifice_Prop_Jail_01.BP_Sacrifice_Prop_Jail_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Jail_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Sacrifice_Prop_Jail_01.BP_Sacrifice_Prop_Jail_01'"));
 	if (Sacrifice_Prop_Jail_01_Blueprint.Object) {
 		Sacrifice_Prop_Jail_01_Class = (UClass*)Sacrifice_Prop_Jail_01_Blueprint.Object->GeneratedClass;
 	}
