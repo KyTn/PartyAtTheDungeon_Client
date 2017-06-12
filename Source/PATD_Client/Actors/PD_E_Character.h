@@ -37,4 +37,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DataCharacter")
 		void GetCharacterID(FString &ID_Char);
 
+	UFUNCTION(BlueprintCallable, Category = "DataCharacter")
+		void GetInfoCharcaterForWidget(FString &ID_Char, FString &TypeChar, int &numberPlayer);
 };

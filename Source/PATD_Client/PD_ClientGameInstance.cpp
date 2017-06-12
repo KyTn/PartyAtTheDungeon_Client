@@ -1518,6 +1518,11 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 							TypeEnemy.Add("Melee Orc");
 							break;
 						}
+						case ECharacterType::OrcBoss:
+						{
+							TypeEnemy.Add("Boss Orc");
+							break;
+						}
 						default:
 							break;
 						}

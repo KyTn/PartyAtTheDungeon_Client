@@ -44,6 +44,7 @@ PD_GM_LogicCharacter* APD_E_Character::GetLogicCharacter()
 	return logic_character;
 }
 
+#pragma region Function For BP
 void APD_E_Character::GetCharacterID(FString &ID_Char)
 {
 	FString positionLogic = "PoX: ";
@@ -54,3 +55,90 @@ void APD_E_Character::GetCharacterID(FString &ID_Char)
 	ID_Char =  logic_character->GetIDCharacter();
 	//ID_Char.Append(positionLogic);
 }
+
+void APD_E_Character::GetInfoCharcaterForWidget(FString &ID_Char, FString &TypeChar, int &numberPlayer)
+{
+	ID_Char = logic_character->GetIDCharacter();
+
+	if (logic_character->GetIsPlayer())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("APD_E_Character::GetInfoCharcaterForWidge weapon - %d "), logic_character->GetSkin()->ID_SkinHead);
+
+		switch (logic_character->GetSkin()->ID_SkinHead)
+		{
+			case 0:
+			{
+				TypeChar = "Legionary";
+				break;
+			}
+			case 1:
+			{
+				TypeChar = "Ranger";
+				break;
+			}
+			case 2:
+			{
+				TypeChar = "Ranger";
+				break;
+			}
+			case 3:
+			{
+				TypeChar = "Wizard";
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+		FString auxNumberplayer = logic_character->GetIDCharacter();
+		FString charSplit = "_0";
+		FString FStringNumberPlayerLeft = "";
+		FString FStringNumberPlayerRight = "";
+		auxNumberplayer.Split(charSplit, &FStringNumberPlayerLeft, &FStringNumberPlayerRight);
+
+		int numChar = FCString::Atoi(*FStringNumberPlayerRight);
+		numChar++;
+		numberPlayer = numChar;
+	}
+	else
+	{
+		//Type Char
+		switch (ECharacterType(logic_character->GetTypeCharacter()))
+		{
+			case ECharacterType::OrcBow:
+			{
+				TypeChar = "Archer Orc";
+				break;
+			}
+			case ECharacterType::OrcGuns:
+			{
+				TypeChar = "Guns Orc";
+				break;
+			}
+			case ECharacterType::OrcMelee:
+			{
+				TypeChar = "Melee Orc";
+				break;
+			}
+			case ECharacterType::OrcBoss:
+			{
+				TypeChar = "Boss Orc";
+				break;
+			}
+			default:
+				break;
+		}
+		//NumberPlayer (For the color)
+		numberPlayer = 0;
+	}
+
+
+
+	//UE_LOG(LogTemp, Warning, TEXT("APD_E_Character::GetInfoCharcaterForWidge - name %s "), *ID_Char);
+	//UE_LOG(LogTemp, Warning, TEXT("APD_E_Character::GetInfoCharcaterForWidge - type  %s "), *TypeChar);
+	//UE_LOG(LogTemp, Warning, TEXT("APD_E_Character::GetInfoCharcaterForWidge number player - %d "), numberPlayer);
+
+}
+
+#pragma endregion
