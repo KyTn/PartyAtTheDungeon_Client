@@ -307,13 +307,25 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 				}
 				else {
 					FOutputDeviceNull ar;
-					const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 1);
-					if (currentTile->CallFunctionByNameWithArguments(*command, ar, NULL, true))
-					{
-						UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (2)"));
+					if (IsMyCharacterPlayerAtPosition(mapManager->LogicToWorldPosition(tilesNear[i]))) {
+						const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 3);
+						if (currentTile->CallFunctionByNameWithArguments(*command, ar, NULL, true))
+						{
+							UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (2)"));
+						}
+						else {
+							UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ShowAdjenctsTile - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(2)"));
+						}
 					}
 					else {
-						UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ShowAdjenctsTile - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(2)"));
+						const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 1);
+						if (currentTile->CallFunctionByNameWithArguments(*command, ar, NULL, true))
+						{
+							UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (2)"));
+						}
+						else {
+							UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ShowAdjenctsTile - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(2)"));
+						}
 					}
 				}
 			}

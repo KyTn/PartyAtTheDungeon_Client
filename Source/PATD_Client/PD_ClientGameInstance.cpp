@@ -2073,7 +2073,7 @@ bool UPD_ClientGameInstance::LogicPositionIsValidToMove(int positionX, int posit
 {
 	bool positionIsValid = false;
 	PD_MG_LogicPosition positionToCheck = PD_MG_LogicPosition(positionX, positionY);
-
+	UE_LOG(LogTemp, Warning, TEXT("Cheking if (%d,%d)"), positionX, positionY);
 	if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
 	{
 		PD_MG_LogicPosition lastPositionOnMovement = PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove[playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() - 1].positionX,
