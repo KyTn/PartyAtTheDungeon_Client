@@ -20,6 +20,7 @@ class PATD_CLIENT_API AMapManagerAccesor : public AActor
 public:	
 	TArray<PD_MG_LogicPosition>  tilesNear;
 	TArray<PD_MG_LogicPosition>  positionMoves;
+	TArray<PD_MG_LogicPosition> lastTileDeleted;
 	PD_GM_MapManager* mapManager;
 	bool lastMoveWasClean;
 	// Sets default values for this actor's properties
