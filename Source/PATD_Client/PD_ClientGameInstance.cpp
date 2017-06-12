@@ -1413,7 +1413,7 @@ void UPD_ClientGameInstance::GiveAPForTurnPlayer(int &APfinal)
 }
 
 
-void UPD_ClientGameInstance::GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills)
+void UPD_ClientGameInstance::GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills, TArray<FString> &id_target)
 {
 	for (int i = 0; i < playersManager->MyPlayerInfo->turnOrders->actions.Num(); i++)
 	{
@@ -1423,6 +1423,13 @@ void UPD_ClientGameInstance::GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray
 			{
 				id_skills.Add(activeSkills[j].ID_Skill);
 				name_skills.Add(activeSkills[j].name_Skill);
+				if (playersManager->MyPlayerInfo->turnOrders->actions[i].id_character.Num() > 0) 
+				{
+					id_target.Add(playersManager->MyPlayerInfo->turnOrders->actions[i].id_character[0]);
+				}
+				else {
+					id_target.Add(" ");
+				}
 			}
 		}
 	}
@@ -2031,17 +2038,20 @@ void UPD_ClientGameInstance::LoadWeaponDataFromFile()
 	}
 }
 
-void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills)
+void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills, TArray<int> &AP_Skills)
 {
 	// añadir Ataque basico a la lista --  lo tienen todos
 	ID_Skills.Add(LoadSkillStructData(0, 0).ID_Skill); 
 	name_skills.Add(LoadSkillStructData(0,0).name_Skill);
 	effect_skills.Add(LoadSkillStructData(0,0).description);
+	AP_Skills.Add(1);
+
 
 	// añadir defensa a la lista --  lo tienen todos
 	ID_Skills.Add(LoadSkillStructData(0, 1).ID_Skill);
 	name_skills.Add(LoadSkillStructData(0, 1).name_Skill);
 	effect_skills.Add(LoadSkillStructData(0, 1).description);
+	AP_Skills.Add(-1);
 
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num() > 0)
 	{
@@ -2050,6 +2060,7 @@ void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skil
 			ID_Skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill);
 			name_skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].name_Skill);
 			effect_skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].description);
+			AP_Skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].AP);
 		}
 	}
 	

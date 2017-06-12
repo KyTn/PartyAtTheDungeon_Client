@@ -235,7 +235,7 @@ public:
 		void GiveAPForTurnPlayer(int &APfinal);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
-		void GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills);
+		void GiveSkillsPickOnTurn(TArray<int> &id_skills, TArray<FString> &name_skills, TArray<FString> &id_target);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
 		int GiveSkinOfPlayer();
@@ -280,7 +280,7 @@ public:
 		void LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range );
 	
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
-		void LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills);
+		void LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills, TArray<int> &AP_Skills);
 
 	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
 		void FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy);
