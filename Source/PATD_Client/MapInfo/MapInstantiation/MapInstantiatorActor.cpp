@@ -127,18 +127,18 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 
 #pragma endregion 
 #pragma region MAPSKIN LIBRARY
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Library_Prop_Treasure_01.BP_Library_Prop_Treasure_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_LIBR/BP_Library_Prop_Treasure_01.BP_Library_Prop_Treasure_01'"));
 	if (Library_Prop_Treasure_01_Blueprint.Object) {
 		Library_Prop_Treasure_01_Class = (UClass*)Library_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
 #pragma endregion 
 #pragma region MAPSKIN SACRIFICE
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Sacrifice_Prop_Treasure_01.BP_Sacrifice_Prop_Treasure_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_SACR/BP_Sacrifice_Prop_Treasure_01.BP_Sacrifice_Prop_Treasure_01'"));
 	if (Sacrifice_Prop_Treasure_01_Blueprint.Object) {
 		Sacrifice_Prop_Treasure_01_Class = (UClass*)Sacrifice_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Jail_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Sacrifice_Prop_Jail_01.BP_Sacrifice_Prop_Jail_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Jail_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_SACR/BP_Sacrifice_Prop_Jail_01.BP_Sacrifice_Prop_Jail_01'"));
 	if (Sacrifice_Prop_Jail_01_Blueprint.Object) {
 		Sacrifice_Prop_Jail_01_Class = (UClass*)Sacrifice_Prop_Jail_01_Blueprint.Object->GeneratedClass;
 	}
