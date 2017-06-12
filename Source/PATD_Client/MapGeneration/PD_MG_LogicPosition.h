@@ -94,8 +94,10 @@ public:
 
 	TArray<PD_MG_LogicPosition> GetAllTilesInRange(float range, TArray<PD_MG_LogicPosition> list) {
 		TArray<PD_MG_LogicPosition> res = TArray<PD_MG_LogicPosition>();
+		float rangeGood = range + 0.7f;
+
 		for (int i = 0; i < list.Num(); i++) {
-			if (this->EuclideanDistance(list[i]) <= range) {
+			if (this->EuclideanDistance(list[i]) <= rangeGood){
 				res.Add(list[i]);
 			}
 		}

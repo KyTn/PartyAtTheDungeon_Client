@@ -1443,6 +1443,8 @@ int UPD_ClientGameInstance::GiveSkinOfPlayer()
 void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy)
 {
 	int skillRange = 0;
+	skillRange = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
 
 	switch (ActiveSkills(ID_Skill))
 	{
@@ -1452,11 +1454,26 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
 		break;
 	}
+	case ActiveSkills::WhoHeal:
+	{
+		for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+		{
+			if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
+			{
+				skillRange = playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].range;
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
+			}
+		}
+		break;
+	}
 	default:
 		break;
 	}
 
-	for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+	/*for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
 	{
 		if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
 		{
@@ -1467,7 +1484,7 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
 		}
 	}
-
+	*/
 	if (skillRange > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
