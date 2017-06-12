@@ -191,6 +191,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 		}
 	}
 	if (positionMoves.Num() > 0 && currentPositionLogic == positionMoves[positionMoves.Num() - 1]) {
+		lastTileDeleted.Add(positionMoves[positionMoves.Num() - 1]);
 		positionMoves.RemoveAt(positionMoves.Num() - 1);
 		isLastPosition = true;
 		lastMoveWasClean = true;
@@ -198,9 +199,13 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 	else if (positionMoves.Num() > 0 && currentPositionLogic == positionMoves[0]) {
 		positionMoves.Empty();
 	}
-	else
+	else {
+		if (lastMoveWasClean) {
+			positionMoves.Add(lastTileDeleted[0]);
+			lastTileDeleted.Empty();
+		}
 		lastMoveWasClean = false;
-
+	}
 
 	for (int i = 0; i < tilesNear.Num(); i++)
 	{
@@ -368,6 +373,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 
 void AMapManagerAccesor::ResetAdj()
 {
+	
 	for (int i = 0; i < tilesNear.Num(); i++)
 	{
 		PD_MM_Room* roomOfTile = nullptr;
@@ -426,6 +432,7 @@ void AMapManagerAccesor::ResetAdj()
 			}
 		}
 	}
+	positionMoves.Empty();
 	tilesNear.Empty();
 }
 
