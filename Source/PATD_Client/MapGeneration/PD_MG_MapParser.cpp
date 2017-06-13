@@ -55,7 +55,7 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromFile(FString* filepath, PD_MG_
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
 		}
 
 	}
@@ -82,13 +82,13 @@ PD_MG_StaticMap* PD_MG_MapParser::StartParsingFromChorizo(FString* chorizo, PD_M
 	chorizo->ParseIntoArray(fileSplitted, TEXT("\n"), true);
 
 	if (fileSplitted[0].Contains("v0.1")) {
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
+		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Using parser version " + fileSplitted[0]);
 
 		Parsing_v_0_1(fileSplitted, staticMapRef, dynamicMapRef);
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No parser version registered! Searching for " + fileSplitted[0]);
 	}
 
 	return staticMapRef;

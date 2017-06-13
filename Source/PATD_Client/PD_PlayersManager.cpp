@@ -81,8 +81,11 @@ void PD_PlayersManager::AddNewPlayer(FStructPlayerInfoAtClient conn) {
 
 		StructPlayer* sp = new StructPlayer();
 		sp->ID_Player = conn.playerNum;
-
+		
 		sp->logic_Character = ch;
+		sp->logic_Character->GetSkin()->ID_SkinHead = conn.structSkin.ID_SkinHead;
+		sp->logic_Character->GetSkin()->weapon_class = conn.structSkin.weapon_class;
+		sp->logic_Character->GetSkin()->weapon_type = conn.structSkin.weapon_type;
 		dataPlayers.Add(sp);
 	}
 }
@@ -231,26 +234,26 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 		{
 			case ActiveSkills::BasicAttack:
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Basic Attack to Actions"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Basic Attack to Actions"));
 
 				APleft = 1;
 				break;
 			}
 			case ActiveSkills::Defense:
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
 				APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
 				break;
 			}
 			case ActiveSkills::Hostion:
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add Defense to Actions"));
 				APleft = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
 				break;
 			}
 			default:
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add others to Actions"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT(" Add others to Actions"));
 
 				for (int j = 0; j < MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); j++)
 				{
@@ -276,7 +279,7 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 		}
 		else  //si es un numero negativo, nos pasamos del AP, no se puede realizar la accion,
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("YOU DO NOT HAVE ENOUGH AP FOR THAT ACTION!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("YOU DO NOT HAVE ENOUGH AP FOR THAT ACTION!"));
 
 			return false;
 		
@@ -285,7 +288,7 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 	}
 	else 
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("YOUR ACTION POINTS (AP) ARE EMPTY !."));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("YOUR ACTION POINTS (AP) ARE EMPTY !."));
 
 		return false;
 	}

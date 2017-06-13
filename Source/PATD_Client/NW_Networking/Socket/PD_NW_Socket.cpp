@@ -65,7 +65,7 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Nivel Socket:  No se ha podido conectar con el servidor ");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Nivel Socket:  No se ha podido conectar con el servidor ");
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket: >>> No se ha podido conectar con el servidor "));
 
 	}
@@ -91,11 +91,11 @@ bool PD_NW_Socket::SendData(TArray<uint8>* sendData) {
 	
 	bool successful = socket->Send(sendData->GetData(), sendData->Num(), bytesReceived);
 	if (successful) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Nivel Socket: Se ha enviado un paquete!");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Nivel Socket: Se ha enviado un paquete!");
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> Se ha enviado un paquete! "));
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Nivel Socket:No se enviado nada! ");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Nivel Socket:No se enviado nada! ");
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> No se enviado nada! "));
 	}
 	return successful;

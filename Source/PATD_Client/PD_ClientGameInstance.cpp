@@ -45,7 +45,7 @@ void UPD_ClientGameInstance::Init()
 	Super::Init();
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
+	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
 	//Inicializar Arrays de Skills and Weapons
 	LoadSkillActiveDatafromFile();
 	LoadSkillPasiveDatafromFile();
@@ -89,7 +89,7 @@ void UPD_ClientGameInstance::Init()
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FGenericPlatformMisc::GetUniqueDeviceId(): %s"), *playersManager->MyPlayerInfo->ID_Client));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FGenericPlatformMisc::GetUniqueDeviceId(): %s"), *playersManager->MyPlayerInfo->ID_Client));
 
 	InitializeNetworking();
 
@@ -382,7 +382,7 @@ void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, i
 		case GameState::NoConnectionAllowed:
 		{
 			//NO CONEXION PERMITIDA 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("NO CONNECTION ALLOWED AT THIS TIME"));
+			//////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("NO CONNECTION ALLOWED AT THIS TIME"));
 			break;
 		}
 		default:
@@ -791,7 +791,7 @@ void UPD_ClientGameInstance::ResetApplication()
 	///Inizaliza the same as UPD_ClientGameInstance::Init()
 	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
+	//////GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
 	//Inicializar Arrays de Skills and Weapons
 	LoadSkillActiveDatafromFile();
 	LoadSkillPasiveDatafromFile();
@@ -827,7 +827,7 @@ void UPD_ClientGameInstance::ResetApplication()
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FGenericPlatformMisc::GetUniqueDeviceId(): %s"), *playersManager->MyPlayerInfo->ID_Client));
+	////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FGenericPlatformMisc::GetUniqueDeviceId(): %s"), *playersManager->MyPlayerInfo->ID_Client));
 	InitializeNetworking();
 	networkManager->RegisterObserver(this);
 	MatchConfigManager = new PD_MatchConfigManager(this);
@@ -868,7 +868,7 @@ void UPD_ClientGameInstance::GoToLobby()
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 2 - GameConfigurationDone"));
 	bool successSend = networkManager->SendNow(&configDone, 0);
 	if (!successSend) {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
+			////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
 			UE_LOG(LogTemp, Warning, TEXT("No se ha enviado bien la informacion al servidor o error de conexion"));
 			networkManager->SendPingToServer();
 	}
@@ -886,7 +886,7 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: 4 - ClientReady"));
 		bool successSend = networkManager->SendNow(&respuesta, 0);
 		if (!successSend) {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
+			////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
 			UE_LOG(LogTemp, Warning, TEXT("No se ha enviado bien la informacion al servidor o error de conexion"));
 			networkManager->SendPingToServer();
 		}
@@ -895,7 +895,7 @@ bool UPD_ClientGameInstance::GetReadyToParty()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, "ERROR!!  Tienes que ACEPTAR y ENVIAR tu personaje antes del READY !");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, "ERROR!!  Tienes que ACEPTAR y ENVIAR tu personaje antes del READY !");
 
 	}
 	return false;
@@ -952,7 +952,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
 	bool successSend = networkManager->SendNow(&structCharacterToSend, 0);
 	if (!successSend) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
 		UE_LOG(LogTemp, Warning, TEXT("No se ha enviado bien la informacion al servidor o error de conexion"));
 		networkManager->SendPingToServer();
 	}
@@ -1454,6 +1454,10 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
 		break;
 	}
+	case ActiveSkills::GiveMeTheFireBlast:
+	{
+		skillRange = 6;
+	}		
 	case ActiveSkills::WhoHeal:
 	{
 		for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
@@ -1561,10 +1565,10 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 
 void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill::  ID SKILL:%d"), ID_Skill));
+	////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill::  ID SKILL:%d"), ID_Skill));
 
 	int skillRange = 0;
-
+	
 	for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
 	{
 		if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
@@ -1573,7 +1577,7 @@ void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FSt
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
+			//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
 		}
 	}
 
@@ -1612,8 +1616,10 @@ void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FSt
 				if ( tilesInRangeOfSkill.Contains(posOtherPlayer))
 				{
 					ID_Player.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter());
-					
-						TypePlayer.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetWeapon()->TypeWeapon);
+					TypePlayer.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
+
+					//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con TYPE  - %d "), playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
+
 				}
 			}
 		}
@@ -1711,7 +1717,7 @@ void UPD_ClientGameInstance::SaveCharacterLogicData() {
 	UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
 	//SaveGameInstance->basicStatsArray.Add(*playersManager->MyPlayerInfo->logic_Character->GetBasicStats());
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
+	////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Saved."));
 }
 
 void UPD_ClientGameInstance::LoadCharacterLogicData() {
@@ -1723,21 +1729,21 @@ void UPD_ClientGameInstance::LoadCharacterLogicData() {
 		//FStructBasicStats* bStats = &SaveGameInstance->basicStatsArray[0];
 		//playersManager->MyPlayerInfo->logic_Character->SetBasicStats(bStats->POD, bStats->AGI, bStats->DES, bStats->CON, bStats->PER, bStats->MAL);
 		//UE_LOG(LogTemp, Warning, TEXT("PODER CARGADO: %d. AGILIDAD CARGADA: %d"), static_cast<uint8>(bStats->POD), static_cast<uint8>(bStats->AGI));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
+		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Game Loaded."));
 	}
 
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
+	else {}
+		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist."));
 }
 
 void UPD_ClientGameInstance::DeleteCharacterLogicData(FString slotName, int slotNumber) {
 	if (UGameplayStatics::DoesSaveGameExist(slotName, slotNumber)) {
 		UGameplayStatics::DeleteGameInSlot(slotName, slotNumber);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Slot Deleted."));
+		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Slot Deleted."));
 	}
 
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
+	else {}
+		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("File does not exist. Can not be deleted"));
 }
 
 
@@ -1755,7 +1761,7 @@ void UPD_ClientGameInstance::LoadWeaponData(TArray<int> &indexWeapons)
 				UE_LOG(LogTemp, Warning, TEXT("ID_weapon : %d"), weapons[i].ID_Weapon);
 			}
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Weapons Loaded."));
+		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Weapons Loaded."));
 	
 }
 
@@ -1939,7 +1945,7 @@ void UPD_ClientGameInstance::LoadSkillActiveDatafromFile()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
 	}
 
 }
@@ -2002,7 +2008,7 @@ void UPD_ClientGameInstance::LoadSkillPasiveDatafromFile()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillPasiveDatafromFile::  Error loading Pasive Skills! Failed to load file!. Path :%s"), *FilePath));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillPasiveDatafromFile::  Error loading Pasive Skills! Failed to load file!. Path :%s"), *FilePath));
 	}
 }
 
@@ -2051,7 +2057,7 @@ void UPD_ClientGameInstance::LoadWeaponDataFromFile()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::LoadSkillActiveDatafromFile::  Error loading Active Skills! Failed to load file!. Path :%s"), *FilePath));
 	}
 }
 

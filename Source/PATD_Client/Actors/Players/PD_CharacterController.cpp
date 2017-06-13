@@ -22,7 +22,7 @@ bool APD_CharacterController::MoveTo(float x, float y)
 bool APD_CharacterController::ActionTo(float x, float y, uint8 id_action)
 {
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "AL ATAQUERRRRRR !!!!!");
+	////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "AL ATAQUERRRRRR !!!!!");
 	return true;
 
 }
