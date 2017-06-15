@@ -14,6 +14,7 @@ class PD_GM_EnemyManager;
 //class PD_PlayersManager;
 class APD_GenericController;
 class PD_MM_DoorInfo;
+class PD_MM_InteractuableInfo;
 
 /**
  * 
@@ -88,9 +89,9 @@ public:
 	void InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMapElement element, PD_MG_LogicPosition lp);
 	void InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPosition lp);
 	void InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* doorInfo);
+	APD_E_Interactuable* InstantiateInteractuable(PD_MG_LogicPosition lp, PD_MM_InteractuableInfo* interInfo);
 	void InstantiateDynamicMap();
 	void InstantiateEnemies();
-
 #pragma endregion
 
 };

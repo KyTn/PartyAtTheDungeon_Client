@@ -398,6 +398,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 			MapInfoRef->interactuableInfoByID.Add(interactuableInfo->IDInteractuable, interactuableInfo);
 
 			if (MapInfoRef->roomByLogPos.Contains(pos)) {
+				MapInfoRef->roomByLogPos[pos]->LogicInteractuablesPosInRoom.AddUnique(pos);
 				MapInfoRef->roomByLogPos[pos]->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
 			}
 			else {

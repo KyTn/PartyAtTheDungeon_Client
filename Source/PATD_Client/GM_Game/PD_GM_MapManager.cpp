@@ -182,6 +182,18 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 		{
 			InstantiateWallBySkin(room->mapSkin, room->LogicWallPosInRoom[j]);
 		}
+
+		for (int j = 0; j < room->LogicInteractuablesPosInRoom.Num(); j++)///Instanciamos las puertas de una habitacion.
+		{
+			room->AddInteractuable(
+				room->LogicInteractuablesPosInRoom[j],
+				InstantiateInteractuable(
+					room->LogicInteractuablesPosInRoom[j],
+					room->InteractuableInfoInRoomByLogicPosition[room->LogicInteractuablesPosInRoom[j]]
+				)
+			);
+		}
+
 		room->IsInstantiated = true;
 	}
 
@@ -208,12 +220,35 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 					InstantiateDoor(MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j], MapInfo->rooms[adj[i]]->DoorInfoInRoomByLogicPosition[MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j]]);
 				}
 			}
+
+			for (int j = 0; j < MapInfo->rooms[adj[i]]->LogicInteractuablesPosInRoom.Num(); j++)///Instanciamos las puertas de una habitacion.
+			{
+				MapInfo->rooms[adj[i]]->AddInteractuable(
+					MapInfo->rooms[adj[i]]->LogicInteractuablesPosInRoom[j], 
+					InstantiateInteractuable(
+						MapInfo->rooms[adj[i]]->LogicInteractuablesPosInRoom[j], 
+						MapInfo->rooms[adj[i]]->InteractuableInfoInRoomByLogicPosition[MapInfo->rooms[adj[i]]->LogicInteractuablesPosInRoom[j]]
+					)
+				);
+			}
+
 			MapInfo->rooms[adj[i]]->IsInstantiated = true;
 		}
 	}
 
 }
+APD_E_Interactuable* PD_GM_MapManager::InstantiateInteractuable(PD_MG_LogicPosition lp, PD_MM_InteractuableInfo* interInfo) {
 
+	APD_E_Interactuable* ret = nullptr;
+
+	switch ((StaticMapElement)interInfo->IDInteractuable) {
+		case StaticMapElement::LARGE_CHEST: {
+			ret = instantiator->InstantiateLargeChest(lp);
+		}
+	}
+
+	return ret;
+}
 
 void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMapElement element, PD_MG_LogicPosition lp) {
 

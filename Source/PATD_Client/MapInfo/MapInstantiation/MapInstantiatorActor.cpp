@@ -86,6 +86,14 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 	if (Default_Prop_Obstruction_12_2_Blueprint.Object) {
 		Default_Prop_Obstruction_12_2_Class = (UClass*)Default_Prop_Obstruction_12_2_Blueprint.Object->GeneratedClass;
 	}
+
+
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Default_Interactuable_LargeChest_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/DEFA_COMM/INTER/PD_E_LargeChest.PD_E_LargeChest'"));
+	if (Default_Interactuable_LargeChest_Blueprint.Object) {
+		Default_Interactuable_LargeChest_Class = (UClass*)Default_Interactuable_LargeChest_Blueprint.Object->GeneratedClass;
+	}
+
 #pragma endregion
 
 
@@ -211,6 +219,11 @@ APD_E_WallActor* AMapInstantiatorActor::InstantiateWall(PD_MG_LogicPosition logp
 APD_E_Door* AMapInstantiatorActor::InstantiateDoor(PD_MG_LogicPosition logpos)
 {
 	return GetWorld()->SpawnActor<APD_E_Door>(DoorClass, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+APD_E_Interactuable * AMapInstantiatorActor::InstantiateLargeChest(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_Interactuable>(Default_Interactuable_LargeChest_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
 #pragma endregion
