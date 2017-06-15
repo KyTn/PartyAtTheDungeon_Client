@@ -190,7 +190,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 			positionMoves.RemoveAt(positionMoves.Num() - 1);
 		}
 	}
-	if (positionMoves.Num() > 0 && currentPositionLogic == positionMoves[positionMoves.Num() - 1]) {
+	if (positionMoves.Num() > 1 && currentPositionLogic == positionMoves[positionMoves.Num() - 1]) {
 		lastTileDeleted.Add(positionMoves[positionMoves.Num() - 1]);
 		positionMoves.RemoveAt(positionMoves.Num() - 1);
 		isLastPosition = true;
@@ -201,7 +201,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 	}
 	else {
 		if (lastMoveWasClean) {
-			positionMoves.Add(lastTileDeleted[0]);
+			positionMoves.Add(lastTileDeleted[lastTileDeleted.Num()-1]);
 			lastTileDeleted.Empty();
 		}
 		lastMoveWasClean = false;
@@ -294,7 +294,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 			if (currentTile)
 			{
 
-				if (positionMoves.Num() > 0 && tilesNear[i] == positionMoves[positionMoves.Num() - 1]) {
+				if (positionMoves.Num() > 1 && tilesNear[i] == positionMoves[positionMoves.Num() - 1]) {
 					FOutputDeviceNull ar;
 					const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 3);
 					if (currentTile->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -314,7 +314,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 							UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile -- EXITO EN LLAMAR A LA FUNCION DrawMovementMaterial (2)"));
 						}
 						else {
-							UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ShowAdjenctsTile - EEROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(2)"));
+							UE_LOG(LogTemp, Error, TEXT(" AMapManagerAccesor::ShowAdjenctsTile - ERROR EN LLAMATR A LA FUNCION - DrawMovementMaterial(2)"));
 						}
 					}
 					else {
@@ -352,7 +352,7 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 					}
 				}
 				else {
-					if (positionMoves.Num() > 0 && tilesNear[i] == positionMoves[positionMoves.Num() - 1]) {
+					if (positionMoves.Num() > 1 && tilesNear[i] == positionMoves[positionMoves.Num() - 1]) {
 						FOutputDeviceNull ar;
 						const FString command = FString::Printf(TEXT("DrawMovementMaterial %d"), 3);
 						if (currentDoor->CallFunctionByNameWithArguments(*command, ar, NULL, true))
@@ -385,7 +385,6 @@ void AMapManagerAccesor::ShowAdjenctsTiles(FVector currentPosition)
 
 void AMapManagerAccesor::ResetAdj()
 {
-	
 	for (int i = 0; i < tilesNear.Num(); i++)
 	{
 		PD_MM_Room* roomOfTile = nullptr;
@@ -446,6 +445,23 @@ void AMapManagerAccesor::ResetAdj()
 	}
 	positionMoves.Empty();
 	tilesNear.Empty();
+	PD_MG_LogicPosition initialLP = mapManager->_GAMEMANAGER->playersManager->GetMyCharacter()->GetCurrentLogicalPosition();
+	if (mapManager->IsLogicPositionATile(initialLP)) {
+		APD_E_ElementActor* startTile = Cast<APD_E_ElementActor>(mapManager->MapInfo->roomByLogPos[initialLP]->tiles[initialLP]);
+
+		FOutputDeviceNull ar;
+		const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
+		startTile->CallFunctionByNameWithArguments(*command, ar, NULL, true);
+
+	}
+	else if (mapManager->IsLogicPositionADoor(initialLP)) {
+
+		APD_E_ElementActor* startTile = Cast<APD_E_Door>(mapManager->MapInfo->roomByLogPos[initialLP]->tiles[initialLP]);
+
+		FOutputDeviceNull ar;
+		const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
+		startTile->CallFunctionByNameWithArguments(*command, ar, NULL, true);
+	}
 }
 
 void AMapManagerAccesor::SetCurrentPositionAsPathMovement(FVector currentPosition)

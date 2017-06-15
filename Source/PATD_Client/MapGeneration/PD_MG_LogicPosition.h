@@ -71,7 +71,7 @@ public:
 	*/
 	FVector ToWorldPosition(bool isCharacter) {
 		if (isCharacter)
-			return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 40.f);
+			return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 2.0f);
 		else
 			return FVector(-1.0f * GetX()*100.0f, GetY() * 100.0f, 0.f);
 	}
