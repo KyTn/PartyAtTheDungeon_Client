@@ -298,6 +298,8 @@ public:
 
 #pragma endregion
 
+	UFUNCTION(BlueprintCallable, Category = "Connection ")
+		EClientConnectionState GetConnectionState();
 
 };
 

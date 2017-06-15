@@ -80,6 +80,7 @@ struct StructClientState {
 	FStructUpdateTurn update_turn_Reconnect;
 	//Esta variable sirve para indicar en caso de reconnect si debe ir a generar ordenes o a esperar turno
 	//bool goToGenerateOrders = false;
+	EClientConnectionState connectionState = EClientConnectionState::InitState;
 };
 
 //Usado por: GameManager
