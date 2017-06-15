@@ -348,6 +348,9 @@ void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, i
 	structClientState->clientMaster = structWelcome->isClientMaster;
 	structClientState->numPlayer = structWelcome->playerIndex;
 
+	//Para mostrar estado de conexion
+	structClientState->connectionState = EClientConnectionState::Connected;
+
 	GameState clientGameState = GameState(structWelcome->GameState);
 	switch (clientGameState)
 	{
@@ -383,6 +386,8 @@ void UPD_ClientGameInstance::HandleEvent_Welcome(FStructGeneric* inDataStruct, i
 		{
 			//NO CONEXION PERMITIDA 
 			//////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("NO CONNECTION ALLOWED AT THIS TIME"));
+			structClientState->connectionState = EClientConnectionState::NotConnectionAllowed;
+
 			break;
 		}
 		default:
@@ -841,6 +846,8 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 		serverAddressToConnect = "127.0.0.1";
 	else
 		serverAddressToConnect = ip;
+	
+	structClientState->connectionState = EClientConnectionState::Connecting;
 
 	networkManager->ConnectTo(serverAddressToConnect, defaultServerPort);
 }
@@ -2113,5 +2120,11 @@ bool UPD_ClientGameInstance::LogicPositionIsValidToMove(int positionX, int posit
 		positionIsValid = true;
 	}
 	return positionIsValid;
+
+}
+
+
+EClientConnectionState UPD_ClientGameInstance::GetConnectionState() {
+	return structClientState->connectionState;
 
 }

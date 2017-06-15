@@ -199,3 +199,9 @@ enum class MATCHCONFIG_DIFFICULTY {
 };
 
 #pragma endregion
+
+
+UENUM(BlueprintType)
+enum class EClientConnectionState {
+	InitState, Connecting, NotConnectionAllowed,Connected
+};
