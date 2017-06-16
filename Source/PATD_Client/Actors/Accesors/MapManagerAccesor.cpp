@@ -456,7 +456,7 @@ void AMapManagerAccesor::ResetAdj()
 	}
 	else if (mapManager->IsLogicPositionADoor(initialLP)) {
 
-		APD_E_ElementActor* startTile = Cast<APD_E_Door>(mapManager->MapInfo->roomByLogPos[initialLP]->tiles[initialLP]);
+		APD_E_Door* startTile = Cast<APD_E_Door>(mapManager->MapInfo->doorActorByLogPos[initialLP]);
 
 		FOutputDeviceNull ar;
 		const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
