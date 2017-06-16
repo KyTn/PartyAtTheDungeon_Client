@@ -2128,3 +2128,7 @@ EClientConnectionState UPD_ClientGameInstance::GetConnectionState() {
 	return structClientState->connectionState;
 
 }
+
+void UPD_ClientGameInstance::SetConnectionState(EClientConnectionState connectionState) {
+	structClientState->connectionState = connectionState;
+}

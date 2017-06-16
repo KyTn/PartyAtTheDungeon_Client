@@ -300,7 +300,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Connection ")
 		EClientConnectionState GetConnectionState();
-
+	UFUNCTION(BlueprintCallable, Category = "Connection ")
+		void SetConnectionState(EClientConnectionState connectionState);
 };
 
 
