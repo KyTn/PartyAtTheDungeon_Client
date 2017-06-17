@@ -1447,7 +1447,28 @@ int UPD_ClientGameInstance::GiveSkinOfPlayer()
 	return playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead;
 
 }
-void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy)
+
+int UPD_ClientGameInstance::GetNumOfAct_WithIDOnChar(int ID_Skill, FString ID_Enemy)
+{
+	int count = 0;
+
+	if (playersManager->MyPlayerInfo->turnOrders)
+	{
+		for (int i = 0; i < playersManager->MyPlayerInfo->turnOrders->actions.Num(); i++)
+		{
+			if (playersManager->MyPlayerInfo->turnOrders->actions[i].id_action == ID_Skill) 
+			{
+				if (playersManager->MyPlayerInfo->turnOrders->actions[i].id_character.Contains(ID_Enemy))
+					count++;
+			}
+		}
+	}
+
+	return count;
+}
+
+
+void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy, TArray<int> &CountAttackOnEnemy)
 {
 	int skillRange = 0;
 	skillRange = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
@@ -1536,6 +1557,8 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 
 					if (hit.GetActor() == gameManager->enemyManager->GetEnemies()[j]->GetCharacterBP()) {
 						ID_Enemy.Add(gameManager->enemyManager->GetEnemies()[j]->GetIDCharacter());
+						CountAttackOnEnemy.Add(GetNumOfAct_WithIDOnChar(ID_Skill, gameManager->enemyManager->GetEnemies()[j]->GetIDCharacter()));
+
 						switch (ECharacterType(gameManager->enemyManager->GetEnemies()[j]->GetTypeCharacter()))
 						{
 						case ECharacterType::OrcBow:
@@ -1570,7 +1593,7 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 }
 
 
-void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer)
+void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer, TArray<int> &CountAttackOnPlayer)
 {
 	////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill::  ID SKILL:%d"), ID_Skill));
 
@@ -1624,6 +1647,7 @@ void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FSt
 				{
 					ID_Player.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter());
 					TypePlayer.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
+					CountAttackOnPlayer.Add(GetNumOfAct_WithIDOnChar(ID_Skill, playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter()));
 
 					//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con TYPE  - %d "), playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
 
@@ -2068,20 +2092,21 @@ void UPD_ClientGameInstance::LoadWeaponDataFromFile()
 	}
 }
 
-void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills, TArray<int> &AP_Skills)
+void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills, TArray<int> &AP_Skills, TArray<int> &CountSkill)
 {
 	// añadir Ataque basico a la lista --  lo tienen todos
 	ID_Skills.Add(LoadSkillStructData(0, 0).ID_Skill); 
 	name_skills.Add(LoadSkillStructData(0,0).name_Skill);
 	effect_skills.Add(LoadSkillStructData(0,0).description);
 	AP_Skills.Add(1);
-
+	CountSkill.Add(GiveHowManyActionOfSkillWithID(0));
 
 	// añadir defensa a la lista --  lo tienen todos
 	ID_Skills.Add(LoadSkillStructData(0, 1).ID_Skill);
 	name_skills.Add(LoadSkillStructData(0, 1).name_Skill);
 	effect_skills.Add(LoadSkillStructData(0, 1).description);
 	AP_Skills.Add(-1);
+	CountSkill.Add(GiveHowManyActionOfSkillWithID(1));
 
 	if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num() > 0)
 	{
@@ -2091,11 +2116,27 @@ void UPD_ClientGameInstance::LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skil
 			name_skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].name_Skill);
 			effect_skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].description);
 			AP_Skills.Add(playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].AP);
+			CountSkill.Add(GiveHowManyActionOfSkillWithID( playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill) );
 		}
 	}
 	
 }
 
+
+int UPD_ClientGameInstance::GiveHowManyActionOfSkillWithID(int ID_Skills)
+{
+	int count = 0;
+	if (playersManager->MyPlayerInfo->turnOrders)
+	{
+		for (int index_actions = 0; index_actions < playersManager->MyPlayerInfo->turnOrders->actions.Num(); index_actions++)
+		{
+			if (ID_Skills == playersManager->MyPlayerInfo->turnOrders->actions[index_actions].id_action)
+				count++;
+		}
+	}
+
+	return count;
+}
 
 #pragma endregion
 

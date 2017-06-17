@@ -128,7 +128,7 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 	pdSocket->InitAsDataSocket();
 	bool connected = pdSocket->ConnectTo(ip, port);
 	if (socketArray.Num() > 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Borrando sockets para nueva conexion"), );
+		UE_LOG(LogTemp, Warning, TEXT("Borrando sockets para nueva conexion") );
 		socketArray.Empty();
 	}
 

@@ -280,14 +280,20 @@ public:
 		void LoadSkillSpecificData(int TypeSkill, int id_skill, FString &nameSkill, FString &effectSkill, int &weaponRequired, int &AP, int &CD, int &target, int &range );
 	
 	UFUNCTION(BlueprintCallable, Category = "SaveLoadData")
-		void LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills, TArray<int> &AP_Skills);
+		void LoadPlayerActiveSkillsForPanel(TArray<int> &ID_Skills, TArray<FString> &name_skills, TArray<FString> &effect_skills, TArray<int> &AP_Skills, TArray<int> &CountSkill);
+
+	UFUNCTION(BlueprintCallable, Category = "SkillInfo")
+		int GiveHowManyActionOfSkillWithID(int ID_Skills);
 
 	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
-		void FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy);
+		void FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Enemy, TArray<FString> &TypeEnemy, TArray<int> &CountAttackOnEnemy);
 
 	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
-		void FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer);
+		void FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer, TArray<int> &CountAttackOnPlayer);
 
+
+	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
+		int GetNumOfAct_WithIDOnChar(int ID_Skill, FString ID_Enemy);
 
 	//Para gestionar los interactuables 
 
