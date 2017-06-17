@@ -222,7 +222,7 @@ public:
 
 	bool AddWall(PD_MG_LogicPosition logpos, APD_E_ElementActor* wall);
 	bool AddTile(PD_MG_LogicPosition logpos, APD_E_ElementActor* tile);
-	bool AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementActor* interactuable);
+	bool AddInteractuable(PD_MG_LogicPosition logpos, APD_E_Interactuable* interactuable);
 	bool AddDoor_WithoutLink(PD_MG_LogicPosition logpos, APD_E_Door* interactuable);
 
 	// TEST PD_MM_MapInfo

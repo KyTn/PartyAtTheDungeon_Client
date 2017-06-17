@@ -28,6 +28,10 @@ public:
 	int ID_Interactuable;
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "type Interactuable")
+		StaticMapElement type;
+
+
 	PD_MM_InteractuableInfo* interactuableInfo;
 
 	// Posiciones desde el cual un character puede interactuar con este elemento

@@ -241,9 +241,16 @@ APD_E_Interactuable* PD_GM_MapManager::InstantiateInteractuable(PD_MG_LogicPosit
 
 	APD_E_Interactuable* ret = nullptr;
 
-	switch ((StaticMapElement)interInfo->IDInteractuable) {
+	switch ((StaticMapElement)interInfo->type) {
 		case StaticMapElement::LARGE_CHEST: {
 			ret = instantiator->InstantiateLargeChest(lp);
+
+			TArray<APD_E_Interactuable*> interact;
+			MapInfo->interactuableActorByID.GenerateValueArray(interact);
+			ret->Set_InteractuableInfo(interact, interInfo);
+
+			MapInfo->AddInteractuable(lp, ret);
+
 		}
 	}
 
@@ -287,6 +294,18 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			instantiator->Instantiate_Dungeon_Prop_Column_03(lp);
 			break;
 		}
+		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
 		}
 		break;
 	}
@@ -323,6 +342,18 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		}
 		case StaticMapElement::OBSTRUCTION_00: {
 			instantiator->Instantiate_Garden_Prop_Bush_01(lp);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		}
@@ -363,6 +394,18 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			instantiator->Instantiate_Sacrifice_Prop_Obstruction_12_2(lp);
 			break;
 		}
+		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
 		}
 		break;
 	}
@@ -401,6 +444,18 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			instantiator->Instantiate_Dungeon_Prop_Obstruction_02(lp);
 			break;
 		}
+		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
 		}
 		break;
 	}
@@ -437,6 +492,18 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		}
 		case StaticMapElement::OBSTRUCTION_00: {
 			instantiator->Instantiate_Library_Prop_Obstruction_12_1(lp);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
+			break;
+		}
+		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::DUNGEON_NORMAL);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		}

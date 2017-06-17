@@ -240,14 +240,16 @@ bool PD_MM_MapInfo::AddTile(PD_MG_LogicPosition logpos, APD_E_ElementActor* tile
 	return false;
 }
 
-bool PD_MM_MapInfo::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementActor* wall)
+bool PD_MM_MapInfo::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_Interactuable* interactuable)
 {
-	/*
+
+	interactuableActorByID.Add(interactuable->ID_Interactuable, interactuable);
+	interactuableActorByLogicPosition.Add(logpos, interactuable);
+
+
 	if (roomByLogPos.Contains(logpos)) {
-	roomByLogPos[logpos].walls.Append(logpos, wall);
-	return true;
+		roomByLogPos[logpos]->AddInteractuable(logpos, interactuable);
 	}
-	*/
 
 	return false;
 }
@@ -257,8 +259,8 @@ bool PD_MM_MapInfo::AddInteractuable(PD_MG_LogicPosition logpos, APD_E_ElementAc
 bool PD_MM_MapInfo::AddDoor_WithoutLink(PD_MG_LogicPosition logpos, APD_E_Door* door) {
 	doorActorByLogPos.Add(logpos, door);
 	doorActorByID.Add(door->ID_Interactuable, door);
-	interactuableActorByID.Add(door->ID_Interactuable, door);
-	interactuableActorByLogicPosition.Add(logpos, door);
+
+	AddInteractuable(logpos, (APD_E_Interactuable*)door);
 
 	return true;
 }
