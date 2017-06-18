@@ -352,6 +352,25 @@ struct FStructUpdateCharacter
 };
 
 
+USTRUCT()
+struct FStructInteractableUpdate
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		uint32 ID_Interactable;
+
+	UPROPERTY()
+		bool isActive;
+
+
+	//Constructor
+	FStructInteractableUpdate()
+	{
+		//structType = static_cast<uint8>(UStructType::FStructMapData);
+	}
+};
+
 
 /*
 Procedimiento para agregar un struct:
@@ -773,7 +792,7 @@ struct FStructUpdateTurn : public  FStructGeneric
 		TArray<uint32> listOfRoomsInstiantate;
 
 	UPROPERTY()
-		TArray<uint32> listOfDoorOpend;
+		TArray<FStructInteractableUpdate> listOfInteractuablesActive;
 
 	UPROPERTY()
 		bool goToGenerateOrders;

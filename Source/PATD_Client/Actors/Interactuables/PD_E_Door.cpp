@@ -54,7 +54,7 @@ void APD_E_Door::Set_DoorInfo(TArray<APD_E_Interactuable*> otherInteractuables, 
 	}
 
 	InteractFromThisLogicPositions = this->doorInfo->logpos.GenerateAdjacents();
-
+	type = dInfo->type;
 }
 
 void APD_E_Door::InteractToActivate(AActor * interactor, bool overwriteState)
