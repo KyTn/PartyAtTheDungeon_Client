@@ -57,13 +57,34 @@ void APD_E_Door::Set_DoorInfo(TArray<APD_E_Interactuable*> otherInteractuables, 
 	type = dInfo->type;
 }
 
-void APD_E_Door::InteractToActivate(AActor * interactor, bool overwriteState)
+void APD_E_Door::InteractToActivate()
 {
 }
 
-void APD_E_Door::InteractToDeactivate(AActor * interactor, bool overwriteState)
+void APD_E_Door::InteractToDeactivate()
 {
 }
+
+
+
+void APD_E_Door::UpdateState() {
+
+	FOutputDeviceNull ar;
+
+	if (IsCurrentlyActivated) {
+		this->CallFunctionByNameWithArguments(TEXT("BP_ACTIVATE"), ar, NULL, true);
+		IsDoorOpen = true;
+	}
+	else {
+		this->CallFunctionByNameWithArguments(TEXT("BP_DEACTIVATE"), ar, NULL, true);
+		IsDoorOpen = false;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("APD_E_WallActor::UpdateState - opening door? %d"), IsDoorOpen);
+}
+
+
+
 
 
 void APD_E_Door::ChangeRotationToReal(PD_MG_LogicPosition lp) {

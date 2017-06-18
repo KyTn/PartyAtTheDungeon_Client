@@ -177,14 +177,43 @@ void PD_GM_GameManager::UpdateTurn() {
 	{
 		mapManager->InstantiateRoomAndAdj(structGameState->update_turn.listOfRoomsInstiantate[id_salas]);
 	}
-
-	for (int id_door = 0; id_door < structGameState->update_turn.listOfDoorOpend.Num(); id_door++)
+	
+	/*for (int id_door = 0; id_door < structGameState->update_turn.listOfDoorOpend.Num(); id_door++)
 	{
 		APD_E_Door* doorOpend = nullptr;
 		doorOpend = mapManager->MapInfo->doorActorByID[structGameState->update_turn.listOfDoorOpend[id_door]];
 		if (doorOpend)
 		{
 			doorOpend->IsDoorOpen = true;
+		}
+	}*/
+
+	for (int id_interact = 0; id_interact < structGameState->update_turn.listOfInteractuablesActive.Num(); id_interact++)
+	{
+		switch ((StaticMapElement)structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable) {
+
+			case StaticMapElement::DOOR: {
+				APD_E_Door* doorOpend = nullptr;
+				doorOpend = mapManager->MapInfo->doorActorByID[structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable];
+				if (doorOpend)
+				{
+					doorOpend->IsCurrentlyActivated = structGameState->update_turn.listOfInteractuablesActive[id_interact].isActive;
+					
+					doorOpend->UpdateState();
+				}
+				break;
+			}
+			default:
+			{
+				APD_E_Interactuable* interactuableActor = nullptr;
+				interactuableActor = mapManager->MapInfo->interactuableActorByID[structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable];
+				if (interactuableActor)
+				{
+					interactuableActor->IsCurrentlyActivated = structGameState->update_turn.listOfInteractuablesActive[id_interact].isActive;
+					interactuableActor->UpdateState();
+				}
+
+			}
 		}
 	}
 

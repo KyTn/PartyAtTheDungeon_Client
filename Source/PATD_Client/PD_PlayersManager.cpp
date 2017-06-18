@@ -187,7 +187,9 @@ bool PD_PlayersManager::DeleteLastMovementOrder()
 bool PD_PlayersManager::CreateInteractableOrder(int id_interactable)
 {
 	//Comprobar que ese id_consumable esta dentro de los valores del enumerado en cuestion
-
+	//FStructInteractableUpdate fst = FStructInteractableUpdate();
+	//fst.ID_Interactable = id_interactable;
+	//fst.isActive = true;
 	MyPlayerInfo->turnOrders->interactuablesToInteract.Add(id_interactable);
 
 	return true;

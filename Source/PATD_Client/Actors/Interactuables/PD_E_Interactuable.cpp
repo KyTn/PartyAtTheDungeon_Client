@@ -32,7 +32,10 @@ void APD_E_Interactuable::Tick(float DeltaTime)
 void APD_E_Interactuable::Set_InteractuableInfo(TArray<APD_E_Interactuable*> otherInteractuables, PD_MM_InteractuableInfo * interInfo)
 {
 	interactuableInfo = interInfo;
-	Name = interactuableInfo->Name_Interactuable;
+	Name = interactuableInfo->Name_Interactuable; 
+	
+	UE_LOG(LogTemp, Error, TEXT("APD_E_Interactuable::Set_InteractuableInfo"));
+
 	for (int i = 0; i < interactuableInfo->reactuables.Num(); i++) {
 		for (APD_E_Interactuable* other : otherInteractuables) {
 			if (other->ID_Interactuable == interactuableInfo->reactuables[i]) {
@@ -44,16 +47,36 @@ void APD_E_Interactuable::Set_InteractuableInfo(TArray<APD_E_Interactuable*> oth
 
 	type = interInfo->type;
 
+	ID_Interactuable = interInfo->IDInteractuable;
+
 	InteractFromThisLogicPositions = this->interactuableInfo->logpos.GenerateAdjacents();
 
 }
 
 
 // Se llamará a esta funcion para activar el interactuable
-void APD_E_Interactuable::InteractToActivate(AActor* interactor, bool overwriteState) {}
+void APD_E_Interactuable::InteractToActivate() {}
 
 // Se llamará a esta función para desactivar el interactuable
-void APD_E_Interactuable::InteractToDeactivate(AActor* interactor, bool overwriteState) {}
+void APD_E_Interactuable::InteractToDeactivate() {}
+
+
+void APD_E_Interactuable::UpdateState() {
+
+	FOutputDeviceNull ar;
+
+	if (IsCurrentlyActivated) {
+		this->CallFunctionByNameWithArguments(TEXT("BP_ACTIVATE"), ar, NULL, true);
+	}
+	else {
+		if (type == StaticMapElement::LARGE_CHEST) {
+			return;
+		}
+
+		this->CallFunctionByNameWithArguments(TEXT("BP_DEACTIVATE"), ar, NULL, true);
+	}
+
+}
 
 
 void APD_E_Interactuable::GetInteractuableInfo(int &id_interactable, FString &name_interactable)

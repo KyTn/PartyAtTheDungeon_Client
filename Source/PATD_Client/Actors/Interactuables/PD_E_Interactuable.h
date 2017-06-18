@@ -67,10 +67,14 @@ public:
 	virtual void Set_InteractuableInfo(TArray<APD_E_Interactuable*> otherInteractuables, PD_MM_InteractuableInfo* interInfo);
 
 	// Se llamará a esta funcion para activar el interactuable
-	virtual void InteractToActivate(AActor* interactor, bool overwriteState = false);
+	virtual void InteractToActivate();
 
 	// Se llamará a esta función para desactivar el interactuable
-	virtual void InteractToDeactivate(AActor* interactor, bool overwriteState = false);
+	virtual void InteractToDeactivate();
+
+	// Se llamará a esta función para actualizar el interactuable
+	virtual void UpdateState();
+
 
 #pragma region GET INFO INTERACTUABLE
 

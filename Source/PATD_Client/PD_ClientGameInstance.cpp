@@ -1595,66 +1595,66 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 
 void UPD_ClientGameInstance::FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer, TArray<int> &CountAttackOnPlayer)
 {
-	////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill::  ID SKILL:%d"), ID_Skill));
+////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill::  ID SKILL:%d"), ID_Skill));
 
-	int skillRange = 0;
-	
-	for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+int skillRange = 0;
+
+for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Num(); i++)
+{
+	if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
 	{
-		if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
-		{
-			skillRange = playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].range;
-		}
-		else
-		{
-			//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
-		}
+		skillRange = playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].range;
+	}
+	else
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
+	}
+}
+
+if (skillRange > 0)
+{
+	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
+
+	//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
+	TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
+	if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+	{
+		tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+			playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY));
+	}
+	else {
+		tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
 	}
 
-	if (skillRange > 0)
+	if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
+		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
 
-		//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
-		TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
-		if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
+		//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
+		for (int j = 0; j < playersManager->GetNumPlayers(); j++)
 		{
-			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
-				playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY));
-		}
-		else {
-			tilesInRangeOfSkill = mapManager->GetAllTilesInRange((float)skillRange, playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
-		}
+			PD_MG_LogicPosition posOtherPlayer;
 
-		if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
-		{
-			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
-
-			//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
-			for (int j = 0; j < playersManager->GetNumPlayers(); j++)
+			if (playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Num() > 0)
 			{
-				PD_MG_LogicPosition posOtherPlayer;
+				posOtherPlayer = PD_MG_LogicPosition(playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Last().positionX,
+					playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Last().positionY);
+			}
+			else {
+				posOtherPlayer = playersManager->GetDataStructPlayer(j)->logic_Character->GetCurrentLogicalPosition();
+			}
+			if (tilesInRangeOfSkill.Contains(posOtherPlayer))
+			{
+				ID_Player.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter());
+				TypePlayer.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
+				CountAttackOnPlayer.Add(GetNumOfAct_WithIDOnChar(ID_Skill, playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter()));
 
-				if (playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Num() > 0)
-				{
-					posOtherPlayer = PD_MG_LogicPosition(playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Last().positionX,
-						playersManager->GetDataStructPlayer(j)->turnOrders->positionsToMove.Last().positionY);
-				}
-				else {
-					posOtherPlayer = playersManager->GetDataStructPlayer(j)->logic_Character->GetCurrentLogicalPosition();
-				}
-				if ( tilesInRangeOfSkill.Contains(posOtherPlayer))
-				{
-					ID_Player.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter());
-					TypePlayer.Add(playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
-					CountAttackOnPlayer.Add(GetNumOfAct_WithIDOnChar(ID_Skill, playersManager->GetDataStructPlayer(j)->logic_Character->GetIDCharacter()));
+				//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con TYPE  - %d "), playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
 
-					//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillPlayersOnRangeForSkill Nose ha encontrado skill player con TYPE  - %d "), playersManager->GetDataStructPlayer(j)->logic_Character->GetSkin()->ID_SkinHead);
-
-				}
 			}
 		}
 	}
+}
 }
 
 void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_Interactuable*>& interactuable)
@@ -1669,7 +1669,7 @@ void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_I
 			UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - interInfo pos(%d,%d), InteractFromThisLogicPositions Num %d"), interInfo->logpos.GetX(), interInfo->logpos.GetY(),
 				mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions.Num());
 			for (PD_MG_LogicPosition lp : mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions) {
-				
+
 
 				if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) {
 
@@ -1690,13 +1690,22 @@ void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_I
 
 					if (lp.GetX() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX &&
 						lp.GetY() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY) {
-						UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
+						
+
+
+						if (mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->type == StaticMapElement::LARGE_CHEST &&
+							mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->IsCurrentlyActivated) 
+						{
+							continue;
+						}
+						UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added! id %d"), mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->ID_Interactuable);
+
 						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
 					}
 				}
 
 
-				
+
 			}
 		}
 	}
