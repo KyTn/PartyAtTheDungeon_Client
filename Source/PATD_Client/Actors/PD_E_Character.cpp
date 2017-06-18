@@ -62,7 +62,7 @@ void APD_E_Character::GetInfoCharcaterForWidget(FString &ID_Char, FString &TypeC
 
 	if (logic_character->GetIsPlayer())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("APD_E_Character::GetInfoCharcaterForWidge weapon - %d "), logic_character->GetSkin()->ID_SkinHead);
+		//UE_LOG(LogTemp, Warning, TEXT("APD_E_Character::GetInfoCharcaterForWidge weapon - %d "), logic_character->GetSkin()->ID_SkinHead);
 
 		switch (logic_character->GetSkin()->ID_SkinHead)
 		{
