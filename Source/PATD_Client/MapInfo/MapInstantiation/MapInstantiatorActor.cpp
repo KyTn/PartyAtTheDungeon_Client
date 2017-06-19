@@ -110,11 +110,28 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 	}
 
 
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Dungeon_Prop_Bush_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_DUNG/BP_Dungeon_Prop_Rocks_01.BP_Dungeon_Prop_Rocks_01'"));
+	if (Dungeon_Prop_Bush_01_Blueprint.Object) {
+		Dungeon_Prop_Bush_01_Class = (UClass*)Dungeon_Prop_Bush_01_Blueprint.Object->GeneratedClass;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Dungeon_Prop_Tomb_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_DUNG/BP_Dungeon_Prop_Tomb_01.BP_Dungeon_Prop_Tomb_01'"));
+	if (Dungeon_Prop_Tomb_01_Blueprint.Object) {
+		Dungeon_Prop_Tomb_01_Class = (UClass*)Dungeon_Prop_Tomb_01_Blueprint.Object->GeneratedClass;
+	}
 
 
+#pragma endregion 
 
 
 #pragma region MAPSKIN GARDEN
+
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_SpecialTile_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_SpecialTile_01.BP_Garden_SpecialTile_01'"));
+	if (Garden_SpecialTile_Blueprint.Object) {
+		Garden_SpecialTile_Class = (UClass*)Garden_SpecialTile_Blueprint.Object->GeneratedClass;
+	}
+
 
 	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_Prop_Treasure_01.BP_Garden_Prop_Treasure_01'"));
 	if (Garden_Prop_Treasure_01_Blueprint.Object) {
@@ -126,21 +143,56 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 		Garden_Prop_Tree_01_Class = (UClass*)Garden_Prop_Tree_01_Blueprint.Object->GeneratedClass;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Bush_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_bush_01.BP_Garden_Bush_01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Bush_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_Bush_01.BP_Garden_Bush_01'"));
 	if (Garden_Prop_Bush_01_Blueprint.Object) {
 		Garden_Prop_Bush_01_Class = (UClass*)Garden_Prop_Bush_01_Blueprint.Object->GeneratedClass;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Garden_Prop_Tomb_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_GARD/BP_Garden_Tomb_01.BP_Garden_Tomb_01'"));
+	if (Garden_Prop_Tomb_01_Blueprint.Object) {
+		Garden_Prop_Tomb_01_Class = (UClass*)Garden_Prop_Tomb_01_Blueprint.Object->GeneratedClass;
+	}
+
 
 
 #pragma endregion 
+
+
 #pragma region MAPSKIN LIBRARY
+
+
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_SpecialTile_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_LIBR/BP_Library_Prop_SpecialTile_01.BP_Library_Prop_SpecialTile_01'"));
+	if (Library_SpecialTile_Blueprint.Object) {
+		Library_SpecialTile_Class = (UClass*)Library_SpecialTile_Blueprint.Object->GeneratedClass;
+	}
+
+
 	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_LIBR/BP_Library_Prop_Treasure_01.BP_Library_Prop_Treasure_01'"));
 	if (Library_Prop_Treasure_01_Blueprint.Object) {
 		Library_Prop_Treasure_01_Class = (UClass*)Library_Prop_Treasure_01_Blueprint.Object->GeneratedClass;
 	}
+
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Shelves_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_LIBR/BP_Library_Prop_Shelves_01.BP_Library_Prop_Shelves_01'"));
+	if (Library_Prop_Shelves_01_Blueprint.Object) {
+		Library_Prop_Shelves_01_Class = (UClass*)Library_Prop_Shelves_01_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Library_Prop_Table_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_LIBR/BP_Library_Prop_table_01.BP_Library_Prop_table_01'"));
+	if (Library_Prop_Table_01_Blueprint.Object) {
+		Library_Prop_Table_01_Class = (UClass*)Library_Prop_Table_01_Blueprint.Object->GeneratedClass;
+	}
+
+
 #pragma endregion 
+
+
 #pragma region MAPSKIN SACRIFICE
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_SpecialTile_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_SACR/BP_Sacrifice_SpecialTile_01.BP_Sacrifice_SpecialTile_01'"));
+	if (Sacrifice_SpecialTile_Blueprint.Object) {
+		Sacrifice_SpecialTile_Class = (UClass*)Sacrifice_SpecialTile_Blueprint.Object->GeneratedClass;
+	}
 
 	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Treasure_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_SACR/BP_Sacrifice_Prop_Treasure_01.BP_Sacrifice_Prop_Treasure_01'"));
 	if (Sacrifice_Prop_Treasure_01_Blueprint.Object) {
@@ -152,8 +204,35 @@ AMapInstantiatorActor::AMapInstantiatorActor()
 	}
 
 
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Sacrifice_Prop_Altar_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_SACR/BP_Sacrifice_Prop_Altar_01.BP_Sacrifice_Prop_Altar_01'"));
+	if (Sacrifice_Prop_Altar_01_Blueprint.Object) {
+		Sacrifice_Prop_Altar_01_Class = (UClass*)Sacrifice_Prop_Altar_01_Blueprint.Object->GeneratedClass;
+	}
+
+
 
 #pragma endregion 
+
+
+#pragma region MAPSKIN BOSS
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Boss_SpecialTile_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_BOSS/BP_Boss_SpecialTile_01.BP_Boss_SpecialTile_01'"));
+	if (Boss_SpecialTile_Blueprint.Object) {
+		Boss_SpecialTile_Class = (UClass*)Boss_SpecialTile_Blueprint.Object->GeneratedClass;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Boss_Prop_Fullpot_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_BOSS/BP_Boss_Prop_fullpot_01.BP_Boss_Prop_fullpot_01'"));
+	if (Boss_Prop_Fullpot_01_Blueprint.Object) {
+		Boss_Prop_Fullpot_01_Class = (UClass*)Boss_Prop_Fullpot_01_Blueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> Boss_Prop_Tomb_01_Blueprint(TEXT("Blueprint'/Game/BluePrints/PD_E/ESC/SK_BOSS/BP_Boss_Prop_tomb_01.BP_Boss_Prop_tomb_01'"));
+	if (Boss_Prop_Tomb_01_Blueprint.Object) {
+		Boss_Prop_Tomb_01_Class = (UClass*)Boss_Prop_Tomb_01_Blueprint.Object->GeneratedClass;
+	}
+
+#pragma endregion 
+
+
 #pragma region CHARACTERS
 
 	static ConstructorHelpers::FObjectFinder<UBlueprint> OrcBowBlueprint(TEXT("Blueprint'/Game/Blueprints/Enemies/Orco_Arco.Orco_Arco'"));
@@ -226,6 +305,62 @@ APD_E_Interactuable * AMapInstantiatorActor::InstantiateLargeChest(PD_MG_LogicPo
 	return GetWorld()->SpawnActor<APD_E_Interactuable>(Default_Interactuable_LargeChest_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Column_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Column_02_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_02_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Column_02_02(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_02_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Column_03(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_03_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Column_04_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_04_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Column_04_02(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_04_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+
+
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Obstruction_00(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_02_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Obstruction_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_03_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Obstruction_02(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_04_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Obstruction_03(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_12_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Obstruction_04(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_12_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
 #pragma endregion
 
 
@@ -244,37 +379,26 @@ APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Dungeon_SpecialTile(PD_MG
 	return GetWorld()->SpawnActor<APD_E_ElementActor>(Dungeon_SpecialTile_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
-APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Dungeon_Prop_Column_01(PD_MG_LogicPosition logpos)
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_bush_1(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Dungeon_Prop_Bush_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 
-APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_Column_02_1(PD_MG_LogicPosition logpos)
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_tomb_1(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_02_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
-}
-APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_Column_03(PD_MG_LogicPosition logpos)
-{
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_03_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
-}
-
-
-
-APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Dungeon_Prop_Column_04_1(PD_MG_LogicPosition logpos)
-{
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_04_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
-}
-
-
-APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Dungeon_Prop_Obstruction_02(PD_MG_LogicPosition logpos) {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_02_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
-
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Dungeon_Prop_Tomb_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 #pragma endregion 
 
 
 
 #pragma region MAPSKIN GARDEN
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Garden_SpecialTile(PD_MG_LogicPosition logpos)
+{
+
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Garden_SpecialTile_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
 
 APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Garden_Prop_Tree_01(PD_MG_LogicPosition logpos)
 {
@@ -288,27 +412,45 @@ APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Garden_Prop_Bush_01(PD_MG
 	return GetWorld()->SpawnActor<APD_E_ElementActor>(Garden_Prop_Bush_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 
 }
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Garden_Prop_tomb_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Garden_Prop_Tomb_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
 #pragma endregion 
 
 #pragma region MAPSKIN LIBRARY
-
-APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Library_Prop_Column_04_2(PD_MG_LogicPosition logpos)
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Library_SpecialTile(PD_MG_LogicPosition logpos)
 {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Column_04_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Library_SpecialTile_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Library_Prop_Treasure_01(PD_MG_LogicPosition logpos) {
 	return GetWorld()->SpawnActor<APD_E_ElementActor>(Library_Prop_Treasure_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 
 }
 
-APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Library_Prop_Obstruction_12_1(PD_MG_LogicPosition logpos) {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_12_1_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Library_Prop_shelves_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Library_Prop_Shelves_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 
 }
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Library_Prop_table_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Library_Prop_Table_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+
+}
+
 
 #pragma endregion 
 
 #pragma region MAPSKIN SACRIFICE
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Sacrifice_SpecialTile(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Sacrifice_SpecialTile_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
 
 APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Treasure_01(PD_MG_LogicPosition logpos) {
 	return GetWorld()->SpawnActor<APD_E_ElementActor>(Sacrifice_Prop_Treasure_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
@@ -319,15 +461,34 @@ APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Jail_01(PD
 
 }
 
-APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Obstruction_12_2(PD_MG_LogicPosition logpos) {
-	return GetWorld()->SpawnActor<APD_E_ElementActor>(Default_Prop_Obstruction_12_2_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Sacrifice_Prop_Altar_01(PD_MG_LogicPosition logpos)
+{
 
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Sacrifice_Prop_Altar_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
+
 #pragma endregion 
 
 
+#pragma region MAPSKIN BOSS
 
 
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Boss_SpecialTile(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Boss_SpecialTile_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Boss_Prop_fullpot_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Boss_Prop_Fullpot_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Boss_Prop_tomb_01(PD_MG_LogicPosition logpos)
+{
+	return GetWorld()->SpawnActor<APD_E_ElementActor>(Boss_Prop_Tomb_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
+}
+
+#pragma endregion
 
 #pragma region CHARACTERS
 
