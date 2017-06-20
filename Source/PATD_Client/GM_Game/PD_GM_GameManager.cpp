@@ -206,13 +206,20 @@ void PD_GM_GameManager::UpdateTurn() {
 			default:
 			{
 				APD_E_Interactuable* interactuableActor = nullptr;
-				interactuableActor = mapManager->MapInfo->interactuableActorByID[structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable];
-				if (interactuableActor)
-				{
-					interactuableActor->IsCurrentlyActivated = structGameState->update_turn.listOfInteractuablesActive[id_interact].isActive;
-					interactuableActor->UpdateState();
-				}
+				if (mapManager->MapInfo->interactuableActorByID.Contains(structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable)) {
+					interactuableActor = mapManager->MapInfo->interactuableActorByID[structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable];
+					if (interactuableActor)
+					{
+						interactuableActor->IsCurrentlyActivated = structGameState->update_turn.listOfInteractuablesActive[id_interact].isActive;
+						interactuableActor->UpdateState();
+						if (interactuableActor->GetIsChest()) {
+							mapManager->MapInfo->interactuableActorByID.Remove(structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable);
+							mapManager->MapInfo->interactuableActorByLogicPosition.Remove(interactuableActor->ActualLogicPosition);
+							interactuableActor->Destroy();
+						}
 
+					}
+				}
 			}
 		}
 	}
