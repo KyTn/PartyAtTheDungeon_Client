@@ -6,3 +6,8 @@
 UPD_SaveCharacterData::UPD_SaveCharacterData() {
 
 }
+
+FString UPD_SaveCharacterData::GetIPSaveAlready()
+{
+	return IPSaveAlready;
+}

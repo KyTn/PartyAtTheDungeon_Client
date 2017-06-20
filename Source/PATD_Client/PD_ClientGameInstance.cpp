@@ -845,7 +845,18 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	if (ip == "")
 		serverAddressToConnect = "127.0.0.1";
 	else
+	{
+		UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+		if (UGameplayStatics::DoesSaveGameExist("IPsaved", 0))
+		{
+			SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("IPsaved", 0));
+		}
+		SaveGameInstance->IPSaveAlready = ip;
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("IPsaved"), 0);
+
 		serverAddressToConnect = ip;
+	}
+		
 	
 	structClientState->connectionState = EClientConnectionState::Connecting;
 
