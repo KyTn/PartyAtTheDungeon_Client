@@ -283,7 +283,8 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::PROP_CHEST: {
-			instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			actorElement = instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			actorElement->SetMaterialSkin(mapSkin);
 			break;
 		}
 		case StaticMapElement::TREE_OR_COLUMN_00: {
@@ -327,12 +328,21 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_2: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::PROP_1: {
@@ -352,13 +362,13 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		switch (element) {
 		case StaticMapElement::NORMAL_TILE: {
 			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::GARDEN);
+			actorElement->SetMaterialSkin(mapSkin);
 			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::SPECIAL_TILE: {
 			actorElement = instantiator->Instantiate_Garden_SpecialTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::GARDEN);
+			actorElement->SetMaterialSkin(mapSkin);
 			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
@@ -410,12 +420,21 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_2: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::PROP_1: {
@@ -435,7 +454,7 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		switch (element) {
 		case StaticMapElement::NORMAL_TILE: {
 			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::SACRIFICE);
+			actorElement->SetMaterialSkin(mapSkin);
 			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
@@ -449,7 +468,8 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::PROP_CHEST: {
-			instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			actorElement = instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			actorElement->SetMaterialSkin(mapSkin);
 			break;
 		}
 		case StaticMapElement::SMALL_CHEST: {
@@ -491,12 +511,21 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_2: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::PROP_1: {
@@ -516,7 +545,7 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		switch (element) {
 		case StaticMapElement::NORMAL_TILE: {
 			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::BOSS);
+			actorElement->SetMaterialSkin(mapSkin);
 			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
@@ -530,7 +559,8 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::PROP_CHEST: {
-			instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			actorElement = instantiator->Instantiate_Dungeon_Prop_Treasure_01(lp);
+			actorElement->SetMaterialSkin(mapSkin);
 			break;
 		}
 		case StaticMapElement::SMALL_CHEST: {
@@ -572,12 +602,21 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_2: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::PROP_1: {
@@ -597,13 +636,13 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 		switch (element) {
 		case StaticMapElement::NORMAL_TILE: {
 			actorElement = instantiator->InstantiateTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+			actorElement->SetMaterialSkin(mapSkin);
 			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::SPECIAL_TILE: {
 			actorElement = instantiator->Instantiate_Library_SpecialTile(lp);
-			actorElement->SetMaterialSkin(MapSkinType::LIBRARY);
+			actorElement->SetMaterialSkin(mapSkin);
 			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
@@ -611,7 +650,8 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::PROP_CHEST: {
-			instantiator->Instantiate_Library_Prop_Treasure_01(lp);
+			actorElement = instantiator->Instantiate_Library_Prop_Treasure_01(lp);
+			actorElement->SetMaterialSkin(mapSkin);
 			break;
 		}
 		case StaticMapElement::SMALL_CHEST: {
@@ -653,12 +693,21 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 			break;
 		}
 		case StaticMapElement::WALL_PROP_1: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_2: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::WALL_PROP_TORCH: {
+			actorElement = instantiator->InstantiateTile(lp);
+			actorElement->SetMaterialSkin(mapSkin);
+			MapInfo->AddTile(lp, actorElement);
 			break;
 		}
 		case StaticMapElement::PROP_1: {
