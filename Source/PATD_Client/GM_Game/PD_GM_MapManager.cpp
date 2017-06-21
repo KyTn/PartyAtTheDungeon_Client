@@ -106,7 +106,7 @@ bool PD_GM_MapManager::IsTherePlayer(uint32 x, uint32 y) {
 }
 
 TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetSpawnPoints() {
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() - Num Rooms: %d"), MapInfo->rooms.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::GetSpawnPoints() - Num Rooms: %d"), MapInfo->rooms.Num());
 	return MapInfo->SpawnRoom->LogicPosInRoom;
 
 }
@@ -157,7 +157,7 @@ TArray<PD_MG_LogicPosition> PD_GM_MapManager::GetAllTilesInRange(float range, PD
 
 void PD_GM_MapManager::InstantiateMap()
 {
-	UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
+	//UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateMap "));
 
 	InstantiateRoomAndAdj(MapInfo->SpawnRoom->IDRoom);
 	InstantiateDynamicMap();
@@ -168,7 +168,7 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 
 	if (!MapInfo->mapAdj.Contains(id)) {
 
-		UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateRoomAndAdj - El mapAdj no contiene el id %d "), id);
+		//UE_LOG(LogTemp, Log, TEXT("MapManager::InstantiateRoomAndAdj - El mapAdj no contiene el id %d "), id);
 	}
 	PD_MM_Room* room = MapInfo->roomByIDRoom[id];
 	if (!room->IsInstantiated) {
@@ -211,12 +211,12 @@ void PD_GM_MapManager::InstantiateRoomAndAdj(uint8 id) {
 			{
 				//InstantiateWallBySkin(MapInfo->rooms[adj[i]]->mapSkin, MapInfo->rooms[adj[i]]->LogicWallPosInRoom[j]);
 			}
-			UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - door in room %d -> %d"), MapInfo->rooms[adj[i]]->IDRoom, MapInfo->rooms[adj[i]]->LogicDoorPosInRoom.Num());
+			//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - door in room %d -> %d"), MapInfo->rooms[adj[i]]->IDRoom, MapInfo->rooms[adj[i]]->LogicDoorPosInRoom.Num());
 
 			for (int j = 0; j < MapInfo->rooms[adj[i]]->LogicDoorPosInRoom.Num(); j++)///Instanciamos las puertas de una habitacion.
 			{
 				if (!MapInfo->IsDoorInstantiatedAt(MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j])) {
-					UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - InstantiateDoor at (%d,%d)"), MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j].GetX(), MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j].GetY());
+					//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateRoomAndAdj - InstantiateDoor at (%d,%d)"), MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j].GetX(), MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j].GetY());
 					InstantiateDoor(MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j], MapInfo->rooms[adj[i]]->DoorInfoInRoomByLogicPosition[MapInfo->rooms[adj[i]]->LogicDoorPosInRoom[j]]);
 				}
 			}
@@ -244,7 +244,7 @@ APD_E_Interactuable* PD_GM_MapManager::InstantiateInteractuable(PD_MG_LogicPosit
 	switch ((StaticMapElement)interInfo->type) {
 		case StaticMapElement::LARGE_CHEST: {
 
-			UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::Instantiate interactuable chest at (%d,%d) id %d"), lp.GetX(), lp.GetY(), interInfo->IDInteractuable);
+			//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::Instantiate interactuable chest at (%d,%d) id %d"), lp.GetX(), lp.GetY(), interInfo->IDInteractuable);
 
 			ret = instantiator->InstantiateLargeChest(lp);
 
@@ -262,7 +262,7 @@ APD_E_Interactuable* PD_GM_MapManager::InstantiateInteractuable(PD_MG_LogicPosit
 
 void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMapElement element, PD_MG_LogicPosition lp) {
 
-	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateMapElementBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
+	//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateMapElementBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
 	APD_E_ElementActor* actorElement;
 	switch (mapSkin) {
 	case MapSkinType::DUNGEON_NORMAL: {
@@ -679,7 +679,7 @@ void PD_GM_MapManager::InstantiateMapElementBySkin(MapSkinType mapSkin, StaticMa
 
 
 void PD_GM_MapManager::InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPosition lp) {
-	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateWallBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
+	//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateWallBySkin at (%d,%d)"), lp.GetX(), lp.GetY());
 	APD_E_WallActor* actorElement = instantiator->InstantiateWall(lp);
 	actorElement->SetMaterialSkin(lp);
 	MapInfo->AddWall(lp, actorElement);
@@ -687,7 +687,7 @@ void PD_GM_MapManager::InstantiateWallBySkin(MapSkinType mapSkin, PD_MG_LogicPos
 
 
 void PD_GM_MapManager::InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* doorInfo) {
-	UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateDoor at (%d,%d)"), lp.GetX(), lp.GetY());
+	//UE_LOG(LogTemp, Error, TEXT("PD_GM_MapManager::InstantiateDoor at (%d,%d)"), lp.GetX(), lp.GetY());
 	APD_E_Door* doorElement = instantiator->InstantiateDoor(lp);
 
 	TArray<APD_E_Interactuable*> interact;
@@ -702,7 +702,7 @@ void PD_GM_MapManager::InstantiateDoor(PD_MG_LogicPosition lp, PD_MM_DoorInfo* d
 
 void PD_GM_MapManager::InstantiateDynamicMap() {
 	
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Players Num %d"), _GAMEMANAGER->playersManager->GetNumPlayers());
+	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Players Num %d"), _GAMEMANAGER->playersManager->GetNumPlayers());
 
 	for (int i = 0; i < _GAMEMANAGER->playersManager->GetNumPlayers(); i++)
 	{
@@ -740,23 +740,23 @@ void PD_GM_MapManager::InstantiateDynamicMap() {
 
 void PD_GM_MapManager::InstantiateEnemies() {
 	ECharacterType enemyType;
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Numero de enemigos enemigos %d"), DynamicMapRef->GetLogicPositions().Num());
+	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Numero de enemigos enemigos %d"), DynamicMapRef->GetLogicPositions().Num());
 	for (int i = 0; i < DynamicMapRef->GetLogicPositions().Num(); i++) {
 		if (MapInfo->roomByLogPos[DynamicMapRef->GetLogicPositions()[i]]->IsInstantiated && !DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->isInstantiated) {
-			UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemigos %d"), i);
+			//	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemigos %d"), i);
 
 			DynamicMapRef->UpdateIsInstantiatedEnemy(DynamicMapRef->GetLogicPositions()[i], true);
 
 			//DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->isInstantiated = true;
 			enemyType = DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character; ///Cogemos el tipo
 
-			UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemikkokoko"));
+					//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando enemikkokoko"));
 
 			switch (enemyType)
 			{
 				case ECharacterType::OrcBow:
 				{
-					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBow"));
+					//	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBow"));
 
 					APD_E_Character* charac = nullptr;
 					if (instantiator)
@@ -772,7 +772,7 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
 					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
-					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					//	UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
@@ -797,7 +797,7 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
 					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
-					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					//	UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
@@ -808,7 +808,7 @@ void PD_GM_MapManager::InstantiateEnemies() {
 				}
 				case ECharacterType::OrcMelee:
 				{
-					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcMelee"));
+					//	UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcMelee"));
 					APD_E_Character* charac = nullptr;
 					if (instantiator)
 					{
@@ -822,7 +822,7 @@ void PD_GM_MapManager::InstantiateEnemies() {
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
 					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
-					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					//UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
@@ -835,16 +835,16 @@ void PD_GM_MapManager::InstantiateEnemies() {
 				}
 				case ECharacterType::OrcBoss:
 				{
-					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBoss"));
+					//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBoss"));
 
 					APD_E_Character* charac = instantiator->InstantiateOrcBoss(DynamicMapRef->GetLogicPositions()[i]);
-					UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBoss - desoues de instanciacion"));
+					//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::InstantiateDynamicMap - Instanciando OrcBoss - desoues de instanciacion"));
 
 					PD_GM_LogicCharacter* logicCha = new PD_GM_LogicCharacter();
 					logicCha->SetIsPlayer(false);
 					logicCha->SetTypeCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->type_Character);
 					logicCha->SetIDCharacter(DynamicMapRef->getEnemies()[DynamicMapRef->GetLogicPositions()[i]]->ID_Character);
-					UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
+					//UE_LOG(LogTemp, Log, TEXT("PD_GM_MapManager::InstantiateDynamicMap: Id Dinamicmap: %s"), *logicCha->GetIDCharacter());
 					logicCha->SetCharacterBP(charac);
 					logicCha->SetController(Cast<APD_GenericController>(charac->GetController()));
 					logicCha->SetCurrentLogicalPosition(DynamicMapRef->GetLogicPositions()[i]);
