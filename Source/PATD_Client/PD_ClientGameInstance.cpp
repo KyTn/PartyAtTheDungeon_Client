@@ -1341,7 +1341,7 @@ void UPD_ClientGameInstance::GenerateMeleeChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 4));
 	
 	///STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 8, 10); //volver a cambiar a 5 AP base
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(7, 5, 5, 7, 7, 6);
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
@@ -1373,7 +1373,7 @@ void UPD_ClientGameInstance::GenerateRangedChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 6));
 
 	///STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 10, 10); //volver a cambiar a 5 AP base
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5, 5, 5, 5, 6, 6);
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
@@ -1404,7 +1404,7 @@ void UPD_ClientGameInstance::GeneratedMagicChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
 
 	///STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 6, 10); //volver a cambiar a 5 AP base
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5, 5, 5, 5, 6, 6);
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
