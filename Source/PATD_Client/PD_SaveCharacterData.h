@@ -28,6 +28,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Basic")
 	TArray<FStructWeapon> weapons;
 
+	UPROPERTY(EditAnywhere, Category = "IPString")
+	FString IPSaveAlready;
+
 	UPD_SaveCharacterData();
-	
+
+	UFUNCTION(BlueprintCallable, Category = "LoadSaveIP")
+		FString GetIPSaveAlready();
 };

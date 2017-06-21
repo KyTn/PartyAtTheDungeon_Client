@@ -31,6 +31,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "type Interactuable")
 		StaticMapElement type;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "type Interactuable")
+		bool isChest;
 
 	PD_MM_InteractuableInfo* interactuableInfo;
 
@@ -80,6 +82,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GetInteractuableInfo")
 		void GetInteractuableInfo(int &id_interactable, FString &name_interactable);
+
+	bool GetIsChest() { return isChest; }
 
 #pragma endregion
 };

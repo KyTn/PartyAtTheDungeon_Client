@@ -845,7 +845,18 @@ void UPD_ClientGameInstance::SetServerAddressToConnect(FString ip) {
 	if (ip == "")
 		serverAddressToConnect = "127.0.0.1";
 	else
+	{
+		UPD_SaveCharacterData* SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::CreateSaveGameObject(UPD_SaveCharacterData::StaticClass()));
+		if (UGameplayStatics::DoesSaveGameExist("IPsaved", 0))
+		{
+			SaveGameInstance = Cast<UPD_SaveCharacterData>(UGameplayStatics::LoadGameFromSlot("IPsaved", 0));
+		}
+		SaveGameInstance->IPSaveAlready = ip;
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("IPsaved"), 0);
+
 		serverAddressToConnect = ip;
+	}
+		
 	
 	structClientState->connectionState = EClientConnectionState::Connecting;
 
@@ -1330,7 +1341,7 @@ void UPD_ClientGameInstance::GenerateMeleeChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 4));
 	
 	///STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 8, 10); //volver a cambiar a 5 AP base
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(7, 5, 5, 7, 7, 6);
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
@@ -1362,7 +1373,7 @@ void UPD_ClientGameInstance::GenerateRangedChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 6));
 
 	///STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 10, 10); //volver a cambiar a 5 AP base
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5, 5, 5, 5, 6, 6);
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }
@@ -1393,7 +1404,7 @@ void UPD_ClientGameInstance::GeneratedMagicChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills.Add(LoadSkillStructData(0, 10));
 
 	///STATS
-	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 20, 10); //volver a cambiar a 5 AP base
+	playersManager->MyPlayerInfo->logic_Character->SetInitBaseStats(200, 6, 10); //volver a cambiar a 5 AP base
 	playersManager->MyPlayerInfo->logic_Character->SetBasicStats(5, 5, 5, 5, 6, 6);
 	playersManager->MyPlayerInfo->logic_Character->SetTotalStats();
 }

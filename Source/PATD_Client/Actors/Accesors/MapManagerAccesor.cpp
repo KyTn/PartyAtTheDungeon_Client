@@ -446,21 +446,27 @@ void AMapManagerAccesor::ResetAdj()
 	positionMoves.Empty();
 	tilesNear.Empty();
 	PD_MG_LogicPosition initialLP = mapManager->_GAMEMANAGER->playersManager->GetMyCharacter()->GetCurrentLogicalPosition();
-	if (mapManager->IsLogicPositionATile(initialLP)) {
-		APD_E_ElementActor* startTile = Cast<APD_E_ElementActor>(mapManager->MapInfo->roomByLogPos[initialLP]->tiles[initialLP]);
+	PD_MM_Room* roomOfTile = nullptr;
+	roomOfTile = mapManager->MapInfo->RoomOf(initialLP);
+	//UE_LOG(LogTemp, Warning, TEXT(" AMapManagerAccesor::ShowAdjenctsTile 2"));
+	if (roomOfTile) //si ha pillado la room a partir de la posicion logica dada..
+	{
+		if (roomOfTile->tiles.Contains(initialLP)) {
+			APD_E_ElementActor* startTile = Cast<APD_E_ElementActor>(mapManager->MapInfo->roomByLogPos[initialLP]->tiles[initialLP]);
 
-		FOutputDeviceNull ar;
-		const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
-		startTile->CallFunctionByNameWithArguments(*command, ar, NULL, true);
+			FOutputDeviceNull ar;
+			const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
+			startTile->CallFunctionByNameWithArguments(*command, ar, NULL, true);
 
-	}
-	else if (mapManager->IsLogicPositionADoor(initialLP)) {
+		}
+		else if (mapManager->IsLogicPositionADoor(initialLP)) {
 
-		APD_E_Door* startTile = Cast<APD_E_Door>(mapManager->MapInfo->doorActorByLogPos[initialLP]);
+			APD_E_Door* startTile = Cast<APD_E_Door>(mapManager->MapInfo->doorActorByLogPos[initialLP]);
 
-		FOutputDeviceNull ar;
-		const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
-		startTile->CallFunctionByNameWithArguments(*command, ar, NULL, true);
+			FOutputDeviceNull ar;
+			const FString command = FString::Printf(TEXT("ResetToInitMaterial"));
+			startTile->CallFunctionByNameWithArguments(*command, ar, NULL, true);
+		}
 	}
 }
 
