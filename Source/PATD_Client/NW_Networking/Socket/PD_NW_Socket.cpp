@@ -17,8 +17,7 @@ PD_NW_Socket::PD_NW_Socket()
 
 PD_NW_Socket::~PD_NW_Socket()
 {
-	UE_LOG(LogTemp, Error, TEXT("DELETE DE LOS SOCKET "));
-
+	
 	//Esto puede dar error al llamarse alguna vez sin que tenga nada?
 	//if (socket) {
 	socket->Close();
@@ -60,7 +59,7 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 		connected = false;
 
 
-	if (connected) {
+	/*if (connected) {
 		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket: Se ha conectado guay con el server "));
 
 	}
@@ -68,7 +67,7 @@ bool PD_NW_Socket::ConnectTo(FString ip, int port) {
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Nivel Socket:  No se ha podido conectar con el servidor ");
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket: >>> No se ha podido conectar con el servidor "));
 
-	}
+	}*/
 	return true;
 	return connected;
 
@@ -90,14 +89,14 @@ bool PD_NW_Socket::SendData(TArray<uint8>* sendData) {
 	//Mirar si la el CountBytes funciona adecuadamente o esta metiendo bytes de mas para el array. (este serializando de mas)
 	
 	bool successful = socket->Send(sendData->GetData(), sendData->Num(), bytesReceived);
-	if (successful) {
+	/*if (successful) {
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Nivel Socket: Se ha enviado un paquete!");
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> Se ha enviado un paquete! "));
 	}
 	else {
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Nivel Socket:No se enviado nada! ");
 		UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> No se enviado nada! "));
-	}
+	}*/
 	return successful;
 }
 
@@ -138,13 +137,13 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 
 		int i = 0;
 
-		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- packageSize size Total - %d :"), packageSize);
-		UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- contByte First Package %d"), contByte);
+		//UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- packageSize size Total - %d :"), packageSize);
+		//UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- contByte First Package %d"), contByte);
 
 
 		uint32 despl = packageSize;
 		while (contByte > despl) { //En este caso hemos recibido parte de otro mensaje
-			UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- while por grande: despl %d"), despl);
+			//UE_LOG(LogTemp, Warning, TEXT("Nivel Socket:>>> ReceiveData --- while por grande: despl %d"), despl);
 			packageSize = ((uint32)((*receivedDataTotal)[0 + despl]) << 24) + ((uint32)((*receivedDataTotal)[1 + despl]) << 16) + ((uint32)((*receivedDataTotal)[2 + despl]) << 8) + ((uint32)(*receivedDataTotal)[3 + despl]);
 			packageSize += 5;
 			despl += packageSize;
@@ -162,7 +161,7 @@ TArray<uint8>* PD_NW_Socket::ReceiveData() {
 				Read = 0;
 				socket->Recv(receivedData->GetData(), receivedData->Num(), Read);
 
-				UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> ReceiveData : bucle while numero %d:, size: %d, read: %d"), i, Size, Read);
+				//UE_LOG(LogTemp, Error, TEXT("Nivel Socket:>>> ReceiveData : bucle while numero %d:, size: %d, read: %d"), i, Size, Read);
 
 
 

@@ -369,8 +369,6 @@ APD_E_ElementActor * AMapInstantiatorActor::Instantiate_Obstruction_04(PD_MG_Log
 
 APD_E_ElementActor* AMapInstantiatorActor::Instantiate_Dungeon_Prop_Treasure_01(PD_MG_LogicPosition logpos)
 {
-
-	UE_LOG(LogTemp, Warning, TEXT("AMapInstantiatorActor::Instantiate_Dungeon_Prop_Treasure_01"));
 	return GetWorld()->SpawnActor<APD_E_ElementActor>(Dungeon_Prop_Treasure_01_Class, logpos.ToWorldPosition(), FRotator(0.0f, 0.f, 0.f));
 }
 

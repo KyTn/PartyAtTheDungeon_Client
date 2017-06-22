@@ -43,7 +43,7 @@ bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) 
 void UPD_ClientGameInstance::Init()
 {
 	Super::Init();
-	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
+	//UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
 	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
 	//Inicializar Arrays de Skills and Weapons
@@ -461,10 +461,10 @@ void UPD_ClientGameInstance::HandleEvent_MapIncoming(FStructGeneric* inDataStruc
 void UPD_ClientGameInstance::HandleEvent_FStructMapDataIncoming(FStructGeneric * inDataStruct, int inPlayer, UStructType inEventType)
 {
 	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming"));
-	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming %s"), *((FStructMapData*)inDataStruct)->PARSER_VERSION);
+	//UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming %s"), *((FStructMapData*)inDataStruct)->PARSER_VERSION);
 
 	*structClientState->NETMAPDATA = *(FStructMapData*)inDataStruct;
-	UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming : Final"));
+	//UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_FStructMapDataIncoming : Final"));
 
 }
 
@@ -488,7 +488,7 @@ void UPD_ClientGameInstance::HandleEvent_AllCharactersInfoIncoming(FStructGeneri
 
 	for (int i = 0; i < InstaPlayers->listInfoPlayerAtClient.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_AllCharactersInfoIncoming: Num player:%s "), *InstaPlayers->listInfoPlayerAtClient[i].ID_character);
+		//UE_LOG(LogTemp, Warning, TEXT("ServerGameInstance::HandleEvent_AllCharactersInfoIncoming: Num player:%s "), *InstaPlayers->listInfoPlayerAtClient[i].ID_character);
 
 		playersManager->AddNewPlayer(InstaPlayers->listInfoPlayerAtClient[i]);
 	}
@@ -794,7 +794,7 @@ void UPD_ClientGameInstance::ResetApplication()
 	}
 
 	///Inizaliza the same as UPD_ClientGameInstance::Init()
-	UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
+	//UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
 	//////GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
 	//Inicializar Arrays de Skills and Weapons
@@ -954,7 +954,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 
 	if (playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APTotal == 205) //Comprobacion sobre un valor para determinar si hay Status o no
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: rellenando datos"));
+		//UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: rellenando datos"));
 		//FillCharecterStats(100,100,100,100,100,100);
 		GenerateRandomChar();
 	}
@@ -967,7 +967,7 @@ bool UPD_ClientGameInstance::SendCharacterToServer()
 	structCharacterToSend.weapon = *(playersManager->MyPlayerInfo->logic_Character->GetWeapon());
 	structCharacterToSend.charState = *(playersManager->MyPlayerInfo->logic_Character->GetCharacterState());
 
-	UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
+	//UE_LOG(LogTemp, Warning, TEXT("ClientGameInstance:: Enviando: Character Stats and Data"));
 	bool successSend = networkManager->SendNow(&structCharacterToSend, 0);
 	if (!successSend) {
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No se ha enviado bien la informacion al servidor o error de conexion")));
@@ -1152,7 +1152,7 @@ APD_E_Character*  UPD_ClientGameInstance::GetCharacterPlayerAtPosition(FVector p
 ///CREAR PERSONAJE ALEATORIO
 void UPD_ClientGameInstance::GenerateRandomChar()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar"));
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar"));
 
 	//Weapon - Clase y Tipo
 	
@@ -1165,8 +1165,8 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	//int weaponSelected = rand() % 9;//weapons.Num();
 
 	FStructWeapon weaponChar = LoadWeaponStructData(weaponSelected);
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon totales - %d "), weapons.Num());
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), weaponSelected);
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon totales - %d "), weapons.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), weaponSelected);
 
 	//FStructWeapon weaponChar = LoadWeaponStructData(8);
 	if (weaponChar.ID_Weapon >= 0)
@@ -1178,7 +1178,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 		playersManager->MyPlayerInfo->logic_Character->GetWeapon()->DMWeapon = weaponChar.DMWeapon;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon);
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar weapon selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon);
 
 	//Skin
 	switch (playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon)
@@ -1219,7 +1219,7 @@ void UPD_ClientGameInstance::GenerateRandomChar()
 	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_class = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->ClassWeapon;
 	playersManager->MyPlayerInfo->logic_Character->GetSkin()->weapon_type = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon;
 
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar skin selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead);
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::GenerateRandomChar skin selected - %d "), playersManager->MyPlayerInfo->logic_Character->GetSkin()->ID_SkinHead);
 
 	//HABILIDADES
 	switch (playersManager->MyPlayerInfo->logic_Character->GetWeapon()->TypeWeapon)
@@ -1483,14 +1483,14 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 {
 	int skillRange = 0;
 	skillRange = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
 
 	switch (ActiveSkills(ID_Skill))
 	{
 	case ActiveSkills::BasicAttack:
 	{
 		skillRange = playersManager->MyPlayerInfo->logic_Character->GetWeapon()->RangeWeapon;
-		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
+		//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill baisc wth range - %d "), skillRange);
 		break;
 	}
 	case ActiveSkills::GiveMeTheFireBlast:
@@ -1504,10 +1504,6 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 			if (playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].ID_Skill == ID_Skill)
 			{
 				skillRange = playersManager->MyPlayerInfo->logic_Character->GetSkills()->listActiveSkills[i].range;
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill Nose ha encontrado skill player con ID - %d "), ID_Skill);
 			}
 		}
 		break;
@@ -1530,7 +1526,7 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 	*/
 	if (skillRange > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
+		//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
 
 		//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
 		TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
@@ -1548,7 +1544,7 @@ void UPD_ClientGameInstance::FillEnemiesOnRangeForSkill(int ID_Skill, TArray<FSt
 
 		if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
 		{
-			UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
+			//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
 
 			//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
 			for (int j = 0; j < gameManager->enemyManager->GetEnemies().Num(); j++)
@@ -1624,7 +1620,7 @@ for (int i = 0; i < playersManager->MyPlayerInfo->logic_Character->GetSkills()->
 
 if (skillRange > 0)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
+	//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill  skill con rango:  - %d "), skillRange);
 
 	//Si hay rango - la habilidad la posee el jugador - buscar todas las tiles adyacentes a la posicion del jugador despues de la fase de movimiento dentro del rango
 	TArray<PD_MG_LogicPosition> tilesInRangeOfSkill = TArray<PD_MG_LogicPosition>();
@@ -1639,7 +1635,7 @@ if (skillRange > 0)
 
 	if (tilesInRangeOfSkill.Num() > 0) //si hay tiles y se ha hecho bien la funcion de rango
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("UPD_ClientGameInstance::FillEnemiesOnRangeForSkill hay tiles con ese rango ! - %d "), tilesInRangeOfSkill.Num());
 
 		//Coge los enemigos que tengan una CurrentLogicPosition = a las que hemos conseguido anteriormente
 		for (int j = 0; j < playersManager->GetNumPlayers(); j++)
@@ -1671,33 +1667,33 @@ if (skillRange > 0)
 void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_Interactuable*>& interactuable)
 {
 	interactuable = TArray<APD_E_Interactuable*>();
-	UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom"));
+	//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom"));
 
 	for (PD_MM_InteractuableInfo* interInfo : mapManager->MapInfo->interactuableInfoInMap) {
 
 		if (mapManager->MapInfo->interactuableActorByLogicPosition.Contains(interInfo->logpos)) {
 
-			UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - interInfo pos(%d,%d), InteractFromThisLogicPositions Num %d"), interInfo->logpos.GetX(), interInfo->logpos.GetY(),
-				mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions.Num());
+			//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - interInfo pos(%d,%d), InteractFromThisLogicPositions Num %d"), interInfo->logpos.GetX(), interInfo->logpos.GetY(),
+				//mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions.Num());
 			for (PD_MG_LogicPosition lp : mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions) {
 
 
 				if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) {
 
-					UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
-						playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetX(),
-						playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetY());
+					//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
+						//playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetX(),
+						//playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetY());
 
 					if (lp == playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition()) {
-						UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
+						//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
 						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
 					}
 				}
 				else {
 
-					UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
-						playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
-						playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
+					//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
+						//playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+						//playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
 
 					if (lp.GetX() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX &&
 						lp.GetY() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY) {
@@ -1709,7 +1705,7 @@ void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_I
 						{
 							continue;
 						}
-						UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added! id %d"), mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->ID_Interactuable);
+						//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added! id %d"), mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->ID_Interactuable);
 
 						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
 					}
@@ -1721,7 +1717,7 @@ void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_I
 		}
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom ENDED %d"), interactuable.Num());
+	//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom ENDED %d"), interactuable.Num());
 }
 
 
@@ -1809,7 +1805,7 @@ void UPD_ClientGameInstance::LoadWeaponData(TArray<int> &indexWeapons)
 			for (int i = 0; i < weapons.Num(); i++)
 			{
 				indexWeapons.Add(weapons[i].ID_Weapon);
-				UE_LOG(LogTemp, Warning, TEXT("ID_weapon : %d"), weapons[i].ID_Weapon);
+				//UE_LOG(LogTemp, Warning, TEXT("ID_weapon : %d"), weapons[i].ID_Weapon);
 			}
 		}
 		////GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Weapons Loaded."));
@@ -2164,7 +2160,6 @@ bool UPD_ClientGameInstance::LogicPositionIsValidToMove(int positionX, int posit
 {
 	bool positionIsValid = false;
 	PD_MG_LogicPosition positionToCheck = PD_MG_LogicPosition(positionX, positionY);
-	UE_LOG(LogTemp, Warning, TEXT("Cheking if (%d,%d)"), positionX, positionY);
 	if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() > 0)
 	{
 		PD_MG_LogicPosition lastPositionOnMovement = PD_MG_LogicPosition(playersManager->MyPlayerInfo->turnOrders->positionsToMove[playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() - 1].positionX,
@@ -2178,7 +2173,12 @@ bool UPD_ClientGameInstance::LogicPositionIsValidToMove(int positionX, int posit
 		}
 	}
 	else {
-		positionIsValid = true;
+		TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+		for (int i = 0; i < tilesNear.Num(); i++)
+		{
+			if (tilesNear[i] == positionToCheck)
+				positionIsValid = true;
+		}
 	}
 	return positionIsValid;
 

@@ -52,7 +52,7 @@ void APD_E_WallActor::ChangeMaterialProperties_MapSkin(PD_MG_LogicPosition lp) {
 	}
 	*/
 
-	UE_LOG(LogTemp, Log, TEXT("APD_E_WallActor::ChangeMaterialProperties_MapSkin - adj_reales %d isTile %d isProp %d && "), adj_reales.Contains(N), Super::SGI->mapManager->IsLogicPositionATile(N), Super::SGI->mapManager->IsLogicPositionAProp(N));
+	//UE_LOG(LogTemp, Log, TEXT("APD_E_WallActor::ChangeMaterialProperties_MapSkin - adj_reales %d isTile %d isProp %d && "), adj_reales.Contains(N), Super::SGI->mapManager->IsLogicPositionATile(N), Super::SGI->mapManager->IsLogicPositionAProp(N));
 
 	// Tienes una tile en el norte ?
 	if (adj_reales.Contains(N)) {
