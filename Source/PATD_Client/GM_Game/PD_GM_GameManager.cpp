@@ -214,8 +214,14 @@ void PD_GM_GameManager::UpdateTurn() {
 						interactuableActor->UpdateState();
 						if (interactuableActor->GetIsChest()) {
 							mapManager->MapInfo->interactuableActorByID.Remove(structGameState->update_turn.listOfInteractuablesActive[id_interact].ID_Interactable);
-							mapManager->MapInfo->interactuableActorByLogicPosition.Remove(interactuableActor->ActualLogicPosition);
+							mapManager->MapInfo->interactuableActorByID.Compact();
+							mapManager->MapInfo->interactuableActorByID.Shrink();
+							PD_MG_LogicPosition lp = *mapManager->MapInfo->interactuableActorByLogicPosition.FindKey(interactuableActor);
+							mapManager->MapInfo->interactuableActorByLogicPosition.Remove(lp);
+							mapManager->MapInfo->interactuableActorByLogicPosition.Compact();
+							mapManager->MapInfo->interactuableActorByLogicPosition.Shrink();
 							interactuableActor->Destroy();
+							
 						}
 
 					}

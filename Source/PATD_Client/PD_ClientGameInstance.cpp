@@ -2178,7 +2178,12 @@ bool UPD_ClientGameInstance::LogicPositionIsValidToMove(int positionX, int posit
 		}
 	}
 	else {
-		positionIsValid = true;
+		TArray<PD_MG_LogicPosition>  tilesNear = mapManager->Get_LogicPosition_Adyacents_To(playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition());
+		for (int i = 0; i < tilesNear.Num(); i++)
+		{
+			if (tilesNear[i] == positionToCheck)
+				positionIsValid = true;
+		}
 	}
 	return positionIsValid;
 
