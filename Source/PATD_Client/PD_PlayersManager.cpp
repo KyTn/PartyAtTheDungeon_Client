@@ -190,7 +190,13 @@ bool PD_PlayersManager::CreateInteractableOrder(int id_interactable)
 	//FStructInteractableUpdate fst = FStructInteractableUpdate();
 	//fst.ID_Interactable = id_interactable;
 	//fst.isActive = true;
-	MyPlayerInfo->turnOrders->interactuablesToInteract.Add(id_interactable);
+	if (!MyPlayerInfo->turnOrders->interactuablesToInteract.Contains(id_interactable) ){
+
+		MyPlayerInfo->turnOrders->interactuablesToInteract.Add(id_interactable);
+	}
+	else {
+		return false;
+	}
 
 	return true;
 }

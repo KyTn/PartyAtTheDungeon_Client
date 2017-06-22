@@ -1677,37 +1677,40 @@ void UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom(TArray<APD_E_I
 				//mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions.Num());
 			for (PD_MG_LogicPosition lp : mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->InteractFromThisLogicPositions) {
 
+				if (!playersManager->MyPlayerInfo->turnOrders->interactuablesToInteract.Contains(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->ID_Interactuable))
+				{ //Condicion para no repetir
 
-				if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) {
+					if (playersManager->MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) {
 
-					//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
-						//playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetX(),
-						//playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetY());
+						//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
+							//playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetX(),
+							//playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition().GetY());
 
-					if (lp == playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition()) {
-						//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
-						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
-					}
-				}
-				else {
-
-					//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
-						//playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
-						//playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
-
-					if (lp.GetX() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX &&
-						lp.GetY() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY) {
-						
-
-
-						if (mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->type == StaticMapElement::LARGE_CHEST &&
-							mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->IsCurrentlyActivated) 
-						{
-							continue;
+						if (lp == playersManager->MyPlayerInfo->logic_Character->GetCurrentLogicalPosition()) {
+							//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added!"));
+							interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
 						}
-						//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added! id %d"), mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->ID_Interactuable);
+					}
+					else {
 
-						interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
+						//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - (%d,%d) - (%d,%d)"), lp.GetX(), lp.GetY(),
+							//playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX,
+							//playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY);
+
+						if (lp.GetX() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionX &&
+							lp.GetY() == playersManager->MyPlayerInfo->turnOrders->positionsToMove.Last().positionY) {
+
+
+
+							if (mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->type == StaticMapElement::LARGE_CHEST &&
+								mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->IsCurrentlyActivated)
+							{
+								continue;
+							}
+							//UE_LOG(LogTemp, Log, TEXT("UPD_ClientGameInstance::InteractuablesThatYouCanInteractFrom - added! id %d"), mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]->ID_Interactuable);
+
+							interactuable.Add(mapManager->MapInfo->interactuableActorByLogicPosition[interInfo->logpos]);
+						}
 					}
 				}
 
