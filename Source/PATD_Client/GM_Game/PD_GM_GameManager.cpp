@@ -22,8 +22,7 @@
 
 PD_GM_GameManager::PD_GM_GameManager(UPD_ClientGameInstance* gameInstance, PD_GM_MapManager* inMapManager, PD_PlayersManager* inPlayerManager, PD_NW_NetworkManager* networkManager, EClientGameState stateAfterInstantiate_Map= EClientGameState::Start_Match)
 {
-	UE_LOG(LogTemp, Log, TEXT("Constructor Game Manager"));
-
+	
 	_GAMEINSTANCE = gameInstance;
 	playersManager = inPlayerManager;
 	mapManager =  inMapManager;
@@ -50,7 +49,6 @@ bool PD_GM_GameManager::SuscribeToEvents(int inPlayer, UStructType inType) {
 
 // Inicializa la maquina de estados.
 void PD_GM_GameManager::InitState() {
-	UE_LOG(LogTemp, Log, TEXT("InitState Game Manager"));
 	
 	ChangeState(EClientGameState::Instantiate_Map);
 }
@@ -232,9 +230,9 @@ void PD_GM_GameManager::UpdateTurn() {
 
 	mapManager->InstantiateEnemies();
 
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Players"));
+	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Players"));
 	for (int iPlayers = 0; iPlayers < structGameState->update_turn.listPlayerCharacters.Num(); iPlayers++) {
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: PlayerFor %d"), iPlayers);
+		//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: PlayerFor %d"), iPlayers);
 		FStructUpdateCharacter updateCharacter = structGameState->update_turn.listPlayerCharacters[iPlayers];
 		PD_GM_LogicCharacter* logicCharacter = playersManager->GetCharacterByID(updateCharacter.ID_character);
 		//Conversion de Struct a LogicPosition
@@ -248,11 +246,8 @@ void PD_GM_GameManager::UpdateTurn() {
 			logicCharacter->GetTotalStats()->PointsCurrent = updateCharacter.PointsCurrent;
 			logicCharacter->GetTotalStats()->APCurrent = logicCharacter->GetTotalStats()->APTotal;
 		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de player con id %s"), *updateCharacter.ID_character);
-		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Enemigos"));
+	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Enemigos"));
 	for (int i = 0; i < enemyManager->GetEnemies().Num(); i++)
 	{
 		bool found = false;
@@ -270,7 +265,7 @@ void PD_GM_GameManager::UpdateTurn() {
 	for (int iEnemies = 0; iEnemies < structGameState->update_turn.listEnemyCharacters.Num(); iEnemies++) {
 
 		FStructUpdateCharacter updateCharacter = structGameState->update_turn.listEnemyCharacters[iEnemies];
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: EnemyFor %d con id: %s"), iEnemies, *updateCharacter.ID_character);
+		///UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: EnemyFor %d con id: %s"), iEnemies, *updateCharacter.ID_character);
 		PD_GM_LogicCharacter* logicCharacter = enemyManager->GetCharacterByID(updateCharacter.ID_character);
 		//Conversion de Struct a LogicPosition
 		PD_MG_LogicPosition logicPosition;
@@ -279,9 +274,6 @@ void PD_GM_GameManager::UpdateTurn() {
 
 		if (logicCharacter) {
 			logicCharacter->MoveAtUpdate(logicPosition);
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: ERROR: No se identifica el character de enemigo con id %s"), *updateCharacter.ID_character);
 		}
 	}
 }
@@ -326,9 +318,6 @@ void PD_GM_GameManager::UpdateState() {
 	else if (structGameState->enumGameState == EClientGameState::EndOfTurn) {
 		
 	}
-	else { //Caso indeterminado
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::UpdateState: WARNING: estado sin update"));
-	}
 }
 
 // Funcion que se llama una sola vez al entrar en un estado. Llamado desde ChangeState. 
@@ -366,7 +355,7 @@ void PD_GM_GameManager::OnBeginState() {
 		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ActionPhase"));
 	}
 	else if (structGameState->enumGameState == EClientGameState::GenerateOrders_Validate) {
-		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_ValidateCACAFUTI"));
+		UE_LOG(LogTemp, Log, TEXT("Game Manager State: GenerateOrders_Validate"));
 		//ChangeState(EClientGameState::SendOrdersToServer); No hay que hacerlo aqui, ya que sino no da tiempo a lanzar el PopUp. El PopUp ya se encarga de cambiar de estado.
 	}
 	else if (structGameState->enumGameState == EClientGameState::SendOrdersToServer) {

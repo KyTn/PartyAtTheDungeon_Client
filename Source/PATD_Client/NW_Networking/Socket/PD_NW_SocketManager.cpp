@@ -35,7 +35,7 @@ PD_NW_SocketManager::~PD_NW_SocketManager()
 */
 void PD_NW_SocketManager::Init(APD_NW_TimerActor* InmyTimerActor, FString ip, int port)
 {
-	UE_LOG(LogTemp, Warning, TEXT("INICIANDO SOCKET MANAGER! "));
+	//UE_LOG(LogTemp, Warning, TEXT("INICIANDO SOCKET MANAGER! "));
 	//Inicializacion actor
 	InitTimerActor(InmyTimerActor);
 
@@ -54,7 +54,7 @@ void PD_NW_SocketManager::Init(APD_NW_TimerActor* InmyTimerActor, FString ip, in
 
 void PD_NW_SocketManager::InitSocketManager_ServerMode(FString ip, int port)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Socket MANAGER como SERVIDOR!! "));
+	//UE_LOG(LogTemp, Warning, TEXT("Socket MANAGER como SERVIDOR!! "));
 
 	//Inicializacion listener
 	if (InitListener(ip, port))
@@ -67,12 +67,12 @@ void PD_NW_SocketManager::InitSocketManager_ServerMode(FString ip, int port)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No se ha podido crear el Socket Listener del Servidor! "));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 }
 
 void PD_NW_SocketManager::InitSocketManager_ClientMode(FString ip, int port)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Socket MANAGER como CLIENTE!! "));
+	//UE_LOG(LogTemp, Warning, TEXT("Socket MANAGER como CLIENTE!! "));
 
 	//1.Crear el Socket que va a comunicar con el Servidor
 	//2.Comprobar que hay comunicacion
@@ -114,13 +114,13 @@ bool PD_NW_SocketManager::InitListener(FString ip, int port) {
 
 void PD_NW_SocketManager::InitTimerActor(APD_NW_TimerActor* InmyTimerActor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("InitTimerActor"));
+	//UE_LOG(LogTemp, Warning, TEXT("InitTimerActor"));
 
 	myTimerActor = InmyTimerActor;
 	myTimerActor->SetSocketManager(this);
 
 	GetTimerActor()->InitTimerActor();
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 }
 
 int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
@@ -128,7 +128,7 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 	pdSocket->InitAsDataSocket();
 	bool connected = pdSocket->ConnectTo(ip, port);
 	if (socketArray.Num() > 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Borrando sockets para nueva conexion") );
+		//UE_LOG(LogTemp, Warning, TEXT("Borrando sockets para nueva conexion") );
 		socketArray.Empty();
 	}
 
@@ -142,7 +142,7 @@ int PD_NW_SocketManager::ConnectDataSocket(FString ip, int port) {
 		delete pdSocket;
 		out = -1;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 	return out;
 }
 
@@ -170,7 +170,7 @@ bool PD_NW_SocketManager::SendInfoTo(int indexSocket, TArray<uint8>* data) {
 void PD_NW_SocketManager::HandleNewSocketData(TArray<uint8>* data, int socketIndex) {
 
 
-	UE_LOG(LogTemp, Error, TEXT("HandleNewSocketData (socketIndex: %d)"), socketIndex);
+	//UE_LOG(LogTemp, Error, TEXT("HandleNewSocketData (socketIndex: %d)"), socketIndex);
 
 	networkManager->HandleNewSocketData(data, socketIndex);
 
@@ -178,12 +178,12 @@ void PD_NW_SocketManager::HandleNewSocketData(TArray<uint8>* data, int socketInd
 
 void PD_NW_SocketManager::HandleNewListenerConnection(PD_NW_Socket* newSocket) {
 
-	UE_LOG(LogTemp, Warning, TEXT("New Listener Connection"));
+	//UE_LOG(LogTemp, Warning, TEXT("New Listener Connection"));
 
 	int socketIndex = socketArray.Add(newSocket);
 	readyPlayersArray.Add(false); //Set siempre a false el ready inicial del cliente
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *StateString());
 
 	//Se podria incluso preguntar antes si meterlo o no meterlo.
 
