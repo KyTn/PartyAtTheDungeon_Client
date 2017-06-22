@@ -115,7 +115,7 @@ public:
 
 	void Test() {
 
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test INIT TESTING OF ROOM"));
+		/*UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test INIT TESTING OF ROOM"));
 
 		if (IsSpawnRoom)
 			UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test IsSpawnRoom!"));
@@ -125,7 +125,7 @@ public:
 		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test LogicWallPosInRoom num %d"), LogicWallPosInRoom.Num());
 		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test tiles num %d"), tiles.Num());
 		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test walls num %d"), walls.Num());
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test interactuables num %d"), interactuables.Num());
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_Room::Test interactuables num %d"), interactuables.Num());*/
 	}
 
 
@@ -180,14 +180,14 @@ public:
 	FStructMapData * NETMAPDATA;
 
 	void ShowMapData() {
-		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - MISSION_TYPE %d "), (int)NETMAPDATA->MISSION_TYPE);
+		/*UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - MISSION_TYPE %d "), (int)NETMAPDATA->MISSION_TYPE);
 		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - PARSER_VERSION %s "), *(NETMAPDATA->PARSER_VERSION));
 		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - IDRoomSpawn %d "), NETMAPDATA->IDRoomSpawn);
 		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - Num skinByRoom %d "), NETMAPDATA->skinByRoom.Num());
 		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - Num roomsAdj %d "), NETMAPDATA->roomsAdj.Num());
 		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - Num roomComposition %d "), NETMAPDATA->roomComposition.Num());
 		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - Num wallComposition %d "), NETMAPDATA->wallComposition.Num());
-		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - Num doorComposition %d "), NETMAPDATA->doorComposition.Num());
+		UE_LOG(LogTemp, Log, TEXT("PD_MM_MapInfo::ShowMapData - Num doorComposition %d "), NETMAPDATA->doorComposition.Num());*/
 
 	}
 
@@ -229,7 +229,7 @@ public:
 
 	void Test() {
 
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test INIT TESTING OF MAPINFO"));
+		/*UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test INIT TESTING OF MAPINFO"));
 
 		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test allLogicPos num %d"), allLogicPos.Num());
 		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test roomByLogPos num %d"), roomByLogPos.Num());
@@ -238,7 +238,7 @@ public:
 
 		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test rooms num %d"), rooms.Num());
 
-		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test TEST ROOM NON INTENSIVE"));
+		UE_LOG(LogTemp, Warning, TEXT("PD_MM_MapInfo::Test TEST ROOM NON INTENSIVE"));*/
 
 		for (int i = 0; i < rooms.Num(); i++) {
 			rooms[i]->Test();

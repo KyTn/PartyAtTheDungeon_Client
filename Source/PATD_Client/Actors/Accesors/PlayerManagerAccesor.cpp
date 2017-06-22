@@ -35,15 +35,15 @@ void APlayerManagerAccesor::Tick( float DeltaTime )
 bool APlayerManagerAccesor::CreateConsumableOrder(int id_consumable) { return playersManager->CreateConsumableOrder(id_consumable); }
 bool APlayerManagerAccesor::CreateMovementOrder(int positionX, int positionY) { 
 	PD_MG_LogicPosition lp = PD_MG_LogicPosition(positionX, positionY);
-	UE_LOG(LogTemp, Warning, TEXT("APlayerManagerAccesor::CreateMovementOrder - Trying to create a move order to (%d:%d)"), lp.GetX(), lp.GetY());
+	//UE_LOG(LogTemp, Warning, TEXT("APlayerManagerAccesor::CreateMovementOrder - Trying to create a move order to (%d:%d)"), lp.GetX(), lp.GetY());
 
 	if (CGI->mapManager->IsLogicPositionATile(lp) || (CGI->mapManager->IsLogicPositionADoor(lp) && CGI->mapManager->MapInfo->doorActorByLogPos[lp]->IsDoorOpen)) {
-		UE_LOG(LogTemp, Warning, TEXT("APlayerManagerAccesor::CreateMovementOrder - tile: %d, dooropen: %d"), CGI->mapManager->IsLogicPositionATile(lp), (CGI->mapManager->IsLogicPositionADoor(lp) && CGI->mapManager->MapInfo->doorActorByLogPos[lp]->IsDoorOpen));
+		//UE_LOG(LogTemp, Warning, TEXT("APlayerManagerAccesor::CreateMovementOrder - tile: %d, dooropen: %d"), CGI->mapManager->IsLogicPositionATile(lp), (CGI->mapManager->IsLogicPositionADoor(lp) && CGI->mapManager->MapInfo->doorActorByLogPos[lp]->IsDoorOpen));
 		return playersManager->CreateMovementOrder(positionX, positionY);
 	}
 	else 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("APlayerManagerAccesor::CreateMovementOrder - hey, you DONT move there!"));
+		//UE_LOG(LogTemp, Warning, TEXT("APlayerManagerAccesor::CreateMovementOrder - hey, you DONT move there!"));
 		return false;
 	}
 }

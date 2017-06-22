@@ -68,14 +68,14 @@ return numTicks;
 void PD_PlayersManager::AddNewPlayer(FStructPlayerInfoAtClient conn) {
 
 	if (conn.ID_character.Compare(GetMyCharacter()->GetIDCharacter()) == 0) {
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding the client player (id:%s) character at(%d,%d)"), *conn.ID_character, conn.logicPosition.positionX, conn.logicPosition.positionY);
+		//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding the client player (id:%s) character at(%d,%d)"), *conn.ID_character, conn.logicPosition.positionX, conn.logicPosition.positionY);
 		GetMyCharacter()->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
 		dataPlayers.Add(MyPlayerInfo);
 	}
 	else {
 		PD_GM_LogicCharacter* ch = new PD_GM_LogicCharacter();
 
-		UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding player at(%d,%d)"), conn.logicPosition.positionX, conn.logicPosition.positionY);
+		//UE_LOG(LogTemp, Warning, TEXT("PD_GM_MapManager::AddNewPlayer - Adding player at(%d,%d)"), conn.logicPosition.positionX, conn.logicPosition.positionY);
 		ch->SetCurrentLogicalPosition(PD_MG_LogicPosition(conn.logicPosition.positionX, conn.logicPosition.positionY));
 		ch->SetIDCharacter(conn.ID_character);
 
@@ -152,7 +152,7 @@ bool PD_PlayersManager::CreateMovementOrder(int positionX, int positionY)
 
 
 
-	UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateMovementOrder: APCurrent:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+	//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateMovementOrder: APCurrent:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 	if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent > 0) 
 	{
 	if ( (MyPlayerInfo->turnOrders->positionsToMove.Num() == 0) ||   (MyPlayerInfo->turnOrders->positionsToMove.Last().positionX != tile.positionX)
@@ -268,13 +268,13 @@ bool PD_PlayersManager::CreateActionToCharacter(int id_action, TArray<FString> i
 			}
 		}
 		
-		UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent BEFORE action:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+		//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent BEFORE action:%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 
 		if (MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent - APleft >= 0)
 		{
 			MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent - APleft;
 
-			UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent AFTER action :%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+			//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: CreateActionToCharacter: APCurrent AFTER action :%d "), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 
 			MyPlayerInfo->turnOrders->actions.Add(target);
 			return true;
@@ -343,7 +343,7 @@ bool PD_PlayersManager::DeleteActionTurn(int index_action)
 	//Borra una accion de la lista de habilidades escogidas por el player
 	//devuelve los AP de la habilidad borrada
 
-	UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn:"));
+	//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn:"));
 
 	int id_skill = 0;
 	id_skill = MyPlayerInfo->turnOrders->actions[index_action].id_action;
@@ -353,11 +353,11 @@ bool PD_PlayersManager::DeleteActionTurn(int index_action)
 	{
 		if (skillsInGI[i].ID_Skill == id_skill)
 		{
-			UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill para eliminar %d"), id_skill);
+			//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill para eliminar %d"), id_skill);
 
 			if ( (ActiveSkills(skillsInGI[i].ID_Skill) == ActiveSkills::Defense)  || (ActiveSkills(skillsInGI[i].ID_Skill) == ActiveSkills::Hostion))
 			{
-				UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill - ES DEFENSA O GASTO TODO AP %d"), id_skill);
+				//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill - ES DEFENSA O GASTO TODO AP %d"), id_skill);
 
 					//Para calcular el AP gastado, veo todo lo que se ha hecho y la resta de eso menos el AP total, sera el gastado en esta accion
 					int APSpentInOneAction = 0;
@@ -375,14 +375,14 @@ bool PD_PlayersManager::DeleteActionTurn(int index_action)
 					int ApSpent = MyPlayerInfo->logic_Character->GetTotalStats()->APTotal - APSpentInOneAction;
 					MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent + ApSpent;
 
-					UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill gasto tocho - recuperando AP - %d"), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+					//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill gasto tocho - recuperando AP - %d"), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 					actionDelete = true;
 			}
 			else 
 			{
 					MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent = MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent + skillsInGI[i].AP;
 
-					UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill - recuperando AP - %d"), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
+					//UE_LOG(LogTemp, Log, TEXT("PD_PlayersManager: DeleteActionTurn: Se ha encontrado skill - recuperando AP - %d"), MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent);
 					actionDelete = true;
 			}
 		}
@@ -390,7 +390,7 @@ bool PD_PlayersManager::DeleteActionTurn(int index_action)
 
 	if (actionDelete)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PD_PlayersManager: DeleteActionTurn: Elimiando accion"));
+		//UE_LOG(LogTemp, Warning, TEXT("PD_PlayersManager: DeleteActionTurn: Elimiando accion"));
 		MyPlayerInfo->turnOrders->actions.RemoveAt(index_action);
 	}
 

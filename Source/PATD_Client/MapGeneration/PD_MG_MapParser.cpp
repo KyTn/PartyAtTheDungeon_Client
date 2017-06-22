@@ -312,16 +312,16 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 	}
 
 
-	UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids num %d"), NETMAPDATA->interactuableId.Num());
+	//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids num %d"), NETMAPDATA->interactuableId.Num());
 	for (int i = 0; i < NETMAPDATA->interactuableId.Num(); i++) {
 
-		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids %d"), NETMAPDATA->interactuableId[i]);
+		//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids %d"), NETMAPDATA->interactuableId[i]);
 
 		PD_MG_LogicPosition pos = PD_MG_LogicPosition((uint16)(NETMAPDATA->interactuableId[i] >> 16) & 0x0000FFFF);
 		int idInter = (NETMAPDATA->interactuableId[i] >> 8) & 0x000000FF;
 		StaticMapElement typeInter = StaticMapElement(NETMAPDATA->interactuableId[i] & 0x000000FF);
 
-		UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids (%d,%d) - %d - %d"), pos.GetX(), pos.GetY(), idInter, (int)typeInter);
+		//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids (%d,%d) - %d - %d"), pos.GetX(), pos.GetY(), idInter, (int)typeInter);
 
 
 		// Si el interactuable es una puerta, tiene un tratamiento adicional ... 
@@ -333,7 +333,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 				// Desempaquetamos el paquete
 				PD_MG_LogicPosition pos_door = PD_MG_LogicPosition((uint16)(NETMAPDATA->doorComposition[idoor] >> 16) & 0x0000FFFF);
 
-				UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids pos (%d,%d) - interactuableids pos (%d,%d)"), pos.GetX(), pos.GetY(), pos_door.GetX(), pos_door.GetY());
+				//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids pos (%d,%d) - interactuableids pos (%d,%d)"), pos.GetX(), pos.GetY(), pos_door.GetX(), pos_door.GetY());
 
 
 
@@ -342,11 +342,11 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 					IDRoomA = (NETMAPDATA->doorComposition[idoor] >> 8) & 0x000000FF;
 
 
-					UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids: room founded. value: %d -> (%d,%d) - %d - %d"), NETMAPDATA->doorComposition[idoor], pos.GetX(), pos.GetY(), IDRoomA, IDRoomB);
+					//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids: room founded. value: %d -> (%d,%d) - %d - %d"), NETMAPDATA->doorComposition[idoor], pos.GetX(), pos.GetY(), IDRoomA, IDRoomB);
 					break;
 				}
 			}
-			UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids IDRoomA - %d - IDRoomB %d"), IDRoomA, IDRoomB);
+			//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - interactuableids IDRoomA - %d - IDRoomB %d"), IDRoomA, IDRoomB);
 
 			PD_MM_Room *roomA = MapInfoRef->roomByIDRoom[IDRoomA], *roomB = MapInfoRef->roomByIDRoom[IDRoomB];
 			PD_MM_DoorInfo* doorInfo = new PD_MM_DoorInfo(pos, idInter, typeInter, roomA, roomB);
@@ -381,7 +381,7 @@ bool PD_MG_MapParser::Parsing_v_0_2(FStructMapData * NETMAPDATA, PD_MM_MapInfo *
 			roomA->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
 			roomB->InteractuableInfoInRoomByLogicPosition.Add(pos, interactuableInfo);
 
-			UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - door added!"));
+			//UE_LOG(LogTemp, Error, TEXT("PD_MG_MapParser::Parsing_v_0_2 - door added!"));
 			continue;
 		}
 		else {
@@ -513,7 +513,7 @@ uint32 PD_MG_MapParser::ReadEnemiesMap(TArray<FString> fileReaded, uint32 firstI
 		}
 
 		PD_MG_LogicPosition lp = PD_MG_LogicPosition(x, y);
-		UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap: %d"), static_cast<uint8>(type));
+		//UE_LOG(LogTemp, Log, TEXT("PD_MG_MapParser::ReadEnemiesMap: %d"), static_cast<uint8>(type));
 
 		/*switch (type) {///En este switch metemos la IA lógica de cada uno
 		case ECharacterType::Archer: {

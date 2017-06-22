@@ -83,15 +83,15 @@ void PD_NW_NetworkManager::HandleNewSocketData(TArray<uint8>* data, int socketIn
 		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::SendNow:: Recibiendo info: tamaño SIN cabecera: %d --> %s"), dataaux.Num(), *s);
 		*/
 
-		if (UStructType(type) == UStructType::FStructMapData) {
+		/*if (UStructType(type) == UStructType::FStructMapData) {
 			for (int i = 0; i < dataaux.Num(); i++) {
 				UE_LOG(LogTemp, Warning, TEXT("PD_NW_NetworkManager::HandleNewSocketData:: %d"), dataaux[i]);
 			}
-		}
+		}*/
 
 		FStructGeneric* genericStruct = serializerManager->DeserializeData(&dataaux, UStructType(type)); //Otra copia?
 																										 //genericStruct->structType = type;
-		UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: While: type: %d : type2: %d"), type, genericStruct->structType);
+		//UE_LOG(LogTemp, Warning, TEXT("NetworkManager::HandleNewSocketData:: While: type: %d : type2: %d"), type, genericStruct->structType);
 
 		eventManager->GenerateEvent(genericStruct, socketIndex);
 
@@ -150,11 +150,11 @@ bool PD_NW_NetworkManager::SendNow(FStructGeneric* structGeneric, int player) {
 
 
 
-	if (UStructType(structGeneric->structType) == UStructType::FStructMapData) {
+	/*if (UStructType(structGeneric->structType) == UStructType::FStructMapData) {
 		for (int i = 0; i < dataIn->Num(); i++) {
 			UE_LOG(LogTemp, Warning, TEXT("PD_NW_NetworkManager::HandleNewSocketData:: %d"), (*dataIn)[i]);
 		}
-	}
+	}*/
 
 
 	/*
@@ -310,8 +310,8 @@ bool PD_NW_NetworkManager::UnregisterObserver(PD_NW_iEventObserver* observer) {
 
 void PD_NW_NetworkManager::SendPingToServer() //Manda un ping al servidor
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("D_NW_NetworkManager::SendPingToServer()")));
-	UE_LOG(LogTemp, Warning, TEXT("D_NW_NetworkManager::SendPingToServer()"));
+	/*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("D_NW_NetworkManager::SendPingToServer()")));
+	UE_LOG(LogTemp, Warning, TEXT("D_NW_NetworkManager::SendPingToServer()"));*/
 
 	UPD_ClientGameInstance* CGI = Cast<UPD_ClientGameInstance>(socketManager->GetTimerActor()->GetGameInstance());
 	if (CGI)
@@ -333,8 +333,8 @@ void PD_NW_NetworkManager::SendPingToServer() //Manda un ping al servidor
 
 bool PD_NW_NetworkManager::CheckPongFromServer() //comprueba que el server ha enviado el pong
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("D_NW_NetworkManager::CheckPongFromServer()")));
-	UE_LOG(LogTemp, Warning, TEXT("D_NW_NetworkManager::CheckPongFromServer()"));
+	/*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("D_NW_NetworkManager::CheckPongFromServer()")));
+	UE_LOG(LogTemp, Warning, TEXT("D_NW_NetworkManager::CheckPongFromServer()"));*/
 
 	UPD_ClientGameInstance* CGI = Cast<UPD_ClientGameInstance>(socketManager->GetTimerActor()->GetGameInstance());
 	if (CGI)
