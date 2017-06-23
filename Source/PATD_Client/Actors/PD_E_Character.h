@@ -31,7 +31,7 @@ public:
 	void SetLogicCharacter(PD_GM_LogicCharacter* nlogic_character);
 	PD_GM_LogicCharacter* GetLogicCharacter();
 
-	void APD_E_Character::UpdateCharLife();
+	void UpdateCharLife();
 
 	UFUNCTION(BlueprintCallable, Category = "DataCharacter")
 		void GetCharacterID(FString &ID_Char);
