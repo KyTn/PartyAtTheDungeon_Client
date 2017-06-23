@@ -414,7 +414,9 @@ void PD_GM_LogicCharacter::SetTotalStats()
 	totalStats->HPTotal = (initBaseStats->HPBase) * (1 + totalStats->CONBonus);
 	totalStats->HPCurrent = totalStats->HPTotal;
 
-
+	//Otros valores
+	totalStats->ChestsOpened = 0;
+	totalStats->EnemiesDefeated = 0;
 	totalStats->PointsCurrent = 0;
 }
 
