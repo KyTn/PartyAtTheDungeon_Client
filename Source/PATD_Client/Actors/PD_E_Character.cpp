@@ -25,6 +25,11 @@ void APD_E_Character::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	//FString lifeInString = FString::FromInt(logic_character->GetTotalStats()->HPCurrent);
+	//lifeInString.Append("/");
+	//lifeInString.Append(FString::FromInt(logic_character->GetTotalStats()->HPTotal));
+	//stringHP = lifeInString;
+
 	//UpdateCharLife();
 }
 
@@ -59,8 +64,7 @@ void APD_E_Character::GetCharacterID(FString &ID_Char)
 
 void APD_E_Character::UpdateCharLife()
 {
-	stringHP = FString::FromInt(logic_character->GetTotalStats()->HPCurrent).Append(FString("/").Append(FString::FromInt((float)logic_character->GetTotalStats()->HPTotal)));
-	percentHP = (float)logic_character->GetTotalStats()->HPCurrent / (float)logic_character->GetTotalStats()->HPTotal;
+	//percentHP = (float)logic_character->GetTotalStats()->HPCurrent / (float)logic_character->GetTotalStats()->HPTotal;
 }
 
 void APD_E_Character::GetInfoCharcaterForWidget(FString &ID_Char, FString &TypeChar, int &numberPlayer)

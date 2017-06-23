@@ -1411,7 +1411,7 @@ void UPD_ClientGameInstance::GeneratedMagicChar()
 
 
 
-void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id)
+void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id, FString &StringinHP)
 {
 	//EL HP se tiene que dar en forma de porcentaje de 1 a 0
 	float life = 0.0f;
@@ -1422,7 +1422,11 @@ void UPD_ClientGameInstance::GivePlayerStatToHUD(float &HP, int &Score, int &AP,
 	AP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->APCurrent;
 	player_id = playersManager->MyPlayerInfo->logic_Character->GetIDCharacter();
 	Score = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->PointsCurrent;
-	//playersManager->MyPlayerInfo->logic_Character->GetPoints(); /// ¿Donde esta el score del jugfador?
+
+	FString lifeInString = FString::FromInt(playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPCurrent);
+	lifeInString.Append("/");
+	lifeInString.Append(FString::FromInt(playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal));
+	StringinHP = lifeInString;
 }
 
 void UPD_ClientGameInstance::GiveAPForTurnPlayer(int &APfinal)
@@ -2155,6 +2159,11 @@ int UPD_ClientGameInstance::GiveHowManyActionOfSkillWithID(int ID_Skills)
 	}
 
 	return count;
+}
+
+APD_E_Character* UPD_ClientGameInstance::GiveCharacterPlayer()
+{
+	return playersManager->MyPlayerInfo->logic_Character->GetCharacterBP();
 }
 
 #pragma endregion

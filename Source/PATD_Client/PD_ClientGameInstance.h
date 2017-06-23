@@ -229,7 +229,7 @@ public:
 		APlayerManagerAccesor* GetPlayersManagerAccessor(bool& existe);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
-		void GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id);
+		void GivePlayerStatToHUD(float &HP, int &Score, int &AP, FString &player_id, FString &StringinHP);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
 		void GiveAPForTurnPlayer(int &APfinal);
@@ -239,6 +239,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
 		int GiveSkinOfPlayer();
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStatsOnHUD")
+		APD_E_Character* GiveCharacterPlayer();
 
 	//Creacion de personaje ALEATORIO
 	UFUNCTION(BlueprintCallable, Category = "CreateRandomCharacter")
@@ -290,7 +293,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
 		void FillPlayersOnRangeForSkill(int ID_Skill, TArray<FString> &ID_Player, TArray<int> &TypePlayer, TArray<int> &CountAttackOnPlayer);
-
 
 	UFUNCTION(BlueprintCallable, Category = "LoadDataForSkill")
 		int GetNumOfAct_WithIDOnChar(int ID_Skill, FString ID_Enemy);
