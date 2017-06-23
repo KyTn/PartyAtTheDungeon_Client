@@ -24,7 +24,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	
 	//Variable Logic Character para tener doble referencia y poder llamar a los metodos logicos con metodos del Character
 	PD_GM_LogicCharacter* logic_character;
@@ -32,11 +31,17 @@ public:
 	void SetLogicCharacter(PD_GM_LogicCharacter* nlogic_character);
 	PD_GM_LogicCharacter* GetLogicCharacter();
 
-
+	void APD_E_Character::UpdateCharLife();
 
 	UFUNCTION(BlueprintCallable, Category = "DataCharacter")
 		void GetCharacterID(FString &ID_Char);
 
 	UFUNCTION(BlueprintCallable, Category = "DataCharacter")
 		void GetInfoCharcaterForWidget(FString &ID_Char, FString &TypeChar, int &numberPlayer);
+
+	//Funciones para mantener la interfaz,  la barra de vida actualizada.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InGameStats")
+		float percentHP = 1.0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InGameStats")
+		FString stringHP = "0";
 };
