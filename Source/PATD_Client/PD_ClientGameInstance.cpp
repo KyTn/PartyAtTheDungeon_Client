@@ -945,6 +945,16 @@ void UPD_ClientGameInstance::GetCharacterTotalStats(int &nAP, int &nCH, int &nSA
 	nHP = playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->HPTotal;
 }
 
+int UPD_ClientGameInstance::GetEnemiesDefeatedByPlayer()
+{
+	return playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->EnemiesDefeated;
+}
+
+int UPD_ClientGameInstance::GetOpenedChestsByPlayer()
+{
+	return playersManager->MyPlayerInfo->logic_Character->GetTotalStats()->ChestsOpened;
+}
+
 bool UPD_ClientGameInstance::SendCharacterToServer()
 {
 	if (!playersManager->MyPlayerInfo->logic_Character) {
