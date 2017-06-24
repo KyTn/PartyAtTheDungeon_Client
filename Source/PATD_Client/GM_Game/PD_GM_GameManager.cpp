@@ -244,7 +244,12 @@ void PD_GM_GameManager::UpdateTurn() {
 			logicCharacter->MoveAtUpdate(logicPosition);
 			logicCharacter->GetTotalStats()->HPCurrent = updateCharacter.HPCurrent;
 			logicCharacter->GetTotalStats()->PointsCurrent = updateCharacter.PointsCurrent;
+			logicCharacter->GetTotalStats()->EnemiesDefeated = updateCharacter.EnemiesDefeated;
+			logicCharacter->GetTotalStats()->ChestsOpened = updateCharacter.ChestsOpened;
 			logicCharacter->GetTotalStats()->APCurrent = logicCharacter->GetTotalStats()->APTotal;
+
+			UE_LOG(LogTemp, Log, TEXT("Chests Opened: %d"), logicCharacter->GetTotalStats()->ChestsOpened);
+			UE_LOG(LogTemp, Log, TEXT("Enemies defeated: %d"), logicCharacter->GetTotalStats()->EnemiesDefeated);
 		}
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("PD_GM_GameManager::OnBeginState: Updateando Enemigos"));
