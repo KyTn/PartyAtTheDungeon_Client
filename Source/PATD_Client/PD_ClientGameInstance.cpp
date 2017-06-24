@@ -43,6 +43,10 @@ bool UPD_ClientGameInstance::SuscribeToEvents(int inPlayer, UStructType inType) 
 void UPD_ClientGameInstance::Init()
 {
 	Super::Init();
+
+	FPlatformMisc::ControlScreensaver(FPlatformMisc::EScreenSaverAction::Disable);
+	//no se cierre el movil cuando el juego esta ejecutandose
+
 	//UE_LOG(LogTemp, Warning, TEXT("Init GameInstance ~> "));
 	//InitializeNetworking();
 	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Orange, FString::Printf(TEXT("Version: 0")));
