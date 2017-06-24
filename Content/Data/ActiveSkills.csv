@@ -3,8 +3,8 @@
 2;WhenFu;When you do the FUA;The next attack is increased by 4 ;0;3;3;1;2;12
 3;JumpFatTigger;The Jump of the Fatty Tigger;Jump in a range of 2 tiles and fall doing a main damage to everything around in the adjacent tiles;0;4;3;2;2;13
 4;Hostion;Hostion;Spend All YOUR CURRENT AP + POW, deal that points of damage to one enemy;0;0;3;1;2;10
-5;SomeHit;Some must hit it!;Make a Burst of shots, this attack will never miss. Spend all your AP;0;4;2;3;2;20
-6;RightInTheAsshole;Right in the asshole!;Makes a Critical Attack;0;4;4;3;2;20
+5;SomeHit;Some must hit it!;Make a Burst of shots, this attack will never miss. Spend all your AP;0;5;2;3;2;20
+6;RightInTheAsshole;Right in the asshole!;Makes a Critical Attack;0;2;4;3;2;20
 7;GiveMeTheFireBlast;Give me the Fire Blast,  progenitor! ;Throw a fire ball that damages 6 points (FIRE Type);0;2;2;5;2;30
 8;Exclaimchas;I exclaim Chas! and appears next to you ;You can teleport to a free tile in a range of 7 tiles of distance (ELECTRIC TYPE);0;3;3;7;2;30
 9;BeInCrossroads;I am in a crossroads in this tavern;Ice explosion wave that damage 3 points to all foes around (ICE TYPE);0;3;3;1;2;30
