@@ -343,7 +343,10 @@ struct FStructUpdateCharacter
 		FString ID_character; //Identifica al LogicCharacter que realiza la modificacion
 	UPROPERTY()
 		FStructLogicPosition currentCharacterPosition;
-
+	UPROPERTY()
+		uint8 EnemiesDefeated;
+	UPROPERTY()
+		uint8 ChestsOpened;
 
 	//Constructor
 	FStructUpdateCharacter()

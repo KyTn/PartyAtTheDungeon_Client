@@ -172,6 +172,12 @@ public:
 	//si pones const siempre lo va a detectar como parametro de entrada. Puedes entonces poner un mismo parametro como entrada y salida asi.
 
 	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		int GetEnemiesDefeatedByPlayer();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
+		int GetOpenedChestsByPlayer();
+
+	UFUNCTION(BlueprintCallable, Category = "GameInstance")
 		bool SendCharacterToServer();
 
 
